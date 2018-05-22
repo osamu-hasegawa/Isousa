@@ -776,9 +776,11 @@ namespace uSCOPE
 
 			return (path);
 		}
+		// filename:setting.xml
 		static public bool COPY_SETTINGS(string filename)
 		{
 			string path;
+			// path:C:\\Users\\araya320\\AppData\\Roaming
 			path = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			path += @"\KOP";
 			if (!System.IO.Directory.Exists(path)) {
@@ -794,7 +796,20 @@ namespace uSCOPE
 				return(false);
 			}
 			try {
-				System.IO.File.Copy(path, GET_DOC_PATH(filename), true);
+				string path_dst = GET_DOC_PATH(filename);
+				if (System.IO.File.Exists(path_dst)) {
+					//backupを作成
+					DateTime dt = System.IO.File.GetLastWriteTime(path_dst);
+					string file_base = System.IO.Path.GetFileNameWithoutExtension(filename);
+					string file_ext = System.IO.Path.GetExtension(filename);
+					string path_bak = file_base;
+					path_bak += string.Format("-{0:D04}{1:D02}{2:D02}", dt.Year, dt.Month, dt.Day);
+					path_bak += string.Format("-{0:D02}h{1:D02}m{2:D02}s", dt.Hour, dt.Minute, dt.Second);
+					path_bak += file_ext;
+					path_bak = GET_DOC_PATH(path_bak);
+					System.IO.File.Copy(path_dst, path_bak, true);
+				}
+				System.IO.File.Copy(path, path_dst, true);
 				System.IO.File.Delete(path);
 			}
 			catch (Exception ex) {

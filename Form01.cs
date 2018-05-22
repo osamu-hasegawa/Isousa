@@ -151,8 +151,13 @@ namespace uSCOPE
 				G.FORM10.LED_SET(2, false);
 			}
 			//---
+			if (this.Left <= -32000 || this.Top <= -32000) {
+				//最小化時は更新しない
+			}
+			else {
 			G.AS.APP_F01_LFT = this.Left;
 			G.AS.APP_F01_TOP = this.Top; 
+			}
 			//---
 			G.AS.AUT_BEF_PATH = G.SS.AUT_BEF_PATH;
 			G.AS.BEFORE_PATH  = G.SS.BEFORE_PATH ;

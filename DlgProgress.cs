@@ -21,6 +21,11 @@ namespace uSCOPE
 //		public override void Show(string strTitle, Control owner)
 		public void Show(string strTitle, Control owner)
 		{
+			if (strTitle == "@") {
+				strTitle = " ";
+				this.Cancel_Button.Visible = false;
+				this.Label1.Top = this.Label1.Top + this.Cancel_Button.Height/2;
+			}
 			this.Text = strTitle;
 			this.Label1.Text = "";
 			//'If (Not Me.IsHandleCreated) Then

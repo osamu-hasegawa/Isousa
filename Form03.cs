@@ -1875,9 +1875,15 @@ retry:
 						m_map_of_irl.TryGetValue(key, out il_ir);
 					}
 					else {
+						var dlg = new DlgProgress();
+						dlg.Show("@", this);
+						dlg.SetStatus("画像読込中...");
 						CreateImageList(m_i, zpos);
 						m_map_of_dml.TryGetValue(key, out il_dm);
 						m_map_of_irl.TryGetValue(key, out il_ir);
+						dlg.Hide();
+						dlg.Dispose();
+						dlg = null;
 					}
 				}
 			}

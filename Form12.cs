@@ -2586,7 +2586,9 @@ a_write("光源切替:->反射");
 			if (this.AUT_STS > 0) {
 				m_adat.sts_bak = this.AUT_STS;
 			}
-			this.AUT_STS = NXT_STS;
+			if (this.AUT_STS != 0) {
+				this.AUT_STS = NXT_STS;
+			}
 		}
 
 		private void button12_Click(object sender, EventArgs e)
