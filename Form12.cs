@@ -62,15 +62,19 @@ namespace uSCOPE
 			this.tabControl4.TabPages.Remove(this.tabPage8);//CUTI.1
 			this.tabControl4.TabPages.Remove(this.tabPage3);//CUTI.2
 			//---[メイン]
-			var lc1 = this.button11.Location;
-			var lc2 = this.button12.Location;
-			var lc3 = this.button26.Location;
+			var lc1 = this.button11.Location;//左下
+			var lc2 = this.button12.Location;//右下
+			var lc3 = this.button26.Location;//右上
+			var lc4 = this.button27.Location;//左上
 			this.button11.Text = "自動測定\r\n(黒髪)";
-		//	this.button12.Visible = false;	//毛髄画面
+			this.button11.Location = lc4;
 			this.button26.Visible = true;
-			this.button26.Location = lc2;
-			this.button12.Location = new Point(lc1.X, lc3.Y);
+			this.button26.Location = lc3;
+//			this.button12.Text = "数値化";
 			this.button12.Text = "画像表示";
+			this.button12.Location = lc2;
+			this.button27.Visible = true;
+			this.button27.Location = lc1;
 			//---[パラメータ]
 			this.button3.Visible = false;	//透過用
 			this.button16.Visible = false;	//反射用
@@ -173,6 +177,9 @@ namespace uSCOPE
 			//else {
 			//    this.radioButton6.Checked = true;
 			//}
+			for (int i = 0; i < this.tabControl4.TabCount; i++) {
+				this.tabControl4.TabPages[i].BackColor = G.SS.ETC_BAK_COLOR;
+			}
 		}
 		private void OnClicks(object sender, EventArgs e)
 		{
@@ -216,7 +223,7 @@ this.SPE_COD = 0;
 					}
 				}
 			}
-			else if (sender == this.button11/*黒*/|| sender == this.button26/*白*/) {
+			else if (sender == this.button11/*黒*/|| sender == this.button26/*白*/ || sender == this.button27/*全*/) {
 				if (G.UIF_LEVL == 0) {
 					string path;
 					path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -224,7 +231,18 @@ this.SPE_COD = 0;
 					path += @"\" + Application.ProductName;
 					G.SS.PLM_AUT_FOLD = path;
 					//3:透過→赤外, 8:反射→赤外
-					G.SS.PLM_AUT_MODE = (sender == this.button11/*黒*/) ? 8: 3;
+					if (sender == this.button11/*黒*/) {
+						G.SS.PLM_AUT_MODE = 8;
+						G.SS.PLM_AUT_RTRY = false;
+					}
+					else if (sender == this.button26/*白*/) {
+						G.SS.PLM_AUT_MODE = 3;
+						G.SS.PLM_AUT_RTRY = false;
+					}
+					else {
+						G.SS.PLM_AUT_MODE = 8;
+						G.SS.PLM_AUT_RTRY = true;
+					}
 					//自動測定実行
 					do_auto_mes(false);
 				}
@@ -451,6 +469,7 @@ this.SPE_COD = 0;
 				this.button10.Enabled = false;
 				this.button11.Enabled = false;//auto.mes
 				this.button26.Enabled = false;
+				this.button27.Enabled = false;
 				//---
 				this.radioButton3.Enabled = false;
 				this.radioButton4.Enabled = false;
@@ -497,10 +516,12 @@ this.SPE_COD = 0;
 				if (G.FORM02.isCONNECTED() && D.isCONNECTED() && G.FORM11.isORG_ALL_DONE()) {
 					this.button11.Enabled = true;
 					this.button26.Enabled = true;
+					this.button27.Enabled = true;
 				}
 				else {
 					this.button11.Enabled = false;
 					this.button26.Enabled = false;
+					this.button27.Enabled = false;
 				}
 				if (G.FORM02.isCONNECTED()) {
 					this.radioButton3.Enabled = true;
@@ -1217,6 +1238,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			int bak_of_mode = G.SS.PLM_AUT_MODE;
 
 			m_adat.trace = false;
+			m_adat.retry = false;
 
 			try {
 				if (G.FORM02.get_size_mode() > 1) {
@@ -1330,6 +1352,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 		{
 			double xum = G.FORM02.PX2UM(x);
 			double yum = G.FORM02.PX2UM(y);
+			if (G.PX2UM(x) != xum || G.PX2UM(y) != yum) {
+				G.mlog("internal error");
+			}
 			int	xpl = (int)(xum / G.SS.PLM_UMPP[0]);
 			int ypl = (int)(yum / G.SS.PLM_UMPP[1]);
 			MOVE_REL_XY(xpl, ypl);
@@ -1381,13 +1406,16 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			public ArrayList z_nam;
 			public ArrayList z_pos;
 			//---
+			public bool retry;
+			public ArrayList y_1st_pos;
+			//---
 			public ADATA()
 			{
 //				dt = DateTime.Now;
 				fold = "";
 				ext = "";
 				pref = "";
-				trace = false;
+				retry = false;
 				org_pos_x = 0;
 				org_pos_y = 0;
 				org_pos_z = 0;
@@ -1416,6 +1444,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				z_cur = 0;
 				z_nam = new ArrayList();
 				z_pos = new ArrayList();
+				y_1st_pos = new ArrayList();
 			}
 		};
 		private ADATA m_adat = new ADATA();
@@ -1667,12 +1696,54 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			m_adat.f_dum.Clear();
 			m_adat.f_nam.Clear();
 		}
+
+		private int retry_check(int sts)
+		{
+			if (G.SS.PLM_AUT_RTRY) {
+				if (G.SS.PLM_AUT_MODE == 5 || G.SS.PLM_AUT_MODE == 8) {
+					//5:反射
+					//8:反射→赤外
+					//反射の未検出域に対して透過にてリトライする
+					G.SS.PLM_AUT_MODE -= 5;
+					//0:透過
+					//3:透過→赤外
+					sts = 1;
+					m_adat.retry = true;
+				}
+			}
+			return(sts);
+		}
+		private bool retry_ypos_check(int ycur, out int ynxt)
+		{
+			ynxt = ycur;
+			double hei;
+			
+			if (m_adat.retry == false) {
+				return(false);
+			}
+			hei = G.CAM_HEI;				//px
+			hei = G.PX2UM(hei);				//um
+			hei = hei / G.SS.PLM_UMPP[1];	//pls
+			for (int i = 0; i < m_adat.y_1st_pos.Count; i++) {
+				int ypos = (int)m_adat.y_1st_pos[i];
+				int ydif = ycur-ypos;
+				if (Math.Abs(ydif) < hei) {
+					ynxt = (int)(ypos+hei+0.5);
+					return(true);
+				}
+			}
+			//int ret;
+			////ret = G.CAM_HEI * G.SS.CAM_SPE_UMPPX
+			//MOVE_PIX_XY(0, (int)(G.CAM_HEI * (1 - G.SS.PLM_AUT_OVLP / 100.0)));
+
+			return(false);
+		}
 		private int m_retry_cnt_of_hpos;
 		// 自動測定
 		private void timer2_Tick(object sender, EventArgs e)
 		{
 			int NXT_STS = this.AUT_STS + 1;
-			int yy, y0;
+			int yy, y0, ypos;
 
 			if (G.bCANCEL) {
 				G.CAM_PRC = G.CAM_STS.STS_NONE;
@@ -1711,31 +1782,33 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					NXT_STS = 70;//70->71->1として白色点灯->安定待機後に戻ってくる
 				}*/
 				else {
-					DateTime dt = DateTime.Now;
-					string buf = "";
-					buf = string.Format("{0:0000}{1:00}{2:00}_{3:00}{4:00}{5:00}",
-									dt.Year,
-									dt.Month,
-									dt.Day,
-									dt.Hour,
-									dt.Minute,
-									dt.Second);
-					if (!string.IsNullOrEmpty(G.SS.PLM_AUT_TITL)) {
-						buf = G.SS.PLM_AUT_TITL + "_" + buf;
+					if (m_adat.retry == false) {
+						DateTime dt = DateTime.Now;
+						string buf = "";
+						buf = string.Format("{0:0000}{1:00}{2:00}_{3:00}{4:00}{5:00}",
+										dt.Year,
+										dt.Month,
+										dt.Day,
+										dt.Hour,
+										dt.Minute,
+										dt.Second);
+						if (!string.IsNullOrEmpty(G.SS.PLM_AUT_TITL)) {
+							buf = G.SS.PLM_AUT_TITL + "_" + buf;
+						}
+						m_adat.fold = G.SS.PLM_AUT_FOLD;
+						if (G.SS.PLM_AUT_FOLD.Last() != '\\') {
+							m_adat.fold += "\\";
+						}
+						m_adat.fold += buf;
+						m_adat.ext = FLTP2STR(G.SS.PLM_AUT_FLTP);
 					}
-					m_adat.fold = G.SS.PLM_AUT_FOLD;
-					if (G.SS.PLM_AUT_FOLD.Last() != '\\') {
-						m_adat.fold += "\\";
-					}
-					m_adat.fold += buf;
-					m_adat.ext = FLTP2STR(G.SS.PLM_AUT_FLTP);
 					if (G.SS.PLM_AUT_MODE >= 0 && G.SS.PLM_AUT_MODE <= 4) {
 						m_adat.pref = "CT";//白色(透過)
 					}
 					else {
 						m_adat.pref = "CR";//白色(反射)
 					}
-					if (true) {
+					if (m_adat.retry == false) {
 						try {
 							System.IO.Directory.CreateDirectory(m_adat.fold);
 							G.SS.AUT_BEF_PATH = m_adat.fold;
@@ -1782,43 +1855,45 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				}
 				break;
 			case 2:
-				m_adat.h_idx = 0;//毛髪１本目
-				m_adat.h_cnt = 0;
-				m_adat.org_pos_x = m_adat.org_pos_y = m_adat.org_pos_z = -0x1000000;
-				for (int i = 0; i < m_adat.f_cnt.Length; i++) {
-					m_adat.f_cnt[i] = 0;
-				}
-				m_adat.trace = false;
-				m_adat.f_ttl = 0;
-				m_adat.f_dum.Clear();
-				m_adat.f_nam.Clear();
-				m_adat.chk1 = 0;
-				m_adat.pos_x.Clear();
-				m_adat.pos_y.Clear();
-				m_adat.pos_z.Clear();
-				//---
-				m_adat.z_nam.Clear();
-				m_adat.z_pos.Clear();
-				//---
-				if (true) {
-					m_adat.z_cnt = 1;
-					m_adat.z_idx = 0;
-					m_adat.z_nam.Add("Z10");
-					m_adat.z_pos.Add(0);
-				}
-				if (G.SS.PLM_AUT_ZMUL) {
-					int z, i;
-					int zstp = G.SS.PLM_AUT_ZSTP;
-					int zhan = zstp * (G.SS.PLM_AUT_ZHAN / zstp);//念のため;
-					int znam = 10 - (zhan/zstp); 
+				if (m_adat.retry == false) {
+					m_adat.h_idx = 0;//毛髪１本目
+					m_adat.h_cnt = 0;
+					m_adat.org_pos_x = m_adat.org_pos_y = m_adat.org_pos_z = -0x1000000;
+					for (int i = 0; i < m_adat.f_cnt.Length; i++) {
+						m_adat.f_cnt[i] = 0;
+					}
+					m_adat.trace = false;
+					m_adat.f_ttl = 0;
+					m_adat.f_dum.Clear();
+					m_adat.f_nam.Clear();
+					m_adat.chk1 = 0;
+					m_adat.pos_x.Clear();
+					m_adat.pos_y.Clear();
+					m_adat.pos_z.Clear();
+					//---
+					m_adat.z_nam.Clear();
+					m_adat.z_pos.Clear();
+					//---
+					if (true) {
+						m_adat.z_cnt = 1;
+						m_adat.z_idx = 0;
+						m_adat.z_nam.Add("Z10");
+						m_adat.z_pos.Add(0);
+					}
+					if (G.SS.PLM_AUT_ZMUL) {
+						int z;
+						int zstp = G.SS.PLM_AUT_ZSTP;
+						int zhan = zstp * (G.SS.PLM_AUT_ZHAN / zstp);//念のため;
+						int znam = 10 - (zhan/zstp); 
 
-					for (i = 0, z = -zhan; z <= +zhan; z += zstp, znam++) {
-						if (z == 0) {
-							continue;
+						for (z = -zhan; z <= +zhan; z += zstp, znam++) {
+							if (z == 0) {
+								continue;
+							}
+							m_adat.z_cnt++;
+							m_adat.z_nam.Add(string.Format("Z{0:00}", znam));
+							m_adat.z_pos.Add(z);
 						}
-						m_adat.z_cnt++;
-						m_adat.z_nam.Add(string.Format("Z{0:00}", znam));
-						m_adat.z_pos.Add(z);
 					}
 				}
 				NXT_STS = 12;
@@ -1826,7 +1901,16 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			case 5:
 				if ((G.PLM_STS_BIT[1] & (int)G.PLM_STS_BITS.BIT_LMT_P) != 0) {
 					//SOFT.LIMIT(+)
+#if true
+					if ((NXT_STS = retry_check(NXT_STS)) == 1) {
+						break;
+					}
+#endif
 					NXT_STS = 999;
+				}
+				else if (retry_ypos_check(G.PLM_POS[1], out ypos)) {
+					MOVE_REL_XY(0, ypos-G.PLM_POS[1]);
+					NXT_STS = -(5 - 1);//->5
 				}
 				else {
 a_write("AF:開始");
@@ -1847,6 +1931,11 @@ a_write("AF:終了");
 a_write("毛髪判定(AF位置探索):NG");
 						m_retry_cnt_of_hpos++;
 						if (m_retry_cnt_of_hpos > G.SS.PLM_AUT_HPRT) {
+#if true
+							if ((NXT_STS = retry_check(NXT_STS)) == 1) {
+								break;
+							}
+#endif
 							NXT_STS = 999;
 						}
 						else {
@@ -1868,6 +1957,10 @@ a_write("毛髪判定(AF位置探索):OK");
 					//SOFT.LIMIT(+)
 					NXT_STS = 40;
 				}
+				else if (retry_ypos_check(G.PLM_POS[1], out ypos)) {
+					MOVE_REL_XY(0, ypos-G.PLM_POS[1]);
+					NXT_STS = -(10 - 1);//->10
+				}
 				else if ((G.PLM_POS[1]+(G.FORM02.PX2UM(G.CAM_HEI)/ G.SS.PLM_UMPP[1])) >=  G.SS.PLM_PLIM[1]) {
 					if (m_adat.sts_bak == 14) {
 						MOVE_REL_XY(0, (G.SS.PLM_PLIM[1] - G.PLM_POS[1]+10));
@@ -1879,6 +1972,11 @@ a_write("毛髪判定(AF位置探索):OK");
 				}
 				if (NXT_STS == 40) {
 					m_adat.h_cnt = m_adat.h_idx;
+#if true
+					if ((NXT_STS = retry_check(NXT_STS)) == 1) {
+						break;
+					}
+#endif
 					//m_adat.trace = true;
 					if (m_adat.f_ttl <= 0 || (G.SS.PLM_AUT_MODE == 0 || G.SS.PLM_AUT_MODE == 5)) {
 						NXT_STS = 998;//開始位置へ移動後に終了
@@ -2036,9 +2134,9 @@ a_write("AF:終了");
 					//m_adat.z_pls[m_adat.h_idx] = G.PLM_POS[2];
 				}
 				break;
-			case 17:
-			case 27:
-			case 37:
+			case 17://初回AF後
+			case 27://左側探索
+			case 37://右側探索
 				if (m_adat.z_idx == 0) {
 					if (this.AUT_STS == 17) {
 						//if ((Environment.TickCount - m_adat.chk1) < 2000) {
@@ -2056,6 +2154,12 @@ a_write("AF:終了");
 							m_adat.org_pos_z = m_adat.sta_pos_z;
 						}
 						m_adat.f_idx = 50;
+						//---
+						if (m_adat.retry == false) {
+							//反射での毛髪Ｙ位置を保存して、
+							//透過のときはこのＹ座標をスキップするようにする
+							m_adat.y_1st_pos.Add(G.PLM_POS[1]);
+						}
 						//--- ONCE
 						if (G.SS.PLM_AUT_CNST) {
 							if (G.CAM_GAI_STS == 1 || G.CAM_EXP_STS == 1 || G.CAM_WBL_STS == 1) {/*1:自動*/

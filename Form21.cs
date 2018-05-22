@@ -39,7 +39,7 @@ namespace uSCOPE
 				this.groupBox3.Visible = false;
 				this.groupBox4.Visible = false;
 				this.comboBox6.Enabled = false;
-				this.comboBox7.Enabled = false;
+				//this.comboBox7.Enabled = false;
 				this.comboBox8.Enabled = false;
 				this.checkBox8.Enabled = false;
 				this.button4.Enabled = false;
@@ -153,6 +153,28 @@ namespace uSCOPE
 			files_cr = System.IO.Directory.GetFiles(path, "?CR_??" +zpos+ ".*");
 			files_ir = System.IO.Directory.GetFiles(path, "?IR_??" +zpos+ ".*");
 			}
+	#if true
+			if (true) {
+				int ttl = files_ct.Length + files_cr.Length;
+				if (ttl <= 0) {
+					G.mlog("指定されたフォルダには毛髪画像ファイルがありません.\r\r" + path);
+					e.Cancel = true;
+					return;
+				}
+			}
+			//画像表示のみの場合
+			if (G.SS.MOZ_CND_NOMZ) {
+				return;
+			}
+			//赤外画像
+			if (G.SS.MOZ_CND_PDFL == 1) {
+				if (files_ir.Length <= 0) {
+					G.mlog("指定されたフォルダには赤外画像ファイル('IR')がありません.\r\r" + path);
+					e.Cancel = true;
+					return;
+				}
+			}
+	#else
 			//画像表示のみの場合
 			if (G.SS.MOZ_CND_NOMZ) {
 				int ttl = 0;
@@ -195,6 +217,7 @@ namespace uSCOPE
 					return;
 				}
 			}
+	#endif
 		}
 		private bool DDX(bool bUpdate)
         {
@@ -214,7 +237,7 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown4 , ref G.SS.MOZ_CND_HANI);
 				//---
 				DDV.DDX(bUpdate, this.comboBox6      , ref G.SS.MOZ_CND_PDFL);
-				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.MOZ_CND_DMFL);
+//				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.MOZ_CND_DMFL);
 				DDV.DDX(bUpdate, this.comboBox8      , ref G.SS.MOZ_CND_ZPOS);
 				DDV.DDX(bUpdate, this.checkBox8      , ref G.SS.MOZ_CND_NOMZ);
 				//---

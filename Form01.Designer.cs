@@ -107,7 +107,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(198)))), ((int)(((byte)(3)))), ((int)(((byte)(85)))));
+            this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(391, 898);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
@@ -126,6 +126,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form01_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form01_KeyUp);
             this.Resize += new System.EventHandler(this.Form01_Resize);
             this.ResumeLayout(false);
 

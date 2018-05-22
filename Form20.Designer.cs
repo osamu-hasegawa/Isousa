@@ -99,6 +99,14 @@
 			this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
 			this.label22 = new System.Windows.Forms.Label();
 			this.label23 = new System.Windows.Forms.Label();
+			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.label20 = new System.Windows.Forms.Label();
+			this.label24 = new System.Windows.Forms.Label();
+			this.radioButton6 = new System.Windows.Forms.RadioButton();
+			this.checkBox6 = new System.Windows.Forms.CheckBox();
+			this.checkBox7 = new System.Windows.Forms.CheckBox();
+			this.label25 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -358,15 +366,15 @@
 			this.comboBox3.FormattingEnabled = true;
 			this.comboBox3.Items.AddRange(new object[] {
             "透過",
-            "透過→反射",
-            "透過→反射→赤外",
+            "-",
+            "-",
             "透過→赤外",
-            "透過→赤外→反射",
+            "-",
             "反射",
-            "反射→透過",
-            "反射→透過→赤外",
+            "-",
+            "-",
             "反射→赤外",
-            "反射→赤外→透過"});
+            "-"});
 			this.comboBox3.Location = new System.Drawing.Point(104, 46);
 			this.comboBox3.Name = "comboBox3";
 			this.comboBox3.Size = new System.Drawing.Size(141, 20);
@@ -723,11 +731,12 @@
 			// checkBox3
 			// 
 			this.checkBox3.AutoSize = true;
+			this.checkBox3.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.checkBox3.Location = new System.Drawing.Point(104, 141);
 			this.checkBox3.Name = "checkBox3";
-			this.checkBox3.Size = new System.Drawing.Size(278, 16);
+			this.checkBox3.Size = new System.Drawing.Size(302, 16);
 			this.checkBox3.TabIndex = 8;
-			this.checkBox3.Text = "反射の測定で毛髪未検出のときは透過で再測定する";
+			this.checkBox3.Text = "反射の測定後、毛髪未検出域に対して透過で再測定する";
 			this.checkBox3.UseVisualStyleBackColor = true;
 			this.checkBox3.Click += new System.EventHandler(this.checkBox2_Click);
 			// 
@@ -1045,7 +1054,7 @@
 			this.label19.Name = "label19";
 			this.label19.Size = new System.Drawing.Size(47, 12);
 			this.label19.TabIndex = 55;
-			this.label19.Text = "521, 520";
+			this.label19.Text = "521, 725";
 			this.label19.Visible = false;
 			// 
 			// groupBox5
@@ -1149,6 +1158,94 @@
 			this.label23.Text = "±100.0 / 99.9 um";
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textBox3
+			// 
+			this.textBox3.Enabled = false;
+			this.textBox3.Location = new System.Drawing.Point(565, 571);
+			this.textBox3.Name = "textBox3";
+			this.textBox3.Size = new System.Drawing.Size(147, 19);
+			this.textBox3.TabIndex = 0;
+			this.textBox3.Text = "+2 +4 +6 -2";
+			// 
+			// textBox4
+			// 
+			this.textBox4.Enabled = false;
+			this.textBox4.Location = new System.Drawing.Point(565, 614);
+			this.textBox4.Name = "textBox4";
+			this.textBox4.Size = new System.Drawing.Size(147, 19);
+			this.textBox4.TabIndex = 0;
+			this.textBox4.Text = "+25 +28 +31";
+			// 
+			// label20
+			// 
+			this.label20.AutoSize = true;
+			this.label20.Enabled = false;
+			this.label20.Location = new System.Drawing.Point(563, 552);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(104, 12);
+			this.label20.TabIndex = 55;
+			this.label20.Text = "Z座標(深度合成用)";
+			this.label20.Visible = false;
+			// 
+			// label24
+			// 
+			this.label24.AutoSize = true;
+			this.label24.Enabled = false;
+			this.label24.Location = new System.Drawing.Point(563, 599);
+			this.label24.Name = "label24";
+			this.label24.Size = new System.Drawing.Size(116, 12);
+			this.label24.TabIndex = 55;
+			this.label24.Text = "Z座標(毛髪径判定用)";
+			this.label24.Visible = false;
+			// 
+			// radioButton6
+			// 
+			this.radioButton6.AutoSize = true;
+			this.radioButton6.Enabled = false;
+			this.radioButton6.Location = new System.Drawing.Point(552, 476);
+			this.radioButton6.Name = "radioButton6";
+			this.radioButton6.Size = new System.Drawing.Size(71, 16);
+			this.radioButton6.TabIndex = 0;
+			this.radioButton6.TabStop = true;
+			this.radioButton6.Text = "毛髪表面";
+			this.radioButton6.UseVisualStyleBackColor = true;
+			this.radioButton6.Click += new System.EventHandler(this.radioButton1_Click);
+			// 
+			// checkBox6
+			// 
+			this.checkBox6.AutoSize = true;
+			this.checkBox6.Enabled = false;
+			this.checkBox6.Location = new System.Drawing.Point(551, 507);
+			this.checkBox6.Name = "checkBox6";
+			this.checkBox6.Size = new System.Drawing.Size(72, 16);
+			this.checkBox6.TabIndex = 56;
+			this.checkBox6.Text = "深度合成";
+			this.checkBox6.UseVisualStyleBackColor = true;
+			this.checkBox6.Click += new System.EventHandler(this.checkBox4_Click);
+			// 
+			// checkBox7
+			// 
+			this.checkBox7.AutoSize = true;
+			this.checkBox7.Enabled = false;
+			this.checkBox7.Location = new System.Drawing.Point(551, 529);
+			this.checkBox7.Name = "checkBox7";
+			this.checkBox7.Size = new System.Drawing.Size(84, 16);
+			this.checkBox7.TabIndex = 56;
+			this.checkBox7.Text = "毛髪径判定";
+			this.checkBox7.UseVisualStyleBackColor = true;
+			this.checkBox7.Click += new System.EventHandler(this.checkBox4_Click);
+			// 
+			// label25
+			// 
+			this.label25.AutoSize = true;
+			this.label25.Enabled = false;
+			this.label25.Location = new System.Drawing.Point(689, 556);
+			this.label25.Name = "label25";
+			this.label25.Size = new System.Drawing.Size(72, 12);
+			this.label25.TabIndex = 55;
+			this.label25.Text = "PLS or um ??";
+			this.label25.Visible = false;
+			// 
 			// Form20
 			// 
 			this.AcceptButton = this.button1;
@@ -1157,6 +1254,8 @@
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.CancelButton = this.button2;
 			this.ClientSize = new System.Drawing.Size(515, 697);
+			this.Controls.Add(this.checkBox7);
+			this.Controls.Add(this.checkBox6);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox3);
@@ -1164,6 +1263,12 @@
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
+			this.Controls.Add(this.radioButton6);
+			this.Controls.Add(this.textBox4);
+			this.Controls.Add(this.textBox3);
+			this.Controls.Add(this.label24);
+			this.Controls.Add(this.label25);
+			this.Controls.Add(this.label20);
 			this.Controls.Add(this.label19);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
@@ -1279,5 +1384,13 @@
 		private System.Windows.Forms.CheckBox checkBox4;
 		private System.Windows.Forms.Label label23;
 		private System.Windows.Forms.CheckBox checkBox5;
+		private System.Windows.Forms.TextBox textBox3;
+		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.Label label20;
+		private System.Windows.Forms.Label label24;
+		private System.Windows.Forms.RadioButton radioButton6;
+		private System.Windows.Forms.CheckBox checkBox6;
+		private System.Windows.Forms.CheckBox checkBox7;
+		private System.Windows.Forms.Label label25;
 	}
 }

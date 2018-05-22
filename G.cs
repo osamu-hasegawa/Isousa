@@ -252,7 +252,15 @@ namespace uSCOPE
 			//---
 			public int ETC_DAN_MODE = 0;
 			public int ETC_HIS_MODE = 0;
-			public int ETC_SPE_CD01 = 0;
+			public int ETC_SPE_CD01 = 0;//一度だけ実行(時期を見て削除すること)
+			public int ETC_SPE_CD02 = 0;//一度だけ実行(時期を見て削除すること)
+			[XmlIgnoreAttribute]
+			public Color ETC_BAK_COLOR = Color.FromArgb(198, 3, 85);
+			[XmlElement("ETC_BAK_COLOR")]
+			public string ETC_BAK_COLOR_STR {
+				get { return ColorTranslator.ToHtml(this.ETC_BAK_COLOR); }
+				set { this.ETC_BAK_COLOR = ColorTranslator.FromHtml(value); }
+			}
 			//---
 			public int MOZ_CND_FMOD = 0;
 			[XmlIgnoreAttribute]
@@ -819,7 +827,8 @@ namespace uSCOPE
 		}
 		static public double PX2UM(double px)
 		{
-			double um = PX2UM(px, G.SS.CAM_SPE_UMPPX, 8);
+			double	zoom = G.SS.ZOM_PLS_A * G.PLM_POS[3] + G.SS.ZOM_PLS_B;
+			double	um = PX2UM(px, G.SS.CAM_SPE_UMPPX, zoom);
 			return (um);
 		}
 		static public double PX2UM(double px, double umppx, double zoom)
@@ -829,8 +838,9 @@ namespace uSCOPE
 		}
 		static public double UM2PX(double um)
 		{
-			double px = UM2PX(um, G.SS.CAM_SPE_UMPPX, 8);
-			return (px);
+			double	zoom = G.SS.ZOM_PLS_A * G.PLM_POS[3] + G.SS.ZOM_PLS_B;
+		    double	px = UM2PX(um, G.SS.CAM_SPE_UMPPX, zoom);
+		    return (px);
 		}
 		static public double UM2PX(double um, double umppx, double zoom)
 		{

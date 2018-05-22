@@ -39,9 +39,19 @@ namespace uSCOPE
 				G.SS.PLM_POSWT[1] = G.SS.PLM_POSFT[1] = G.SS.PLM_POSZT[1] = "メモ２";
 				G.SS.PLM_POSWT[2] = G.SS.PLM_POSFT[2] = G.SS.PLM_POSZT[2] = "メモ３";
 			}
+			if (G.SS.ETC_SPE_CD02 == 0) {
+				G.SS.ETC_SPE_CD02 = 1;
+				switch (/*位置検出*/G.SS.MOZ_CND_PDFL) {
+				case  0:/*透過*/ G.SS.MOZ_CND_PDFL = 0; break;//カラー
+				case  1:/*反射*/ G.SS.MOZ_CND_PDFL = 0; break;//カラー
+				default:/*赤外*/ G.SS.MOZ_CND_PDFL = 1; break;//赤外
+				}
+			}
+			//G.SS.ETC_BAK_COLOR = Color.FromArgb(198, 3, 85);
 			//---
 			this.Left = G.AS.APP_F01_LFT;
 			this.Top = G.AS.APP_F01_TOP;
+			this.BackColor = G.SS.ETC_BAK_COLOR;
 			G.FORM01 = this;
 			//---
 			G.FORM10 = new Form10();
@@ -52,6 +62,12 @@ namespace uSCOPE
 			G.FORM12.TopLevel = false;
 			G.FORM13 = new Form13();
 			G.FORM13.TopLevel = false;
+			//---
+			G.FORM10.BackColor = G.SS.ETC_BAK_COLOR;
+			G.FORM11.BackColor = G.SS.ETC_BAK_COLOR;
+			G.FORM12.BackColor = G.SS.ETC_BAK_COLOR;
+			G.FORM13.BackColor = G.SS.ETC_BAK_COLOR;
+			//---
 			if (true) {
 				//プログラム起動時のUIFレベルとして記憶
 				G.UIF_LEVL = G.SS.ETC_UIF_LEVL;
@@ -243,16 +259,16 @@ namespace uSCOPE
 			}
 		}
 
-		static bool ctrlKeyFlg = false;
-		static bool AKeyFlg = false;
-		static bool BKeyFlg = false;
-		static bool CKeyFlg = false;
+        static bool ctrlKeyFlg = false;
+        static bool AKeyFlg = false;
+        static bool BKeyFlg = false;
+        static bool CKeyFlg = false;
+        bool flag = false;
 
 		private void Form01_KeyDown(object sender, KeyEventArgs e)
 		{
-			bool flag = true;
-
 #if false
+			bool flag = true;
 			if (false) {
 			}
 			else if ((System.Windows.Input.Keyboard.GetKeyStates(System.Windows.Input.Key.LeftCtrl) & System.Windows.Input.KeyStates.Down)== 0) {
@@ -267,21 +283,26 @@ namespace uSCOPE
 			else if ((System.Windows.Input.Keyboard.GetKeyStates(System.Windows.Input.Key.C) & System.Windows.Input.KeyStates.Down)== 0) {
 				flag = false;
 			}
+			if (flag) {
+			//this.KeyPreview = false;
+			//G.mlog("#iソフトウェアは次回起動時にユーザモードで起動します。");
+			var frm = new frmMessage();
+			frm.ShowDialog(this);
+            }
 #else
-			flag = false;
-			if(ctrlKeyFlg == false && e.KeyCode == Keys.ControlKey)
+			if(e.KeyCode == Keys.ControlKey)
 			{
 				ctrlKeyFlg = true;
 			}
-			if(AKeyFlg == false && e.KeyCode == Keys.A)
+			if(e.KeyCode == Keys.A)
 			{
 				AKeyFlg = true;
 			}
-			if(BKeyFlg == false && e.KeyCode == Keys.B)
+			if(e.KeyCode == Keys.B)
 			{
 				BKeyFlg = true;
 			}
-			if(CKeyFlg == false && e.KeyCode == Keys.C)
+			if(e.KeyCode == Keys.C)
 			{
 				CKeyFlg = true;
 			}
@@ -294,13 +315,39 @@ namespace uSCOPE
                 BKeyFlg = false;
                 CKeyFlg = false;
             }
-#endif
             if (flag) {
 			//this.KeyPreview = false;
 			//G.mlog("#iソフトウェアは次回起動時にユーザモードで起動します。");
 			var frm = new frmMessage();
 			frm.ShowDialog(this);
+            flag = false;
             }
+#endif
+        }
+
+        private void Form01_KeyUp(object sender, KeyEventArgs e)
+        {
+			if(e.KeyCode == Keys.ControlKey)
+			{
+				ctrlKeyFlg = false;
+                flag = false;
+			}
+			if(e.KeyCode == Keys.A)
+			{
+				AKeyFlg = false;
+                flag = false;
+			}
+			if(e.KeyCode == Keys.B)
+			{
+				BKeyFlg = false;
+                flag = false;
+			}
+			if(e.KeyCode == Keys.C)
+			{
+				CKeyFlg = false;
+                flag = false;
+			}
+
         }
     }
 }

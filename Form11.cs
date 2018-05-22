@@ -76,8 +76,13 @@ namespace uSCOPE
 		public bool isORG_ALL_DONE()
 		{
 			timer1_Tick(null, null);
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 3; i++) {
 				if ((G.PLM_STS_BIT[i] & (int)G.PLM_STS_BITS.BIT_ORGOK) == 0) {
+					return(false);
+				}
+			}
+			if (this.checkBox1.Checked) {
+				if ((G.PLM_STS_BIT[3] & (int)G.PLM_STS_BITS.BIT_ORGOK) == 0) {
 					return(false);
 				}
 			}
@@ -89,6 +94,9 @@ namespace uSCOPE
 			for (int i = 0; i < m_txtPos1.Length; i++) {
 				m_txtPos1[i].Text = "";
 				m_txtPos2[i].Text = "";
+			}
+			for (int i = 0; i < this.tabControl1.TabCount; i++) {
+				this.tabControl1.TabPages[i].BackColor = G.SS.ETC_BAK_COLOR;
 			}
 			this.backgroundWorker1.RunWorkerAsync();
 		}
@@ -232,9 +240,16 @@ namespace uSCOPE
 				G.PLM_STS |= (1 << q);
 			}
 			else if (sender == this.button37) {//原点ch.all
-				for (int q = 0; q < 4; q++) {
+				for (int q = 0; q < 3; q++) {
 					D.SET_STG_ORG(q);
 					G.PLM_STS |= (1 << q);
+				}
+				if (this.checkBox1.Checked) {//ZOOM軸の原点ALL
+					D.SET_STG_ORG(3);
+					G.PLM_STS |= (1 << 3);
+				}
+				else {
+					D.SET_STG_POS(3, G.SS.PLM_POSZ[3]);
 				}
 				this.button37.Tag = 1;
 			}
@@ -430,7 +445,9 @@ namespace uSCOPE
 					D.SET_STG_ABS(0, G.SS.PLM_POSX[3]);
 					D.SET_STG_ABS(1, G.SS.PLM_POSY[3]);
 					D.SET_STG_ABS(2, G.SS.PLM_POSF[3]);
+					if (this.checkBox1.Checked) {
 					D.SET_STG_ABS(3, G.SS.PLM_POSZ[3]);
+					}
 					G.PLM_STS |= (1 | 2 | 4 | 8);
 				}
 				if ((int)this.button37.Tag == 2 && G.PLM_STS == 0) {

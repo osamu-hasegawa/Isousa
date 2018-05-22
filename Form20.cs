@@ -50,6 +50,12 @@ namespace uSCOPE
 				e.Cancel = true;
 			}
 			else {
+				if (this.comboBox3.Text == "-") {
+					G.mlog("有効な測定モードを選択してください.");
+					this.comboBox3.Focus();
+					e.Cancel = true;
+					return;
+				}
 				G.SS = (G.SYSSET)m_ss.Clone();
 			}
 		}

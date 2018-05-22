@@ -1043,44 +1043,51 @@ retry:
 			}
 			return(fold+"\\"+buf);
 		}
+#if false
 		//---
 		private string to_pd_file(string path)
 		{
-			string fold = System.IO.Path.GetDirectoryName(path);
-			string name = System.IO.Path.GetFileName(path);
-			string buf = null, tmp = null;
-
-			if (string.IsNullOrEmpty(path)) {
-				return(null);
-			}
-			if (name.Contains("CT")) {
-				buf = name.Replace("CT", "@@");
-			}
-			else if (name.Contains("CR")) {
-				buf = name.Replace("CR", "@@");
+			if (true) {
+				return(path);
 			}
 			else {
-				buf = name.Replace("CL", "@@");
-			}
-			//---
-			switch (/*位置検出*/G.SS.MOZ_CND_PDFL) {
-			case  0:/*透過*/ tmp = buf.Replace("@@", "CT"); break;
-			case  1:/*反射*/ tmp = buf.Replace("@@", "CR"); break;
-			default:/*赤外*/ tmp = buf.Replace("@@", "IR"); break;
-			}
-			if (System.IO.File.Exists(fold + "\\" + tmp)) {
-				return(fold + "\\" +tmp);
-			}
-			//---
-			if (G.SS.ETC_CLF_CTCR == G.SS.MOZ_CND_PDFL) {
-				tmp = buf.Replace("@@", "CL");
-				if (System.IO.File.Exists(fold + "\\" +tmp)) {
+				string fold = System.IO.Path.GetDirectoryName(path);
+				string name = System.IO.Path.GetFileName(path);
+				string buf = null, tmp = null;
+
+				if (string.IsNullOrEmpty(path)) {
+					return(null);
+				}
+				if (name.Contains("CT")) {
+					buf = name.Replace("CT", "@@");
+				}
+				else if (name.Contains("CR")) {
+					buf = name.Replace("CR", "@@");
+				}
+				else {
+					buf = name.Replace("CL", "@@");
+				}
+				//---
+				switch (/*位置検出*/G.SS.MOZ_CND_PDFL) {
+				case  0:/*透過*/ tmp = buf.Replace("@@", "CT"); break;
+				case  1:/*反射*/ tmp = buf.Replace("@@", "CR"); break;
+				default:/*赤外*/ tmp = buf.Replace("@@", "IR"); break;
+				}
+				if (System.IO.File.Exists(fold + "\\" + tmp)) {
 					return(fold + "\\" +tmp);
 				}
+				//---
+				//if (G.SS.ETC_CLF_CTCR == G.SS.MOZ_CND_PDFL) {
+				//    tmp = buf.Replace("@@", "CL");
+				//    if (System.IO.File.Exists(fold + "\\" +tmp)) {
+				//        return(fold + "\\" +tmp);
+				//    }
+				//}
+				//---
+				return(null);
 			}
-			//---
-			return(null);
 		}
+#endif
 		private void dispose_bmp(ref Bitmap bmp)
 		{
 			if (bmp != null) {
@@ -1299,46 +1306,32 @@ retry:
 
 				files_ct = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD,  buf +  "CT_??"+zpos+".*");
 				files_cr = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD,  buf +  "CR_??"+zpos+".*");
-				files_cl = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD,  buf +  "CL_??"+zpos+".*");
 				files_ir = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD,  buf +  "IR_??"+zpos+".*");
 				if (files_ct.Length <= 0 && files_cr.Length <= 0) {
-					if (files_cl.Length <= 0) {
-						break;//終了
-					}
-					if (G.SS.ETC_CLF_CTCR == 0) {
-						files_ct = files_cl;
-					}
-					else {
-						files_cr = files_cl;
-					}
+					break;//終了
 				}
-				if ((cnt_of_seg = files_ct.Length) < files_cr.Length) {
-					cnt_of_seg = files_cr.Length;
+				if (files_ct.Length > 0 && files_cr.Length > 0) {
+					break;//終了(反射と透過が混在！)
 				}
-				if (/*位置検出*/G.SS.MOZ_CND_PDFL == 0/*透過*/ && files_ct.Length <= 0) {
-					break;
+				if (files_ct.Length > 0) {
+					files_cl = files_ct;//透過
+					G.set_imp_param(/*透過*/0, -1);
 				}
-				if (/*位置検出*/G.SS.MOZ_CND_PDFL == 1/*反射*/ && files_cr.Length <= 0) {
-					break;
+				else {
+					files_cl = files_cr;//反射
+					G.set_imp_param(/*反射*/1, -1);
 				}
-				if (/*位置検出*/G.SS.MOZ_CND_PDFL == 2/*赤外*/ && files_ir.Length <= 0) {
-					break;
-				}
-				if (/*カラー断面*/G.SS.MOZ_CND_DMFL == 0/*透過*/ && files_ct.Length <= 0) {
-					break;
-				}
-				if (/*カラー断面*/G.SS.MOZ_CND_DMFL == 1/*反射*/ && files_cr.Length <= 0) {
+				cnt_of_seg = files_cl.Length;
+				//---
+				if (/*位置検出*/G.SS.MOZ_CND_PDFL == 1/*赤外*/ && files_ir.Length <= 0) {
 					break;
 				}
 				switch (/*位置検出*/G.SS.MOZ_CND_PDFL) {
-				case  0:/*透過*/files_pd = files_ct; break;
-				case  1:/*反射*/files_pd = files_cr; break;
-				default:/*赤外*/files_pd = files_ir; break;
+				case  0:/*カラー*/files_pd = files_cl; break;
+				default:/*赤外  */files_pd = files_ir; break;
 				}
-				switch (/*カラー断面*/G.SS.MOZ_CND_DMFL) {
-				case   0:/*透過*/files_dm = files_ct; break;
-				default :/*反射*/files_dm = files_cr; break;
-				}
+				//カラー断面
+				files_dm = files_cl;
 				//---
 				m_back_of_x = 0;
 				//---
@@ -1348,7 +1341,7 @@ retry:
 				for (int i = 0; i < cnt_of_seg; i++) {
 					string path_dm1 = files_dm[i];
 					string path_ir1 = to_ir_file(path_dm1);
-					string path_pd1 = to_pd_file(path_dm1);
+					string path_pd1 = files_pd[i];
 					string name_dm1 = get_name_of_path(path_dm1);
 					string name_ir1 = get_name_of_path(path_ir1);
 					string name_pd1 = get_name_of_path(path_pd1);
@@ -1453,7 +1446,7 @@ retry:
 					}
 					if (false) {
 					}
-					else if (G.SS.MOZ_CND_PDFL == 0/*透過*/ || G.SS.MOZ_CND_PDFL == 1/*反射*/) {
+					else if (G.SS.MOZ_CND_PDFL == 0/*カラー*/) {
 						//---
 						object obj = m_bmp_dm1.Tag;
 						m_bmp_dm1.Tag = null;
@@ -1461,7 +1454,7 @@ retry:
 						m_bmp_dm1.Tag = obj;
 						//---
 					}
-					else if (G.SS.MOZ_CND_PDFL == 2/*赤外*/) {
+					else {/*赤外*/
 						string path_of_bo = this.textBox1.Text + "\\" + segs[i].name_of_ir;
 						Bitmap bo;
 						Bitmap bmp_ir = (Bitmap)m_bmp_ir1.Clone();
@@ -1479,7 +1472,7 @@ retry:
 					if (G.SS.MOZ_CND_NOMZ) {
 						//断面・毛髄径計算は行わない
 					}
-					else if (G.SS.MOZ_CND_PDFL == 2 && G.SS.MOZ_IRC_NOMZ) {
+					else if (G.SS.MOZ_CND_PDFL == 1 && G.SS.MOZ_IRC_NOMZ) {
 						G.SS.MOZ_IRC_NOMZ = G.SS.MOZ_IRC_NOMZ;//断面・毛髄径計算は行わない
 					}
 					else if (G.IR.CIR_CNT > 0) {
@@ -1675,15 +1668,6 @@ retry:
 			init();
 			if (true) {
 				G.push_imp_para();
-				if (G.SS.MOZ_CND_PDFL == 0/*透過*/) {
-					G.set_imp_param(/*透過*/0, -1);
-				}
-				else if (G.SS.MOZ_CND_PDFL == 1/*反射*/) {
-					G.set_imp_param(/*反射*/1, -1);
-				}
-				else if (G.SS.MOZ_CND_PDFL == 2/*赤外*/) {
-					//何もしない
-				}
 			}
 			if (true) {
 				if (G.FORM02 != null) {

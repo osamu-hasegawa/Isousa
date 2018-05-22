@@ -51,24 +51,6 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\Icon1.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Basler.Pylon">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\KOP\uSCOPE\Basler.Pylon.dll</HintPath>
@@ -209,12 +191,6 @@
     <Compile Include="Form31.designer.cs">
       <DependentUpon>Form31.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form20BAK.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form20BAK.Designer.cs">
-      <DependentUpon>Form20BAK.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form32.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -232,6 +208,18 @@
     </Compile>
     <Compile Include="Form33.designer.cs">
       <DependentUpon>Form33.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form20BAK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form20BAK.Designer.cs">
+      <DependentUpon>Form20BAK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form21BAK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form21BAK.Designer.cs">
+      <DependentUpon>Form21BAK.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="DlgProgress.resx">
       <DependentUpon>DlgProgress.cs</DependentUpon>
@@ -297,9 +285,6 @@
     <EmbeddedResource Include="Form31.resx">
       <DependentUpon>Form31.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form20BAK.resx">
-      <DependentUpon>Form20BAK.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form32.resx">
       <DependentUpon>Form32.cs</DependentUpon>
     </EmbeddedResource>
@@ -308,6 +293,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form33.resx">
       <DependentUpon>Form33.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form20BAK.resx">
+      <DependentUpon>Form20BAK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form21BAK.resx">
+      <DependentUpon>Form21BAK.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

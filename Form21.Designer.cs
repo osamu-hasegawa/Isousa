@@ -39,12 +39,11 @@
 			this.button3 = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkBox8 = new System.Windows.Forms.CheckBox();
 			this.label29 = new System.Windows.Forms.Label();
 			this.label28 = new System.Windows.Forms.Label();
-			this.label27 = new System.Windows.Forms.Label();
 			this.button4 = new System.Windows.Forms.Button();
 			this.comboBox8 = new System.Windows.Forms.ComboBox();
-			this.comboBox7 = new System.Windows.Forms.ComboBox();
 			this.label26 = new System.Windows.Forms.Label();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.comboBox6 = new System.Windows.Forms.ComboBox();
@@ -107,7 +106,6 @@
 			this.numericUpDown19 = new System.Windows.Forms.NumericUpDown();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
-			this.checkBox8 = new System.Windows.Forms.CheckBox();
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -138,7 +136,7 @@
 			this.groupBox3.Controls.Add(this.label8);
 			this.groupBox3.Controls.Add(this.label10);
 			this.groupBox3.Controls.Add(this.label7);
-			this.groupBox3.Location = new System.Drawing.Point(12, 297);
+			this.groupBox3.Location = new System.Drawing.Point(12, 275);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(288, 64);
 			this.groupBox3.TabIndex = 48;
@@ -256,11 +254,9 @@
 			this.groupBox2.Controls.Add(this.checkBox8);
 			this.groupBox2.Controls.Add(this.label29);
 			this.groupBox2.Controls.Add(this.label28);
-			this.groupBox2.Controls.Add(this.label27);
 			this.groupBox2.Controls.Add(this.button4);
 			this.groupBox2.Controls.Add(this.label4);
 			this.groupBox2.Controls.Add(this.comboBox8);
-			this.groupBox2.Controls.Add(this.comboBox7);
 			this.groupBox2.Controls.Add(this.label26);
 			this.groupBox2.Controls.Add(this.textBox1);
 			this.groupBox2.Controls.Add(this.comboBox6);
@@ -269,15 +265,25 @@
 			this.groupBox2.Controls.Add(this.button3);
 			this.groupBox2.Location = new System.Drawing.Point(12, 12);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(289, 224);
+			this.groupBox2.Size = new System.Drawing.Size(289, 201);
 			this.groupBox2.TabIndex = 50;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "毛髪画像";
 			// 
+			// checkBox8
+			// 
+			this.checkBox8.AutoSize = true;
+			this.checkBox8.Location = new System.Drawing.Point(29, 174);
+			this.checkBox8.Name = "checkBox8";
+			this.checkBox8.Size = new System.Drawing.Size(211, 16);
+			this.checkBox8.TabIndex = 57;
+			this.checkBox8.Text = "グラフ表示は行わず、画像表示のみ行う";
+			this.checkBox8.UseVisualStyleBackColor = true;
+			// 
 			// label29
 			// 
 			this.label29.AutoSize = true;
-			this.label29.Location = new System.Drawing.Point(219, 173);
+			this.label29.Location = new System.Drawing.Point(219, 151);
 			this.label29.Name = "label29";
 			this.label29.Size = new System.Drawing.Size(65, 12);
 			this.label29.TabIndex = 38;
@@ -286,20 +292,11 @@
 			// label28
 			// 
 			this.label28.AutoSize = true;
-			this.label28.Location = new System.Drawing.Point(27, 172);
+			this.label28.Location = new System.Drawing.Point(27, 150);
 			this.label28.Name = "label28";
 			this.label28.Size = new System.Drawing.Size(36, 12);
 			this.label28.TabIndex = 38;
 			this.label28.Text = "Z位置";
-			// 
-			// label27
-			// 
-			this.label27.AutoSize = true;
-			this.label27.Location = new System.Drawing.Point(27, 148);
-			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(80, 12);
-			this.label27.TabIndex = 38;
-			this.label27.Text = "断面カラー画像";
 			// 
 			// button4
 			// 
@@ -322,22 +319,10 @@
             "Z10 (AF位置)",
             "Z11 (+側)",
             "Z12 (+側)"});
-			this.comboBox8.Location = new System.Drawing.Point(162, 169);
+			this.comboBox8.Location = new System.Drawing.Point(162, 147);
 			this.comboBox8.Name = "comboBox8";
 			this.comboBox8.Size = new System.Drawing.Size(50, 20);
 			this.comboBox8.TabIndex = 0;
-			// 
-			// comboBox7
-			// 
-			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox7.FormattingEnabled = true;
-			this.comboBox7.Items.AddRange(new object[] {
-            "透過画像",
-            "反射画像"});
-			this.comboBox7.Location = new System.Drawing.Point(162, 142);
-			this.comboBox7.Name = "comboBox7";
-			this.comboBox7.Size = new System.Drawing.Size(75, 20);
-			this.comboBox7.TabIndex = 0;
 			// 
 			// label26
 			// 
@@ -361,8 +346,7 @@
 			this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox6.FormattingEnabled = true;
 			this.comboBox6.Items.AddRange(new object[] {
-            "透過画像",
-            "反射画像",
+            "カラー画像",
             "赤外画像"});
 			this.comboBox6.Location = new System.Drawing.Point(162, 113);
 			this.comboBox6.Name = "comboBox6";
@@ -397,7 +381,7 @@
 			// button1
 			// 
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button1.Location = new System.Drawing.Point(76, 556);
+			this.button1.Location = new System.Drawing.Point(76, 534);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 26);
 			this.button1.TabIndex = 51;
@@ -408,7 +392,7 @@
 			// button2
 			// 
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(174, 556);
+			this.button2.Location = new System.Drawing.Point(174, 534);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 26);
 			this.button2.TabIndex = 52;
@@ -429,7 +413,7 @@
 			this.groupBox4.Controls.Add(this.numericUpDown2);
 			this.groupBox4.Controls.Add(this.label3);
 			this.groupBox4.Controls.Add(this.label46);
-			this.groupBox4.Location = new System.Drawing.Point(12, 366);
+			this.groupBox4.Location = new System.Drawing.Point(12, 344);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(289, 179);
 			this.groupBox4.TabIndex = 48;
@@ -599,7 +583,7 @@
 			this.groupBox1.Controls.Add(this.numericUpDown3);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Location = new System.Drawing.Point(14, 242);
+			this.groupBox1.Location = new System.Drawing.Point(14, 220);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(286, 49);
 			this.groupBox1.TabIndex = 57;
@@ -1158,7 +1142,7 @@
 			this.groupBox6.Controls.Add(this.numericUpDown39);
 			this.groupBox6.Controls.Add(this.numericUpDown33);
 			this.groupBox6.Controls.Add(this.numericUpDown35);
-			this.groupBox6.Location = new System.Drawing.Point(317, 12);
+			this.groupBox6.Location = new System.Drawing.Point(318, 12);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(265, 511);
 			this.groupBox6.TabIndex = 59;
@@ -1201,22 +1185,12 @@
 			// label25
 			// 
 			this.label25.AutoSize = true;
-			this.label25.Location = new System.Drawing.Point(7, 563);
+			this.label25.Location = new System.Drawing.Point(7, 541);
 			this.label25.Name = "label25";
 			this.label25.Size = new System.Drawing.Size(47, 12);
 			this.label25.TabIndex = 55;
-			this.label25.Text = "321, 620";
+			this.label25.Text = "320, 620";
 			this.label25.Visible = false;
-			// 
-			// checkBox8
-			// 
-			this.checkBox8.AutoSize = true;
-			this.checkBox8.Location = new System.Drawing.Point(29, 196);
-			this.checkBox8.Name = "checkBox8";
-			this.checkBox8.Size = new System.Drawing.Size(211, 16);
-			this.checkBox8.TabIndex = 57;
-			this.checkBox8.Text = "グラフ表示は行わず、画像表示のみ行う";
-			this.checkBox8.UseVisualStyleBackColor = true;
 			// 
 			// Form21
 			// 
@@ -1224,7 +1198,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(314, 592);
+			this.ClientSize = new System.Drawing.Size(317, 571);
 			this.Controls.Add(this.label25);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox1);
@@ -1348,8 +1322,6 @@
 		private System.Windows.Forms.Label label25;
 		private System.Windows.Forms.ComboBox comboBox6;
 		private System.Windows.Forms.Label label26;
-		private System.Windows.Forms.Label label27;
-		private System.Windows.Forms.ComboBox comboBox7;
 		private System.Windows.Forms.Label label28;
 		private System.Windows.Forms.ComboBox comboBox8;
 		private System.Windows.Forms.Label label29;

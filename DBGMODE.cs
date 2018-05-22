@@ -159,13 +159,13 @@ namespace uSCOPE
 			else {
 				PLM_STS[idx] &=~(int)G.PLM_STS_BITS.BIT_LMT_H;
 			}
-			if (PLM_CNT[idx] > G.SS.PLM_PLIM[idx]) {
+			if (PLM_CNT[idx] >= G.SS.PLM_PLIM[idx]) {
 				PLM_STS[idx] |= (int)G.PLM_STS_BITS.BIT_LMT_P;
 			}
 			else {
 				PLM_STS[idx] &=~(int)G.PLM_STS_BITS.BIT_LMT_P;
 			}
-			if (PLM_CNT[idx] < G.SS.PLM_MLIM[idx]) {
+			if (PLM_CNT[idx] <= G.SS.PLM_MLIM[idx]) {
 				PLM_STS[idx] |= (int)G.PLM_STS_BITS.BIT_LMT_M;
 			}
 			else {
@@ -193,6 +193,9 @@ namespace uSCOPE
 				RET_BUF[1] = (byte)B3(PLM_CNT[idx]);
 				RET_BUF[2] = (byte)B2(PLM_CNT[idx]);
 				RET_BUF[3] = (byte)B1(PLM_CNT[idx]);//LSB
+				break;
+			case D.CMD_SET_PLM_POS:
+				PLM_CNT[idx] = MAKELONG(0x00, buf[2], buf[3], buf[4]);
 				break;
 			case D.CMD_GET_PLM_STS:
 				RET_BUF[0] = STS_BIT(0);//MSB
@@ -401,32 +404,44 @@ namespace uSCOPE
 				int CAM_WID = 2592;
 				const
 				int CAM_HEI = 1944;
-				const
-				int IMAGE_RATE = 4;
+				//const
+				//int IMAGE_RATE = 4;
+#if true
+				double LENS_ZOOM = G.SS.ZOM_PLS_A * G.PLM_POS[3] + G.SS.ZOM_PLS_B;
+#else
 				const
 				int LENS_ZOOM = 16;
-				int x = PLM_CNT[0];
-				int y = PLM_CNT[1];
-				double xum = x * G.SS.PLM_UMPP[0];//ステージのum位置
-				double yum = y * G.SS.PLM_UMPP[1];
-				double xpx = G.UM2PX(xum, G.SS.CAM_SPE_UMPPX, LENS_ZOOM/4);
-				double ypx = G.UM2PX(yum, G.SS.CAM_SPE_UMPPX, LENS_ZOOM/4);
-				int ox = (int)(m_bmp_org.Width / 2 - xpx / IMAGE_RATE);
-				int oy = (int)(m_bmp_org.Height / 2 + ypx / IMAGE_RATE);
-				int wid = CAM_WID / IMAGE_RATE;
-				int	hei = CAM_HEI / IMAGE_RATE;
+#endif
+				//int x = PLM_CNT[0];
+				//int y = PLM_CNT[1];
+				double wid_p = G.SS.PLM_PLIM[0] - G.SS.PLM_MLIM[0];
+				double hei_p = G.SS.PLM_PLIM[1] - G.SS.PLM_MLIM[1];
+				double wid_u = wid_p * G.SS.PLM_UMPP[0];
+				double hei_u = hei_p * G.SS.PLM_UMPP[1];
+				int wid_i = m_bmp_org.Width;
+				int hei_i = m_bmp_org.Height;
+				double x_per = (PLM_CNT[0]- G.SS.PLM_MLIM[0]) / wid_p;
+				double y_per = (PLM_CNT[1]- G.SS.PLM_MLIM[1]) / hei_p;
+				//double xum = x * G.SS.PLM_UMPP[0];//ステージのum位置
+				//double yum = y * G.SS.PLM_UMPP[1];
+				//double xpx = G.UM2PX(xum, G.SS.CAM_SPE_UMPPX, LENS_ZOOM/4);
+				//double ypx = G.UM2PX(yum, G.SS.CAM_SPE_UMPPX, LENS_ZOOM/4);
+				int ox = (int)(wid_i - wid_i * x_per);
+				int oy = (int)(hei_i * y_per);
+				int wid = (int)(((CAM_WID *G.SS.CAM_SPE_UMPPX)/wid_u * wid_i)/LENS_ZOOM);
+				int	hei = (int)(((CAM_HEI *G.SS.CAM_SPE_UMPPX)/hei_u * hei_i)/LENS_ZOOM);
 				//
 				Graphics g = Graphics.FromImage(m_bmp_cam);
 				Rectangle d_rt = new Rectangle(0,0,CAM_WID,CAM_HEI);
 				Rectangle s_rt = new Rectangle(ox-wid/2, oy-hei/2, wid, hei);
-				g.Clear(Color.Aquamarine);
+				g.Clear(Color.Black/*.Aquamarine*/);
 				g.DrawImage(m_bmp_org, d_rt, s_rt, GraphicsUnit.Pixel);
 				g.Dispose();
 				Thread.Sleep(0);
 				//画像取得
 				try {
 					m_fm.BeginInvoke(m_fg, new object[] { null, null });
-					if (m_event_cam.WaitOne(750)) {
+					if (m_event_cam.WaitOne(250)) {
 						if (m_exit_req) {
 							break;
 						}

@@ -302,6 +302,10 @@ namespace uSCOPE
 			CMDOUT(CMD_GET_PLM_POS, idx, buf);
 			return(MAKELONG(buf[0], buf[1], buf[2], buf[3]));
 		}
+		static public void SET_STG_POS(int idx, int cnt) {
+			byte[] buf = new byte[5];
+			CMDOUT(CMD_SET_PLM_POS, idx, B3(cnt), B2(cnt), B1(cnt), null);
+		}
 		static public int GET_STG_STS() {
 			byte[] buf = new byte[5];
 			CMDOUT(CMD_GET_PLM_STS, 0, buf);
