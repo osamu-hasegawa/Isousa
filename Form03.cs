@@ -1476,7 +1476,10 @@ retry:
 						bmp_ir.Dispose();
 						bmp_ir = null;
 					}
-					if (G.SS.MOZ_CND_PDFL == 2 && G.SS.MOZ_IRC_NOMZ) {
+					if (G.SS.MOZ_CND_NOMZ) {
+						//断面・毛髄径計算は行わない
+					}
+					else if (G.SS.MOZ_CND_PDFL == 2 && G.SS.MOZ_IRC_NOMZ) {
 						G.SS.MOZ_IRC_NOMZ = G.SS.MOZ_IRC_NOMZ;//断面・毛髄径計算は行わない
 					}
 					else if (G.IR.CIR_CNT > 0) {
@@ -1646,6 +1649,28 @@ retry:
 		{
 			if (true) {
 				this.SetDesktopBounds(G.AS.APP_F02_LFT, G.AS.APP_F02_TOP, G.AS.APP_F02_WID, G.AS.APP_F02_HEI);
+			}
+			if (true) {
+				if (G.UIF_LEVL == 0) {
+				}
+				if (G.SS.MOZ_CND_NOMZ) {
+					this.groupBox4.Visible = false;
+					this.groupBox1.Visible = false;
+					this.groupBox2.Visible = false;
+					//---
+					this.checkBox1.Visible = false;
+					this.checkBox9.Visible = false;
+					this.checkBox2.Visible = false;
+					this.checkBox8.Visible = false;
+					this.checkBox10.Visible = false;
+					this.panel5.Visible = false;
+					this.panel8.Visible = false;
+					this.label7.Visible = false;
+					this.label9.Visible = false;
+					//---
+					this.tableLayoutPanel1.RowCount = 1;
+					this.tableLayoutPanel2.RowCount = 1;
+				}
 			}
 			init();
 			if (true) {

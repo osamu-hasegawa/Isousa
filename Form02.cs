@@ -16,7 +16,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.DataVisualization.Charting;
 //---
 using Basler.Pylon;
-//using OpenCvSharp;
 
 #pragma warning disable 1717//(同じ変数に割り当てられました。他の変数に割り当てますか?)
 
@@ -27,17 +26,71 @@ namespace uSCOPE
 	{
 		private 
 		const bool C_SELFCONT = true;
-
-//		private const int C_HOVER_MS = 250;//500;
-//		private const int C_LEAVE_MS = 3000; 
-		private const int C_HOVER_MS = 150;
-		private const int C_LEAVE_MS = 2500; 
+		private 
+		const int C_HANKEI = 3;
 		//---
-		private int[] m_zoomLevel = { 25, 50, 75, 100, 125, 150, 200 };
-		private int m_zoom = 3;
+		//private int[] m_zoomLevel = { 25, 50, 75, 100, 125, 150, 200 };
+		//private int m_zoom = 3;
 		//---
-		private Stopwatch m_sw_en = new Stopwatch();
-		private Stopwatch m_sw_lv = new Stopwatch();
+		private class CALC_LEN {
+			//pt[0],pt[1]:直線
+			//pt[2]:直線と直交する線上の点
+			//pt[3]:直線上の交点
+			Point[] pt_of_bmp;
+			bool	flag;		//再計算フラグ
+			double	len;		//長さ
+			//---
+			int		width, height;
+			//---
+			public CALC_LEN() {
+				this.pt_of_bmp = new Point[4];
+				this.flag = true;
+				this.len = 0.0;
+				this.width = this.height = -1;
+			}
+			public void reset(int width, int height) {
+				if (width != this.width || height != this.height) {
+					int ox =  width/2, oy =  height/2;
+					this.width = width;
+					this.height = height;
+					this.flag = true;
+					this.pt_of_bmp[0].X = ox-100;
+					this.pt_of_bmp[0].Y = oy-100;
+					this.pt_of_bmp[1].X = ox+100;
+					this.pt_of_bmp[1].Y = oy+100;
+					this.pt_of_bmp[2].X = ox-100;
+					this.pt_of_bmp[2].Y = oy+100;
+					get_len();
+				}
+			}
+			public void set_pt(int i, Point pt) {
+				this.pt_of_bmp[i] = pt;
+				flag = true;
+			}
+			public Point get_pt(int i) {
+				return(this.pt_of_bmp[i]);
+			}
+			public double get_len() {
+				if (flag) {
+					FN1D f1 = new FN1D(this.pt_of_bmp[0], this.pt_of_bmp[1]);
+					FN1D f2 = f1.GetNormFn(this.pt_of_bmp[2]);
+					PointF pt = f1.GetCrossPt(f2);
+					if (f1.valid == false || f2.valid == false) {
+						len = 0.0;
+					}
+					//else if (double.IsNaN(f1.A) || double.IsNaN(f2.A) || double.IsNaN(pt.X) || double.IsNaN(pt.Y)) {
+					//    len = 0.0;
+					//}
+					else {
+						len = G.diff((PointF)this.pt_of_bmp[2], pt);
+					}
+					this.pt_of_bmp[3] = Point.Round(pt);
+					flag = false;
+					//再計算
+				}
+				return(this.len);
+			}
+		};
 		//---
 		private Camera m_camera = null;
 		private PixelDataConverter m_converter = new PixelDataConverter();
@@ -73,7 +126,7 @@ namespace uSCOPE
 		//IplImage m_img_m = null;
 		//IplImage m_img_b = null;
 		//CvFont fnt = null;
-		AutoResetEvent m_event = new AutoResetEvent(false);
+		//AutoResetEvent m_event = new AutoResetEvent(false);
 		bool m_bproc = false;
 		int	m_tk1, m_tk2, m_tk3;
 		string m_filename = null;
@@ -90,6 +143,9 @@ namespace uSCOPE
 		private int m_chk2=0;
 		private int m_chk3=0;
 		private int HIS_PAR1 = 0;
+		private Point[] m_pt_of_marker = new Point[9];//2点間断面(0,1), コントラスト矩形(2,3), 距離(4,5,6)
+		private int m_mouse_icap=-1;
+		private CALC_LEN m_calc_len = new CALC_LEN();
 		//---
 		public Form02()
 		{
@@ -221,37 +277,49 @@ namespace uSCOPE
 		//private int m_mode_layout;
 		public void set_layout(/*int i*/)
 		{
-#if true
 			if (this.checkBox1.Checked) {
 				this.groupBox1.Visible = true;
+				if (true) {
+					if (m_rtDanImg.Width <= 0 && m_rtDanImg.Height <= 0) {
+						int GAP = 100;
+						m_rtDanBmp.X = m_width/2-GAP/2;
+						m_rtDanBmp.Y = m_height/2-GAP/2;
+						m_rtDanBmp.Width = m_rtDanBmp.Height = GAP;
+						m_rtDanImg = BMPCD_TO_IMGCD(m_rtDanBmp);
+					}
+					m_pt_of_marker[0].X = m_rtDanImg.X;
+					m_pt_of_marker[0].Y = m_rtDanImg.Y;
+					m_pt_of_marker[1].X = m_rtDanImg.Right;
+					m_pt_of_marker[1].Y = m_rtDanImg.Bottom;
+				}
 			}
 			else {
 				this.groupBox1.Visible = false;
+				if (true) {
+					m_pt_of_marker[0].X = -1;
+					m_pt_of_marker[0].Y = -1;
+					m_pt_of_marker[1].X = -1;
+					m_pt_of_marker[1].Y = -1;
+				}
 			}
 			if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
+				if (G.CNT_MOD == 1) {
+					m_pt_of_marker[2].X = m_rtCntImg.X;
+					m_pt_of_marker[2].Y = m_rtCntImg.Y;
+					m_pt_of_marker[3].X = m_rtCntImg.Right;
+					m_pt_of_marker[3].Y = m_rtCntImg.Bottom;
+				}
 				this.groupBox2.Visible = true;
 			}
 			else {
 				this.groupBox2.Visible = false;
+				if (true) {
+					m_pt_of_marker[2].X = -1;
+					m_pt_of_marker[2].Y = -1;
+					m_pt_of_marker[3].X = -1;
+					m_pt_of_marker[3].Y = -1;
+				}
 			}
-#else
-			switch (m_mode_layout = i) {
-			case 0:
-				this.groupBox1.Visible = false;
-				this.pictureBox3.Visible = false;
-				break;
-			case 1:
-				this.pictureBox1.Dock = DockStyle.Fill;
-				//this.chart1.Dock = DockStyle.Bottom;
-				this.groupBox1.Visible = true;
-				this.pictureBox3.Visible = false;
-				break;
-			default:
-				this.groupBox1.Visible = true;
-				this.pictureBox3.Visible = true;
-				break;
-			}
-#endif
 		}
 		public void get_param(CAM_PARAM param, out double fVal, out double fMax, out double fMin)
 		{
@@ -577,10 +645,10 @@ namespace uSCOPE
 		}
 		private void set_visible(bool b)
 		{
-			this.button1.Visible = b;
-			this.button2.Visible = b;
-			this.button3.Visible = b;
-			this.button4.Visible = b;
+			//this.button1.Visible = b;
+			//this.button2.Visible = b;
+			//this.button3.Visible = b;
+			//this.button4.Visible = b;
 			this.button5.Visible = b;
 			this.button6.Visible = b;
 			this.button7.Visible = b;
@@ -590,9 +658,7 @@ namespace uSCOPE
 			this.button11.Visible = b;
 			this.button12.Visible = b;
 			this.checkBox1.Visible = b;
-			this.checkBox2.Visible = b;
 			//---
-			//this.button8.BringToFront();
 		}
 		private void update_sts_txt(int mask)
 		{
@@ -628,72 +694,7 @@ namespace uSCOPE
 				this.SetDesktopBounds(G.AS.APP_F02_LFT, G.AS.APP_F02_TOP, G.AS.APP_F02_WID, G.AS.APP_F02_HEI);
 			}
 			if (true) {
-				Control[] btns_src = {
-					this.button1,this.button2,this.button3,
-					this.button4,this.button5,this.button6,
-					this.button7,this.button8,this.button9,
-					this.button10,this.button11, this.checkBox1,
-					this.checkBox2,this.button12
-				};
-				Control[] btns_dst = {
-					this.button5, this.button6,this.button7,
-					this.button8,this.button9,  null,
-//					this.checkBox1, null,null,
-					this.checkBox1, this.button10,this.button11,
-					this.button12,null,null,
-					null,null
-				};
-				int	cnt = btns_src.Length;
-				Point[] pts = new Point[cnt];
-				for (int i = 0; i < cnt; i++) {
-					pts[i] = btns_src[i].Location;
-				}
-				for (int i = 0; i < cnt; i++) {
-					if (btns_dst[i] != null) {
-						btns_dst[i].Location = pts[i];
-					}
-				}
-				for (int i = 0; i < cnt; i++) {
-					if (!btns_dst.Contains(btns_src[i])) {
-						btns_src[i].Dispose();
-					}
-				}
 			}
-#if false
-			else {
-				Control[] btns = {
-					this.button1,this.button2,this.button3,
-					this.button4,this.button5,this.button6,
-					this.button7,this.button8,this.button9,
-					this.button10,this.button11,
-					this.checkBox1,
-					this.checkBox2
-				};
-				Point[] pts = new Point[11];
-
-				for (int i = 0; i < 11; i++) {
-					pts[i] = btns[i].Location;
-				}
-				for (int i = 0; i < 8; i++) {
-					//pts[i].Y += 50;
-					if (i >= 7) {
-					btns[11].Location = pts[i-1];
-					}
-					else {
-					btns[4+i].Location = pts[i];
-					}
-				}
-				this.button1.Dispose();
-				this.button2.Dispose();
-				this.button3.Dispose();
-				this.button4.Dispose();
-				//this.button10.Dispose();
-				//this.button11.Dispose();
-				this.checkBox2.Dispose();
-				//---
-				//---
-			}
-#endif
 			//this.pictureBox1.Dock = DockStyle.Fill;
 			//this.panel1.Dock = DockStyle.Fill;
 			set_visible(false);
@@ -714,9 +715,12 @@ namespace uSCOPE
 				}
 			}
 #if true
-			buttons_Click(this.button4, null);//zoom fit
+			if (true) {
+				//fit to win.
+				this.pictureBox1.Dock = DockStyle.Fill;
+				this.pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+			}
 #endif
-			//this.backgroundWorker1.RunWorkerAsync();
 			set_title();
 			update_sts_txt(32);
 			if (true) {
@@ -787,11 +791,26 @@ namespace uSCOPE
 			if (G.AS.DEBUG_MODE == 1) {
 				OnCameraOpened(null, null);
 			}
+			//---
+			if (G.SS.ETC_UIF_LEVL == 0) {
+				this.toolStripMenuItem20.Visible = false;//ヒストグラム
+				this.toolStripMenuItem21.Visible = false;//計算範囲・サブメニュー
+				this.toolStripSeparator3.Visible = false;
+				this.toolStripSeparator4.Visible = false;
+			}
+			//---
+			for (int i = 0; i < m_pt_of_marker.Length; i++) {
+				m_pt_of_marker[i].X = m_pt_of_marker[i].Y = -1;
+			}
 		}
 
 		private void Form02_FormClosing(object sender, FormClosingEventArgs e)
-		{//// Closes the camera object when the window is closed.
-			// Close the camera object.
+		{
+			if (G.FORM12.AUT_STS != 0) {
+				//自動測定中はクローズ禁止
+				e.Cancel = true;
+				return;
+			}
 			if (isCONNECTED()) {
 				Stop();
 				for (int i = 0; i < 3; i++) {
@@ -809,27 +828,17 @@ namespace uSCOPE
 				m_bmpZ = null;
 			}
 			//---
-#if false
-			this.backgroundWorker1.CancelAsync();
-			m_event.Set();
-			while (this.backgroundWorker1.IsBusy) {
-				Application.DoEvents();
-				Thread.Sleep(10);
-			}
-			if (m_camera != null) {
-				e.Cancel = true;
-				return;
-			}
-			if (m_bcontinuous) {
-				Stop();
-			}
-#endif
 			DestroyCamera();
 			//---
+			if (this.Left <= -32000 || this.Top <= -32000) {
+				//最小化時は更新しない
+			}
+			else {
 			G.AS.APP_F02_LFT = this.Left;
 			G.AS.APP_F02_TOP = this.Top;
 			G.AS.APP_F02_WID = this.Width;
 			G.AS.APP_F02_HEI = this.Height;
+			}
 			//---
 			G.FORM02 = null;
 			G.FORM12.UPDSTS();
@@ -839,30 +848,30 @@ namespace uSCOPE
 		{
 			if (false) {
 			}
-			else if (sender == this.button1) {
-				//zoom in
-				if ((m_zoom + 1) < m_zoomLevel.Length) {
-					m_zoom++;
-					set_size();
-				}
-			}
-			else if (sender == this.button2) {
-				//zoom out
-				if (m_zoom > 0) {
-					m_zoom--;
-				}
-				set_size();
-			}
-			else if (sender == this.button3) {
-				//zoom 100%
-				m_zoom = 3;
-				set_size();
-			}
-			else if (sender == this.button4) {
-				//fit to win.
-				this.pictureBox1.Dock = DockStyle.Fill;
-				this.pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-			}
+			//else if (sender == this.button1) {
+			//    //zoom in
+			//    if ((m_zoom + 1) < m_zoomLevel.Length) {
+			//        m_zoom++;
+			//        set_size();
+			//    }
+			//}
+			//else if (sender == this.button2) {
+			//    //zoom out
+			//    if (m_zoom > 0) {
+			//        m_zoom--;
+			//    }
+			//    set_size();
+			//}
+			//else if (sender == this.button3) {
+			//    //zoom 100%
+			//    m_zoom = 3;
+			//    set_size();
+			//}
+			//else if (sender == this.button4) {
+			//    //fit to win.
+			//    this.pictureBox1.Dock = DockStyle.Fill;
+			//    this.pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+			//}
 			else if (sender == this.button5) {
 				if (m_filename != null) {
 					m_filename = null;
@@ -922,21 +931,6 @@ namespace uSCOPE
 			else if (sender == this.checkBox1) {
 				set_layout(/*this.checkBox1.Checked ? 1: 0*/);
 			}
-			else if (sender == this.checkBox2) {
-#if true
-#else
-				this.chart1.Series[0].Points.Clear();
-				Random rnd = new Random();
-				//this.chart1.ChartAreas[0].
-				for (int i = 0; i < 200; i++) {
-				this.chart1.Series[0].Points.AddXY(i, rnd.Next(255));
-				}
-				//this.chart1.ChartAreas[0].Position.Width = 50;
-				//this.chart1.ChartAreas[0].Position.X = 20;
-				this.chart1.ChartAreas[0].Position.Auto = true;
-				this.groupBox1.Visible = true;
-#endif
-			}
 			else if (sender == this.radioButton1 || sender == this.radioButton2) {
 				G.SS.ETC_DAN_MODE = (this.radioButton1.Checked ? 0 : 1);
 				set_danmod();
@@ -949,9 +943,10 @@ namespace uSCOPE
 				disp_bmp(true);
 			}
 		}
-
+		/*
 		private void set_size()
 		{
+			G.mlog("set_size is called!");
 			int wid, hei;
 			this.pictureBox1.Dock = DockStyle.None;
 			this.pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -959,7 +954,7 @@ namespace uSCOPE
 			wid = (int)(this.pictureBox1.Image.Width * m_zoomLevel[m_zoom] / 100.0);
 			hei = (int)(this.pictureBox1.Image.Height * m_zoomLevel[m_zoom] / 100.0);
 			this.pictureBox1.Size = new Size(wid, hei);
-		}
+		}*/
 
 
 		private void Form02_DragEnter(object sender, DragEventArgs e)
@@ -1039,66 +1034,7 @@ namespace uSCOPE
 				G.FORM12.UPDSTS();
 			}
 		}
-		private int get_cursor_y()
-		{
-			//画面座標でマウスポインタの位置を取得する
-			System.Drawing.Point sp = System.Windows.Forms.Cursor.Position;
-			//画面座標をクライアント座標に変換する
-			System.Drawing.Point cp = this.PointToClient(sp);
-			//X座標を取得する
-			int x = cp.X;
-			//Y座標を取得する
-			int y = cp.Y;
-			//Debug.WriteLine("get_cursor_y:" + y + ":"+Environment.TickCount);
-			return (y);
-		}
-		private void timer1_Tick(object sender, EventArgs e)
-		{
-		#if false//2018.04.24
-			if (m_sw_en.IsRunning && m_sw_en.ElapsedMilliseconds >= C_HOVER_MS) {
-				set_visible(true);
-				m_sw_en.Stop();
-			}
-			if (m_sw_lv.IsRunning && m_sw_lv.ElapsedMilliseconds >= C_LEAVE_MS) {
-				set_visible(false);
-				m_sw_lv.Stop();
-			}
-		#endif
-		}
 
-		private void Form02_MouseMove(object sender, MouseEventArgs e)
-		{
-			panel1_MouseMove(sender, e);
-		}
-
-		private void panel1_MouseMove(object sender, MouseEventArgs e)
-		{
-			int y = get_cursor_y();
-			if (y <= 20 && y > 0) {
-				if (m_sw_lv.IsRunning == true) {
-					m_sw_lv.Stop();
-					m_sw_lv.Reset();
-				}
-				if (this.button8.Visible == true) {
-					return;//常態
-				}
-				if (m_sw_en.IsRunning == false) {
-					m_sw_en.Restart();
-				}
-			}
-			else {
-				if (m_sw_en.IsRunning == true) {
-					m_sw_en.Stop();
-					m_sw_en.Reset();
-				}
-				if (this.button8.Visible == false) {
-					return;//常態
-				}
-				if (m_sw_lv.IsRunning == false) {
-					m_sw_lv.Restart();
-				}
-			}
-		}
 		private bool m_mouse_cap = false;
 		private Rectangle m_rtImgBounds;
 		private Rectangle m_rtCntImg;
@@ -1279,8 +1215,6 @@ namespace uSCOPE
 		}
 		private void set_hismod()
 		{
-			this.propertyGrid1.Visible = false;
-			this.propertyGrid1.Width = 150;
 			//this.chart5.Series[0].LabelToolTip = "TEST:#VALX{N0},#VALY";
 			//this.chart5.Series[0].ToolTip = "(#INDEX, #VAL)";
 			if (G.SS.ETC_HIS_MODE != 0) {
@@ -1372,9 +1306,10 @@ namespace uSCOPE
 			this.label1.Text = string.Format("({0},{1})",m_rtDanBmp.Left, m_rtDanBmp.Top);
 			this.label2.Text = string.Format("({0},{1})", m_rtDanBmp.Right, m_rtDanBmp.Bottom);
 			double	dif = 0;
-			dif += Math.Pow((m_rtDanBmp.Right - m_rtDanBmp.Left), 2);
-			dif += Math.Pow((m_rtDanBmp.Bottom - m_rtDanBmp.Top), 2);
-			dif = Math.Sqrt(dif);
+			//dif += Math.Pow((m_rtDanBmp.Right - m_rtDanBmp.Left), 2);
+			//dif += Math.Pow((m_rtDanBmp.Bottom - m_rtDanBmp.Top), 2);
+			//dif = Math.Sqrt(dif);
+			dif = G.diff(m_rtDanBmp.Left, m_rtDanBmp.Top, m_rtDanBmp.Right, m_rtDanBmp.Bottom);
 			this.label3.Text = string.Format("{0:F1}", dif);
 			this.label4.Text = string.Format("{0:F1}", PX2UM(dif));
 		}
@@ -1430,13 +1365,29 @@ namespace uSCOPE
 				this.label5.Text = string.Format(" ({0},{1})\r-({2},{3})", p1.X, p1.Y, p2.X, p2.Y);
 			}
 		}
+
 		private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
 		{
 			//Debug.WriteLine(string.Format("{0}:pictureBox1_MouseDown", Environment.TickCount));
 
 			if (!m_rtImgBounds.Contains(e.Location)) {
+				//return;
+			}
+#if true
+			if (e.Button != System.Windows.Forms.MouseButtons.Left) {
 				return;
 			}
+			m_mouse_icap=-1;
+			for (int i = 0; i < m_pt_of_marker.Length; i++) {
+				if (m_pt_of_marker[i].X < 0) {
+					continue;
+				}
+				if (PtInRect(e.Location, m_pt_of_marker[i], C_HANKEI)) {
+					m_mouse_icap = i;
+					break;
+				}
+			}
+#else
 			if (e.Button == System.Windows.Forms.MouseButtons.Right) {
 				if (G.CAM_PRC == G.CAM_STS.STS_HIST && G.CNT_MOD == 1) {
 					m_mouse_cap = true;
@@ -1455,6 +1406,7 @@ namespace uSCOPE
 					m_rtDanImg.Height = 0;
 				}
 			}
+#endif
 		}
 
 		private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -1462,6 +1414,7 @@ namespace uSCOPE
 			//Debug.WriteLine(string.Format("{0}:pictureBox1_MouseUp", Environment.TickCount));
 
 			m_mouse_cap = false;
+			m_mouse_icap = -1;
 		}
 		private Point BMPCD_TO_IMGCD(Point pi)
 		{
@@ -1499,7 +1452,20 @@ namespace uSCOPE
 			ro = new Rectangle(p1.X, p1.Y, p2.X - p1.X, p2.Y - p1.Y);
 			return (ro);
 		}
-		private Point CHK_PT(Point p, int width, int height)
+		private Rectangle NORMALIZE_RT(Rectangle rt)
+		{
+			Rectangle ret = rt;
+			if (ret.Width < 0) {
+				ret.X = ret.X + ret.Width;
+				ret.Width = -ret.Width;
+			}
+			if (ret.Height < 0) {
+				ret.Y = ret.Y + ret.Height;
+				ret.Height = -ret.Height;
+			}
+			return(ret);
+		}
+		private Point CHK_PT(Point p/*, int width, int height*/)
 		{
 			Point	pt = p;
 			if (pt.X < m_rtImgBounds.Left) {
@@ -1521,10 +1487,17 @@ namespace uSCOPE
 			Color c = m_bmpR.GetPixel(pt.X, pt.Y);
 			return(c);
 		}
+		private bool PtInRect(Point pt, int center_x, int center_y, int radius)
+		{
+			return(PtInRect(pt, new Point(center_x, center_y), radius));
+		}
+		private bool PtInRect(Point pt, Point center, int radius)
+		{
+			Rectangle rt = new Rectangle(center.X-radius, center.Y-radius, radius*2, radius*2);
+			return(rt.Contains(pt));
+		}
 		private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
 		{
-			panel1_MouseMove(sender, e);
-
 			if (m_rtImgBounds.Contains(e.Location)) {
 //				m_fps = 1;
 				Point pt = IMGCD_TO_BMPCD(e.Location);
@@ -1570,7 +1543,7 @@ namespace uSCOPE
 			//m_sts_y = e.Y;
 			update_sts_txt(2 | 8| 16 | 32);
 			bool flag = false;
-
+#if false
 			if (m_mouse_cap && e.Button == System.Windows.Forms.MouseButtons.Right) {
 				m_rtCntImg.Width = e.X - m_rtCntImg.X;
 				m_rtCntImg.Height = e.Y - m_rtCntImg.Y;
@@ -1599,7 +1572,7 @@ namespace uSCOPE
 			}
 			if (m_mouse_cap && e.Button == System.Windows.Forms.MouseButtons.Left) {
 				Point	pt = e.Location;
-				pt = CHK_PT(pt, 0, 0);
+				pt = CHK_PT(pt/*, 0, 0*/);
 				m_rtDanImg.Width = pt.X - m_rtDanImg.X;
 				m_rtDanImg.Height = pt.Y - m_rtDanImg.Y;
 				Point p1, p2;
@@ -1617,6 +1590,68 @@ namespace uSCOPE
 				set_dan();
 				set_danval();
 				flag = true;
+			}
+#else
+			if (m_mouse_icap >= 0) {
+				//kokode pt wo sousa
+				m_pt_of_marker[m_mouse_icap] = CHK_PT(e.Location);
+				switch (m_mouse_icap) {
+				case 0:
+				case 1://2点間断面
+					m_rtDanImg.X = m_pt_of_marker[0].X;
+					m_rtDanImg.Y = m_pt_of_marker[0].Y;
+					m_rtDanImg.Width = (m_pt_of_marker[1].X-m_pt_of_marker[0].X);
+					m_rtDanImg.Height = (m_pt_of_marker[1].Y-m_pt_of_marker[0].Y);
+					m_rtDanBmp = IMGCD_TO_BMPCD(m_rtDanImg);
+					set_dan();
+					set_danval();
+					flag = true;
+				break;
+				case 2:
+				case 3://コントラスト矩形
+					m_rtCntImg.X = m_pt_of_marker[2].X;
+					m_rtCntImg.Y = m_pt_of_marker[2].Y;
+					m_rtCntImg.Width = (m_pt_of_marker[3].X-m_pt_of_marker[2].X);
+					m_rtCntImg.Height = (m_pt_of_marker[3].Y-m_pt_of_marker[2].Y);
+					m_rtCntImg = NORMALIZE_RT(m_rtCntImg);
+					Rectangle rt = IMGCD_TO_BMPCD(m_rtCntImg);
+					G.SS.CAM_HIS_RT_X = rt.X;
+					G.SS.CAM_HIS_RT_Y = rt.Y;
+					G.SS.CAM_HIS_RT_W = rt.Width;
+					G.SS.CAM_HIS_RT_H = rt.Height;
+					update_sts_txt(32);
+					reset_mask_rect();
+					flag = true;
+				break;
+				case 4:
+				case 5:
+				case 6://距離
+					m_calc_len.set_pt(0, IMGCD_TO_BMPCD(m_pt_of_marker[4]));
+					m_calc_len.set_pt(1, IMGCD_TO_BMPCD(m_pt_of_marker[5]));
+					m_calc_len.set_pt(2, IMGCD_TO_BMPCD(m_pt_of_marker[6]));
+					flag = true;
+				break;
+				}
+			}
+			else
+#endif
+			if (!m_mouse_cap) {
+				Point pt = e.Location;
+				bool bl = false;
+				for (int i = 0; i < m_pt_of_marker.Length; i++) {
+					if (m_pt_of_marker[i].X < 0) {
+						continue;
+					}
+					if (PtInRect(e.Location, m_pt_of_marker[i], C_HANKEI)) {
+						bl = true;
+					}
+				}
+				if (bl) {
+					this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+				}
+				else {
+					this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Default;
+				}
 			}
 			if (flag) {
 				disp_bmp(true);
@@ -1868,7 +1903,7 @@ namespace uSCOPE
 			// The image provider is ready to grab. Enable the grab buttons.
 			EnableButtons(true, false);
 #if true
-			buttons_Click(this.button4, null);//zoom fit
+			//buttons_Click(this.button4, null);//zoom fit
 			buttons_Click(this.button6, null);//continuous
 #endif
 		}
@@ -2066,11 +2101,6 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OnImageGrabbed()::WxH" + m_width
 							//disp_bmp(true);
 							//this.BeginInvoke(new DLG_VOID_BOOL(this.disp_bmp), new object[] {true});
 						}
-#if false
-						else {
-							m_event.Set();
-						}
-#else
 						else {
 							post_proc();
 						}
@@ -2082,7 +2112,6 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OnImageGrabbed()::WxH" + m_width
 						//    // Dispose the bitmap.
 						//    bitmapOld.Dispose();
 						//}
-#endif
 					}
 				}
 			}
@@ -3445,7 +3474,8 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				break;
 			default:
 				disp = 0;
-				G.mlog("(TT;");
+				mode = G.CAM_STS.STS_NONE;
+				//G.mlog("(TT;");
 				break;
 			}
 			if (m_bmpR.Tag == null) {
@@ -3920,7 +3950,6 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 					}
 				}
 			}
-
 			if (true) {
 #if true
 				if (m_bmpZ != null && (m_bmpZ.Width != m_width || m_bmpZ.Height != m_height)) {
@@ -4788,6 +4817,10 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				gr.DrawRectangle(Pens.Yellow, G.IR.MSK_PLY_IMG[i].X-1, G.IR.MSK_PLY_IMG[i].Y-1, 3, 3);
 			}
 		}
+		private void draw_marker(Graphics gr, Pen pen, int x, int y)
+		{
+			gr.DrawEllipse(pen, x-C_HANKEI, y-C_HANKEI, C_HANKEI*2, C_HANKEI*2);
+		}
 		private void disp_extr(Graphics gr)
 		{
 			bool flag = false;
@@ -4798,13 +4831,14 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			if ((G.CAM_PRC == G.CAM_STS.STS_HIST || (G.CAM_PRC == G.CAM_STS.STS_FCUS && G.SS.CAM_FCS_PAR1 == 0))
 			   && (G.CNT_MOD >= 1 && G.CNT_MOD <= 5)) {
 				gr.DrawRectangle(Pens.Blue, m_rtCntImg);
-
-				//gr.DrawRectangle(Pens.Blue,
-				//    G.SS.CAM_HIS_RTX1,
-				//    G.SS.CAM_HIS_RTY1,
-				//    G.SS.CAM_HIS_RTX2 - G.SS.CAM_HIS_RTX1,
-				//    G.SS.CAM_HIS_RTY2 - G.SS.CAM_HIS_RTY1
-				//    );
+				if (G.CNT_MOD == 1) {
+//				draw_marker(gr, Pens.LightSkyBlue, m_rtCntImg.Left, m_rtCntImg.Top);
+//				draw_marker(gr, Pens.LightSkyBlue, m_rtCntImg.Right, m_rtCntImg.Top);
+//				draw_marker(gr, Pens.LightSkyBlue, m_rtCntImg.Right, m_rtCntImg.Bottom);
+//				draw_marker(gr, Pens.LightSkyBlue, m_rtCntImg.Left, m_rtCntImg.Bottom);
+				draw_marker(gr, Pens.LightSkyBlue, m_pt_of_marker[2].X, m_pt_of_marker[2].Y);
+				draw_marker(gr, Pens.LightSkyBlue, m_pt_of_marker[3].X, m_pt_of_marker[3].Y);
+				}
 			}
 			if ((G.CAM_PRC == G.CAM_STS.STS_AUTO) && (G.CNT_MOD >= 6)) {
 				if (G.IR.HIST_ALL == false) {
@@ -4818,7 +4852,32 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 
 			if (this.chart1.Visible) {
 				gr.DrawLine(Pens.Red, m_rtDanImg.Left, m_rtDanImg.Top, m_rtDanImg.Right, m_rtDanImg.Bottom);
+				draw_marker(gr, Pens.LightGreen, m_rtDanImg.Left, m_rtDanImg.Top);
+				draw_marker(gr, Pens.LightGreen, m_rtDanImg.Right, m_rtDanImg.Bottom);
 				set_danval();
+			}
+			if (this.toolStripMenuItem40.Checked) {
+				Pen pen1 = new Pen(Color.DarkGreen);
+				Pen pen2 = new Pen(Color.DarkGreen);
+
+				pen2.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+				pen2.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+
+				gr.DrawLine(pen2, m_pt_of_marker[4], m_pt_of_marker[5]);
+				draw_marker(gr, Pens.LightGreen, m_pt_of_marker[4].X,m_pt_of_marker[4].Y);
+				draw_marker(gr, Pens.LightGreen, m_pt_of_marker[5].X,m_pt_of_marker[5].Y);
+				draw_marker(gr, Pens.LightGreen, m_pt_of_marker[6].X,m_pt_of_marker[6].Y);
+				Font fnt = new Font("Arial", 20);
+				RectangleF rt = m_rtImgBounds;
+				StringFormat sf  = new StringFormat();
+				string buf = string.Format("L={0:F1}um", PX2UM(m_calc_len.get_len()));
+				Point pt = BMPCD_TO_IMGCD(m_calc_len.get_pt(3));
+				
+				sf.Alignment = StringAlignment.Far;
+				sf.LineAlignment = StringAlignment.Far;
+				//gr.DrawRectangle(Pens.Indigo, Rectangle.Round(rt));
+				gr.DrawString(buf, fnt, Brushes.LimeGreen, rt, sf);
+				gr.DrawLine(pen1/*Pens.Green*/, m_pt_of_marker[6], pt);
 			}
 			if (this.chart5.Visible) {
 				set_hisval();
@@ -4955,20 +5014,31 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				PropertyInfo pi = typeof(PictureBox).GetProperty("ImageRectangle", BindingFlags.GetProperty | BindingFlags.NonPublic | BindingFlags.Instance);
 				object obj = pi.GetValue(pictureBox1, null);
 				m_rtImgBounds = (Rectangle)obj;
+				//---
 				if (m_width > 0 && m_height > 0) {
 					m_rtCntImg = BMPCD_TO_IMGCD(new Rectangle(G.SS.CAM_HIS_RT_X, G.SS.CAM_HIS_RT_Y, G.SS.CAM_HIS_RT_W, G.SS.CAM_HIS_RT_H));
+					if (G.CNT_MOD == 1) {
+						m_pt_of_marker[2].X = m_rtCntImg.X;
+						m_pt_of_marker[2].Y = m_rtCntImg.Y;
+						m_pt_of_marker[3].X = m_rtCntImg.Right;
+						m_pt_of_marker[3].Y = m_rtCntImg.Bottom;
+					}
 				}
 				if (true) {
-					//double x = 100.0*m_rtImgBounds.X / this.pictureBox1.Width;
-					//double w = 100.0*m_rtImgBounds.Width / this.pictureBox1.Width; 
-					//this.chart1.ChartAreas[0].Position.Auto = true;
-					//this.chart1.ChartAreas[0].Position.X = (float)x;
-					//this.chart1.ChartAreas[0].Position.Width = (float)w-2;
-					//this.chart1.ChartAreas[0].Position.Y = 5;
-					//this.chart1.ChartAreas[0].Position.Height = 95;
 				}
 				if (m_width > 0 && m_height > 0) {
 					m_rtDanImg = BMPCD_TO_IMGCD(m_rtDanBmp);
+
+					m_pt_of_marker[0].X = m_rtDanImg.X;
+					m_pt_of_marker[0].Y = m_rtDanImg.Y;
+					m_pt_of_marker[1].X = m_rtDanImg.Right;
+					m_pt_of_marker[1].Y = m_rtDanImg.Bottom;
+
+					if (this.toolStripMenuItem40.Checked) {
+						for (int i=0; i < 3; i++) {
+							m_pt_of_marker[4+i] = BMPCD_TO_IMGCD(m_calc_len.get_pt(i));
+						}
+					}
 				}
 				disp_extr(null);
 			}
@@ -4997,52 +5067,6 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			disp_extr(e.Graphics);
 		}
 
-		private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-		{
-			//this.backgroundWorker1.RunWorkerAsync();
-			
-			while (this.backgroundWorker1.CancellationPending == false) {
-				while (m_event.WaitOne(250) == false) {
-					Thread.Sleep(0);
-				}
-				if (this.backgroundWorker1.CancellationPending) {
-					break;
-				}
-				m_bproc = true;
-				post_proc();
-#if false	//2017.09.28
-				this.BeginInvoke(new G.DLG_VOID_INT(this.FireCmd), new object[] { 0 });
-#endif		
-				Thread.Sleep(0);
-				m_bproc = false;
-				this.BeginInvoke(new G.DLG_VOID_BOOL(this.disp_bmp), new object[] { true });
-				Thread.Sleep(0);
-				//this.BeginInvoke(new DLG_VOID_VOID(this.FireDispBmp));
-//				this.backgroundWorker1.ReportProgress(0);
-			}
-			//this.backgroundWorker1.ReportProgress(0);
-			//e.Cancel = true;
-			//this.backgroundWorker1.CancelAsync();
-		}
-
-		private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-		{
-			//switch (e.ProgressPercentage) {
-			//case 0:
-			//    disp_bmp(true);
-			//    break;
-			//default:
-			//    break;
-			//}
-			//Debug.WriteLine(e.ToString());
-		}
-
-		private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			//bool b1 = e.Cancelled;
-			////object obj = e.Result;
-			//Debug.WriteLine(e.ToString());
-		}
 
 		private void toolStripMenuItems_Click(object sender, EventArgs e)
 		{
@@ -5074,6 +5098,22 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				this.toolStripMenuItem6.Checked = !this.toolStripMenuItem6.Checked;
 				this.checkBox1.Checked = this.toolStripMenuItem6.Checked;
 				set_layout();
+				if (this.checkBox1.Checked) {
+					if (m_rtDanImg.Width <= 0 && m_rtDanImg.Height <= 0) {
+						m_rtDanImg.X = m_rtDanImg.Y = 100;
+						m_rtDanImg.Width = m_rtDanImg.Height = 100;
+					}
+					m_pt_of_marker[0].X = m_rtDanImg.X;
+					m_pt_of_marker[0].Y = m_rtDanImg.Y;
+					m_pt_of_marker[1].X = m_rtDanImg.Right;
+					m_pt_of_marker[1].Y = m_rtDanImg.Bottom;
+				}
+				else {
+					m_pt_of_marker[0].X = -1;
+					m_pt_of_marker[0].Y = -1;
+					m_pt_of_marker[1].X = -1;
+					m_pt_of_marker[1].Y = -1;
+				}
 			}
 			else if (sender == this.toolStripMenuItem20) {
 				//ヒストグラム
@@ -5119,6 +5159,22 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				this.toolStripMenuItem31.Checked = false;
 				this.toolStripMenuItem32.Checked = false;
 				this.toolStripMenuItem33.Checked = true;
+			}
+			else if (sender == this.toolStripMenuItem40) {
+				//距離計算
+				this.toolStripMenuItem40.Checked = !this.toolStripMenuItem40.Checked;
+				//set_layout();
+				if (this.toolStripMenuItem40.Checked) {
+					m_calc_len.reset(m_width, m_height);
+					for (int i=0; i < 3; i++) {
+						m_pt_of_marker[4+i] = BMPCD_TO_IMGCD(m_calc_len.get_pt(i));
+					}
+				}
+				else {
+					m_pt_of_marker[4].X = m_pt_of_marker[4].Y = -1;
+					m_pt_of_marker[5].X = m_pt_of_marker[5].Y = -1;
+					m_pt_of_marker[6].X = m_pt_of_marker[6].Y = -1;
+				}
 			}
 		}
 

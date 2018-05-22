@@ -23,18 +23,31 @@ namespace uSCOPE
 
 		private void Form21_Load(object sender, EventArgs e)
 		{
-			//if (string.IsNullOrEmpty(G.SS.PLM_AUT_FOLD)) {
-				//string path;
-				//path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-				//path += @"\KOP";
-				//path += @"\" + Application.ProductName;
-				//G.SS.PLM_AUT_FOLD = path;
-			//}
+			if (string.IsNullOrEmpty(G.SS.MOZ_CND_FOLD)) {
+				string path;
+				path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+				path += @"\KOP";
+				path += @"\" + Application.ProductName;
+				G.SS.MOZ_CND_FOLD = path;
+			}
 			//G.SS.MOZ_CND_FMOD = 1;
 			//G.SS.ETC_NOZ_FOLD = "C:\\temp\\test_20171102_225530";
 			//G.SS.ETC_NOZ_FOLD = "C:\\temp\\test_20171108_024440";
 			this.groupBox6.Enabled = false;
-			//this.Width = this.groupBox1.Location.X + this.groupBox1.Width+GAP;
+			if (G.UIF_LEVL == 0) {
+				this.groupBox1.Visible = false;
+				this.groupBox3.Visible = false;
+				this.groupBox4.Visible = false;
+				this.comboBox6.Enabled = false;
+				this.comboBox7.Enabled = false;
+				this.comboBox8.Enabled = false;
+				this.checkBox8.Enabled = false;
+				this.button4.Enabled = false;
+				this.groupBox2.Height = this.comboBox6.Location.Y;
+				this.button1.Top = this.groupBox2.Bottom + GAP/2;
+				this.button2.Top = this.groupBox2.Bottom + GAP/2;
+				this.Height = this.button1.Bottom + GAP/2 + (this.Size.Height-this.ClientSize.Height);
+			}
 			//---
 			DDX(true);
 			//---
@@ -140,6 +153,17 @@ namespace uSCOPE
 			files_cr = System.IO.Directory.GetFiles(path, "?CR_??" +zpos+ ".*");
 			files_ir = System.IO.Directory.GetFiles(path, "?IR_??" +zpos+ ".*");
 			}
+			//画像表示のみの場合
+			if (G.SS.MOZ_CND_NOMZ) {
+				int ttl = 0;
+				ttl += files_cl.Length + files_ct.Length;
+				ttl += files_cr.Length + files_ir.Length;
+				if (ttl <= 0) {
+					G.mlog("指定されたフォルダには毛髪画像ファイルがありません.\r\r" + path);
+					e.Cancel = true;
+				}
+				return;
+			}
 			//透過画像
 			if (/*位置検出*/G.SS.MOZ_CND_PDFL == 0 || /*カラー断面*/G.SS.MOZ_CND_DMFL == 0) {
 				if (files_ct.Length > 0 || (G.SS.ETC_CLF_CTCR == 0 && files_cl.Length > 0)) {
@@ -192,6 +216,7 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.comboBox6      , ref G.SS.MOZ_CND_PDFL);
 				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.MOZ_CND_DMFL);
 				DDV.DDX(bUpdate, this.comboBox8      , ref G.SS.MOZ_CND_ZPOS);
+				DDV.DDX(bUpdate, this.checkBox8      , ref G.SS.MOZ_CND_NOMZ);
 				//---
 				DDV.DDX(bUpdate, this.comboBox5      , ref  G.SS.IMP_FLT_COEF[3]);
 				G.SS.IMP_BIN_MODE[3] = 1;//GRAY-SCALE

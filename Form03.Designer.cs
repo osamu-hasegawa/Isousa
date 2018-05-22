@@ -102,6 +102,9 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.panel11 = new System.Windows.Forms.Panel();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.panel13 = new System.Windows.Forms.Panel();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
 			this.groupBox2.SuspendLayout();
@@ -116,6 +119,9 @@
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.groupBox5.SuspendLayout();
+			this.panel11.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
+			this.panel13.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
@@ -268,7 +274,7 @@
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.button1.Location = new System.Drawing.Point(131, 152);
+			this.button1.Location = new System.Drawing.Point(3, 316);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(25, 21);
 			this.button1.TabIndex = 1;
@@ -331,24 +337,7 @@
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Controls.Add(this.panel10);
-			this.groupBox3.Controls.Add(this.label9);
-			this.groupBox3.Controls.Add(this.label28);
-			this.groupBox3.Controls.Add(this.button1);
-			this.groupBox3.Controls.Add(this.checkBox9);
-			this.groupBox3.Controls.Add(this.checkBox10);
-			this.groupBox3.Controls.Add(this.comboBox8);
-			this.groupBox3.Controls.Add(this.checkBox8);
-			this.groupBox3.Controls.Add(this.checkBox2);
-			this.groupBox3.Controls.Add(this.checkBox1);
-			this.groupBox3.Controls.Add(this.panel8);
-			this.groupBox3.Controls.Add(this.panel5);
-			this.groupBox3.Controls.Add(this.comboBox1);
-			this.groupBox3.Controls.Add(this.label2);
-			this.groupBox3.Controls.Add(this.radioButton4);
-			this.groupBox3.Controls.Add(this.label3);
-			this.groupBox3.Controls.Add(this.label7);
-			this.groupBox3.Controls.Add(this.radioButton3);
+			this.groupBox3.Controls.Add(this.flowLayoutPanel1);
 			this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox3.ForeColor = System.Drawing.Color.White;
 			this.groupBox3.Location = new System.Drawing.Point(3, 3);
@@ -361,23 +350,26 @@
 			// panel10
 			// 
 			this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel10.Location = new System.Drawing.Point(12, 246);
+			this.panel10.Location = new System.Drawing.Point(8, 243);
+			this.panel10.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
 			this.panel10.Name = "panel10";
 			this.panel10.Size = new System.Drawing.Size(130, 2);
 			this.panel10.TabIndex = 12;
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(18, 276);
+			this.label9.AutoSize = true;
+			this.label9.Location = new System.Drawing.Point(10, 289);
+			this.label9.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(132, 35);
+			this.label9.Size = new System.Drawing.Size(135, 24);
 			this.label9.TabIndex = 38;
 			this.label9.Text = "グラフ表示には反映されません";
 			// 
 			// label28
 			// 
 			this.label28.AutoSize = true;
-			this.label28.Location = new System.Drawing.Point(15, 255);
+			this.label28.Location = new System.Drawing.Point(3, 10);
 			this.label28.Name = "label28";
 			this.label28.Size = new System.Drawing.Size(36, 12);
 			this.label28.TabIndex = 38;
@@ -388,7 +380,8 @@
 			this.checkBox9.AutoSize = true;
 			this.checkBox9.Checked = true;
 			this.checkBox9.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox9.Location = new System.Drawing.Point(92, 154);
+			this.checkBox9.Location = new System.Drawing.Point(10, 148);
+			this.checkBox9.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBox9.Name = "checkBox9";
 			this.checkBox9.Size = new System.Drawing.Size(60, 16);
 			this.checkBox9.TabIndex = 11;
@@ -398,7 +391,8 @@
 			// 
 			// checkBox10
 			// 
-			this.checkBox10.Location = new System.Drawing.Point(20, 197);
+			this.checkBox10.Location = new System.Drawing.Point(10, 192);
+			this.checkBox10.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBox10.Name = "checkBox10";
 			this.checkBox10.Size = new System.Drawing.Size(123, 45);
 			this.checkBox10.TabIndex = 11;
@@ -416,7 +410,7 @@
             "Z10 (AF位置)",
             "Z11 (+側)",
             "Z12 (+側)"});
-			this.comboBox8.Location = new System.Drawing.Point(69, 252);
+			this.comboBox8.Location = new System.Drawing.Point(45, 7);
 			this.comboBox8.Name = "comboBox8";
 			this.comboBox8.Size = new System.Drawing.Size(50, 20);
 			this.comboBox8.TabIndex = 0;
@@ -427,7 +421,8 @@
 			this.checkBox8.AutoSize = true;
 			this.checkBox8.Checked = true;
 			this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox8.Location = new System.Drawing.Point(20, 176);
+			this.checkBox8.Location = new System.Drawing.Point(10, 170);
+			this.checkBox8.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBox8.Name = "checkBox8";
 			this.checkBox8.Size = new System.Drawing.Size(74, 16);
 			this.checkBox8.TabIndex = 11;
@@ -440,7 +435,8 @@
 			this.checkBox2.AutoSize = true;
 			this.checkBox2.Checked = true;
 			this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox2.Location = new System.Drawing.Point(20, 154);
+			this.checkBox2.Location = new System.Drawing.Point(83, 148);
+			this.checkBox2.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBox2.Name = "checkBox2";
 			this.checkBox2.Size = new System.Drawing.Size(48, 16);
 			this.checkBox2.TabIndex = 11;
@@ -453,7 +449,8 @@
 			this.checkBox1.AutoSize = true;
 			this.checkBox1.Checked = true;
 			this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox1.Location = new System.Drawing.Point(17, 100);
+			this.checkBox1.Location = new System.Drawing.Point(10, 96);
+			this.checkBox1.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(107, 16);
 			this.checkBox1.TabIndex = 11;
@@ -464,7 +461,8 @@
 			// panel8
 			// 
 			this.panel8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel8.Location = new System.Drawing.Point(14, 123);
+			this.panel8.Location = new System.Drawing.Point(8, 118);
+			this.panel8.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
 			this.panel8.Name = "panel8";
 			this.panel8.Size = new System.Drawing.Size(130, 2);
 			this.panel8.TabIndex = 10;
@@ -472,7 +470,8 @@
 			// panel5
 			// 
 			this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel5.Location = new System.Drawing.Point(13, 90);
+			this.panel5.Location = new System.Drawing.Point(8, 88);
+			this.panel5.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
 			this.panel5.Name = "panel5";
 			this.panel5.Size = new System.Drawing.Size(130, 2);
 			this.panel5.TabIndex = 10;
@@ -481,7 +480,7 @@
 			// 
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(69, 18);
+			this.comboBox1.Location = new System.Drawing.Point(55, 8);
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(40, 20);
 			this.comboBox1.TabIndex = 1;
@@ -490,7 +489,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(115, 21);
+			this.label2.Location = new System.Drawing.Point(101, 11);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(21, 12);
 			this.label2.TabIndex = 0;
@@ -500,7 +499,8 @@
 			// 
 			this.radioButton4.AutoSize = true;
 			this.radioButton4.Checked = true;
-			this.radioButton4.Location = new System.Drawing.Point(17, 68);
+			this.radioButton4.Location = new System.Drawing.Point(10, 66);
+			this.radioButton4.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.radioButton4.Name = "radioButton4";
 			this.radioButton4.Size = new System.Drawing.Size(93, 16);
 			this.radioButton4.TabIndex = 0;
@@ -511,7 +511,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(15, 21);
+			this.label3.Location = new System.Drawing.Point(1, 11);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(29, 12);
 			this.label3.TabIndex = 0;
@@ -520,7 +520,9 @@
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(15, 132);
+			this.flowLayoutPanel1.SetFlowBreak(this.label7, true);
+			this.label7.Location = new System.Drawing.Point(10, 123);
+			this.label7.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(53, 12);
 			this.label7.TabIndex = 0;
@@ -529,7 +531,8 @@
 			// radioButton3
 			// 
 			this.radioButton3.AutoSize = true;
-			this.radioButton3.Location = new System.Drawing.Point(17, 46);
+			this.radioButton3.Location = new System.Drawing.Point(10, 44);
+			this.radioButton3.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.radioButton3.Name = "radioButton3";
 			this.radioButton3.Size = new System.Drawing.Size(71, 16);
 			this.radioButton3.TabIndex = 0;
@@ -864,6 +867,50 @@
 			this.label5.TabIndex = 0;
 			this.label5.Text = "光学倍率";
 			// 
+			// panel11
+			// 
+			this.panel11.Controls.Add(this.comboBox1);
+			this.panel11.Controls.Add(this.label3);
+			this.panel11.Controls.Add(this.label2);
+			this.panel11.Location = new System.Drawing.Point(7, 3);
+			this.panel11.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+			this.panel11.Name = "panel11";
+			this.panel11.Size = new System.Drawing.Size(131, 35);
+			this.panel11.TabIndex = 39;
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.Controls.Add(this.panel11);
+			this.flowLayoutPanel1.Controls.Add(this.radioButton3);
+			this.flowLayoutPanel1.Controls.Add(this.radioButton4);
+			this.flowLayoutPanel1.Controls.Add(this.panel5);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox1);
+			this.flowLayoutPanel1.Controls.Add(this.panel8);
+			this.flowLayoutPanel1.Controls.Add(this.label7);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox9);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox2);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox8);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox10);
+			this.flowLayoutPanel1.Controls.Add(this.panel10);
+			this.flowLayoutPanel1.Controls.Add(this.panel13);
+			this.flowLayoutPanel1.Controls.Add(this.label9);
+			this.flowLayoutPanel1.Controls.Add(this.button1);
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 15);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 296);
+			this.flowLayoutPanel1.TabIndex = 0;
+			// 
+			// panel13
+			// 
+			this.panel13.Controls.Add(this.label28);
+			this.panel13.Controls.Add(this.comboBox8);
+			this.panel13.Location = new System.Drawing.Point(7, 251);
+			this.panel13.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+			this.panel13.Name = "panel13";
+			this.panel13.Size = new System.Drawing.Size(131, 35);
+			this.panel13.TabIndex = 2;
+			// 
 			// Form03
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -889,7 +936,6 @@
 			this.panel1.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
-			this.groupBox3.PerformLayout();
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
@@ -897,6 +943,12 @@
 			this.panel3.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
+			this.panel11.ResumeLayout(false);
+			this.panel11.PerformLayout();
+			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
+			this.panel13.ResumeLayout(false);
+			this.panel13.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -962,5 +1014,8 @@
 		private System.Windows.Forms.Label label28;
 		private System.Windows.Forms.ComboBox comboBox8;
 		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+		private System.Windows.Forms.Panel panel11;
+		private System.Windows.Forms.Panel panel13;
 	}
 }

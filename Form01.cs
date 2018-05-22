@@ -52,8 +52,21 @@ namespace uSCOPE
 			G.FORM12.TopLevel = false;
 			G.FORM13 = new Form13();
 			G.FORM13.TopLevel = false;
-			if (G.SS.ETC_UIF_LEVL == 0) {
-				this.button3.Visible = false;
+			if (true) {
+				//プログラム起動時のUIFレベルとして記憶
+				G.UIF_LEVL = G.SS.ETC_UIF_LEVL;
+			}
+			/*
+				0:ユーザ用(暫定版)
+				1:ユーザ用
+				2:開発者用(一度)
+				3:開発者用(常に)
+			 */
+			if (G.UIF_LEVL == 0 || G.UIF_LEVL == 1) {
+				this.button3.Visible = false;//設定
+			}
+			if (G.UIF_LEVL == 0) {
+				G.FORM11.SET_UIF_USER();
 				G.FORM12.SET_UIF_USER();
 			}
 			//---
@@ -78,18 +91,18 @@ namespace uSCOPE
 			//---
 			UPDSTS();
 			//---
-			if (G.SS.ETC_UIF_LEVL == 0) {
+			if (G.UIF_LEVL == 1/*ユーザ用*/) {
 				this.Text = "uSCOPE Application";
-				BeginInvoke(new G.DLG_VOID_VOID(this.UIF_LEVL0_INIT));
+				BeginInvoke(new G.DLG_VOID_VOID(this.UIF_LEVL1_INIT));
 			}
 			else {
 				this.Text = this.Text + Assembly.GetExecutingAssembly().GetName().Version.ToString();
 			}
-			if (G.SS.ETC_UIF_LEVL != 2) {
-				G.SS.ETC_UIF_LEVL = 0;
+			if (G.UIF_LEVL == 2/*開発者用(一度)*/) {
+				G.SS.ETC_UIF_LEVL = G.SS.ETC_UIF_BACK;
 			}
 		}
-		private void UIF_LEVL0_INIT()
+		private void UIF_LEVL1_INIT()
 		{
 			//---
 			this.button1.Visible = false;
@@ -145,6 +158,10 @@ namespace uSCOPE
 			G.AS.BEFORE_PATH  = G.SS.BEFORE_PATH ;
 			G.AS.PLM_AUT_FOLD = G.SS.PLM_AUT_FOLD;
 			G.AS.MOZ_CND_FOLD = G.SS.MOZ_CND_FOLD;
+			//---
+			if (G.SS.ETC_UIF_LEVL == 0 || G.SS.ETC_UIF_LEVL == 1) {
+				G.SS.ETC_UIF_BACK = G.SS.ETC_UIF_LEVL;
+			}
 			//---
 			G.AS.save(G.AS);
 			G.SS.save(G.SS);

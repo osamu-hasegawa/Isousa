@@ -245,6 +245,7 @@ namespace uSCOPE
 			//---
 			public int ETC_LED_WAIT = 18;
 			public int ETC_UIF_LEVL =  0;
+			public int ETC_UIF_BACK =  0;
 			public bool ETC_UIF_CUTI = false;
 			public bool ETC_LED_IRGR = true;
 			public int ETC_CLF_CTCR = 1;
@@ -269,6 +270,7 @@ namespace uSCOPE
 			public int MOZ_CND_DMFL = 0;//断面画像
 			public string MOZ_CND_ZPOS;
 			public int MOZ_CND_ZCNT;
+			public bool MOZ_CND_NOMZ;//画像表示のみ
 			//public int MOZ_IRC_FILT = 5;
 			//public int MOZ_IRC_ZVAL = 135-10;
 			//public int MOZ_IRC_SMAX = 1000000;
@@ -645,6 +647,7 @@ namespace uSCOPE
 		//static public bool		bDEBUG=true;
 		//static public bool		bONLINE=false;
 		//static public bool		bONLINE_OF_NI=false;
+		static public int		UIF_LEVL=0;
 		static public bool		bCANCEL=false;
 		static public Form01	FORM01 = null;
 		static public Form02	FORM02 = null;
@@ -830,6 +833,13 @@ namespace uSCOPE
 		{
 			int dx = p2.X - p1.X;
 			int dy = p2.Y - p1.Y;
+			double df = Math.Sqrt(dx*dx + dy*dy);
+			return(df);
+		}
+		static public double diff(int x1, int y1, int x2, int y2)
+		{
+			int dx = x2 - x1;
+			int dy = y2 - y1;
 			double df = Math.Sqrt(dx*dx + dy*dy);
 			return(df);
 		}

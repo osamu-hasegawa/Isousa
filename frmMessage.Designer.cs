@@ -47,9 +47,9 @@
 			// label1
 			// 
 			this.label1.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.label1.Location = new System.Drawing.Point(72, 35);
+			this.label1.Location = new System.Drawing.Point(72, 27);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(339, 35);
+			this.label1.Size = new System.Drawing.Size(339, 43);
 			this.label1.TabIndex = 1;
 			this.label1.Text = "ソフトウェアは次回起動時にユーザモードで起動します。";
 			// 
@@ -70,6 +70,7 @@
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.button1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "frmMessage";

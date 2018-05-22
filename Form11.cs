@@ -29,6 +29,14 @@ namespace uSCOPE
 		{
 			InitializeComponent();
 		}
+		public void SET_UIF_USER()
+		{
+			//---
+			this.tabControl1.TabPages.Remove(this.tabPage3);//詳細
+			//---
+			this.button1.Visible = false;//[ZERO]
+			//---
+		}
 		private void init()
 		{
 			//this.textBox1.Text = G.SS.LED_PWM_VAL[0].ToString();
@@ -352,6 +360,12 @@ namespace uSCOPE
 				this.timer1.Interval = 100;
 			}
 		}
+		private void disp_zoom_rate()
+		{
+			double Y;
+			Y = G.SS.ZOM_PLS_A * G.PLM_POS[3] + G.SS.ZOM_PLS_B;
+			this.label1.Text = string.Format("x{0:F2}", Y);
+		}
 		//private int aa;
 		//private int[] bb = { 1, 2, 3 };
 		
@@ -400,11 +414,12 @@ namespace uSCOPE
 						else {
 							G.PLM_STS &= ~(1 << i);
 							if (i == 3) {
-								double Y;
-								Y = G.SS.ZOM_PLS_A * G.PLM_POS[3] + G.SS.ZOM_PLS_B;
-								this.label1.Text = string.Format("x{0:F2}", Y);
+								disp_zoom_rate();
 							}
 						}
+					}
+					if (i == 3 && this.button37.Tag == null) {
+						disp_zoom_rate();
 					}
 				}
 			}

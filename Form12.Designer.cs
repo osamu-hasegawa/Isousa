@@ -212,6 +212,8 @@
 			this.numericUpDown34 = new System.Windows.Forms.NumericUpDown();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.timer2 = new System.Windows.Forms.Timer(this.components);
+			this.button26 = new System.Windows.Forms.Button();
+			this.timer3 = new System.Windows.Forms.Timer(this.components);
 			this.tabControl4.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel9.SuspendLayout();
@@ -300,6 +302,7 @@
 			this.tabPage1.Controls.Add(this.panel3);
 			this.tabPage1.Controls.Add(this.button12);
 			this.tabPage1.Controls.Add(this.button1);
+			this.tabPage1.Controls.Add(this.button26);
 			this.tabPage1.Controls.Add(this.button11);
 			this.tabPage1.Controls.Add(this.button2);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -2877,6 +2880,23 @@
 			this.timer2.Interval = 50;
 			this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
 			// 
+			// button26
+			// 
+			this.button26.Location = new System.Drawing.Point(78, 61);
+			this.button26.Name = "button26";
+			this.button26.Size = new System.Drawing.Size(70, 40);
+			this.button26.TabIndex = 2;
+			this.button26.Tag = "3";
+			this.button26.Text = "自動測定\r\n(白髪)";
+			this.button26.UseVisualStyleBackColor = true;
+			this.button26.Visible = false;
+			this.button26.Click += new System.EventHandler(this.OnClicks);
+			// 
+			// timer3
+			// 
+			this.timer3.Interval = 50;
+			this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
+			// 
 			// Form12
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -3141,5 +3161,7 @@
 		private System.Windows.Forms.Label label58;
 		private System.Windows.Forms.Label label60;
 		private System.Windows.Forms.Label label61;
+		protected System.Windows.Forms.Button button26;
+		private System.Windows.Forms.Timer timer3;
 	}
 }

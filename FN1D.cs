@@ -14,22 +14,30 @@ namespace uSCOPE
 		public double C;//切片X(垂線の場合)
 		public PointF P1;
 		public PointF P2;
+		public bool valid;
 		FN1D()
 		{
 			this.A = this.B = this.C = double.NaN;
 			this.P1.X = this.P1.Y = float.NaN;
+			this.valid = false;
 		}
 		public FN1D(double A, double B):this(A, B, double.NaN)
 		{
 		}
 		public FN1D(double A, double B, double C)
 		{
+			this.valid = true;
 			this.A = A;
 			this.B = B;
 			this.C = C;
 			if (double.IsNaN(this.A)) {
 				//垂直
-				this.C = C;
+				if (double.IsNaN(this.C)) {
+					this.valid = false;
+				}
+			}
+			else if (double.IsNaN(this.B)) {
+				this.valid = false;
 			}
 			else if (this.A == 0.0) {
 				//水平
@@ -47,8 +55,16 @@ namespace uSCOPE
 		{
 			double dx = p2.X - p1.X;
 			double dy = p2.Y - p1.Y;
+			this.valid = true;
 			this.A = dy/dx;
 			this.B = p1.Y - A * p1.X;
+			if (dx == 0.0 && dy == 0.0) {
+			this.A = double.NaN;
+			this.B = double.NaN;
+			this.C = double.NaN;
+			this.valid = false;
+			}
+			else
 			if (dx == 0.0) {
 			this.A = double.NaN;
 			this.B = double.NaN;
@@ -160,19 +176,19 @@ namespace uSCOPE
 		public FN1D GetNormFn(PointF pt)
 		{
 			if (this.A == 0.0) {
-				//当該直線は水平
-				FN1D fn = new FN1D();
-				fn.A = double.NaN;
-				fn.B = double.NaN;
-				fn.C = pt.X;
+				//当該直線は水平→垂直の直線を作成
+				FN1D fn = new FN1D(double.NaN, double.NaN, pt.X);
+				//fn.A = double.NaN;
+				//fn.B = double.NaN;
+				//fn.C = pt.X;
 				return(fn);
 			}
 			else if (double.IsNaN(this.A)) {
-				//当該直線は垂直
-				FN1D fn = new FN1D();
-				fn.A = 0;
-				fn.B = pt.Y;
-				fn.C = double.NaN;
+				//当該直線は垂直→水平の直線を作成
+				FN1D fn = new FN1D(0, pt.Y, double.NaN);
+				//fn.A = 0;
+				//fn.B = pt.Y;
+				//fn.C = double.NaN;
 				return(fn);
 			}
 			else {

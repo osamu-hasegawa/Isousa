@@ -20,12 +20,13 @@ namespace uSCOPE
 		{
 			this.Text = Application.ProductName;
 			this.pictureBox1.Image = SystemIcons.Information.ToBitmap();
-			if (G.SS.ETC_UIF_LEVL == 0) {
-			G.SS.ETC_UIF_LEVL = 1;
+			if (G.SS.ETC_UIF_LEVL == 0 || G.SS.ETC_UIF_LEVL == 1) {
+			G.SS.ETC_UIF_BACK = G.SS.ETC_UIF_LEVL;
+			G.SS.ETC_UIF_LEVL = 2;
 			this.label1.Text = "ソフトウェアは次回起動時に開発者モードで起動します。";
 			}
 			else {
-			G.SS.ETC_UIF_LEVL = 0;
+			G.SS.ETC_UIF_LEVL = G.SS.ETC_UIF_BACK;
 			this.label1.Text = "ソフトウェアは次回起動時にユーザモードで起動します。";
 			}
 		}

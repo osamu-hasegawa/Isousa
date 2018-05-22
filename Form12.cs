@@ -39,8 +39,13 @@ namespace uSCOPE
 		private int m_diss, m_dism, m_disl;
 		private int m_fcnt;
 		public double m_contrast;
+		private DlgProgress
+					m_prg = null;//new DlgProgress();
+		private int	m_tic;
+		private int	m_icam;
 		private int FCS_STS;
-		public int AUT_STS;
+		public  int AUT_STS;
+		private int CAL_STS;
 		//private int MOK_STS;
 		private int SPE_COD=0;
 		public Form12()
@@ -49,6 +54,39 @@ namespace uSCOPE
 		}
 		public void SET_UIF_USER()
 		{
+		#if true//2018.04.26
+			//---
+			this.tabControl4.TabPages.Remove(this.tabPage5);//毛髪
+			this.tabControl4.TabPages.Remove(this.tabPage6);//AF
+			this.tabControl4.TabPages.Remove(this.tabPage2);//2値化
+			this.tabControl4.TabPages.Remove(this.tabPage8);//CUTI.1
+			this.tabControl4.TabPages.Remove(this.tabPage3);//CUTI.2
+			//---[メイン]
+			var lc1 = this.button11.Location;
+			var lc2 = this.button12.Location;
+			var lc3 = this.button26.Location;
+			this.button11.Text = "自動測定\r\n(黒髪)";
+		//	this.button12.Visible = false;	//毛髄画面
+			this.button26.Visible = true;
+			this.button26.Location = lc2;
+			this.button12.Location = new Point(lc1.X, lc3.Y);
+			this.button12.Text = "数値化";
+			//---[パラメータ]
+			this.button3.Visible = false;	//透過用
+			this.button16.Visible = false;	//反射用
+			this.button4.Visible = false;	//赤外用
+			//---[ヒストグラム]
+			m_bENTER_GETD = true;//GETDが呼ばれないように
+			this.comboBox1.Items.Clear();
+			this.comboBox1.Items.Add("矩形範囲");
+			this.comboBox1.SelectedIndex = 0;
+			G.SS.CAM_HIS_PAR1 = 1;//1:矩形範囲
+			this.comboBox2.Items.Clear();
+			this.comboBox2.Items.Add("生画像");
+			this.comboBox2.SelectedIndex = 0;
+			m_bENTER_GETD = false;//元に戻す
+			//---		
+		#endif
 		#if false//2018.04.23
 			//---
 			this.trackBar2.Visible = false;
@@ -102,7 +140,7 @@ namespace uSCOPE
 			//---
 			//---
 			//---
-			#endif
+		#endif
 		}
 		private void Form12_Load(object sender, EventArgs e)
 		{
@@ -170,11 +208,29 @@ this.SPE_COD = 0;
 						else {
 							G.FORM02.set_auto(Form02.CAM_PARAM.WHITE, 0);
 						}
+						if (true) {
+							//校正実行
+							this.CAL_STS = 1;
+							timer3.Enabled = true;
+						}
 					}
 				}
 			}
-			else if (sender == this.button11) {
-				do_auto_mes(true);
+			else if (sender == this.button11/*黒*/|| sender == this.button26/*白*/) {
+				if (G.UIF_LEVL == 0) {
+					string path;
+					path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+					path += @"\KOP";
+					path += @"\" + Application.ProductName;
+					G.SS.PLM_AUT_FOLD = path;
+					//3:透過→赤外, 8:反射→赤外
+					G.SS.PLM_AUT_MODE = (sender == this.button11/*黒*/) ? 8: 3;
+					//自動測定実行
+					do_auto_mes(false);
+				}
+				else {
+					do_auto_mes(true);
+				}
 			}
 			//else if (sender == this.button12) {
 			//    do_mouk_mes();
@@ -291,12 +347,22 @@ this.SPE_COD = 0;
 			}
 			m_bENTER_GETD = true;
 			try {
+				if (G.UIF_LEVL == 0) {
+				G.SS.CAM_HIS_PAR1 = 1;//1:矩形範囲
+				}
+				else {
 				DDV.DDX(bUpdate, this.comboBox1, ref G.SS.CAM_HIS_PAR1);
+				}
 				DDV.DDX(bUpdate, this.comboBox7, ref G.SS.CAM_HIS_METH);
 				DDV.DDX(bUpdate, this.comboBox8, ref G.SS.CAM_HIS_OIMG);
 
 				DDV.DDX(bUpdate, this.numericUpDown5, ref G.SS.CAM_HIS_BVAL);//, 1, 254);
+				if (G.UIF_LEVL == 0) {
+				G.SS.CAM_HIS_DISP = 0;//0:生画像
+				}
+				else {
 				DDV.DDX(bUpdate, this.comboBox2, ref G.SS.CAM_HIS_DISP);
+				}
 				DDV.DDX(bUpdate, this.checkBox1, ref G.SS.CAM_HIS_CHK1);
 				DDV.DDX(bUpdate, this.checkBox2, ref G.SS.CAM_HIS_CHK2);
 				//---
@@ -384,6 +450,7 @@ this.SPE_COD = 0;
 				this.button9.Enabled = false;//af.exec
 				this.button10.Enabled = false;
 				this.button11.Enabled = false;//auto.mes
+				this.button26.Enabled = false;
 				//---
 				this.radioButton3.Enabled = false;
 				this.radioButton4.Enabled = false;
@@ -429,9 +496,11 @@ this.SPE_COD = 0;
 				//
 				if (G.FORM02.isCONNECTED() && D.isCONNECTED() && G.FORM11.isORG_ALL_DONE()) {
 					this.button11.Enabled = true;
+					this.button26.Enabled = true;
 				}
 				else {
 					this.button11.Enabled = false;
+					this.button26.Enabled = false;
 				}
 				if (G.FORM02.isCONNECTED()) {
 					this.radioButton3.Enabled = true;
@@ -2536,6 +2605,132 @@ a_write("光源切替:->反射");
 				}
 				G.FORM03 = new Form03();
 				G.FORM03.Show();
+			}
+		}
+
+		private void timer3_Tick(object sender, EventArgs e)
+		{
+			int NXT_STS = this.CAL_STS+1;
+
+			this.timer3.Enabled = false;
+
+			switch (this.CAL_STS) {
+			case 0:
+				this.timer3.Enabled = false;
+				break;
+			case 2:
+				if ((Environment.TickCount-m_tic) < 250) {
+					NXT_STS = this.CAL_STS;
+				}
+				break;
+			case 3:
+				if (true) {
+					DialogResult ret;
+					ret = G.mlog(""
+							+ "#qカメラのキョリブレーションを実行します。"
+							+ "校正用のプレパラートをセットしてください。\r\n-\r\n"
+							+ "「いいえ」を選択するとキャリブレーション処理をスキップします。", G.FORM01);
+					if (ret != System.Windows.Forms.DialogResult.Yes) {
+						NXT_STS = -1;
+					}
+					else {
+						m_prg = new DlgProgress();
+						m_prg.Show(Application.ProductName, G.FORM01);
+						m_prg.SetStatus("カメラ校正\r\n\r\n実行中...");
+						G.FORM10.LED_SET(m_icam = 1, true);//LED.反射->ON
+						NXT_STS = 9;
+					}
+				}
+				break;
+			case 1:
+			case 9:
+				m_tic = Environment.TickCount;
+			break;
+			case 10:
+				if ((Environment.TickCount-m_tic) < 1000) {
+					NXT_STS = this.CAL_STS;
+				}
+				break;
+			case 11:
+				set_expo_mode(1/*1:auto*/);
+				m_tic = Environment.TickCount;
+			break;
+			case 12:
+				if ((Environment.TickCount-m_tic) < 5000) {
+					NXT_STS = this.CAL_STS;
+				}
+				else {
+					set_expo_mode(/*const*/0);
+				}
+			break;
+			case 13:
+				//設定を保存
+				if (true) {
+					double fval, fmin, fmax;
+					//---
+					G.FORM02.get_param(Form02.CAM_PARAM.GAIN, out fval, out fmax, out fmin);
+					G.SS.CAM_PAR_GA_VL[m_icam] = fval;
+					//---
+					G.FORM02.get_param(Form02.CAM_PARAM.EXPOSURE, out fval, out fmax, out fmin);
+					G.SS.CAM_PAR_EX_VL[m_icam] = fval;
+					//---
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 0);
+					G.FORM02.get_param(Form02.CAM_PARAM.BALANCE, out fval, out fmax, out fmin);
+					G.SS.CAM_PAR_WB_RV[m_icam] = fval;
+					//---
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 1);
+					G.FORM02.get_param(Form02.CAM_PARAM.BALANCE, out fval, out fmax, out fmin);
+					G.SS.CAM_PAR_WB_GV[m_icam] = fval;
+					//---
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 2);
+					G.FORM02.get_param(Form02.CAM_PARAM.BALANCE, out fval, out fmax, out fmin);
+					G.SS.CAM_PAR_WB_BV[m_icam] = fval;
+				}
+			break;
+			case 14:
+				if (m_icam == 1) {
+					G.FORM10.LED_SET(m_icam = 0, true);//LED.透過->ON
+					NXT_STS = 9;
+				}
+				else if (m_icam == 0) {
+					G.FORM10.LED_SET(m_icam = 2, true);//LED.赤外->ON
+					NXT_STS = 9;
+				}
+				else {
+					G.FORM10.LED_SET(m_icam = 1, true);//LED.反射->ON
+					NXT_STS = NXT_STS;
+				}
+			break;
+			case 15:
+			case 20:
+				if (m_prg != null) {
+					m_prg.Hide();
+					m_prg.Close();
+					m_prg.Dispose();
+					m_prg = null;
+				}
+				break;
+			case 16:
+				G.mlog("#iカメラのキョリブレーションが完了しました。");
+			break;
+			case 17:
+			case 21:
+				NXT_STS = 0;
+			break;
+			default:
+				NXT_STS = 0;
+				break;
+			}
+			if (NXT_STS == 0) {
+				NXT_STS = 0;//for break.point
+			}
+			if (m_prg != null && G.bCANCEL) {
+				NXT_STS = 20;
+                G.bCANCEL = false;
+            }
+			this.CAL_STS = NXT_STS;
+			if (NXT_STS != 0) {
+				this.timer3.Enabled = true;
 			}
 		}
 	}

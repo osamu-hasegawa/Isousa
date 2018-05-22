@@ -145,14 +145,14 @@
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.comboBox4 = new System.Windows.Forms.ComboBox();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.checkBox6 = new System.Windows.Forms.CheckBox();
+			this.checkBox5 = new System.Windows.Forms.CheckBox();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
 			this.label22 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textBox67 = new System.Windows.Forms.TextBox();
-			this.checkBox5 = new System.Windows.Forms.CheckBox();
-			this.checkBox6 = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1345,7 +1345,7 @@
             "反射画像"});
 			this.comboBox4.Location = new System.Drawing.Point(129, 109);
 			this.comboBox4.Name = "comboBox4";
-			this.comboBox4.Size = new System.Drawing.Size(101, 20);
+			this.comboBox4.Size = new System.Drawing.Size(118, 20);
 			this.comboBox4.TabIndex = 1;
 			// 
 			// comboBox1
@@ -1353,13 +1353,36 @@
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Items.AddRange(new object[] {
-            "ユーザ用",
+            "ユーザ用(暫定)",
+            "ユーザ用(最終)",
             "開発者用(一度)",
             "開発者用(常に)"});
 			this.comboBox1.Location = new System.Drawing.Point(129, 53);
 			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(101, 20);
+			this.comboBox1.Size = new System.Drawing.Size(118, 20);
 			this.comboBox1.TabIndex = 1;
+			// 
+			// checkBox6
+			// 
+			this.checkBox6.AutoSize = true;
+			this.checkBox6.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox6.Location = new System.Drawing.Point(17, 204);
+			this.checkBox6.Name = "checkBox6";
+			this.checkBox6.Size = new System.Drawing.Size(269, 16);
+			this.checkBox6.TabIndex = 2;
+			this.checkBox6.Text = "自動測定実行時 ZOOM軸 を初期位置に設定する";
+			this.checkBox6.UseVisualStyleBackColor = false;
+			// 
+			// checkBox5
+			// 
+			this.checkBox5.AutoSize = true;
+			this.checkBox5.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox5.Location = new System.Drawing.Point(17, 180);
+			this.checkBox5.Name = "checkBox5";
+			this.checkBox5.Size = new System.Drawing.Size(244, 16);
+			this.checkBox5.TabIndex = 2;
+			this.checkBox5.Text = "自動測定実行時 Z軸 を初期位置に設定する";
+			this.checkBox5.UseVisualStyleBackColor = false;
 			// 
 			// checkBox4
 			// 
@@ -1419,28 +1442,6 @@
 			this.textBox67.TabIndex = 0;
 			this.textBox67.Text = "0";
 			this.textBox67.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// checkBox5
-			// 
-			this.checkBox5.AutoSize = true;
-			this.checkBox5.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox5.Location = new System.Drawing.Point(17, 180);
-			this.checkBox5.Name = "checkBox5";
-			this.checkBox5.Size = new System.Drawing.Size(244, 16);
-			this.checkBox5.TabIndex = 2;
-			this.checkBox5.Text = "自動測定実行時 Z軸 を初期位置に設定する";
-			this.checkBox5.UseVisualStyleBackColor = false;
-			// 
-			// checkBox6
-			// 
-			this.checkBox6.AutoSize = true;
-			this.checkBox6.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox6.Location = new System.Drawing.Point(17, 204);
-			this.checkBox6.Name = "checkBox6";
-			this.checkBox6.Size = new System.Drawing.Size(269, 16);
-			this.checkBox6.TabIndex = 2;
-			this.checkBox6.Text = "自動測定実行時 ZOOM軸 を初期位置に設定する";
-			this.checkBox6.UseVisualStyleBackColor = false;
 			// 
 			// Form30
 			// 
