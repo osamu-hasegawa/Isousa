@@ -70,7 +70,7 @@ namespace uSCOPE
 			this.button26.Visible = true;
 			this.button26.Location = lc2;
 			this.button12.Location = new Point(lc1.X, lc3.Y);
-			this.button12.Text = "数値化";
+			this.button12.Text = "画像表示";
 			//---[パラメータ]
 			this.button3.Visible = false;	//透過用
 			this.button16.Visible = false;	//反射用

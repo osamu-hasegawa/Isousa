@@ -80,6 +80,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(198)))), ((int)(((byte)(3)))), ((int)(((byte)(85)))));
             this.groupBox1.Controls.Add(this.radioButton3);
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
@@ -88,10 +89,11 @@
             this.groupBox1.Controls.Add(this.button21);
             this.groupBox1.Controls.Add(this.button20);
             this.groupBox1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.groupBox1.Location = new System.Drawing.Point(6, 6);
+            this.groupBox1.Location = new System.Drawing.Point(8, 8);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(13, 3, 3, 3);
-            this.groupBox1.Size = new System.Drawing.Size(265, 109);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(17, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(353, 136);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "X軸 / Y軸 調整";
@@ -100,9 +102,10 @@
             // 
             this.radioButton3.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton3.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.radioButton3.Location = new System.Drawing.Point(16, 71);
+            this.radioButton3.Location = new System.Drawing.Point(21, 89);
+            this.radioButton3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(55, 25);
+            this.radioButton3.Size = new System.Drawing.Size(73, 31);
             this.radioButton3.TabIndex = 9;
             this.radioButton3.TabStop = true;
             this.radioButton3.Tag = "2";
@@ -115,9 +118,10 @@
             // 
             this.radioButton2.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton2.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.radioButton2.Location = new System.Drawing.Point(16, 46);
+            this.radioButton2.Location = new System.Drawing.Point(21, 58);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(55, 25);
+            this.radioButton2.Size = new System.Drawing.Size(73, 31);
             this.radioButton2.TabIndex = 8;
             this.radioButton2.TabStop = true;
             this.radioButton2.Tag = "1";
@@ -130,9 +134,10 @@
             // 
             this.radioButton1.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.radioButton1.Location = new System.Drawing.Point(16, 21);
+            this.radioButton1.Location = new System.Drawing.Point(21, 26);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(55, 25);
+            this.radioButton1.Size = new System.Drawing.Size(73, 31);
             this.radioButton1.TabIndex = 7;
             this.radioButton1.TabStop = true;
             this.radioButton1.Tag = "0";
@@ -144,9 +149,10 @@
             // button23
             // 
             this.button23.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button23.Location = new System.Drawing.Point(147, 71);
+            this.button23.Location = new System.Drawing.Point(196, 89);
+            this.button23.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(55, 26);
+            this.button23.Size = new System.Drawing.Size(73, 32);
             this.button23.TabIndex = 4;
             this.button23.Tag = "1";
             this.button23.Text = "↓";
@@ -157,9 +163,10 @@
             // button22
             // 
             this.button22.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button22.Location = new System.Drawing.Point(147, 20);
+            this.button22.Location = new System.Drawing.Point(196, 25);
+            this.button22.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(55, 26);
+            this.button22.Size = new System.Drawing.Size(73, 32);
             this.button22.TabIndex = 6;
             this.button22.Tag = "1";
             this.button22.Text = "↑";
@@ -170,9 +177,10 @@
             // button21
             // 
             this.button21.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button21.Location = new System.Drawing.Point(202, 45);
+            this.button21.Location = new System.Drawing.Point(269, 56);
+            this.button21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(55, 26);
+            this.button21.Size = new System.Drawing.Size(73, 32);
             this.button21.TabIndex = 5;
             this.button21.Tag = "0";
             this.button21.Text = "→";
@@ -183,9 +191,10 @@
             // button20
             // 
             this.button20.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button20.Location = new System.Drawing.Point(92, 45);
+            this.button20.Location = new System.Drawing.Point(123, 56);
+            this.button20.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button20.Name = "button20";
-            this.button20.Size = new System.Drawing.Size(55, 26);
+            this.button20.Size = new System.Drawing.Size(73, 32);
             this.button20.TabIndex = 3;
             this.button20.Tag = "0";
             this.button20.Text = "←";
@@ -198,18 +207,21 @@
             this.groupBox2.Controls.Add(this.radioButton10);
             this.groupBox2.Controls.Add(this.radioButton11);
             this.groupBox2.Controls.Add(this.radioButton12);
-            this.groupBox2.Location = new System.Drawing.Point(6, 364);
+            this.groupBox2.Location = new System.Drawing.Point(8, 455);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(265, 56);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Size = new System.Drawing.Size(353, 70);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "照明";
             // 
             // radioButton10
             // 
-            this.radioButton10.Location = new System.Drawing.Point(77, 22);
+            this.radioButton10.Location = new System.Drawing.Point(103, 28);
+            this.radioButton10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton10.Name = "radioButton10";
-            this.radioButton10.Size = new System.Drawing.Size(55, 25);
+            this.radioButton10.Size = new System.Drawing.Size(73, 31);
             this.radioButton10.TabIndex = 18;
             this.radioButton10.TabStop = true;
             this.radioButton10.Text = "透過";
@@ -219,9 +231,10 @@
             // 
             // radioButton11
             // 
-            this.radioButton11.Location = new System.Drawing.Point(138, 22);
+            this.radioButton11.Location = new System.Drawing.Point(184, 28);
+            this.radioButton11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton11.Name = "radioButton11";
-            this.radioButton11.Size = new System.Drawing.Size(55, 25);
+            this.radioButton11.Size = new System.Drawing.Size(73, 31);
             this.radioButton11.TabIndex = 17;
             this.radioButton11.TabStop = true;
             this.radioButton11.Text = "反射";
@@ -231,9 +244,10 @@
             // 
             // radioButton12
             // 
-            this.radioButton12.Location = new System.Drawing.Point(199, 22);
+            this.radioButton12.Location = new System.Drawing.Point(265, 28);
+            this.radioButton12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton12.Name = "radioButton12";
-            this.radioButton12.Size = new System.Drawing.Size(55, 25);
+            this.radioButton12.Size = new System.Drawing.Size(73, 31);
             this.radioButton12.TabIndex = 16;
             this.radioButton12.TabStop = true;
             this.radioButton12.Text = "赤外";
@@ -254,9 +268,11 @@
             this.groupBox3.Controls.Add(this.radioButton8);
             this.groupBox3.Controls.Add(this.radioButton9);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(6, 218);
+            this.groupBox3.Location = new System.Drawing.Point(8, 272);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(265, 138);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Size = new System.Drawing.Size(353, 172);
             this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "ZOOM 調整";
@@ -264,35 +280,39 @@
             // panel5
             // 
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel5.Location = new System.Drawing.Point(19, 68);
+            this.panel5.Location = new System.Drawing.Point(25, 85);
+            this.panel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(235, 2);
+            this.panel5.Size = new System.Drawing.Size(313, 2);
             this.panel5.TabIndex = 19;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(201, 22);
+            this.label3.Location = new System.Drawing.Point(268, 28);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 12);
+            this.label3.Size = new System.Drawing.Size(37, 15);
             this.label3.TabIndex = 18;
             this.label3.Text = "倍率";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 22);
+            this.label1.Location = new System.Drawing.Point(20, 28);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 12);
+            this.label1.Size = new System.Drawing.Size(73, 15);
             this.label1.TabIndex = 18;
             this.label1.Text = "ズーム倍率";
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button2.Location = new System.Drawing.Point(78, 37);
+            this.button2.Location = new System.Drawing.Point(104, 46);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(55, 26);
+            this.button2.Size = new System.Drawing.Size(73, 32);
             this.button2.TabIndex = 17;
             this.button2.Tag = "3";
             this.button2.Text = "16倍";
@@ -303,9 +323,10 @@
             // button36
             // 
             this.button36.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button36.Location = new System.Drawing.Point(202, 103);
+            this.button36.Location = new System.Drawing.Point(269, 129);
+            this.button36.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button36.Name = "button36";
-            this.button36.Size = new System.Drawing.Size(55, 26);
+            this.button36.Size = new System.Drawing.Size(73, 32);
             this.button36.TabIndex = 17;
             this.button36.Tag = "3";
             this.button36.Text = "↓";
@@ -316,9 +337,10 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button1.Location = new System.Drawing.Point(17, 37);
+            this.button1.Location = new System.Drawing.Point(23, 46);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(55, 26);
+            this.button1.Size = new System.Drawing.Size(73, 32);
             this.button1.TabIndex = 16;
             this.button1.Tag = "3";
             this.button1.Text = "8倍";
@@ -329,9 +351,10 @@
             // button35
             // 
             this.button35.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button35.Location = new System.Drawing.Point(202, 73);
+            this.button35.Location = new System.Drawing.Point(269, 91);
+            this.button35.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button35.Name = "button35";
-            this.button35.Size = new System.Drawing.Size(55, 26);
+            this.button35.Size = new System.Drawing.Size(73, 32);
             this.button35.TabIndex = 16;
             this.button35.Tag = "3";
             this.button35.Text = "↑";
@@ -343,9 +366,10 @@
             // 
             this.radioButton7.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton7.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.radioButton7.Location = new System.Drawing.Point(17, 84);
+            this.radioButton7.Location = new System.Drawing.Point(23, 105);
+            this.radioButton7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton7.Name = "radioButton7";
-            this.radioButton7.Size = new System.Drawing.Size(55, 25);
+            this.radioButton7.Size = new System.Drawing.Size(73, 31);
             this.radioButton7.TabIndex = 15;
             this.radioButton7.TabStop = true;
             this.radioButton7.Tag = "0";
@@ -358,9 +382,10 @@
             // 
             this.radioButton8.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton8.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.radioButton8.Location = new System.Drawing.Point(78, 84);
+            this.radioButton8.Location = new System.Drawing.Point(104, 105);
+            this.radioButton8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton8.Name = "radioButton8";
-            this.radioButton8.Size = new System.Drawing.Size(55, 25);
+            this.radioButton8.Size = new System.Drawing.Size(73, 31);
             this.radioButton8.TabIndex = 14;
             this.radioButton8.TabStop = true;
             this.radioButton8.Tag = "1";
@@ -373,9 +398,10 @@
             // 
             this.radioButton9.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton9.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.radioButton9.Location = new System.Drawing.Point(139, 84);
+            this.radioButton9.Location = new System.Drawing.Point(185, 105);
+            this.radioButton9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton9.Name = "radioButton9";
-            this.radioButton9.Size = new System.Drawing.Size(55, 25);
+            this.radioButton9.Size = new System.Drawing.Size(73, 31);
             this.radioButton9.TabIndex = 13;
             this.radioButton9.TabStop = true;
             this.radioButton9.Tag = "2";
@@ -389,9 +415,10 @@
             this.label2.BackColor = System.Drawing.Color.LightBlue;
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label2.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label2.Location = new System.Drawing.Point(201, 40);
+            this.label2.Location = new System.Drawing.Point(268, 50);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 19);
+            this.label2.Size = new System.Drawing.Size(73, 23);
             this.label2.TabIndex = 11;
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -402,9 +429,11 @@
             this.groupBox4.Controls.Add(this.radioButton4);
             this.groupBox4.Controls.Add(this.radioButton5);
             this.groupBox4.Controls.Add(this.radioButton6);
-            this.groupBox4.Location = new System.Drawing.Point(6, 126);
+            this.groupBox4.Location = new System.Drawing.Point(8, 158);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(265, 81);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox4.Size = new System.Drawing.Size(353, 101);
             this.groupBox4.TabIndex = 7;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Z / FOCUS 調整";
@@ -412,9 +441,10 @@
             // button34
             // 
             this.button34.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button34.Location = new System.Drawing.Point(202, 48);
+            this.button34.Location = new System.Drawing.Point(269, 60);
+            this.button34.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button34.Name = "button34";
-            this.button34.Size = new System.Drawing.Size(55, 26);
+            this.button34.Size = new System.Drawing.Size(73, 32);
             this.button34.TabIndex = 14;
             this.button34.Tag = "2";
             this.button34.Text = "↓";
@@ -425,9 +455,10 @@
             // button33
             // 
             this.button33.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button33.Location = new System.Drawing.Point(202, 18);
+            this.button33.Location = new System.Drawing.Point(269, 22);
+            this.button33.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button33.Name = "button33";
-            this.button33.Size = new System.Drawing.Size(55, 26);
+            this.button33.Size = new System.Drawing.Size(73, 32);
             this.button33.TabIndex = 13;
             this.button33.Tag = "2";
             this.button33.Text = "↑";
@@ -439,9 +470,10 @@
             // 
             this.radioButton4.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton4.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.radioButton4.Location = new System.Drawing.Point(16, 40);
+            this.radioButton4.Location = new System.Drawing.Point(21, 50);
+            this.radioButton4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(55, 25);
+            this.radioButton4.Size = new System.Drawing.Size(73, 31);
             this.radioButton4.TabIndex = 12;
             this.radioButton4.TabStop = true;
             this.radioButton4.Tag = "0";
@@ -454,9 +486,10 @@
             // 
             this.radioButton5.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton5.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.radioButton5.Location = new System.Drawing.Point(77, 40);
+            this.radioButton5.Location = new System.Drawing.Point(103, 50);
+            this.radioButton5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(55, 25);
+            this.radioButton5.Size = new System.Drawing.Size(73, 31);
             this.radioButton5.TabIndex = 11;
             this.radioButton5.TabStop = true;
             this.radioButton5.Tag = "1";
@@ -469,9 +502,10 @@
             // 
             this.radioButton6.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioButton6.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.radioButton6.Location = new System.Drawing.Point(138, 40);
+            this.radioButton6.Location = new System.Drawing.Point(184, 50);
+            this.radioButton6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(55, 25);
+            this.radioButton6.Size = new System.Drawing.Size(73, 31);
             this.radioButton6.TabIndex = 10;
             this.radioButton6.TabStop = true;
             this.radioButton6.Tag = "2";
@@ -482,16 +516,17 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.SteelBlue;
+            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(198)))), ((int)(((byte)(3)))), ((int)(((byte)(85)))));
             this.tabPage1.Controls.Add(this.groupBox5);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.groupBox4);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(277, 533);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Size = new System.Drawing.Size(372, 670);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "操作画面";
             // 
@@ -499,9 +534,11 @@
             // 
             this.groupBox5.Controls.Add(this.groupBox6);
             this.groupBox5.Controls.Add(this.button9);
-            this.groupBox5.Location = new System.Drawing.Point(6, 432);
+            this.groupBox5.Location = new System.Drawing.Point(8, 540);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(265, 90);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox5.Size = new System.Drawing.Size(353, 112);
             this.groupBox5.TabIndex = 10;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "撮影";
@@ -510,9 +547,11 @@
             // 
             this.groupBox6.Controls.Add(this.button10);
             this.groupBox6.Controls.Add(this.button11);
-            this.groupBox6.Location = new System.Drawing.Point(111, 18);
+            this.groupBox6.Location = new System.Drawing.Point(148, 22);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(144, 61);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox6.Size = new System.Drawing.Size(192, 76);
             this.groupBox6.TabIndex = 20;
             this.groupBox6.TabStop = false;
             // 
@@ -520,9 +559,10 @@
             // 
             this.button10.Enabled = false;
             this.button10.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button10.Location = new System.Drawing.Point(9, 21);
+            this.button10.Location = new System.Drawing.Point(12, 26);
+            this.button10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(55, 26);
+            this.button10.Size = new System.Drawing.Size(73, 32);
             this.button10.TabIndex = 18;
             this.button10.Tag = "3";
             this.button10.Text = "金髪";
@@ -532,9 +572,10 @@
             // button11
             // 
             this.button11.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button11.Location = new System.Drawing.Point(82, 21);
+            this.button11.Location = new System.Drawing.Point(109, 26);
+            this.button11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(55, 26);
+            this.button11.Size = new System.Drawing.Size(73, 32);
             this.button11.TabIndex = 19;
             this.button11.Tag = "3";
             this.button11.Text = "白髪";
@@ -544,9 +585,10 @@
             // button9
             // 
             this.button9.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Bold);
-            this.button9.Location = new System.Drawing.Point(14, 39);
+            this.button9.Location = new System.Drawing.Point(19, 49);
+            this.button9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(55, 26);
+            this.button9.Size = new System.Drawing.Size(73, 32);
             this.button9.TabIndex = 17;
             this.button9.Tag = "3";
             this.button9.Text = "自動";
@@ -562,7 +604,7 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(285, 559);
+            this.tabControl1.Size = new System.Drawing.Size(380, 699);
             this.tabControl1.TabIndex = 10;
             // 
             // backgroundWorker1
@@ -576,12 +618,13 @@
             // 
             // Form13
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(285, 559);
+            this.ClientSize = new System.Drawing.Size(380, 699);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form13";
             this.Text = "Form13";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form13_FormClosing);

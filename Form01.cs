@@ -243,9 +243,16 @@ namespace uSCOPE
 			}
 		}
 
+		static bool ctrlKeyFlg = false;
+		static bool AKeyFlg = false;
+		static bool BKeyFlg = false;
+		static bool CKeyFlg = false;
+
 		private void Form01_KeyDown(object sender, KeyEventArgs e)
 		{
 			bool flag = true;
+
+#if false
 			if (false) {
 			}
 			else if ((System.Windows.Input.Keyboard.GetKeyStates(System.Windows.Input.Key.LeftCtrl) & System.Windows.Input.KeyStates.Down)== 0) {
@@ -260,12 +267,40 @@ namespace uSCOPE
 			else if ((System.Windows.Input.Keyboard.GetKeyStates(System.Windows.Input.Key.C) & System.Windows.Input.KeyStates.Down)== 0) {
 				flag = false;
 			}
-			if (flag) {
+#else
+			flag = false;
+			if(ctrlKeyFlg == false && e.KeyCode == Keys.ControlKey)
+			{
+				ctrlKeyFlg = true;
+			}
+			if(AKeyFlg == false && e.KeyCode == Keys.A)
+			{
+				AKeyFlg = true;
+			}
+			if(BKeyFlg == false && e.KeyCode == Keys.B)
+			{
+				BKeyFlg = true;
+			}
+			if(CKeyFlg == false && e.KeyCode == Keys.C)
+			{
+				CKeyFlg = true;
+			}
+
+            if(ctrlKeyFlg && AKeyFlg && BKeyFlg && CKeyFlg)
+            {
+                flag = true;
+                ctrlKeyFlg = false;
+                AKeyFlg = false;
+                BKeyFlg = false;
+                CKeyFlg = false;
+            }
+#endif
+            if (flag) {
 			//this.KeyPreview = false;
 			//G.mlog("#iソフトウェアは次回起動時にユーザモードで起動します。");
 			var frm = new frmMessage();
 			frm.ShowDialog(this);
-			}
-		}
+            }
+        }
     }
 }

@@ -80,7 +80,7 @@ namespace uSCOPE
 			public string BEFORE_PATH = null;
 			public int[]	LED_PWM_VAL = { 90, 90, 90};
 			public bool		LED_PWM_AUTO = true;
-			[XmlIgnoreAttribute]
+			//[XmlIgnoreAttribute]
 			//public bool		LED_STS;
 			//---
 			public int[] PLM_JSPD = { 300, 300, 300, 300 };
