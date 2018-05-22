@@ -92,6 +92,7 @@ namespace uSCOPE
 			public int[]	PLM_BSLA = { 0, 0, 0, 0};
 			public int[] PLM_OFFS = { 0, 0, 0, 0 };
 			public double[] PLM_UMPP = { 2.5, 2.5, 0.35, 0};
+			public bool[] PLM_PWSV = { true, true, true, true};
 			//---
 			public int[]	PLM_POSX = { -3000, 0, 3000, 0 };
 			public int[]	PLM_POSY = { -3000, 0, 3000, 0 };
@@ -203,6 +204,7 @@ namespace uSCOPE
 
 			public int[] IMP_POL_PREC = {28,28,28,28};
 			public double[] IMP_OPT_MAGN = {8.0,8.0,8.0,8.0};
+			public int[] IMP_AUT_AFMD = {0, 0, 0, 0};
 			//---
 			public bool PLM_AUT_FINI = true;
 			public bool PLM_AUT_ZINI = true;
@@ -677,6 +679,7 @@ namespace uSCOPE
 		static public int CAM_WID;
 		static public int CAM_HEI;
 		static public int LED_PWR_STS;
+		static public int STG_PWR_SAV = 0;
 		static public int CAM_GAI_STS=2;//0:固定, 1:自動, 2:不定
 		static public int CAM_EXP_STS=2;//0:固定, 1:自動, 2:不定
 		static public int CAM_WBL_STS=2;//0:固定, 1:自動, 2:不定

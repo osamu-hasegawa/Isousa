@@ -153,6 +153,11 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textBox67 = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.checkBox7 = new System.Windows.Forms.CheckBox();
+			this.checkBox8 = new System.Windows.Forms.CheckBox();
+			this.checkBox9 = new System.Windows.Forms.CheckBox();
+			this.checkBox10 = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -185,6 +190,10 @@
 			this.groupBox2.Controls.Add(this.textBox12);
 			this.groupBox2.Controls.Add(this.textBox8);
 			this.groupBox2.Controls.Add(this.textBox2);
+			this.groupBox2.Controls.Add(this.checkBox10);
+			this.groupBox2.Controls.Add(this.checkBox9);
+			this.groupBox2.Controls.Add(this.checkBox8);
+			this.groupBox2.Controls.Add(this.checkBox7);
 			this.groupBox2.Controls.Add(this.label33);
 			this.groupBox2.Controls.Add(this.textBox11);
 			this.groupBox2.Controls.Add(this.textBox71);
@@ -196,6 +205,7 @@
 			this.groupBox2.Controls.Add(this.textBox9);
 			this.groupBox2.Controls.Add(this.textBox5);
 			this.groupBox2.Controls.Add(this.textBox1);
+			this.groupBox2.Controls.Add(this.label4);
 			this.groupBox2.Controls.Add(this.label11);
 			this.groupBox2.Controls.Add(this.label25);
 			this.groupBox2.Controls.Add(this.label6);
@@ -231,7 +241,7 @@
 			this.groupBox2.Controls.Add(this.textBox14);
 			this.groupBox2.Location = new System.Drawing.Point(12, 12);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(353, 292);
+			this.groupBox2.Size = new System.Drawing.Size(353, 305);
 			this.groupBox2.TabIndex = 0;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "パルスモータ・パラメータ";
@@ -267,9 +277,10 @@
 			// 
 			// label33
 			// 
-			this.label33.Location = new System.Drawing.Point(92, 257);
+			this.label33.AutoSize = true;
+			this.label33.Location = new System.Drawing.Point(10, 284);
 			this.label33.Name = "label33";
-			this.label33.Size = new System.Drawing.Size(225, 30);
+			this.label33.Size = new System.Drawing.Size(323, 12);
 			this.label33.TabIndex = 1;
 			this.label33.Text = "速度は[高速度]>[JOG速度]>[低速度]となるように設定してください.";
 			// 
@@ -805,7 +816,7 @@
 			this.groupBox5.Controls.Add(this.textBox31);
 			this.groupBox5.Controls.Add(this.label34);
 			this.groupBox5.Controls.Add(this.label35);
-			this.groupBox5.Location = new System.Drawing.Point(12, 312);
+			this.groupBox5.Location = new System.Drawing.Point(12, 323);
 			this.groupBox5.Name = "groupBox5";
 			this.groupBox5.Size = new System.Drawing.Size(353, 234);
 			this.groupBox5.TabIndex = 1;
@@ -1158,7 +1169,7 @@
 			this.groupBox1.Controls.Add(this.label15);
 			this.groupBox1.Location = new System.Drawing.Point(371, 138);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(353, 166);
+			this.groupBox1.Size = new System.Drawing.Size(353, 179);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "光学倍率";
@@ -1329,7 +1340,7 @@
 			this.groupBox3.Controls.Add(this.label3);
 			this.groupBox3.Controls.Add(this.label18);
 			this.groupBox3.Controls.Add(this.textBox67);
-			this.groupBox3.Location = new System.Drawing.Point(371, 312);
+			this.groupBox3.Location = new System.Drawing.Point(371, 323);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(353, 234);
 			this.groupBox3.TabIndex = 5;
@@ -1442,6 +1453,59 @@
 			this.textBox67.TabIndex = 0;
 			this.textBox67.Text = "0";
 			this.textBox67.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(8, 259);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(63, 12);
+			this.label4.TabIndex = 1;
+			this.label4.Text = "パワーセーブ";
+			// 
+			// checkBox7
+			// 
+			this.checkBox7.AutoSize = true;
+			this.checkBox7.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox7.Location = new System.Drawing.Point(98, 259);
+			this.checkBox7.Name = "checkBox7";
+			this.checkBox7.Size = new System.Drawing.Size(40, 16);
+			this.checkBox7.TabIndex = 8;
+			this.checkBox7.Text = "ON";
+			this.checkBox7.UseVisualStyleBackColor = false;
+			// 
+			// checkBox8
+			// 
+			this.checkBox8.AutoSize = true;
+			this.checkBox8.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox8.Location = new System.Drawing.Point(157, 259);
+			this.checkBox8.Name = "checkBox8";
+			this.checkBox8.Size = new System.Drawing.Size(40, 16);
+			this.checkBox8.TabIndex = 8;
+			this.checkBox8.Text = "ON";
+			this.checkBox8.UseVisualStyleBackColor = false;
+			// 
+			// checkBox9
+			// 
+			this.checkBox9.AutoSize = true;
+			this.checkBox9.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox9.Location = new System.Drawing.Point(220, 259);
+			this.checkBox9.Name = "checkBox9";
+			this.checkBox9.Size = new System.Drawing.Size(40, 16);
+			this.checkBox9.TabIndex = 8;
+			this.checkBox9.Text = "ON";
+			this.checkBox9.UseVisualStyleBackColor = false;
+			// 
+			// checkBox10
+			// 
+			this.checkBox10.AutoSize = true;
+			this.checkBox10.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox10.Location = new System.Drawing.Point(280, 259);
+			this.checkBox10.Name = "checkBox10";
+			this.checkBox10.Size = new System.Drawing.Size(40, 16);
+			this.checkBox10.TabIndex = 8;
+			this.checkBox10.Text = "ON";
+			this.checkBox10.UseVisualStyleBackColor = false;
 			// 
 			// Form30
 			// 
@@ -1606,6 +1670,11 @@
 		private System.Windows.Forms.CheckBox checkBox4;
 		private System.Windows.Forms.CheckBox checkBox6;
 		private System.Windows.Forms.CheckBox checkBox5;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.CheckBox checkBox10;
+		private System.Windows.Forms.CheckBox checkBox9;
+		private System.Windows.Forms.CheckBox checkBox8;
+		private System.Windows.Forms.CheckBox checkBox7;
 
 	}
 }

@@ -47,6 +47,7 @@ namespace uSCOPE
 				this.button1.Top = this.groupBox2.Bottom + GAP/2;
 				this.button2.Top = this.groupBox2.Bottom + GAP/2;
 				this.Height = this.button1.Bottom + GAP/2 + (this.Size.Height-this.ClientSize.Height);
+				this.Text = "画像表示";
 			}
 			//---
 			DDX(true);

@@ -70,7 +70,6 @@ namespace uSCOPE
 			this.button11.Location = lc4;
 			this.button26.Visible = true;
 			this.button26.Location = lc3;
-//			this.button12.Text = "数値化";
 			this.button12.Text = "画像表示";
 			this.button12.Location = lc2;
 			this.button27.Visible = true;
@@ -1246,7 +1245,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				}
 				prg.Show("自動測定", G.FORM01);
 				prg.SetStatus("実行中...");
+#if false//2018.05.17
 				G.CNT_MOD = (G.SS.PLM_AUT_AFMD==0) ? 0: 1+G.SS.PLM_AUT_AFMD;
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_AUTO;
 				this.AUT_STS = 1;
 				timer2.Enabled = true;
@@ -1521,6 +1522,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					buf = G.SS.PLM_AUT_SKIP.ToString();
 					break;
 				case 4:
+#if false//2018.05.17
 					switch (G.SS.PLM_AUT_AFMD) {
 					case  0:buf = "画像全体"; break;
 					case  1:buf = "毛髪範囲"; break;
@@ -1528,6 +1530,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					case  3:buf = "毛髪範囲+50%"; break;
 					default:buf = "毛髪範囲+100%"; break;
 					}
+#else
+					buf = "";
+#endif
 				break;
 				case 5:
 					buf = G.SS.PLM_AUT_HANI.ToString();
@@ -1782,6 +1787,16 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					NXT_STS = 70;//70->71->1として白色点灯->安定待機後に戻ってくる
 				}*/
 				else {
+#if true//2018.05.17
+					if ((G.LED_PWR_STS & 1) != 0) {
+						//白色(透過)
+						G.CNT_MOD = (G.SS.IMP_AUT_AFMD[0]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[0];
+					}
+					else {
+						//白色(反射)
+						G.CNT_MOD = (G.SS.IMP_AUT_AFMD[1]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[1];
+					}
+#endif
 					if (m_adat.retry == false) {
 						DateTime dt = DateTime.Now;
 						string buf = "";

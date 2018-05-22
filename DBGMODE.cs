@@ -441,7 +441,7 @@ namespace uSCOPE
 				//画像取得
 				try {
 					m_fm.BeginInvoke(m_fg, new object[] { null, null });
-					if (m_event_cam.WaitOne(250)) {
+					if (m_event_cam.WaitOne(750)) {
 						if (m_exit_req) {
 							break;
 						}

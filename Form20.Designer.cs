@@ -494,6 +494,7 @@
 			this.label5.Size = new System.Drawing.Size(53, 12);
 			this.label5.TabIndex = 57;
 			this.label5.Text = "計算範囲";
+			this.label5.Visible = false;
 			// 
 			// radioButton1
 			// 
@@ -547,6 +548,7 @@
 			this.comboBox4.Name = "comboBox4";
 			this.comboBox4.Size = new System.Drawing.Size(135, 20);
 			this.comboBox4.TabIndex = 4;
+			this.comboBox4.Visible = false;
 			// 
 			// numericUpDown7
 			// 

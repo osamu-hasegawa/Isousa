@@ -61,6 +61,7 @@ namespace uSCOPE
 			TextBox[] txtPLIM = { this.textBox6, this.textBox13,this.textBox20, this.textBox27 };
 			TextBox[] txtBSLA = { this.textBox7, this.textBox14, this.textBox21, this.textBox28 };
 			TextBox[] txtOKRI = { this.textBox71, this.textBox68, this.textBox69, this.textBox70 };
+			CheckBox[]chkPWSV = { this.checkBox7, this.checkBox8, this.checkBox9, this.checkBox10 };
 			//
 			TextBox[] txtCH1P = { this.textBox29, this.textBox32, this.textBox35, this.textBox73 };
 			TextBox[] txtCH2P = { this.textBox30, this.textBox33, this.textBox36, this.textBox72 };
@@ -80,7 +81,7 @@ namespace uSCOPE
 					DDV.DDX(bUpdate, txtPLIM[i], ref m_ss.PLM_PLIM[i], -0x7FFFFF, +0x7FFFFF);
 					DDV.DDX(bUpdate, txtBSLA[i], ref m_ss.PLM_BSLA[i], 0, 200 * 8);
 					DDV.DDX(bUpdate, txtOKRI[i], ref m_ss.PLM_UMPP[i], -1000, +1000);
-					
+					DDV.DDX(bUpdate, chkPWSV[i], ref m_ss.PLM_PWSV[i]);
 					//---
 					if (bUpdate == false) {
 						if (m_ss.PLM_LSPD[i] > m_ss.PLM_JSPD[i] || m_ss.PLM_JSPD[i] > m_ss.PLM_HSPD[i]) {

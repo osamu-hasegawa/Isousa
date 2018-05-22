@@ -75,7 +75,10 @@ namespace uSCOPE
 		}
 		public bool isORG_ALL_DONE()
 		{
-			timer1_Tick(null, null);
+			if (true) {
+				//timer1_Tick(null, null);
+				D.GET_STG_STS(G.PLM_STS_BIT);
+			}
 			for (int i = 0; i < 3; i++) {
 				if ((G.PLM_STS_BIT[i] & (int)G.PLM_STS_BITS.BIT_ORGOK) == 0) {
 					return(false);
@@ -166,7 +169,7 @@ namespace uSCOPE
 			}
 			else if (!isORG_ALL_DONE()) {
 				this.button37.Enabled = true;//原点.allと停止のみenable
-				this.button38.Enabled = true;
+				//this.button38.Enabled = true;
 #if true//2018.03.13
 				this.button4.Enabled = true;
 				this.button5.Enabled = true;
@@ -373,6 +376,9 @@ namespace uSCOPE
 			//UPDSTS();
 			if (G.PLM_STS != 0) {
 				this.timer1.Interval = 100;
+				if (this.timer1.Enabled == false) {
+					this.timer1.Enabled = true;
+				}
 			}
 		}
 		private void disp_zoom_rate()
@@ -421,6 +427,11 @@ namespace uSCOPE
 					m_txtPos1[i].Text = m_txtPos2[i].Text = pos.ToString();
 
 					if ((G.PLM_STS_BIT[i] & (int)G.PLM_STS_BITS.BIT_ONMOV) == 0) {
+						if (G.SS.PLM_PWSV[i] == false) {
+							if ((G.STG_PWR_SAV & (1<<i)) != 0) {
+								D.SET_STG_TRQ(i, 1);//TRQをHIにする
+							}
+						}
 						//---
 						if (G.PLM_BSL[i] > 0) {
 							D.SET_STG_REL(i, G.PLM_BSL[i]);

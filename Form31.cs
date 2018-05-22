@@ -149,6 +149,8 @@ namespace uSCOPE
 					DDV.DDX(bUpdate, this.numericUpDown74, ref m_ss.IMP_GIZ_UPPR[i]);
 					}
 				}
+				DDV.DDX(bUpdate, this.comboBox9, ref m_ss.IMP_AUT_AFMD[0]);
+				DDV.DDX(bUpdate, this.comboBox10, ref m_ss.IMP_AUT_AFMD[1]);
 				//-----
                 rc = true;
             }

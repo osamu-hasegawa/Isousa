@@ -2404,8 +2404,11 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			else {
 				wid = (int)m_camera.Parameters[PLCamera.Width].GetValue();
 				hei = (int)m_camera.Parameters[PLCamera.Height].GetValue();
-//				buf = string.Format("CAM:{0}", m_caminfo[CameraInfoKey.FriendlyName]);
-				buf = string.Format("");
+#if true
+				buf = "";
+#else
+				buf = string.Format("CAM:{0}", m_caminfo[CameraInfoKey.FriendlyName]);
+#endif
 				//---
 				G.CAM_WID = m_width = wid;
 				G.CAM_HEI = m_height = hei;

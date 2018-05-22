@@ -273,6 +273,7 @@ namespace uSCOPE
 		static public void SET_STG_ORG(int idx) {
 			SET_STG_TRQ(idx, 1);
 			CMDOUT(CMD_SET_PLM_ORG, idx, null);
+			G.STG_PWR_SAV |= (1<<idx);//PW.SVビットセット
 		}
 		static public void SET_STG_ABS(int idx, int pos) {
 			if (true) {
@@ -281,8 +282,12 @@ namespace uSCOPE
 				int	cur_pos = MAKELONG(buf[0], buf[1], buf[2], buf[3]);
 				int	dif = pos - cur_pos;
 				if (dif != 0) {
+#if true//2018.05.18
+					SET_STG_TRQ(idx, 1);
+#endif
 					CMDOUT(CMD_SET_PLM_REL, idx, B3(dif), B2(dif), B1(dif), null);
 				}
+				G.STG_PWR_SAV |= (1<<idx);//PW.SVビットセット
 			}
 			//else {
 			//    SET_STG_TRQ(idx, 1);
@@ -292,10 +297,12 @@ namespace uSCOPE
 		static public void SET_STG_REL(int idx, int cnt) {
 			SET_STG_TRQ(idx, 1);
 			CMDOUT(CMD_SET_PLM_REL, idx, B3(cnt), B2(cnt), B1(cnt), null);
+			G.STG_PWR_SAV |= (1<<idx);//PW.SVビットセット
 		}
 		static public void SET_STG_JOG(int idx, int dir) {
 			SET_STG_TRQ(idx, 1);
 			CMDOUT(CMD_SET_PLM_JOG, idx, dir, null);
+			G.STG_PWR_SAV |= (1<<idx);//PW.SVビットセット
 		}
 		static public int GET_STG_POS(int idx) {
 			byte[] buf = new byte[5];
@@ -320,6 +327,9 @@ namespace uSCOPE
 		}
 		static public void SET_STG_TRQ(int idx, int hi_lo) {
 			CMDOUT(CMD_SET_PLM_TRQ, idx, hi_lo, null);
+			if (hi_lo == 1) {
+				G.STG_PWR_SAV &= ~(1<<idx);//PW.SVビットクリア
+			}
 		}
 		//static public void SET_VCM_POS(int idx, int sts) {
 		//    CMDOUT(CMD_SET_VCM_POS, idx, sts, null);
