@@ -679,7 +679,7 @@ namespace uSCOPE
 		static public int CAM_WID;
 		static public int CAM_HEI;
 		static public int LED_PWR_STS;
-		static public int STG_PWR_SAV = 0;
+		static public int STG_TRQ_STS = 0;//ビットON:TRQ-HI, OFF:TRQ-LO
 		static public int CAM_GAI_STS=2;//0:固定, 1:自動, 2:不定
 		static public int CAM_EXP_STS=2;//0:固定, 1:自動, 2:不定
 		static public int CAM_WBL_STS=2;//0:固定, 1:自動, 2:不定

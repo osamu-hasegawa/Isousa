@@ -173,7 +173,7 @@ namespace uSCOPE
 		static private int HID_ENUM(uint vid, uint pid, out int pcnt)
 		{
 #if true
-			if (G.AS.DEBUG_MODE == 1) {
+			if ((G.AS.DEBUG_MODE & 1) != 0) {
 				DBGMODE.HID_ENUM(vid, pid, out pcnt);
 				return(1);
 			}
@@ -198,7 +198,7 @@ namespace uSCOPE
 					return(false);
 				}
 #if true
-				if (G.AS.DEBUG_MODE == 1) {
+				if ((G.AS.DEBUG_MODE & 1) != 0) {
 					if (DBGMODE.HID_OPEN(0x04D8, 0x003F, 0) == 0) {
 						return(false);
 					}
@@ -246,7 +246,7 @@ namespace uSCOPE
   	 				SET_STG_TRQ(q, 0);
   	 			}
 #if true
-				if (G.AS.DEBUG_MODE == 1) {
+				if ((G.AS.DEBUG_MODE & 1) != 0) {
 					DBGMODE.HID_CLOSE();
 					m_access = false;
 					return;
@@ -273,7 +273,6 @@ namespace uSCOPE
 		static public void SET_STG_ORG(int idx) {
 			SET_STG_TRQ(idx, 1);
 			CMDOUT(CMD_SET_PLM_ORG, idx, null);
-			G.STG_PWR_SAV |= (1<<idx);//PW.SVビットセット
 		}
 		static public void SET_STG_ABS(int idx, int pos) {
 			if (true) {
@@ -287,7 +286,6 @@ namespace uSCOPE
 #endif
 					CMDOUT(CMD_SET_PLM_REL, idx, B3(dif), B2(dif), B1(dif), null);
 				}
-				G.STG_PWR_SAV |= (1<<idx);//PW.SVビットセット
 			}
 			//else {
 			//    SET_STG_TRQ(idx, 1);
@@ -297,12 +295,10 @@ namespace uSCOPE
 		static public void SET_STG_REL(int idx, int cnt) {
 			SET_STG_TRQ(idx, 1);
 			CMDOUT(CMD_SET_PLM_REL, idx, B3(cnt), B2(cnt), B1(cnt), null);
-			G.STG_PWR_SAV |= (1<<idx);//PW.SVビットセット
 		}
 		static public void SET_STG_JOG(int idx, int dir) {
 			SET_STG_TRQ(idx, 1);
 			CMDOUT(CMD_SET_PLM_JOG, idx, dir, null);
-			G.STG_PWR_SAV |= (1<<idx);//PW.SVビットセット
 		}
 		static public int GET_STG_POS(int idx) {
 			byte[] buf = new byte[5];
@@ -328,7 +324,10 @@ namespace uSCOPE
 		static public void SET_STG_TRQ(int idx, int hi_lo) {
 			CMDOUT(CMD_SET_PLM_TRQ, idx, hi_lo, null);
 			if (hi_lo == 1) {
-				G.STG_PWR_SAV &= ~(1<<idx);//PW.SVビットクリア
+				G.STG_TRQ_STS |= (1<<idx);//TRQ.HIセット
+			}
+			else {
+				G.STG_TRQ_STS &= ~(1<<idx);//TRQ.HIクリア
 			}
 		}
 		//static public void SET_VCM_POS(int idx, int sts) {
@@ -372,7 +371,7 @@ namespace uSCOPE
 			commandPacket[3] = (byte)par3;
 			commandPacket[4] = (byte)par4;
 #if true
-			if (G.AS.DEBUG_MODE == 1) {
+			if ((G.AS.DEBUG_MODE & 1) != 0) {
 				DBGMODE.WRITE_HID(commandPacket);
 				if (buf != null) {
 				DBGMODE.READ_HID(buf);

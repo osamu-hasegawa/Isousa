@@ -31,6 +31,10 @@ namespace uSCOPE
 		private int[] m_pos = null;
 		private int m_idx;
 		private int[] m_bsla = { 0, 0, 0, 0 };
+#if true//2018.05.21(Z軸制御をXY移動後に行うようにする)
+		private bool[] m_pre_set = {false, false, false, false };
+		private int[] m_pre_pos = { 0, 0, 0, 0 };
+#endif
 		private int m_didx;
 		private int m_dcur;
 		private string m_path;
@@ -1159,6 +1163,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				//f軸停止待ち
 				if ((G.PLM_STS & (1 << 2)) == 0) {
 					if (m_bsla[2] != 0) {
+						Thread.Sleep(1000/G.SS.PLM_LSPD[2]);//2018.05.21
 						//バックラッシュ対応
 						MOVE_REL_Z(m_bsla[2]);
 						m_bsla[2] = 0;
@@ -1860,7 +1865,13 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					MOVE_ABS_XY((G.SS.PLM_MLIM[0] + G.SS.PLM_PLIM[0]) / 2, G.SS.PLM_MLIM[1]);
 				}
 				if (G.SS.PLM_AUT_FINI) {
-					MOVE_ABS_Z(G.SS.PLM_POSF[3]);//FOCUS/Z軸
+					if (NXT_STS < 0) {
+						m_pre_set[2] = true;
+						m_pre_pos[2] = G.SS.PLM_POSF[3];
+					}
+					else {
+						MOVE_ABS_Z(G.SS.PLM_POSF[3]);//FOCUS/Z軸
+					}
 				}
 				if (G.SS.PLM_AUT_ZINI) {
 					MOVE_ABS(3, G.SS.PLM_POSZ[3]);//ZOOM軸
@@ -2301,7 +2312,12 @@ a_write("AF:終了");
 				}
 				//開始位置へ移動後,右側処理
 				MOVE_ABS_XY(m_adat.sta_pos_x, m_adat.sta_pos_y);
+#if true//2018.05.21(Z軸制御をXY移動後に行うようにする)
+				m_pre_set[2] = true;
+				m_pre_pos[2] = m_adat.sta_pos_z;
+#else
 				MOVE_ABS_Z(m_adat.sta_pos_z);
+#endif
 				m_adat.f_idx = 51;
 				m_adat.chk1 = 0;
 				NXT_STS = -(30 - 1);//->30
@@ -2346,7 +2362,12 @@ a_write("AF:終了");
 			case 39:
 				//開始位置へ移動後,次の毛髪処理
 				MOVE_ABS_XY(m_adat.sta_pos_x, m_adat.sta_pos_y);
+#if true//2018.05.21(Z軸制御をXY移動後に行うようにする)
+				m_pre_set[2] = true;
+				m_pre_pos[2] = m_adat.sta_pos_z;
+#else
 				MOVE_ABS_Z(m_adat.sta_pos_z);
+#endif
 				NXT_STS = -(10 - 1);//->10
 				//---
 				rename_aut_files();
@@ -2437,7 +2458,12 @@ a_write("光源切替:->赤外");
 					int y = (int)m_adat.pos_y[i];
 					int z = (int)m_adat.pos_z[i];
 					MOVE_ABS_XY(x, y);
+#if true//2018.05.21(Z軸制御をXY移動後に行うようにする)
+					m_pre_set[2] = true;
+					m_pre_pos[2] = z;
+#else
 					MOVE_ABS_Z(z);
+#endif
 				}
 				NXT_STS = -this.AUT_STS;
 a_write("次へ移動");
@@ -2507,7 +2533,12 @@ a_write(string.Format("画像保存:{0}", path0));
 				if (m_adat.org_pos_x != -0x1000000) {
 					//最初の1本目探索位置へ
 					MOVE_ABS_XY(m_adat.org_pos_x, m_adat.org_pos_y);
+#if true//2018.05.21(Z軸制御をXY移動後に行うようにする)
+					m_pre_set[2] = true;
+					m_pre_pos[2] = m_adat.org_pos_z;
+#else
 					MOVE_ABS_Z(m_adat.org_pos_z);
+#endif
 				}
 				else {
 					//中上
@@ -2684,7 +2715,15 @@ a_write("光源切替:->反射");
 							m_bsla[0] = m_bsla[1] = 0;
 							NXT_STS = this.AUT_STS;
 						}
+#if true//2018.05.21(Z軸制御をXY移動後に行うようにする)
+						else if (m_pre_set[2]) {
+							m_pre_set[2] = false;
+							MOVE_ABS_Z(m_pre_pos[2]);
+							NXT_STS = this.AUT_STS;
+						}
+#endif
 						else if (m_bsla[2] != 0) {
+							Thread.Sleep(1000/G.SS.PLM_LSPD[2]);//2018.05.21
 							MOVE_REL_Z(m_bsla[2]);
 							m_bsla[2] = 0;
 							NXT_STS = this.AUT_STS;

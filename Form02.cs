@@ -169,7 +169,7 @@ namespace uSCOPE
 		};
 		public bool isCONNECTED()
 		{
-			if (G.AS.DEBUG_MODE == 1) {
+			if ((G.AS.DEBUG_MODE & 2) != 0) {
 				return(true);
 			}
 			return (m_camera != null);
@@ -327,7 +327,7 @@ namespace uSCOPE
 			fMax = double.NaN;
 			fMin = double.NaN;
 			//---
-			if (G.AS.DEBUG_MODE == 1) {
+			if ((G.AS.DEBUG_MODE & 2) != 0) {
 				var r = new Random();
 				fVal = 0.5 + r.NextDouble()/10;
 				fMin = 0;
@@ -450,7 +450,7 @@ namespace uSCOPE
 
 		public void set_param(CAM_PARAM param, double fVal)
 		{
-			if (G.AS.DEBUG_MODE == 1) {
+			if ((G.AS.DEBUG_MODE & 2) != 0) {
 				return;
 			}
 			//---
@@ -570,22 +570,21 @@ namespace uSCOPE
 				}
 				else if (param == CAM_PARAM.GAIN) {
 					if (val == 0) {//固定
-
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							//m_camera.Parameters[PLCamera.ExposureAuto].SetValue(PLCamera.ExposureAuto.Off);
 							m_camera.Parameters[PLCamera.GainAuto].SetValue(PLCamera.GainAuto.Off);
 						}
 						G.CAM_GAI_STS = 0;
 					}
 					else if (val == 1) {//自動
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							//m_camera.Parameters[PLCamera.ExposureAuto].SetValue(PLCamera.ExposureAuto.Continuous);
 							m_camera.Parameters[PLCamera.GainAuto].SetValue(PLCamera.GainAuto.Continuous);
 						}
 						G.CAM_GAI_STS = 1;
 					}
 					else {//ONCE
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							//m_camera.Parameters[PLCamera.ExposureAuto].SetValue(PLCamera.ExposureAuto.Once);
 							m_camera.Parameters[PLCamera.GainAuto].SetValue(PLCamera.GainAuto.Once);
 						}
@@ -594,21 +593,21 @@ namespace uSCOPE
 				}
 				else if (param == CAM_PARAM.EXPOSURE) {
 					if (val == 0) {
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							m_camera.Parameters[PLCamera.ExposureAuto].SetValue(PLCamera.ExposureAuto.Off);
 							//m_camera.Parameters[PLCamera.GainAuto].SetValue(PLCamera.GainAuto.Off);
 						}
 						G.CAM_EXP_STS = 0;
 					}
 					else if (val == 1) {
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							m_camera.Parameters[PLCamera.ExposureAuto].SetValue(PLCamera.ExposureAuto.Continuous);
 							//m_camera.Parameters[PLCamera.GainAuto].SetValue(PLCamera.GainAuto.Continuous);
 						}
 						G.CAM_EXP_STS = 1;
 					}
 					else {
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							m_camera.Parameters[PLCamera.ExposureAuto].SetValue(PLCamera.ExposureAuto.Once);
 							//m_camera.Parameters[PLCamera.GainAuto].SetValue(PLCamera.GainAuto.Once);
 						}
@@ -617,19 +616,19 @@ namespace uSCOPE
 				}
 				else if (param == CAM_PARAM.WHITE) {
 					if (val == 0) {
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							m_camera.Parameters[PLCamera.BalanceWhiteAuto].SetValue(PLCamera.BalanceWhiteAuto.Off);
 						}
 						G.CAM_WBL_STS = 0;
 					}
 					else if (val == 1) {
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							m_camera.Parameters[PLCamera.BalanceWhiteAuto].SetValue(PLCamera.BalanceWhiteAuto.Continuous);
 						}
 						G.CAM_WBL_STS = 1;
 					}
 					else {
-						if (G.AS.DEBUG_MODE != 1) {
+						if ((G.AS.DEBUG_MODE & 2) == 0) {
 							m_camera.Parameters[PLCamera.BalanceWhiteAuto].SetValue(PLCamera.BalanceWhiteAuto.Once);
 						}
 						G.CAM_WBL_STS = 0;
@@ -699,9 +698,10 @@ namespace uSCOPE
 			//this.panel1.Dock = DockStyle.Fill;
 			set_visible(false);
 
-			if (G.AS.DEBUG_MODE == 1) {
+			if ((G.AS.DEBUG_MODE & 2) != 0) {
 				m_size_mode = m_size_regi = 1;
 				set_size_mode(m_size_regi, -1, -1);
+				DBGMODE.INIT_OF_CAM();
 			}
 			else {
 				// Update the list of available camera devices in the upper left area.
@@ -788,7 +788,7 @@ namespace uSCOPE
 			set_danmod();
 			set_hismod();
 			//---
-			if (G.AS.DEBUG_MODE == 1) {
+			if ((G.AS.DEBUG_MODE & 2) != 0) {
 				OnCameraOpened(null, null);
 			}
 			//---
@@ -1968,7 +1968,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OnImageGrabbed()::" + Environmen
 				// Get the grab result.
 				IGrabResult grabResult = null;
 				int mask = 0;
-				if (G.AS.DEBUG_MODE != 1) {
+				if ((G.AS.DEBUG_MODE & 2) == 0) {
 					grabResult = e.GrabResult;
 				}
 				// Check if the image can be displayed.
@@ -2026,7 +2026,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OnImageGrabbed()::WxH" + m_width
 						m_bmpR = new Bitmap(m_width, m_height, PixelFormat.Format32bppRgb);
 						Rectangle rtBmp = new Rectangle(0, 0, m_bmpR.Width, m_bmpR.Height);
 						BitmapData bmpData;
-						if (G.AS.DEBUG_MODE == 1)
+						if ((G.AS.DEBUG_MODE & 2) != 0)
 						{
 							Image img = DBGMODE.GET_IMAGE();
 							Graphics g = Graphics.FromImage(m_bmpR);
@@ -2149,7 +2149,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OnGrabStopped()::" + Environment
 				EnableButtons(true, false);
 			}
 			// If the grabbed stop due to an error, display the error message.
-			if (G.AS.DEBUG_MODE == 1)
+			if ((G.AS.DEBUG_MODE & 2) != 0)
 			{
 			}
 			else if (e.Reason != GrabStopReason.UserRequest) {
@@ -2350,7 +2350,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 					set_size_mode(m_size_mode = m_size_regi, -1, -1);
 					m_bNeedToTakeImgBounds = true;
 				}
-				if (G.AS.DEBUG_MODE == 1) {
+				if ((G.AS.DEBUG_MODE & 2) != 0) {
 					DBGMODE.REG_CALLBACK(this, OnImageGrabbed, OnGrabStopped);
 					DBGMODE.ONE_SHOT();
 				}
@@ -2383,7 +2383,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 		{
 			string buf;
 			int wid, hei;
-			if (G.AS.DEBUG_MODE == 1) {
+			if ((G.AS.DEBUG_MODE & 2) != 0) {
 				buf = "CAM:DEBUG";
 				//---
 				G.CAM_WID = m_width = 2592;

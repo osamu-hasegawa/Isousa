@@ -59,16 +59,6 @@ namespace uSCOPE
 			if (m_event_dev == null) {
 				m_event_dev = new AutoResetEvent(false);
 			}
-			if (m_thrd_of_cam == null) {
-				m_thrd_of_cam = new Thread( new ThreadStart( THRD_OF_CAMERA ) );
-			}
-			if (m_event_cam == null) {
-				m_event_cam = new AutoResetEvent(false);
-			}
-
-			//OFFLINE画像(OFFLINE-IMAGE.PNG)の読込
-			m_bmp_org = new Bitmap(G.GET_DOC_PATH("OFFLINE-IMAGE.PNG"));
-			m_bmp_cam = new Bitmap(2592, 1944);
 			//---
 			for (int i = 0; i < PLM_AMS.Length; i++) {
 				//ms当たり何pps増えるか
@@ -80,6 +70,19 @@ namespace uSCOPE
 			}
 			m_exit_req = false;
 			m_thrd_of_dev.Start();
+		}
+		static public void INIT_OF_CAM()
+		{
+			//OFFLINE画像(OFFLINE-IMAGE.PNG)の読込
+			m_bmp_org = new Bitmap(G.GET_DOC_PATH("OFFLINE-IMAGE.PNG"));
+			m_bmp_cam = new Bitmap(2592, 1944);
+			//---
+			if (m_thrd_of_cam == null) {
+				m_thrd_of_cam = new Thread( new ThreadStart( THRD_OF_CAMERA ) );
+			}
+			if (m_event_cam == null) {
+				m_event_cam = new AutoResetEvent(false);
+			}
             m_thrd_of_cam.Start();
 		}
 		static public void TERM()
@@ -420,8 +423,8 @@ namespace uSCOPE
 				double hei_u = hei_p * G.SS.PLM_UMPP[1];
 				int wid_i = m_bmp_org.Width;
 				int hei_i = m_bmp_org.Height;
-				double x_per = (PLM_CNT[0]- G.SS.PLM_MLIM[0]) / wid_p;
-				double y_per = (PLM_CNT[1]- G.SS.PLM_MLIM[1]) / hei_p;
+				double x_per = (G.PLM_POS[0]- G.SS.PLM_MLIM[0]) / wid_p;
+				double y_per = (G.PLM_POS[1]- G.SS.PLM_MLIM[1]) / hei_p;
 				//double xum = x * G.SS.PLM_UMPP[0];//ステージのum位置
 				//double yum = y * G.SS.PLM_UMPP[1];
 				//double xpx = G.UM2PX(xum, G.SS.CAM_SPE_UMPPX, LENS_ZOOM/4);

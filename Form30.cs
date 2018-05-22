@@ -73,9 +73,9 @@ namespace uSCOPE
 			//
 			try {
 				for (int i = 0; i < 4; i++) {
-					DDV.DDX(bUpdate, txtLSPD[i], ref m_ss.PLM_LSPD[i], 10, 80000);
-					DDV.DDX(bUpdate, txtJSPD[i], ref m_ss.PLM_JSPD[i], 10, 80000);
-					DDV.DDX(bUpdate, txtHSPD[i], ref m_ss.PLM_HSPD[i], 10, 80000);
+					DDV.DDX(bUpdate, txtLSPD[i], ref m_ss.PLM_LSPD[i], 1, 80000);
+					DDV.DDX(bUpdate, txtJSPD[i], ref m_ss.PLM_JSPD[i], 1, 80000);
+					DDV.DDX(bUpdate, txtHSPD[i], ref m_ss.PLM_HSPD[i], 1, 80000);
 					DDV.DDX(bUpdate, txtACCL[i], ref m_ss.PLM_ACCL[i], 10, 1000);
 					DDV.DDX(bUpdate, txtMLIM[i], ref m_ss.PLM_MLIM[i], -0x7FFFFF, +0x7FFFFF);
 					DDV.DDX(bUpdate, txtPLIM[i], ref m_ss.PLM_PLIM[i], -0x7FFFFF, +0x7FFFFF);

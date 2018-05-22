@@ -187,7 +187,7 @@ namespace uSCOPE
 			G.AS.save(G.AS);
 			G.SS.save(G.SS);
 			//---
-			if (G.AS.DEBUG_MODE == 1) {
+			if (G.AS.DEBUG_MODE != 0) {
 				DBGMODE.TERM();
 			}
 		}
