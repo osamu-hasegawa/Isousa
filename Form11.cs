@@ -280,12 +280,24 @@ namespace uSCOPE
 				if (pos0 > nxt0 && G.SS.PLM_BSLA[0] > 0) {
 					G.PLM_BSL[0] = G.SS.PLM_BSLA[0];
 				}
+#if true//2018.05.22(バックラッシュ方向反転対応)
+				else
+				if (pos0 < nxt0 && G.SS.PLM_BSLA[0] < 0) {
+					G.PLM_BSL[0] = G.SS.PLM_BSLA[0];
+				}
+#endif
 				else {
 					G.PLM_BSL[0] = 0;
 				}
 				if (pos1 > nxt1 && G.SS.PLM_BSLA[1] > 0) {
 					G.PLM_BSL[1] = G.SS.PLM_BSLA[1];
 				}
+#if true//2018.05.22(バックラッシュ方向反転対応)
+				else
+				if (pos1 < nxt1 && G.SS.PLM_BSLA[1] < 0) {
+					G.PLM_BSL[1] = G.SS.PLM_BSLA[1];
+				}
+#endif
 				else {
 					G.PLM_BSL[1] = 0;
 				}
@@ -306,6 +318,12 @@ namespace uSCOPE
 				if (pos > nxt && G.SS.PLM_BSLA[2] > 0) {
 					G.PLM_BSL[2] = G.SS.PLM_BSLA[2];
 				}
+#if true//2018.05.22(バックラッシュ方向反転対応)
+				else
+				if (pos < nxt && G.SS.PLM_BSLA[2] < 0) {
+					G.PLM_BSL[2] = G.SS.PLM_BSLA[2];
+				}
+#endif
 				else {
 					G.PLM_BSL[2] = 0;
 				}
@@ -325,6 +343,12 @@ namespace uSCOPE
 				if (pos > nxt && G.SS.PLM_BSLA[3] > 0) {
 					G.PLM_BSL[3] = G.SS.PLM_BSLA[3];
 				}
+#if true//2018.05.22(バックラッシュ方向反転対応)
+				else
+				if (pos < nxt && G.SS.PLM_BSLA[3] < 0) {
+					G.PLM_BSL[3] = G.SS.PLM_BSLA[3];
+				}
+#endif
 				else {
 					G.PLM_BSL[3] = 0;
 				}
@@ -464,7 +488,11 @@ namespace uSCOPE
 							}
 						}
 						//---
+#if true//2018.05.22(バックラッシュ方向反転対応)
+						if (G.PLM_BSL[i] != 0) {
+#else
 						if (G.PLM_BSL[i] > 0) {
+#endif
 							D.SET_STG_REL(i, G.PLM_BSL[i]);
 							G.PLM_BSL[i] = 0;
 						}
@@ -714,6 +742,12 @@ namespace uSCOPE
 					if (pos > nxt && G.SS.PLM_BSLA[q] > 0) {
 						G.PLM_BSL[q] = G.SS.PLM_BSLA[q];
 					}
+#if true//2018.05.22(バックラッシュ方向反転対応)
+					else
+					if (pos < nxt && G.SS.PLM_BSLA[q] < 0) {
+						G.PLM_BSL[q] = G.SS.PLM_BSLA[q];
+					}
+#endif
 					else {
 						G.PLM_BSL[q] = 0;
 					}

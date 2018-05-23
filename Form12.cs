@@ -800,6 +800,12 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				if (G.PLM_POS[q] > pos && G.SS.PLM_BSLA[q] > 0) {
 					m_bsla[q] = G.SS.PLM_BSLA[q];
 				}
+#if true//2018.05.22(バックラッシュ方向反転対応)
+				else
+				if (G.PLM_POS[q] < pos && G.SS.PLM_BSLA[q] < 0) {
+					m_bsla[q] = G.SS.PLM_BSLA[q];
+				}
+#endif
 				else {
 					m_bsla[q] = 0;
 				}
@@ -819,7 +825,15 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 		{
 			var ar = new ArrayList();
 			int pos;
-	
+#if true//2018.05.22(バックラッシュ方向反転対応)
+			bool brev = false;
+			if (min > max) {
+				int tmp = min;
+				min = max;
+				max = tmp;
+				brev = true;
+			}
+#endif	
 			ar.Add(min);
 
 			if ((min % stp) != 0) {
@@ -836,7 +850,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				pos += stp;
 			}
 			ar.Add(max);
-
+#if true//2018.05.22(バックラッシュ方向反転対応)
+			if (brev) {
+				ar.Reverse();
+			}
+#endif
 			return ((int[])ar.ToArray(typeof(int)));
 		}
 
@@ -998,6 +1016,15 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					m_pmin = G.SS.PLM_AUT_HPMN;
 					m_pmax = G.SS.PLM_AUT_HPMX;
 				}
+#if true//2018.05.22(バックラッシュ方向反転対応)
+				if (G.SS.PLM_BSLA[2] < 0) {
+					if (m_pmin < m_pmax) {
+						int tmp = m_pmin;
+						m_pmin = m_pmax;
+						m_pmax = tmp;
+					}
+				}
+#endif
 				m_pstp = m_disl;
 				m_lms = 0;
 				break;
@@ -1910,16 +1937,25 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 						int z;
 						int zstp = G.SS.PLM_AUT_ZSTP;
 						int zhan = zstp * (G.SS.PLM_AUT_ZHAN / zstp);//念のため;
-						int znam = 10 - (zhan/zstp); 
-
+						int znam = 10 - (zhan/zstp);
+						var ar_z_nam = new ArrayList();
+						var ar_z_pos = new ArrayList();
 						for (z = -zhan; z <= +zhan; z += zstp, znam++) {
 							if (z == 0) {
 								continue;
 							}
 							m_adat.z_cnt++;
-							m_adat.z_nam.Add(string.Format("Z{0:00}", znam));
-							m_adat.z_pos.Add(z);
+							ar_z_nam.Add(string.Format("Z{0:00}", znam));
+							ar_z_pos.Add(z);
 						}
+#if true//2018.05.22(バックラッシュ方向反転対応)
+						if (G.SS.PLM_BSLA[2] < 0) {
+							ar_z_nam.Reverse();
+							ar_z_pos.Reverse();
+						}
+#endif
+						m_adat.z_nam.AddRange(ar_z_nam);
+						m_adat.z_pos.AddRange(ar_z_pos);
 					}
 				}
 				NXT_STS = 12;
@@ -2711,7 +2747,19 @@ a_write("光源切替:->反射");
 					//f軸停止待ち
 					if ((G.PLM_STS & (1|2|4)) == 0) {
 						if (m_bsla[0] != 0 || m_bsla[1] != 0) {
+#if true//2018.05.23(毛髪右端での繰り返し発生対応)
+							if ((G.PLM_STS_BIT[0] & (int)G.PLM_STS_BITS.BIT_LMT_M) != 0) {
+								NXT_STS = NXT_STS;//リミットステータスが消えてしまうのでバックラッシュ制御はスキップする
+							}
+							else if ((G.PLM_STS_BIT[0] & (int)G.PLM_STS_BITS.BIT_LMT_P) != 0) {
+								NXT_STS = NXT_STS;//リミットステータスが消えてしまうのでバックラッシュ制御はスキップする
+							}
+							else {
+#endif
 							MOVE_REL_XY(m_bsla[0], m_bsla[1]);
+#if true//2018.05.23(毛髪右端での繰り返し発生対応)
+							}
+#endif
 							m_bsla[0] = m_bsla[1] = 0;
 							NXT_STS = this.AUT_STS;
 						}

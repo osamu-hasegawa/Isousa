@@ -52,9 +52,7 @@
     <ApplicationIcon>Resources\Icon1.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Basler.Pylon">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\KOP\uSCOPE\Basler.Pylon.dll</HintPath>
-    </Reference>
+    <Reference Include="Basler.Pylon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e389355f398382ab, processorArchitecture=x86" />
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />

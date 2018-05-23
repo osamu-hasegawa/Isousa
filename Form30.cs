@@ -79,7 +79,11 @@ namespace uSCOPE
 					DDV.DDX(bUpdate, txtACCL[i], ref m_ss.PLM_ACCL[i], 10, 1000);
 					DDV.DDX(bUpdate, txtMLIM[i], ref m_ss.PLM_MLIM[i], -0x7FFFFF, +0x7FFFFF);
 					DDV.DDX(bUpdate, txtPLIM[i], ref m_ss.PLM_PLIM[i], -0x7FFFFF, +0x7FFFFF);
+#if true//2018.05.22(バックラッシュ方向反転対応)
+					DDV.DDX(bUpdate, txtBSLA[i], ref m_ss.PLM_BSLA[i], -200 * 8, +200 * 8);
+#else
 					DDV.DDX(bUpdate, txtBSLA[i], ref m_ss.PLM_BSLA[i], 0, 200 * 8);
+#endif
 					DDV.DDX(bUpdate, txtOKRI[i], ref m_ss.PLM_UMPP[i], -1000, +1000);
 					DDV.DDX(bUpdate, chkPWSV[i], ref m_ss.PLM_PWSV[i]);
 					//---

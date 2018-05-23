@@ -436,6 +436,11 @@ namespace uSCOPE
 				//
 				Graphics g = Graphics.FromImage(m_bmp_cam);
 				Rectangle d_rt = new Rectangle(0,0,CAM_WID,CAM_HEI);
+//				Rectangle s_rt = new Rectangle(ox-wid/2, oy-hei/2, wid, hei);
+				if ((G.PLM_POS[0]/G.SS.PLM_MLIM[0]) >= 0.95) {
+				//-リミットでの繰り返し発生実験
+				ox = (int)(wid_i - wid_i * 0.5);
+				}
 				Rectangle s_rt = new Rectangle(ox-wid/2, oy-hei/2, wid, hei);
 				g.Clear(Color.Black/*.Aquamarine*/);
 				g.DrawImage(m_bmp_org, d_rt, s_rt, GraphicsUnit.Pixel);
