@@ -70,14 +70,16 @@ namespace uSCOPE
 			var lc2 = this.button12.Location;//右下
 			var lc3 = this.button26.Location;//右上
 			var lc4 = this.button27.Location;//左上
-			this.button11.Text = "自動測定\r\n(黒髪)";
-			this.button11.Location = lc4;
+			//this.button11.Text = "黒髪";
+			//this.button11.Location = lc4;
 			this.button26.Visible = true;
-			this.button26.Location = lc3;
-			this.button12.Text = "画像表示";
-			this.button12.Location = lc2;
+			//this.button26.Location = lc3;
+			//this.button12.Text = "画像表示";
+			//this.button12.Location = lc2;
 			this.button27.Visible = true;
-			this.button27.Location = lc1;
+			//this.button27.Location = lc1;
+			this.checkBox11.Visible = true;//深度合成
+
 			//---[パラメータ]
 			this.button3.Visible = false;	//透過用
 			this.button16.Visible = false;	//反射用
@@ -233,18 +235,19 @@ this.SPE_COD = 0;
 					path += @"\KOP";
 					path += @"\" + Application.ProductName;
 					G.SS.PLM_AUT_FOLD = path;
+					//G.SS.PLM_AUT_ZDCK = this.checkBox11.Checked;
 					//3:透過→赤外, 8:反射→赤外
-					if (sender == this.button11/*黒*/) {
+					if (sender == this.button11/*自動*/) {
 						G.SS.PLM_AUT_MODE = 8;
-						G.SS.PLM_AUT_RTRY = false;
+						G.SS.PLM_AUT_RTRY = true;
 					}
 					else if (sender == this.button26/*白*/) {
 						G.SS.PLM_AUT_MODE = 3;
 						G.SS.PLM_AUT_RTRY = false;
 					}
-					else {
+					else if (sender == this.button27/*黒*/){
 						G.SS.PLM_AUT_MODE = 8;
-						G.SS.PLM_AUT_RTRY = true;
+						G.SS.PLM_AUT_RTRY = false;
 					}
 					//自動測定実行
 					do_auto_mes(false);
@@ -446,6 +449,9 @@ this.SPE_COD = 0;
 				DDV.DDX(bUpdate, this.numericUpDown41, ref G.SS.TST_PAR_SMAX);	//面積:MAX
 				DDV.DDX(bUpdate, this.numericUpDown42, ref G.SS.TST_PAR_LMIN);	//周囲長:MIN
 				DDV.DDX(bUpdate, this.numericUpDown40, ref G.SS.TST_PAR_LMAX);	//周囲長:MAX
+				if (G.UIF_LEVL == 0) {
+				DDV.DDX(bUpdate, this.checkBox11, ref G.SS.PLM_AUT_ZDCK);
+				}
 				//---
 				rc = true;
 			}
@@ -473,6 +479,7 @@ this.SPE_COD = 0;
 				this.button11.Enabled = false;//auto.mes
 				this.button26.Enabled = false;
 				this.button27.Enabled = false;
+				this.checkBox11.Enabled = false;//深度合成
 				//---
 				this.radioButton3.Enabled = false;
 				this.radioButton4.Enabled = false;
@@ -520,11 +527,13 @@ this.SPE_COD = 0;
 					this.button11.Enabled = true;
 					this.button26.Enabled = true;
 					this.button27.Enabled = true;
+					this.checkBox11.Enabled = true;//深度合成
 				}
 				else {
 					this.button11.Enabled = false;
 					this.button26.Enabled = false;
 					this.button27.Enabled = false;
+					this.checkBox11.Enabled = false;//深度合成
 				}
 				if (G.FORM02.isCONNECTED()) {
 					this.radioButton3.Enabled = true;
@@ -1275,7 +1284,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				if (G.FORM02.get_size_mode() > 1) {
 					G.FORM02.set_size_mode(1, -1, -1);
 				}
-				prg.Show("自動測定", G.FORM01);
+				prg.Show("自動撮影", G.FORM01);
 				prg.SetStatus("実行中...");
 #if false//2018.05.17
 				G.CNT_MOD = (G.SS.PLM_AUT_AFMD==0) ? 0: 1+G.SS.PLM_AUT_AFMD;
@@ -1307,13 +1316,13 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 						continue;
 					}
 					if ((G.LED_PWR_STS & 1) != 0) {
-						buf += "白色(透過):";
+						buf += "透過:";
 					}
 					else if ((G.LED_PWR_STS & 2) != 0) {
-						buf += "白色(反射):";
+						buf += "反射:";
 					}
 					else if ((G.LED_PWR_STS & 4) != 0) {
-						buf += "赤外LED : ";
+						buf += "位相差: ";
 					}
 					//if ((this.AUT_STS >= 140 && this.AUT_STS <= 141)/* || (this.AUT_STS >= 56 && this.AUT_STS <= 58)*/) {
 					//    buf += "\r\r";
@@ -1710,8 +1719,8 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					if (m_adat.z_cnt > 1) {
 						for (int q = 1; q < m_adat.z_cnt; q++) {
 							string tmp = (string)m_adat.z_nam[q];
-							string name_old = src.Replace("Z10", tmp);
-							string name_new = dst.Replace("Z10", tmp);
+							string name_old = src.Replace("ZP00D", tmp);
+							string name_new = dst.Replace("ZP00D", tmp);
 							//---
 							buf = buf.Replace(name_old, name_new);
 						}
@@ -1721,8 +1730,8 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					if (m_adat.z_cnt > 1) {
 						for (int q = 1; q < m_adat.z_cnt; q++) {
 							string tmp = (string)m_adat.z_nam[q];
-							string name_old = path_old.Replace("Z10", tmp);
-							string name_new = path_new.Replace("Z10", tmp);
+							string name_old = path_old.Replace("ZP00D", tmp);
+							string name_new = path_new.Replace("ZP00D", tmp);
 							//---
 							System.IO.File.Move(name_old, name_new);
 						}
@@ -1930,33 +1939,59 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					if (true) {
 						m_adat.z_cnt = 1;
 						m_adat.z_idx = 0;
-						m_adat.z_nam.Add("Z10");
+						m_adat.z_nam.Add("ZP00D");
 						m_adat.z_pos.Add(0);
 					}
-					if (G.SS.PLM_AUT_ZMUL) {
-						int z;
-						int zstp = G.SS.PLM_AUT_ZSTP;
-						int zhan = zstp * (G.SS.PLM_AUT_ZHAN / zstp);//念のため;
-						int znam = 10 - (zhan/zstp);
-						var ar_z_nam = new ArrayList();
-						var ar_z_pos = new ArrayList();
-						for (z = -zhan; z <= +zhan; z += zstp, znam++) {
-							if (z == 0) {
-								continue;
+					if (G.SS.PLM_AUT_ZDCK && G.SS.PLM_AUT_ZDEP != null && G.SS.PLM_AUT_ZDEP.Length > 0) {
+						for (int i = 0; i < G.SS.PLM_AUT_ZDEP.Length; i++) {
+							int pos = G.SS.PLM_AUT_ZDEP[i];
+					        m_adat.z_cnt++;
+							if (pos >= 0) {
+					        m_adat.z_nam.Add(string.Format("ZP{0:00}D", +pos));
 							}
-							m_adat.z_cnt++;
-							ar_z_nam.Add(string.Format("Z{0:00}", znam));
-							ar_z_pos.Add(z);
-						}
-#if true//2018.05.22(バックラッシュ方向反転対応)
-						if (G.SS.PLM_BSLA[2] < 0) {
-							ar_z_nam.Reverse();
-							ar_z_pos.Reverse();
-						}
-#endif
-						m_adat.z_nam.AddRange(ar_z_nam);
-						m_adat.z_pos.AddRange(ar_z_pos);
+							else {
+					        m_adat.z_nam.Add(string.Format("ZM{0:00}D", -pos));
+							}
+					        m_adat.z_pos.Add(pos);
+					    }
 					}
+					if (G.SS.PLM_AUT_ZKCK && G.SS.PLM_AUT_ZKEI != null && G.SS.PLM_AUT_ZKEI.Length > 0) {
+						for (int i = 0; i < G.SS.PLM_AUT_ZKEI.Length; i++) {
+							int pos = G.SS.PLM_AUT_ZKEI[i];
+					        m_adat.z_cnt++;
+							if (pos >= 0) {
+					        m_adat.z_nam.Add(string.Format("ZP{0:00}K", +pos));
+							}
+							else {
+					        m_adat.z_nam.Add(string.Format("ZM{0:00}K", -pos));
+							}
+					        m_adat.z_pos.Add(pos);
+					    }
+					}
+//                    if (G.SS.PLM_AUT_ZMUL) {
+//                        int z;
+//                        int zstp = G.SS.PLM_AUT_ZSTP;
+//                        int zhan = zstp * (G.SS.PLM_AUT_ZHAN / zstp);//念のため;
+//                        int znam = 10 - (zhan/zstp);
+//                        var ar_z_nam = new ArrayList();
+//                        var ar_z_pos = new ArrayList();
+//                        for (z = -zhan; z <= +zhan; z += zstp, znam++) {
+//                            if (z == 0) {
+//                                continue;
+//                            }
+//                            m_adat.z_cnt++;
+//                            ar_z_nam.Add(string.Format("Z{0:00}", znam));
+//                            ar_z_pos.Add(z);
+//                        }
+//#if true//2018.05.22(バックラッシュ方向反転対応)
+//                        if (G.SS.PLM_BSLA[2] < 0) {
+//                            ar_z_nam.Reverse();
+//                            ar_z_pos.Reverse();
+//                        }
+//#endif
+//                        m_adat.z_nam.AddRange(ar_z_nam);
+//                        m_adat.z_pos.AddRange(ar_z_pos);
+//                    }
 				}
 				NXT_STS = 12;
 				break;

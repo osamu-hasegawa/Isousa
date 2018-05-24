@@ -35,6 +35,7 @@ namespace uSCOPE
 			//---
 			numericUpDown17_ValueChanged(null, null);
 			checkBox4_Click(null, null);
+			//---
 		}
 
 		private void Form20_FormClosing(object sender, FormClosingEventArgs e)
@@ -97,9 +98,14 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown15, ref m_ss.PLM_AUT_HPSL);
 				DDV.DDX(bUpdate, this.numericUpDown16, ref m_ss.PLM_AUT_HPSS);
 				//---
-				DDV.DDX(bUpdate, this.checkBox4      , ref m_ss.PLM_AUT_ZMUL);
-				DDV.DDX(bUpdate, this.numericUpDown17, ref m_ss.PLM_AUT_ZHAN);
-				DDV.DDX(bUpdate, this.numericUpDown18, ref m_ss.PLM_AUT_ZSTP);
+				//DDV.DDX(bUpdate, this.checkBox4      , ref m_ss.PLM_AUT_ZMUL);
+				//DDV.DDX(bUpdate, this.numericUpDown17, ref m_ss.PLM_AUT_ZHAN);
+				//DDV.DDX(bUpdate, this.numericUpDown18, ref m_ss.PLM_AUT_ZSTP);
+				//---
+				DDV.DDX(bUpdate, this.checkBox6      , ref m_ss.PLM_AUT_ZDCK);//Ｚ測定:深度合成用
+				DDV.DDX(bUpdate, this.textBox3       , ref m_ss.PLM_AUT_ZDEP, 20, -99, +99);
+				DDV.DDX(bUpdate, this.checkBox7      , ref m_ss.PLM_AUT_ZKCK);//Ｚ測定:毛髪径判定用
+				DDV.DDX(bUpdate, this.textBox4       , ref m_ss.PLM_AUT_ZKEI, 20, -99, +99);
 				//---
 				if (bUpdate == false) {
 					if (this.textBox2.Text == "") {
@@ -118,18 +124,59 @@ namespace uSCOPE
 						}
 					}
 					//---
-					if (m_ss.PLM_AUT_ZMUL) {
-						if ((m_ss.PLM_AUT_ZHAN % m_ss.PLM_AUT_ZSTP) != 0) {
-							this.numericUpDown18.Focus();
-							G.mlog("測定範囲は測定ステップで割り切れる値で指定してください.");
-							return(false);
-						}
-						if ((m_ss.PLM_AUT_ZHAN / m_ss.PLM_AUT_ZSTP) > 10) {
-							this.numericUpDown18.Focus();
-							G.mlog("測定ステップが小さすぎます.中心を含めて21位置以下になるように指定してください.");
-							return(false);
+					if (m_ss.PLM_AUT_ZDEP != null) {
+						for (int i = 0; i < m_ss.PLM_AUT_ZDEP.Length; i++) {
+							int val = m_ss.PLM_AUT_ZDEP[i];
+							int idxf, idxl;
+							idxf = Array.IndexOf(m_ss.PLM_AUT_ZDEP, val);
+							idxl = Array.LastIndexOf(m_ss.PLM_AUT_ZDEP, val);
+							if (idxf != idxl) {
+								G.mlog(string.Format("同じ値({0})が指定されています.", val));
+								this.textBox3.Focus();
+								return(false);
+							}
 						}
 					}
+					if (m_ss.PLM_AUT_ZKEI != null) {
+						for (int i = 0; i < m_ss.PLM_AUT_ZKEI.Length; i++) {
+							int val = m_ss.PLM_AUT_ZKEI[i];
+							int idxf, idxl;
+							idxf = Array.IndexOf(m_ss.PLM_AUT_ZKEI, val);
+							idxl = Array.LastIndexOf(m_ss.PLM_AUT_ZKEI, val);
+							if (idxf != idxl) {
+								G.mlog(string.Format("同じ値({0})が指定されています.", val));
+								this.textBox4.Focus();
+								return(false);
+							}
+						}
+					}
+					if (!m_ss.PLM_AUT_ZDCK || !m_ss.PLM_AUT_ZKCK) {
+					}
+					else if (m_ss.PLM_AUT_ZDEP != null && m_ss.PLM_AUT_ZKEI != null) {
+						for (int i = 0; i < m_ss.PLM_AUT_ZDEP.Length; i++) {
+							int val = m_ss.PLM_AUT_ZDEP[i];
+							int idxf;
+							idxf = Array.IndexOf(m_ss.PLM_AUT_ZKEI, val);
+							if (idxf >= 0) {
+								G.mlog(string.Format("同じ値({0})が指定されています.", val));
+								this.textBox3.Focus();
+								return(false);
+							}
+						}
+					}
+					//---
+					//if (m_ss.PLM_AUT_ZMUL) {
+					//    if ((m_ss.PLM_AUT_ZHAN % m_ss.PLM_AUT_ZSTP) != 0) {
+					//        this.numericUpDown18.Focus();
+					//        G.mlog("測定範囲は測定ステップで割り切れる値で指定してください.");
+					//        return(false);
+					//    }
+					//    if ((m_ss.PLM_AUT_ZHAN / m_ss.PLM_AUT_ZSTP) > 10) {
+					//        this.numericUpDown18.Focus();
+					//        G.mlog("測定ステップが小さすぎます.中心を含めて21位置以下になるように指定してください.");
+					//        return(false);
+					//    }
+					//}
 				}
                 rc = true;
             }
@@ -236,22 +283,23 @@ namespace uSCOPE
 
 		private void numericUpDown17_ValueChanged(object sender, EventArgs e)
 		{
-			double f1, f2;
-			//---
-			f1 = (double)this.numericUpDown17.Value;
-			f2 = (double)this.numericUpDown18.Value;
-			f1 *= G.SS.PLM_UMPP[2];
-			f2 *= G.SS.PLM_UMPP[2];
-			this.label23.Text = string.Format("±{0:F1} / {1:F1} um", f1, f2);
+			//double f1, f2;
+			////---
+			//f1 = (double)this.numericUpDown17.Value;
+			//f2 = (double)this.numericUpDown18.Value;
+			//f1 *= G.SS.PLM_UMPP[2];
+			//f2 *= G.SS.PLM_UMPP[2];
+			//this.label23.Text = string.Format("±{0:F1} / {1:F1} um", f1, f2);
 		}
 
 		private void checkBox4_Click(object sender, EventArgs e)
 		{
-			bool bl = (this.checkBox4.Checked == true);
+			//bool bl = (this.checkBox4.Checked == true);
 
-			this.numericUpDown17.Enabled = bl;
-			this.numericUpDown18.Enabled = bl;
-
+			//this.numericUpDown17.Enabled = bl;
+			//this.numericUpDown18.Enabled = bl;
+			textBox3.Enabled = (this.checkBox6.Checked == true);
+			textBox4.Enabled = (this.checkBox7.Checked == true);
 		}
 	}
 }

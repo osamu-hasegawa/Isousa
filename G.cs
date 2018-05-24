@@ -241,9 +241,15 @@ namespace uSCOPE
 			public bool PLM_AUT_CNST = false;
 			public bool PLM_AUT_RTRY = false;
 			//---
-			public bool PLM_AUT_ZMUL = false;
-			public int PLM_AUT_ZHAN = 200;
-			public int PLM_AUT_ZSTP =  50;
+			//public bool PLM_AUT_ZMUL = false;
+			//public int PLM_AUT_ZHAN = 200;
+			//public int PLM_AUT_ZSTP =  50;
+			//---
+			public bool PLM_AUT_ZDCK = false;//Ｚ測定:深度合成用
+			public int[] PLM_AUT_ZDEP = null;
+			//---
+			public bool PLM_AUT_ZKCK = false;//Ｚ測定:毛髪径判定用
+			public int[] PLM_AUT_ZKEI = null;
 			//---
 			public int ETC_LED_WAIT = 18;
 			public int ETC_UIF_LEVL =  0;

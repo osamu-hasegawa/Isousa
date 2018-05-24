@@ -40,6 +40,9 @@ namespace uSCOPE
 		public Dictionary<string, ImageList> m_map_of_dml;
 		public Dictionary<string, ImageList> m_map_of_irl;
 		private int		m_thm_wid, m_thm_hei;
+		private ArrayList m_zpos_org = new ArrayList();
+		private ArrayList m_zpos_val = new ArrayList();
+
 		//---
 		public Form03()
 		{
@@ -1239,6 +1242,41 @@ retry:
 			bo = null;
 
 		}
+		private string ZVAL2ORG(string val)
+		{
+			int idx = m_zpos_val.IndexOf(val);
+			if (idx < 0) {
+				return("");
+			}
+			return((string)m_zpos_org[idx]);
+		}
+		private string ZORG2VAL(string org)
+		{
+			int idx = m_zpos_org.IndexOf(org);
+			if (idx < 0) {
+				return("");
+			}
+			return((string)m_zpos_val[idx]);
+		}
+		private void sort_zpos()
+		{
+			for (int q = 0; q < m_zpos_val.Count; q++) {
+			for (int i = 0; i < m_zpos_val.Count-1; i++) {
+				int v0 = int.Parse((string)m_zpos_val[i+0]);
+				int v1 = int.Parse((string)m_zpos_val[i+1]);
+				if (v1 < v0) {
+					string tmp;
+					tmp = (string)m_zpos_val[i+0];
+					m_zpos_val[i+0] = m_zpos_val[i+1];
+					m_zpos_val[i+1] = tmp;
+					//---
+					tmp = (string)m_zpos_org[i+0];
+					m_zpos_org[i+0] = m_zpos_org[i+1];
+					m_zpos_org[i+1] = tmp;
+				}
+			}
+			}
+		}
 		//---
 		private void load()
 		{
@@ -1267,15 +1305,41 @@ retry:
 				}
 				else {
 					this.comboBox8.Tag = true;
-					int zno = 10 - G.SS.MOZ_CND_ZCNT/2;
-					for (int i = 0; i < G.SS.MOZ_CND_ZCNT; i++) {
-						string str = string.Format("Z{0:00}", zno++);
-						if (str == G.SS.MOZ_CND_ZPOS) {
-							str += "*";
+					if (true) {
+						string path = this.MOZ_CND_FOLD;
+						string[] zary = null;
+						zary = System.IO.Directory.GetFiles(path, "0CR_00_*.*");
+						if (zary.Length <= 0) {
+						zary = System.IO.Directory.GetFiles(path, "0CT_00_*.*");
 						}
-						this.comboBox8.Items.Add(str);
+						for (int i = 0; i < zary.Length; i++) {
+							string tmp = System.IO.Path.GetFileNameWithoutExtension(zary[i]);
+							string sgn;
+							tmp = tmp.Substring(7);
+							m_zpos_org.Add(tmp);
+							if (tmp.Substring(1, 1) == "P") {
+								sgn = "+";
+							}
+							else {
+								sgn = "-";
+							}
+							tmp = tmp.Substring(2, 2);
+							m_zpos_val.Add(sgn+tmp);
+						}
+						sort_zpos();
+						this.comboBox8.Items.AddRange(m_zpos_val.ToArray());
 					}
-					this.comboBox8.SelectedIndex = this.comboBox8.FindString(G.SS.MOZ_CND_ZPOS);
+					else {
+						int zno = 10 - G.SS.MOZ_CND_ZCNT/2;
+						for (int i = 0; i < G.SS.MOZ_CND_ZCNT; i++) {
+							string str = string.Format("Z{0:00}", zno++);
+							if (str == G.SS.MOZ_CND_ZPOS) {
+								str += "*";
+							}
+							this.comboBox8.Items.Add(str);
+						}
+					}
+					this.comboBox8.SelectedIndex = this.comboBox8.FindString(ZORG2VAL(G.SS.MOZ_CND_ZPOS));
 				}
 			}
 			test_log();
@@ -1807,8 +1871,8 @@ retry:
 				buf_cl = this.textBox1.Text + "\\" + seg.name_of_dm;
 				buf_ir = this.textBox1.Text + "\\" + seg.name_of_ir;
 				if (true) {
-					buf_cl = Regex.Replace(buf_cl, "_Z[0-9][0-9]", "_"+zpos);
-					buf_ir = Regex.Replace(buf_ir, "_Z[0-9][0-9]", "_"+zpos);
+					buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", "_"+zpos);
+					buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", "_"+zpos);
 				}
 				bmp_cl = Bitmap.FromFile(buf_cl);
 				if (System.IO.File.Exists(buf_ir)) {
@@ -1840,7 +1904,7 @@ retry:
 			//---
 			int idx = m_isel;
 			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
-			string zpos = this.comboBox8.Text;
+			string zpos = ZVAL2ORG(this.comboBox8.Text);
 			ImageList il_dm = null, il_ir = null;
 
 			if (this.radioButton3.Checked) {
@@ -1911,8 +1975,8 @@ retry:
 
 						if (!string.IsNullOrEmpty(zpos)) {
 							zpos = "_" + zpos;
-							buf_cl = Regex.Replace(buf_cl, "_Z[0-9][0-9]", zpos);
-							buf_ir = Regex.Replace(buf_ir, "_Z[0-9][0-9]", zpos);
+							buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", zpos);
+							buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", zpos);
 						}
 					}
 					if (this.checkBox10.Checked) {

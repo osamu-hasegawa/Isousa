@@ -46,13 +46,14 @@
 			this.label18 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.panel7 = new System.Windows.Forms.Panel();
-			this.panel3 = new System.Windows.Forms.Panel();
 			this.button12 = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button26 = new System.Windows.Forms.Button();
-			this.button11 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkBox11 = new System.Windows.Forms.CheckBox();
+			this.button27 = new System.Windows.Forms.Button();
+			this.button11 = new System.Windows.Forms.Button();
 			this.tabPage7 = new System.Windows.Forms.TabPage();
 			this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
@@ -214,12 +215,12 @@
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.timer2 = new System.Windows.Forms.Timer(this.components);
 			this.timer3 = new System.Windows.Forms.Timer(this.components);
-			this.button27 = new System.Windows.Forms.Button();
 			this.tabControl4.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel9.SuspendLayout();
 			this.panel8.SuspendLayout();
 			this.panel6.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.tabPage7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -284,10 +285,10 @@
 			this.tabControl4.Controls.Add(this.tabPage2);
 			this.tabControl4.Controls.Add(this.tabPage8);
 			this.tabControl4.Controls.Add(this.tabPage3);
-			this.tabControl4.Location = new System.Drawing.Point(0, 0);
+			this.tabControl4.Location = new System.Drawing.Point(-2, 0);
 			this.tabControl4.Name = "tabControl4";
 			this.tabControl4.SelectedIndex = 0;
-			this.tabControl4.Size = new System.Drawing.Size(294, 181);
+			this.tabControl4.Size = new System.Drawing.Size(285, 181);
 			this.tabControl4.TabIndex = 0;
 			// 
 			// tabPage1
@@ -299,18 +300,15 @@
 			this.tabPage1.Controls.Add(this.label18);
 			this.tabPage1.Controls.Add(this.label17);
 			this.tabPage1.Controls.Add(this.label2);
-			this.tabPage1.Controls.Add(this.panel7);
-			this.tabPage1.Controls.Add(this.panel3);
 			this.tabPage1.Controls.Add(this.button12);
 			this.tabPage1.Controls.Add(this.button1);
 			this.tabPage1.Controls.Add(this.button26);
-			this.tabPage1.Controls.Add(this.button27);
-			this.tabPage1.Controls.Add(this.button11);
 			this.tabPage1.Controls.Add(this.button2);
+			this.tabPage1.Controls.Add(this.groupBox1);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(286, 155);
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage1.Size = new System.Drawing.Size(277, 155);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "メイン";
 			// 
@@ -319,7 +317,7 @@
 			this.panel9.Controls.Add(this.radioButton5);
 			this.panel9.Controls.Add(this.button15);
 			this.panel9.Controls.Add(this.radioButton6);
-			this.panel9.Location = new System.Drawing.Point(154, 119);
+			this.panel9.Location = new System.Drawing.Point(142, 119);
 			this.panel9.Name = "panel9";
 			this.panel9.Size = new System.Drawing.Size(132, 30);
 			this.panel9.TabIndex = 28;
@@ -327,7 +325,7 @@
 			// radioButton5
 			// 
 			this.radioButton5.Appearance = System.Windows.Forms.Appearance.Button;
-			this.radioButton5.Location = new System.Drawing.Point(0, 2);
+			this.radioButton5.Location = new System.Drawing.Point(2, 2);
 			this.radioButton5.Name = "radioButton5";
 			this.radioButton5.Size = new System.Drawing.Size(44, 25);
 			this.radioButton5.TabIndex = 19;
@@ -339,7 +337,7 @@
 			// 
 			// button15
 			// 
-			this.button15.Location = new System.Drawing.Point(87, 2);
+			this.button15.Location = new System.Drawing.Point(88, 2);
 			this.button15.Name = "button15";
 			this.button15.Size = new System.Drawing.Size(44, 25);
 			this.button15.TabIndex = 1;
@@ -351,7 +349,7 @@
 			// radioButton6
 			// 
 			this.radioButton6.Appearance = System.Windows.Forms.Appearance.Button;
-			this.radioButton6.Location = new System.Drawing.Point(44, 2);
+			this.radioButton6.Location = new System.Drawing.Point(45, 2);
 			this.radioButton6.Name = "radioButton6";
 			this.radioButton6.Size = new System.Drawing.Size(44, 25);
 			this.radioButton6.TabIndex = 19;
@@ -366,7 +364,7 @@
 			this.panel8.Controls.Add(this.radioButton7);
 			this.panel8.Controls.Add(this.button23);
 			this.panel8.Controls.Add(this.radioButton8);
-			this.panel8.Location = new System.Drawing.Point(154, 74);
+			this.panel8.Location = new System.Drawing.Point(142, 74);
 			this.panel8.Name = "panel8";
 			this.panel8.Size = new System.Drawing.Size(132, 30);
 			this.panel8.TabIndex = 28;
@@ -374,7 +372,7 @@
 			// radioButton7
 			// 
 			this.radioButton7.Appearance = System.Windows.Forms.Appearance.Button;
-			this.radioButton7.Location = new System.Drawing.Point(0, 2);
+			this.radioButton7.Location = new System.Drawing.Point(1, 2);
 			this.radioButton7.Name = "radioButton7";
 			this.radioButton7.Size = new System.Drawing.Size(44, 25);
 			this.radioButton7.TabIndex = 19;
@@ -413,7 +411,7 @@
 			this.panel6.Controls.Add(this.radioButton3);
 			this.panel6.Controls.Add(this.button14);
 			this.panel6.Controls.Add(this.radioButton4);
-			this.panel6.Location = new System.Drawing.Point(154, 24);
+			this.panel6.Location = new System.Drawing.Point(143, 24);
 			this.panel6.Name = "panel6";
 			this.panel6.Size = new System.Drawing.Size(132, 33);
 			this.panel6.TabIndex = 27;
@@ -421,7 +419,7 @@
 			// radioButton3
 			// 
 			this.radioButton3.Appearance = System.Windows.Forms.Appearance.Button;
-			this.radioButton3.Location = new System.Drawing.Point(-1, 3);
+			this.radioButton3.Location = new System.Drawing.Point(2, 3);
 			this.radioButton3.Name = "radioButton3";
 			this.radioButton3.Size = new System.Drawing.Size(44, 25);
 			this.radioButton3.TabIndex = 19;
@@ -433,7 +431,7 @@
 			// 
 			// button14
 			// 
-			this.button14.Location = new System.Drawing.Point(86, 3);
+			this.button14.Location = new System.Drawing.Point(88, 3);
 			this.button14.Name = "button14";
 			this.button14.Size = new System.Drawing.Size(44, 25);
 			this.button14.TabIndex = 1;
@@ -445,7 +443,7 @@
 			// radioButton4
 			// 
 			this.radioButton4.Appearance = System.Windows.Forms.Appearance.Button;
-			this.radioButton4.Location = new System.Drawing.Point(42, 3);
+			this.radioButton4.Location = new System.Drawing.Point(44, 3);
 			this.radioButton4.Name = "radioButton4";
 			this.radioButton4.Size = new System.Drawing.Size(44, 25);
 			this.radioButton4.TabIndex = 19;
@@ -482,79 +480,104 @@
 			this.label2.TabIndex = 26;
 			this.label2.Text = "ゲイン";
 			// 
-			// panel7
-			// 
-			this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel7.Location = new System.Drawing.Point(148, 10);
-			this.panel7.Name = "panel7";
-			this.panel7.Size = new System.Drawing.Size(2, 136);
-			this.panel7.TabIndex = 25;
-			// 
-			// panel3
-			// 
-			this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel3.Location = new System.Drawing.Point(2, 7);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(2, 145);
-			this.panel3.TabIndex = 10;
-			this.panel3.Visible = false;
-			// 
 			// button12
 			// 
-			this.button12.Location = new System.Drawing.Point(77, 107);
+			this.button12.Location = new System.Drawing.Point(71, 5);
 			this.button12.Name = "button12";
-			this.button12.Size = new System.Drawing.Size(70, 40);
+			this.button12.Size = new System.Drawing.Size(66, 40);
 			this.button12.TabIndex = 3;
 			this.button12.Tag = "3";
-			this.button12.Text = "毛髄径算出";
+			this.button12.Text = "画像解析";
 			this.button12.UseVisualStyleBackColor = true;
 			this.button12.Click += new System.EventHandler(this.button12_Click);
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(6, 13);
+			this.button1.Location = new System.Drawing.Point(4, 5);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(70, 26);
+			this.button1.Size = new System.Drawing.Size(66, 40);
 			this.button1.TabIndex = 0;
 			this.button1.Tag = "3";
-			this.button1.Text = "OPEN";
+			this.button1.Text = "撮影開始";
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.OnClicks);
 			// 
 			// button26
 			// 
-			this.button26.Location = new System.Drawing.Point(78, 61);
+			this.button26.BackColor = System.Drawing.Color.SteelBlue;
+			this.button26.Location = new System.Drawing.Point(72, 63);
 			this.button26.Name = "button26";
-			this.button26.Size = new System.Drawing.Size(70, 40);
+			this.button26.Size = new System.Drawing.Size(66, 40);
 			this.button26.TabIndex = 2;
 			this.button26.Tag = "3";
-			this.button26.Text = "自動測定\r\n(白髪)";
+			this.button26.Text = "白髪";
 			this.button26.UseVisualStyleBackColor = true;
 			this.button26.Visible = false;
 			this.button26.Click += new System.EventHandler(this.OnClicks);
 			// 
-			// button11
-			// 
-			this.button11.Location = new System.Drawing.Point(6, 107);
-			this.button11.Name = "button11";
-			this.button11.Size = new System.Drawing.Size(70, 40);
-			this.button11.TabIndex = 2;
-			this.button11.Tag = "3";
-			this.button11.Text = "自動測定";
-			this.button11.UseVisualStyleBackColor = true;
-			this.button11.Click += new System.EventHandler(this.OnClicks);
-			// 
 			// button2
 			// 
-			this.button2.Location = new System.Drawing.Point(77, 13);
+			this.button2.Location = new System.Drawing.Point(218, 0);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(70, 26);
+			this.button2.Size = new System.Drawing.Size(53, 18);
 			this.button2.TabIndex = 1;
 			this.button2.Tag = "3";
 			this.button2.Text = "CLOSE";
 			this.button2.UseVisualStyleBackColor = true;
 			this.button2.Visible = false;
 			this.button2.Click += new System.EventHandler(this.OnClicks);
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.checkBox11);
+			this.groupBox1.Controls.Add(this.button27);
+			this.groupBox1.Controls.Add(this.button11);
+			this.groupBox1.Location = new System.Drawing.Point(2, 46);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(140, 106);
+			this.groupBox1.TabIndex = 29;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "自動撮影";
+			// 
+			// checkBox11
+			// 
+			this.checkBox11.AutoSize = true;
+			this.checkBox11.Enabled = false;
+			this.checkBox11.Location = new System.Drawing.Point(79, 67);
+			this.checkBox11.Name = "checkBox11";
+			this.checkBox11.Size = new System.Drawing.Size(48, 28);
+			this.checkBox11.TabIndex = 3;
+			this.checkBox11.Text = "深度\r\n合成";
+			this.checkBox11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox11.UseVisualStyleBackColor = true;
+			this.checkBox11.Visible = false;
+			// 
+			// button27
+			// 
+			this.button27.BackColor = System.Drawing.Color.SteelBlue;
+			this.button27.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.button27.Location = new System.Drawing.Point(3, 17);
+			this.button27.Name = "button27";
+			this.button27.Size = new System.Drawing.Size(66, 40);
+			this.button27.TabIndex = 2;
+			this.button27.Tag = "3";
+			this.button27.Text = "黒髪";
+			this.button27.UseVisualStyleBackColor = true;
+			this.button27.Visible = false;
+			this.button27.Click += new System.EventHandler(this.OnClicks);
+			// 
+			// button11
+			// 
+			this.button11.BackColor = System.Drawing.Color.SteelBlue;
+			this.button11.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.button11.Location = new System.Drawing.Point(3, 60);
+			this.button11.Name = "button11";
+			this.button11.Size = new System.Drawing.Size(66, 40);
+			this.button11.TabIndex = 2;
+			this.button11.Tag = "3";
+			this.button11.Text = "自動選択";
+			this.button11.UseVisualStyleBackColor = true;
+			this.button11.Click += new System.EventHandler(this.OnClicks);
 			// 
 			// tabPage7
 			// 
@@ -577,8 +600,8 @@
 			this.tabPage7.Controls.Add(this.trackBar4);
 			this.tabPage7.Location = new System.Drawing.Point(4, 22);
 			this.tabPage7.Name = "tabPage7";
-			this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage7.Size = new System.Drawing.Size(286, 155);
+			this.tabPage7.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage7.Size = new System.Drawing.Size(277, 155);
 			this.tabPage7.TabIndex = 4;
 			this.tabPage7.Text = "パラメータ";
 			// 
@@ -835,8 +858,8 @@
 			this.tabPage4.Controls.Add(this.label38);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(286, 155);
+			this.tabPage4.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage4.Size = new System.Drawing.Size(277, 155);
 			this.tabPage4.TabIndex = 1;
 			this.tabPage4.Text = "ヒストグラム";
 			// 
@@ -884,7 +907,7 @@
             "H画像",
             "S画像",
             "V画像"});
-			this.comboBox8.Location = new System.Drawing.Point(204, 37);
+			this.comboBox8.Location = new System.Drawing.Point(202, 37);
 			this.comboBox8.Name = "comboBox8";
 			this.comboBox8.Size = new System.Drawing.Size(73, 20);
 			this.comboBox8.TabIndex = 0;
@@ -900,7 +923,7 @@
             "標準偏差",
             "積算微分値",
             "積算2次微分値"});
-			this.comboBox7.Location = new System.Drawing.Point(204, 11);
+			this.comboBox7.Location = new System.Drawing.Point(202, 11);
 			this.comboBox7.Name = "comboBox7";
 			this.comboBox7.Size = new System.Drawing.Size(73, 20);
 			this.comboBox7.TabIndex = 0;
@@ -926,7 +949,7 @@
             "毛髪範囲10% (横1/3)",
             "毛髪範囲10% (横1/4)",
             "毛髪範囲10% (横1/5)"});
-			this.comboBox1.Location = new System.Drawing.Point(139, 63);
+			this.comboBox1.Location = new System.Drawing.Point(137, 63);
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(138, 20);
 			this.comboBox1.TabIndex = 0;
@@ -940,7 +963,7 @@
             "生画像",
             "グレースケール",
             "２値化"});
-			this.comboBox2.Location = new System.Drawing.Point(204, 107);
+			this.comboBox2.Location = new System.Drawing.Point(202, 107);
 			this.comboBox2.Name = "comboBox2";
 			this.comboBox2.Size = new System.Drawing.Size(73, 20);
 			this.comboBox2.TabIndex = 1;
@@ -1052,8 +1075,8 @@
 			this.tabPage5.Controls.Add(this.numericUpDown27);
 			this.tabPage5.Location = new System.Drawing.Point(4, 22);
 			this.tabPage5.Name = "tabPage5";
-			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(286, 155);
+			this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage5.Size = new System.Drawing.Size(277, 155);
 			this.tabPage5.TabIndex = 2;
 			this.tabPage5.Text = "毛髪";
 			// 
@@ -1096,7 +1119,7 @@
 			// checkBox6
 			// 
 			this.checkBox6.AutoSize = true;
-			this.checkBox6.Location = new System.Drawing.Point(215, 135);
+			this.checkBox6.Location = new System.Drawing.Point(214, 135);
 			this.checkBox6.Name = "checkBox6";
 			this.checkBox6.Size = new System.Drawing.Size(69, 16);
 			this.checkBox6.TabIndex = 11;
@@ -1139,7 +1162,7 @@
 			// 
 			// numericUpDown15
 			// 
-			this.numericUpDown15.Location = new System.Drawing.Point(230, 85);
+			this.numericUpDown15.Location = new System.Drawing.Point(229, 85);
 			this.numericUpDown15.Minimum = new decimal(new int[] {
             5,
             0,
@@ -1184,7 +1207,7 @@
             0,
             0,
             131072});
-			this.numericUpDown9.Location = new System.Drawing.Point(204, 62);
+			this.numericUpDown9.Location = new System.Drawing.Point(202, 62);
 			this.numericUpDown9.Maximum = new decimal(new int[] {
             1,
             0,
@@ -1208,7 +1231,7 @@
             0,
             0,
             0});
-			this.numericUpDown19.Location = new System.Drawing.Point(204, 39);
+			this.numericUpDown19.Location = new System.Drawing.Point(202, 39);
 			this.numericUpDown19.Maximum = new decimal(new int[] {
             200000,
             0,
@@ -1237,7 +1260,7 @@
             0,
             0,
             0});
-			this.numericUpDown18.Location = new System.Drawing.Point(204, 17);
+			this.numericUpDown18.Location = new System.Drawing.Point(202, 17);
 			this.numericUpDown18.Maximum = new decimal(new int[] {
             5000000,
             0,
@@ -1325,7 +1348,7 @@
             "生画像",
             "グレースケール",
             "２値化"});
-			this.comboBox4.Location = new System.Drawing.Point(204, 107);
+			this.comboBox4.Location = new System.Drawing.Point(202, 107);
 			this.comboBox4.Name = "comboBox4";
 			this.comboBox4.Size = new System.Drawing.Size(73, 20);
 			this.comboBox4.TabIndex = 7;
@@ -1501,8 +1524,8 @@
 			this.tabPage6.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.tabPage6.Location = new System.Drawing.Point(4, 22);
 			this.tabPage6.Name = "tabPage6";
-			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage6.Size = new System.Drawing.Size(286, 155);
+			this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage6.Size = new System.Drawing.Size(277, 155);
 			this.tabPage6.TabIndex = 3;
 			this.tabPage6.Text = "AF";
 			// 
@@ -1513,7 +1536,7 @@
             0,
             0,
             0});
-			this.numericUpDown11.Location = new System.Drawing.Point(219, 10);
+			this.numericUpDown11.Location = new System.Drawing.Point(218, 10);
 			this.numericUpDown11.Maximum = new decimal(new int[] {
             1259712,
             0,
@@ -1573,7 +1596,7 @@
             "抽出領域・S",
             "抽出領域・L",
             "抽出領域・径"});
-			this.comboBox5.Location = new System.Drawing.Point(193, 81);
+			this.comboBox5.Location = new System.Drawing.Point(192, 81);
 			this.comboBox5.Name = "comboBox5";
 			this.comboBox5.Size = new System.Drawing.Size(84, 20);
 			this.comboBox5.TabIndex = 7;
@@ -1588,7 +1611,7 @@
             "グレースケール",
             "２値化",
             "コントラスト"});
-			this.comboBox6.Location = new System.Drawing.Point(193, 107);
+			this.comboBox6.Location = new System.Drawing.Point(192, 107);
 			this.comboBox6.Name = "comboBox6";
 			this.comboBox6.Size = new System.Drawing.Size(84, 20);
 			this.comboBox6.TabIndex = 8;
@@ -1701,7 +1724,7 @@
 			// 
 			// numericUpDown17
 			// 
-			this.numericUpDown17.Location = new System.Drawing.Point(219, 58);
+			this.numericUpDown17.Location = new System.Drawing.Point(218, 58);
 			this.numericUpDown17.Maximum = new decimal(new int[] {
             10,
             0,
@@ -1750,7 +1773,7 @@
 			// numericUpDown14
 			// 
 			this.numericUpDown14.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.numericUpDown14.Location = new System.Drawing.Point(219, 34);
+			this.numericUpDown14.Location = new System.Drawing.Point(218, 34);
 			this.numericUpDown14.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -1809,7 +1832,7 @@
 			// checkBox8
 			// 
 			this.checkBox8.AutoSize = true;
-			this.checkBox8.Location = new System.Drawing.Point(197, 135);
+			this.checkBox8.Location = new System.Drawing.Point(196, 135);
 			this.checkBox8.Name = "checkBox8";
 			this.checkBox8.Size = new System.Drawing.Size(86, 16);
 			this.checkBox8.TabIndex = 9;
@@ -1846,8 +1869,8 @@
 			this.tabPage2.Controls.Add(this.numericUpDown24);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(286, 155);
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage2.Size = new System.Drawing.Size(277, 155);
 			this.tabPage2.TabIndex = 5;
 			this.tabPage2.Text = "2値化";
 			// 
@@ -1914,7 +1937,7 @@
             "7x7",
             "9x9",
             "11x11"});
-			this.comboBox3.Location = new System.Drawing.Point(224, 9);
+			this.comboBox3.Location = new System.Drawing.Point(222, 9);
 			this.comboBox3.Name = "comboBox3";
 			this.comboBox3.Size = new System.Drawing.Size(55, 20);
 			this.comboBox3.TabIndex = 0;
@@ -2061,7 +2084,7 @@
 			// 
 			// numericUpDown5
 			// 
-			this.numericUpDown5.Location = new System.Drawing.Point(224, 46);
+			this.numericUpDown5.Location = new System.Drawing.Point(223, 46);
 			this.numericUpDown5.Maximum = new decimal(new int[] {
             254,
             0,
@@ -2085,7 +2108,7 @@
 			// 
 			// numericUpDown22
 			// 
-			this.numericUpDown22.Location = new System.Drawing.Point(224, 81);
+			this.numericUpDown22.Location = new System.Drawing.Point(223, 81);
 			this.numericUpDown22.Maximum = new decimal(new int[] {
             359,
             0,
@@ -2104,7 +2127,7 @@
 			// 
 			// numericUpDown26
 			// 
-			this.numericUpDown26.Location = new System.Drawing.Point(224, 125);
+			this.numericUpDown26.Location = new System.Drawing.Point(223, 125);
 			this.numericUpDown26.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2135,7 +2158,7 @@
 			// 
 			// numericUpDown24
 			// 
-			this.numericUpDown24.Location = new System.Drawing.Point(224, 103);
+			this.numericUpDown24.Location = new System.Drawing.Point(223, 103);
 			this.numericUpDown24.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2181,8 +2204,8 @@
 			this.tabPage8.Controls.Add(this.radioButton10);
 			this.tabPage8.Location = new System.Drawing.Point(4, 22);
 			this.tabPage8.Name = "tabPage8";
-			this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage8.Size = new System.Drawing.Size(286, 155);
+			this.tabPage8.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage8.Size = new System.Drawing.Size(277, 155);
 			this.tabPage8.TabIndex = 7;
 			this.tabPage8.Text = "CUTI.1";
 			this.tabPage8.UseVisualStyleBackColor = true;
@@ -2558,8 +2581,8 @@
 			this.tabPage3.Controls.Add(this.numericUpDown34);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(286, 155);
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage3.Size = new System.Drawing.Size(277, 155);
 			this.tabPage3.TabIndex = 6;
 			this.tabPage3.Text = "CUTI.2";
 			this.tabPage3.UseVisualStyleBackColor = true;
@@ -2899,23 +2922,11 @@
 			this.timer3.Interval = 50;
 			this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
 			// 
-			// button27
-			// 
-			this.button27.Location = new System.Drawing.Point(6, 61);
-			this.button27.Name = "button27";
-			this.button27.Size = new System.Drawing.Size(70, 40);
-			this.button27.TabIndex = 2;
-			this.button27.Tag = "3";
-			this.button27.Text = "全自動測定";
-			this.button27.UseVisualStyleBackColor = true;
-			this.button27.Visible = false;
-			this.button27.Click += new System.EventHandler(this.OnClicks);
-			// 
 			// Form12
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(294, 181);
+			this.ClientSize = new System.Drawing.Size(285, 181);
 			this.Controls.Add(this.tabControl4);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "Form12";
@@ -2927,6 +2938,8 @@
 			this.panel9.ResumeLayout(false);
 			this.panel8.ResumeLayout(false);
 			this.panel6.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.tabPage7.ResumeLayout(false);
 			this.tabPage7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
@@ -3088,7 +3101,6 @@
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.CheckBox checkBox7;
-		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Button button13;
 		private System.Windows.Forms.ComboBox comboBox8;
 		private System.Windows.Forms.ComboBox comboBox7;
@@ -3113,7 +3125,6 @@
 		private System.Windows.Forms.Label label16;
 		private System.Windows.Forms.NumericUpDown numericUpDown27;
 		private System.Windows.Forms.NumericUpDown numericUpDown1;
-		private System.Windows.Forms.Panel panel7;
 		private System.Windows.Forms.Label label18;
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.Label label2;
@@ -3178,5 +3189,7 @@
 		protected System.Windows.Forms.Button button26;
 		private System.Windows.Forms.Timer timer3;
 		protected System.Windows.Forms.Button button27;
-	}
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox checkBox11;
+    }
 }

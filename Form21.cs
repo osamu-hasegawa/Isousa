@@ -73,35 +73,62 @@ namespace uSCOPE
 		private void check_z10(string path)
 		{
 			string[] files_10;
-
-			files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
+			string[] zpos = null;
+			//
+			if (true) {
+				zpos = System.IO.Directory.GetFiles(path, "0CR_00_*.*");
+				if (zpos.Length <= 0) {
+				zpos = System.IO.Directory.GetFiles(path, "0CT_00_*.*");
+				}
+				if (zpos.Length <= 0) {
+					//古い形式のファイルもしくはフォルダが空
+					this.comboBox8.Items.Clear();
+					this.comboBox8.Enabled = false;
+					return;
+				}
+				for (int i = 0; i < zpos.Length; i++) {
+					string tmp = System.IO.Path.GetFileNameWithoutExtension(zpos[i]);
+					zpos[i] = tmp.Substring(7);
+				}
+			}
+			//files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
+			files_10 = System.IO.Directory.GetFiles(path, "*_ZP00D.*");
 			files_10 = cut_IZ(files_10);
+
 			if (files_10.Length <= 0) {
 				//古い形式のファイルもしくはフォルダが空
 				this.comboBox8.Items.Clear();
 				this.comboBox8.Enabled = false;
+				return;
 			}
-			else {
+			if (true) {
 				string[] files_pl, files_mi;
 				this.comboBox8.Items.Clear();
 				this.comboBox8.Enabled = true;
-				this.comboBox8.Items.Add("Z10");
-				for (int i = 1; i < 10; i++) {
-					files_mi = System.IO.Directory.GetFiles(path, string.Format("*_Z{0:00}.*", 10-i));
-					files_pl = System.IO.Directory.GetFiles(path, string.Format("*_Z{0:00}.*", 10+i));
-					files_mi = cut_IZ(files_mi);
-					files_pl = cut_IZ(files_pl);
-					if (files_pl.Length != files_10.Length || files_mi.Length != files_10.Length) {
-						break;
+				if (true) {
+					for (int i = 0; i < zpos.Length; i++) {
+						this.comboBox8.Items.Add(zpos[i]);
 					}
-					this.comboBox8.Items.Insert(0, string.Format("Z{0:00}", 10-i));
-					this.comboBox8.Items.Add(string.Format("Z{0:00}", 10+i));
+				}
+				else {
+					this.comboBox8.Items.Add("ZP00D");
+					for (int i = 1; i < 10; i++) {
+						files_mi = System.IO.Directory.GetFiles(path, string.Format("*_Z{0:00}.*", 10-i));
+						files_pl = System.IO.Directory.GetFiles(path, string.Format("*_Z{0:00}.*", 10+i));
+						files_mi = cut_IZ(files_mi);
+						files_pl = cut_IZ(files_pl);
+						if (files_pl.Length != files_10.Length || files_mi.Length != files_10.Length) {
+							break;
+						}
+						this.comboBox8.Items.Insert(0, string.Format("Z{0:00}", 10-i));
+						this.comboBox8.Items.Add(string.Format("Z{0:00}", 10+i));
+					}
 				}
 				this.comboBox8.SelectedIndex = this.comboBox8.FindString(G.SS.MOZ_CND_ZPOS);
 
 				int idx = this.comboBox8.FindString(G.SS.MOZ_CND_ZPOS);
 				if (idx < 0) {
-					this.comboBox8.SelectedIndex = this.comboBox8.FindString("Z10");
+					this.comboBox8.SelectedIndex = this.comboBox8.FindString("ZP00D");
 				}
 				else {
 					this.comboBox8.SelectedIndex = idx;

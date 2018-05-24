@@ -24,7 +24,6 @@ namespace uSCOPE
 		private int m_ijog = -1;
 		private bool m_bORGPROC = false;
 		//private byte[] m_sts = new byte[16];
-		private int REP_STS;
 
 		public Form11()
 		{
@@ -34,7 +33,6 @@ namespace uSCOPE
 		{
 			//---
 			this.tabControl1.TabPages.Remove(this.tabPage3);//詳細
-			this.tabControl1.TabPages.Remove(this.tabPage1);//再現性
 			//---
 			this.button1.Visible = false;//[ZERO]
 			//---
@@ -65,8 +63,6 @@ namespace uSCOPE
 			//---
 			m_txtPos1 = new TextBox[] {this.textBox3,this.textBox4,this.textBox5,this.textBox6};
 			m_txtPos2 = new TextBox[] {this.textBox7,this.textBox8,this.textBox9,this.textBox10};
-			//---
-			this.comboBox1.SelectedIndex = 4;
 			//---
 		}
 		public bool isORG_ALL_DONE()
@@ -156,14 +152,12 @@ namespace uSCOPE
 				this.button12, this.button13,this.button14, this.button15,
 				this.button16, this.button17,this.button18, this.button19,
 				this.button1,
-				this.button40, this.button41, this.button42,
+				this.button40, this.button41, this.button42
 			};
 			if (!D.isCONNECTED()) {
 				foreach (Control c in ctls) {
 					c.Enabled = false;
 				}
-				this.comboBox1.Enabled = false;
-				this.comboBox1.SelectedIndex = 4;
 			}
 			else if (!isORG_ALL_DONE()) {
 				this.button37.Enabled = true;//原点.allと停止のみenable
@@ -210,7 +204,6 @@ namespace uSCOPE
 				foreach (Control c in ctls) {
 					c.Enabled = true;
 				}
-				this.comboBox1.Enabled = true;
 			}
 		}
 		private void OnClicks(object sender, EventArgs e)
@@ -395,29 +388,6 @@ namespace uSCOPE
 			//        G.FORMCAM = null;
 			//    }
 			//}
-			else if (sender == this.button43) {//再現性:原点
-				int q = this.comboBox1.SelectedIndex;
-				if (q >= 0 && q <= 3) {
-					D.SET_STG_ORG(q);
-					G.PLM_STS |= (1 << q);
-					m_bORGPROC = true;
-				}
-			}
-			else if (sender == this.button44) {//再現性:停止
-				int q = this.comboBox1.SelectedIndex;
-				if (q >= 0 && q <= 3) {
-					D.SET_STG_STOP(q);
-					G.PLM_STS |= (1 << q);
-				}
-				timer2.Enabled = false;
-			}
-			else if (sender == this.button47) {//再現性:再現性
-				//do_repeatability();
-				//再現性テスト
-				this.REP_STS = 1;
-				this.timer2.Tag = null;
-				this.timer2.Enabled = true;
-			}
 			//---------------------------
 			//UPDSTS();
 			if (G.PLM_STS != 0) {
@@ -462,11 +432,6 @@ namespace uSCOPE
 				}
 				if (true) {
 					m_lblSts1[i].Text = m_lblSts2[i].Text = buf.Trim();
-					if (this.tabControl1.TabPages.Count >= 3) {
-						if (i == this.comboBox1.SelectedIndex) {
-							this.label4.Text = buf.Trim();
-						}
-					}
 				}
 				if ((G.PLM_STS & (1 << i)) != 0) {
 					//POS
@@ -476,11 +441,6 @@ namespace uSCOPE
 						pos -= G.SS.PLM_OFFS[2];
 					}
 					m_txtPos1[i].Text = m_txtPos2[i].Text = pos.ToString();
-					if (this.tabControl1.TabPages.Count >= 3) {
-						if (i == this.comboBox1.SelectedIndex) {
-							this.textBox1.Text = pos.ToString();
-						}
-					}
 					if ((G.PLM_STS_BIT[i] & (int)G.PLM_STS_BITS.BIT_ONMOV) == 0) {
 						if (G.SS.PLM_PWSV[i] == true) {
 							if ((G.STG_TRQ_STS & (1<<i)) != 0) {
@@ -634,225 +594,6 @@ namespace uSCOPE
 		public void DO_ORG_ALL()
 		{
 			OnClicks(this.button37, null);
-		}
-
-		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			int i = this.comboBox1.SelectedIndex;
-			if (i < 0 || i > 3 || isORG_ALL_DONE() == false) {
-				this.button43.Enabled = false;
-				this.button44.Enabled = false;
-				this.button45.Enabled = false;
-				this.button46.Enabled = false;
-				this.button47.Enabled = false;
-				this.textBox1.Text = "";
-				this.label4.Text = "";
-				return;
-			}
-			this.button43.Enabled = true;
-			this.button44.Enabled = true;
-			this.button45.Enabled = true;
-			this.button46.Enabled = true;
-			this.button47.Enabled = true;
-			this.textBox1.Text = m_txtPos1[i].Text;
-			this.label4.Text = m_lblSts1[i].Text;
-			//---
-			int mlim = G.SS.PLM_MLIM[i];
-			int plim = G.SS.PLM_PLIM[i];
-			int wid = (plim-mlim)/1;
-			int cen = (plim+mlim)/2;
-			wid = (wid/10)*10;
-			cen = (cen/10)*10;
-			this.numericUpDown6.Value = cen-wid/4;
-			this.numericUpDown7.Value = cen+wid/4;
-		}
-		private void do_repeatability()
-		{
-			//再現性テスト
-		}
-
-		private void button45_MouseDown(object sender, MouseEventArgs e)
-		{
-			int d = (sender == this.button45) ? 0:1;	//0:CCW(-), 1:CW(+)
-			int q = (this.comboBox1.SelectedIndex);
-			D.SET_STG_JOG(q, d);
-			G.PLM_STS |= (1 << q);
-			this.timer1.Interval = 100;
-			m_ijog = q;
-			m_event.Set();
-		}
-		private void scroll_to_end(TextBox tb, string txt)
-		{
-			tb.Text = txt;
-			tb.SelectionStart = tb.Text.Length;
-			tb.Focus();
-			tb.ScrollToCaret();
-			tb.Update();
-		}
-		private int m_rep_cnt;
-		private int m_rep_tic;
-		private int m_rep_idx;
-		private int m_rep_axs;
-		private int[] m_rep_pos = null;
-		private void timer2_Tick(object sender, EventArgs e)
-		{
-			int NXT_STS = this.REP_STS+1;
-			double fmax;
-			int imax;
-
-			this.timer2.Enabled = false;
-		
-
-			switch (this.REP_STS) {
-			case 0:
-				break;
-			case 1:
-				m_rep_axs = this.comboBox1.SelectedIndex;
-				m_rep_idx = m_rep_cnt = 0;
-				{
-					int min = (int)this.numericUpDown6.Value;
-					int max = (int)this.numericUpDown7.Value;
-					int wid = max-min;
-					ArrayList ar = new ArrayList();
-					for (int i = 0; i < 5; i++) {
-						ar.Add(min+i*(wid/5));
-					}
-					ar.Add(max);
-					ar.Add(0);
-					m_rep_pos = (int[])ar.ToArray(typeof(int));
-				}
-				this.textBox2.Text = "";
-				break;
-			case 2:
-				if (++m_rep_cnt > this.numericUpDown5.Value) {
-					this.REP_STS = 0;
-					timer2.Enabled = false;
-				}
-				if (this.checkBox2.Checked) {
-					NXT_STS = 20;
-				}
-				break;
-			case 3:
-				{
-					int q = this.comboBox1.SelectedIndex;
-					int pos = G.PLM_POS[q];
-					int nxt = m_rep_pos[m_rep_idx];
-	
-
-					if (pos > nxt && G.SS.PLM_BSLA[q] > 0) {
-						G.PLM_BSL[q] = G.SS.PLM_BSLA[q];
-					}
-#if true//2018.05.22(バックラッシュ方向反転対応)
-					else
-					if (pos < nxt && G.SS.PLM_BSLA[q] < 0) {
-						G.PLM_BSL[q] = G.SS.PLM_BSLA[q];
-					}
-#endif
-					else {
-						G.PLM_BSL[q] = 0;
-					}
-					D.SET_STG_ABS(q, nxt - G.PLM_BSL[q]);
-					G.PLM_STS |= (1<<q);
-				}
-			break;
-			case 4:
-			case 8:
-			case 11:
-			case 21:
-				if (G.PLM_STS != 0) {
-					NXT_STS = this.REP_STS;//停止待ち
-				}
-			break;
-			case 5:
-				if (++m_rep_idx < m_rep_pos.Length) {
-					NXT_STS = 3;
-				}
-				else {
-					m_rep_idx = 0;
-				}
-				break;
-			case 6:
-				{
-					int q = this.comboBox1.SelectedIndex;
-					if ((G.PLM_STS_BIT[q] & (int)G.PLM_STS_BITS.BIT_LMT_H) != 0) {
-						//LMT_HがLOになるまで,+1移動
-					}
-					else {
-						//LMT_HがHIになるまで,-1移動
-					}
-				}
-			break;
-			case 7:
-				{
-					int q = this.comboBox1.SelectedIndex;
-					if ((G.PLM_STS_BIT[q] & (int)G.PLM_STS_BITS.BIT_LMT_H) != 0) {
-						//LMT_HがLOになるまで,+1移動
-						D.SET_STG_REL(q, +1);
-						G.PLM_STS |= (1<<q);
-					}
-					else {
-						string txt = this.textBox2.Text;
-						txt += string.Format("{0}\r\n", G.PLM_POS[q]);
-						scroll_to_end(this.textBox2, txt);
-						NXT_STS = 13;
-					}
-				}
-			break;
-			case 9:
-				NXT_STS = 7;
-			break;
-			case 10:
-				{
-					int q = this.comboBox1.SelectedIndex;
-					if ((G.PLM_STS_BIT[q] & (int)G.PLM_STS_BITS.BIT_LMT_H) == 0) {
-						//LMT_HがHIになるまで,-1移動
-						D.SET_STG_REL(q, -1);
-						G.PLM_STS |= (1<<q);
-					}
-					else {
-						NXT_STS = 7;
-					}
-				}
-			break;
-			case 12:
-				NXT_STS = 10;
-			break;
-			case 13:
-				m_rep_tic = Environment.TickCount;
-			break;
-			case 14:
-				if ((Environment.TickCount - m_rep_tic) < 3000) {//3秒待ち
-					NXT_STS = this.REP_STS;
-				}
-				break;
-			case 15:
-				NXT_STS = 2;
-			break;
-			case 20:
-				{
-					int q = this.comboBox1.SelectedIndex;
-					if (q >= 0 && q <= 3) {
-						D.SET_STG_ORG(q);
-						G.PLM_STS |= (1 << q);
-						m_bORGPROC = true;
-					}
-				}
-			break;
-			case 22:
-				NXT_STS = 3;
-			break;
-			default:
-				//f軸停止待ち
-				break;
-			}
-			if (NXT_STS == 0) {
-				NXT_STS = 0;//for break.point
-			}
-			if (this.REP_STS != 0) {
-				this.REP_STS = NXT_STS;
-				this.timer2.Interval = 1;
-				this.timer2.Enabled = true;
-			}
 		}
 	}
 }

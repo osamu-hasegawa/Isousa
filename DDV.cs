@@ -3,42 +3,46 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+//---
+using System.Collections;
 
 namespace uSCOPE
 {
 	class DDV
     {
-		static bool ChkNumeric(Control ctl, double min, double max)
+		static void ThrowErr(Control ctl, string msg)
+		{
+			if (ctl is TextBox) {
+				((TextBox)ctl).SelectAll();
+			}
+			else if (ctl is NumericUpDown) {
+				((NumericUpDown)ctl).Select(0, ctl.Text.Length);
+			}
+            ctl.Focus();
+            throw new Exception(msg);
+		}
+		static bool ChkNumeric(Control ctl, string txt)
         {
-            string msg = null;
-            if (T.IsNumeric(ctl.Text) == false)
-            {
-                msg = "数字を入力してください.";
-            }
-            else if (min == max)
-            {
-                // 範囲チェックなし
-            }
-            else if (double.Parse(ctl.Text) < min || double.Parse(ctl.Text) > max)
-            {
-                msg = String.Format("{0} ～ {1} の範囲で入力してください.", min, max);
-            }
-            if (msg != null)
-            {
-				if (ctl is TextBox) {
-					((TextBox)ctl).SelectAll();
-				}
-				else if (ctl is NumericUpDown) {
-					((NumericUpDown)ctl).Select(0, ctl.Text.Length);
-				}
-                ctl.Focus();
-                throw new Exception(msg);
-                //                      System.Windows.Forms.MessageBox.Show(msg, System.Windows.Forms.MessageBoxIcon.Exclamation);
-//                G.mlog(msg);
-                //                       MsgBox(, MsgBoxStyle.Exclamation);
- //               return (false);
+            if (T.IsNumeric(txt) == false) {
+				ThrowErr(ctl, "数字を入力してください.");
             }
             return (true);
+        }
+		static bool ChkNumeric(Control ctl)
+        {
+            ChkNumeric(ctl, ctl.Text);
+            return (true);
+        }
+		static string ChkMinMax(double val, double min, double max)
+        {
+			if (min == max) {
+                // 範囲チェックなし
+				return(null);
+            }
+            if (val < min || val > max) {
+				return(string.Format("{0} ～ {1} の範囲で入力してください.", min, max));
+            }
+            return (null);
         }
         static public void DDX(bool bUpdate, Control ctl, ref int val)
         {
@@ -46,7 +50,7 @@ namespace uSCOPE
                 ctl.Text = val.ToString();
             }
             else {
-                ChkNumeric(ctl, 0, 0);
+                ChkNumeric(ctl, ctl.Text);
 				if (ctl.GetType().Equals(typeof(NumericUpDown))) {
 				val = (int)((NumericUpDown)ctl).Value;
 				}
@@ -61,8 +65,13 @@ namespace uSCOPE
 				ctl.Text = val.ToString();
 			}
 			else {
-				ChkNumeric(ctl, min, max);
+				ChkNumeric(ctl, ctl.Text);
 				val = int.Parse(ctl.Text);
+				string msg;
+				msg = ChkMinMax(val, min, max);
+				if (msg != null) {
+					ThrowErr(ctl, msg);
+				}
 			}
 		}
         static public void DDX(bool bUpdate, Control ctl, ref double val)
@@ -87,7 +96,7 @@ namespace uSCOPE
 #endif
 			}
             else {
-                ChkNumeric(ctl, 0, 0);
+                ChkNumeric(ctl, ctl.Text);
                 val = double.Parse(ctl.Text);
             }
         }
@@ -97,53 +106,49 @@ namespace uSCOPE
 				ctl.Text = val.ToString();
 			}
 			else {
-				ChkNumeric(ctl, min, max);
+				ChkNumeric(ctl, ctl.Text);
 				val = Double.Parse(ctl.Text);
+				string msg = ChkMinMax(val, min, max);
+				if (msg != null) {
+					ThrowErr(ctl, msg);
+				}
 			}
 		}
 		static public void DDX(bool bUpdate, TextBox ctl, ref string str)
         {
-           if (bUpdate)
-           {
+           if (bUpdate) {
                ctl.Text = str;
            }
-           else
-           {
+           else {
                str = ctl.Text;
            }
        }
        static public void DDX(bool bUpdate, CheckBox ctl, ref bool chk)
        {
-           if (bUpdate)
-           {
+           if (bUpdate) {
                ctl.Checked = chk;
            }
-           else
-           {
+           else {
                chk = ctl.Checked;
            }
        }
        static public void DDX(bool bUpdate, CheckBox ctl, ref int chk)
        {
-           if (bUpdate)
-           {
+           if (bUpdate) {
                ctl.Checked = (chk != 0) ? true : false;
            }
-           else
-           {
+           else {
                chk = ctl.Checked ? 1 : 0;
            }
        }
        static public void DDX(bool bUpdate, RadioButton[] ctl, ref int chk)
        {
-           if (bUpdate)
-           {
+           if (bUpdate) {
 			   for (int i = 0; i < ctl.Length; i++) {
 				   ctl[i].Checked = (i == chk);
 			   }
            }
-           else
-           {
+           else {
 			   chk = -1;
 			   for (int i = 0; i < ctl.Length; i++) {
 				   if (ctl[i].Checked) {
@@ -169,40 +174,79 @@ namespace uSCOPE
 		}
 		static public void DDX(bool bUpdate, ComboBox ctl, ref int idx)
 		{
-			if (bUpdate)
-			{
+			if (bUpdate) {
 				ctl.SelectedIndex = idx;
 			}
-			else
-			{
+			else {
 				idx = ctl.SelectedIndex;
 			}
 		}
 		static public void DDX(bool bUpdate, DateTimePicker ctl, ref DateTime tim)
 		{
-			if (bUpdate)
-			{
+			if (bUpdate) {
 				ctl.Value = tim;
 			}
-			else
-			{
+			else {
 				tim = ctl.Value;
 			}
 		}
 		static public void DDX(bool bUpdate, DateTimePicker ctl1, DateTimePicker ctl2, ref DateTime tim)
 		{
-			if (bUpdate)
-			{
+			if (bUpdate) {
 				/**/
 				ctl1.Value = tim;
 				/**/
 				ctl2.Value = tim;
 			}
-			else
-			{
+			else {
 				tim = new DateTime(
 					ctl1.Value.Year, ctl1.Value.Month, ctl1.Value.Day,
 					ctl2.Value.Hour, ctl1.Value.Minute,ctl1.Value.Second);
+			}
+		}
+		static public void DDX(bool bUpdate, TextBox ctl, ref int[] ary, int cnt, int min, int max)
+		{
+			if (bUpdate) {
+				string buf = "";
+				if (ary != null && ary.Length > 0) {
+					buf += ary[0].ToString();
+					for (int i = 1; i < ary.Length; i++) {
+						buf += ", ";
+						buf += ary[i].ToString();
+					}
+				}
+				ctl.Text = buf;
+			}
+			else {
+				string buf = ctl.Text;
+				string[] abuf = null;
+				buf = buf.Replace("  ", " ");
+				buf = buf.Replace(" ,", ",");
+				buf = buf.Replace(", ", ",");
+				buf = buf.Replace(" ", ",");
+				abuf = buf.Split(',');
+				if (abuf.Length <= 0) {
+					ary = null;
+				}
+				else if (abuf.Length == 1 && abuf[0] == "") {
+					ary = null;
+				}
+				else {
+					ArrayList ar = new ArrayList();
+					for (int i = 0; i < abuf.Length; i++) {
+						ChkNumeric(ctl, abuf[i]);
+						int val = int.Parse(abuf[i]);
+						string msg = ChkMinMax(val, min, max);
+						if (msg != null) {
+							ThrowErr(ctl, msg);
+						}
+						ar.Add(val);
+					}
+					if (ar.Count > cnt) {
+						ThrowErr(ctl, string.Format("{0}ヶ以内で入力してください.", cnt));
+					}
+					ary = (int[])ar.ToArray(typeof(int));
+				}
 			}
 		}
     }
