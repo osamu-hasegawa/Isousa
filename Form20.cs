@@ -107,6 +107,8 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox7      , ref m_ss.PLM_AUT_ZKCK);//Ｚ測定:毛髪径判定用
 				DDV.DDX(bUpdate, this.textBox4       , ref m_ss.PLM_AUT_ZKEI, 20, -99, +99);
 				//---
+				DDV.DDX(bUpdate, this.checkBox4      , ref m_ss.PLM_AUT_IRCK);//カラーと同時に赤外測定
+
 				if (bUpdate == false) {
 					if (this.textBox2.Text == "") {
 						G.mlog("フォルダを指定してください.");
@@ -260,8 +262,8 @@ namespace uSCOPE
 		{
 			bool bl = (this.checkBox2.Checked == true);
 
-			this.numericUpDown10.Enabled = bl;
-			this.numericUpDown11.Enabled = bl;
+			//this.numericUpDown10.Enabled = bl;
+			//this.numericUpDown11.Enabled = bl;
 			this.numericUpDown12.Enabled = bl;
 			this.numericUpDown13.Enabled = bl;
 			this.numericUpDown14.Enabled = bl;

@@ -124,7 +124,9 @@ namespace uSCOPE
 			public int[]	CAM_PAR_EXMOD = {1, 1, 1};//自動
 			public int[]	CAM_PAR_WBMOD = {1, 1, 1};//自動
 			public double[]	CAM_PAR_GA_VL = {1.0, 1.0, 1.0};
+			public double[]	CAM_PAR_GA_OF = {0, 0, 0};
 			public double[]	CAM_PAR_EX_VL = {1000.0, 1000.0, 1000.0};
+			public double[]	CAM_PAR_EX_OF = {0, 0, 0};
 			public double[]	CAM_PAR_WB_RV = {1.0, 1.0, 1.0};
 			public double[]	CAM_PAR_WB_GV = {1.0, 1.0, 1.0};
 			public double[]	CAM_PAR_WB_BV = {1.0, 1.0, 1.0};
@@ -250,6 +252,8 @@ namespace uSCOPE
 			//---
 			public bool PLM_AUT_ZKCK = false;//Ｚ測定:毛髪径判定用
 			public int[] PLM_AUT_ZKEI = null;
+			//---
+			public bool PLM_AUT_IRCK = false;
 			//---
 			public int ETC_LED_WAIT = 18;
 			public int ETC_UIF_LEVL =  0;

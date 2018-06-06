@@ -22,8 +22,10 @@ namespace uSCOPE
 		private ComboBox[]      cmbWMODE;
 		//
 		private NumericUpDown[] numGAIDB;
+		private NumericUpDown[] numGAIOF;
 		//
 		private NumericUpDown[] numEXPTM;
+		private NumericUpDown[] numEXPOF;
 		//
 		private NumericUpDown[] numRAT_R;
 		private NumericUpDown[] numRAT_G;
@@ -49,8 +51,10 @@ namespace uSCOPE
 			cmbWMODE = new ComboBox[] { this.comboBox3,  this.comboBox6,  this.comboBox9 };
 			//
 			numGAIDB = new NumericUpDown[] { this.numericUpDown5 , this.numericUpDown14, this.numericUpDown23 };
+			numGAIOF = new NumericUpDown[] { this.numericUpDown28, this.numericUpDown29, this.numericUpDown30 };
 			//
 			numEXPTM = new NumericUpDown[] { this.numericUpDown6 , this.numericUpDown15, this.numericUpDown24 };
+			numEXPOF = new NumericUpDown[] { this.numericUpDown31, this.numericUpDown32, this.numericUpDown33 };
 			//
 			numRAT_R = new NumericUpDown[] { this.numericUpDown7 , this.numericUpDown16, this.numericUpDown25 };
 			numRAT_G = new NumericUpDown[] { this.numericUpDown8 , this.numericUpDown17, this.numericUpDown26 };
@@ -85,7 +89,9 @@ namespace uSCOPE
 					DDV.DDX(bUpdate, cmbWMODE[i], ref m_ss.CAM_PAR_WBMOD[i]);
 					//---
 					DDV.DDX(bUpdate, numGAIDB[i], ref m_ss.CAM_PAR_GA_VL[i]);
+					DDV.DDX(bUpdate, numGAIOF[i], ref m_ss.CAM_PAR_GA_OF[i]);
 					DDV.DDX(bUpdate, numEXPTM[i], ref m_ss.CAM_PAR_EX_VL[i]);
+					DDV.DDX(bUpdate, numEXPOF[i], ref m_ss.CAM_PAR_EX_OF[i]);
 					DDV.DDX(bUpdate, numRAT_R[i], ref m_ss.CAM_PAR_WB_RV[i]);
 					DDV.DDX(bUpdate, numRAT_G[i], ref m_ss.CAM_PAR_WB_GV[i]);
 					DDV.DDX(bUpdate, numRAT_B[i], ref m_ss.CAM_PAR_WB_BV[i]);

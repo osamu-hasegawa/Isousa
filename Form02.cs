@@ -446,6 +446,9 @@ namespace uSCOPE
 			catch (Exception exception) {
 				ShowException(exception);
 			}
+#if true//2018.06.04 赤外同時測定
+			Thread.Sleep(5);
+#endif
 		}
 
 		public void set_param(CAM_PARAM param, double fVal)
@@ -542,6 +545,9 @@ namespace uSCOPE
 			//string buf;
 			//buf = (string)m_camera.Parameters[PLCamera.DeviceLinkThroughputLimitMode].GetValue();
 			//this.toolStripStatusLabel6.Text = "DeviceLinkThroughputLimitMode:" + buf;
+#if true//2018.06.04 赤外同時測定
+			Thread.Sleep(5);
+#endif
 		}
 		public void set_auto(CAM_PARAM param, int val)
 		{
@@ -641,6 +647,9 @@ namespace uSCOPE
 			catch (Exception exception) {
 				ShowException(exception);
 			}
+#if true//2018.06.04 赤外同時測定
+			Thread.Sleep(5);
+#endif
 		}
 		private void set_visible(bool b)
 		{

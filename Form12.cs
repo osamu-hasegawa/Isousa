@@ -237,6 +237,12 @@ this.SPE_COD = 0;
 					G.SS.PLM_AUT_FOLD = path;
 					//G.SS.PLM_AUT_ZDCK = this.checkBox11.Checked;
 					//3:透過→赤外, 8:反射→赤外
+#if true//2018.06.04 赤外同時測定
+					Form22 frm = new Form22();
+					if(frm.ShowDialog(this) != System.Windows.Forms.DialogResult.OK) {
+						return;
+					}
+#endif
 					if (sender == this.button11/*自動*/) {
 						G.SS.PLM_AUT_MODE = 8;
 						G.SS.PLM_AUT_RTRY = true;
@@ -662,7 +668,11 @@ this.SPE_COD = 0;
 			else {
 				//固定
 				G.FORM02.set_auto(Form02.CAM_PARAM.GAIN, 0);
+#if true//2018.06.04 赤外同時測定
+				G.FORM02.set_param(Form02.CAM_PARAM.GAIN, G.SS.CAM_PAR_GA_VL[ch] + G.SS.CAM_PAR_GA_OF[ch]);
+#else
 				G.FORM02.set_param(Form02.CAM_PARAM.GAIN, G.SS.CAM_PAR_GA_VL[ch]);
+#endif
 				this.radioButton4.Checked = true;//固定
 			}
 			if (G.SS.CAM_PAR_EXMOD[ch] == 1) {
@@ -673,7 +683,11 @@ this.SPE_COD = 0;
 			else {
 				//固定
 				G.FORM02.set_auto(Form02.CAM_PARAM.EXPOSURE, 0);
+#if true//2018.06.04 赤外同時測定
+				G.FORM02.set_param(Form02.CAM_PARAM.EXPOSURE, G.SS.CAM_PAR_EX_VL[ch] + G.SS.CAM_PAR_EX_OF[ch]);
+#else
 				G.FORM02.set_param(Form02.CAM_PARAM.EXPOSURE, G.SS.CAM_PAR_EX_VL[ch]);
+#endif
 				this.radioButton8.Checked = true;//固定
 			}
 			if (G.SS.CAM_PAR_WBMOD[ch] == 1) {
@@ -1384,12 +1398,54 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				this.radioButton5.Checked = true;
 			}
 			else {
+				//G.mlog("固定時にはオフセット演算を追加する");
 				this.radioButton4.Checked = true;
 				this.radioButton8.Checked = true;
 				this.radioButton6.Checked = true;
 			}
 		}
-
+#if true//2018.06.04 赤外同時測定
+		public void set_expo_const()
+		{
+			double fval, fmin, fmax;
+			int		ch;
+			if ((G.LED_PWR_STS & 1) != 0) {
+				ch = 0;		//透過
+			}
+			else if ((G.LED_PWR_STS & 2) != 0) {
+				ch = 1;		//反射
+			}
+			else {
+				ch = 2;		//赤外
+			}
+			if (G.CAM_GAI_STS == 1) {
+				G.FORM02.set_auto(Form02.CAM_PARAM.GAIN, /*固定*/0);
+				if (G.SS.CAM_PAR_GA_OF[ch] != 0) {
+				G.FORM02.get_param(Form02.CAM_PARAM.GAIN, out fval, out fmax, out fmin);
+				G.FORM02.set_param(Form02.CAM_PARAM.GAIN, fval + G.SS.CAM_PAR_GA_OF[ch]);
+				}
+			}
+			if (G.CAM_EXP_STS == 1) {
+				G.FORM02.set_auto(Form02.CAM_PARAM.EXPOSURE, /*固定*/0);
+				if (G.SS.CAM_PAR_EX_OF[ch] != 0) {
+				G.FORM02.get_param(Form02.CAM_PARAM.EXPOSURE, out fval, out fmax, out fmin);
+				G.FORM02.set_param(Form02.CAM_PARAM.EXPOSURE, fval + G.SS.CAM_PAR_EX_OF[ch]);
+				}
+			}
+			if (G.CAM_WBL_STS == 1) {
+				G.FORM02.set_auto(Form02.CAM_PARAM.WHITE, /*固定*/0);
+			}
+			if (true) {
+				//G.mlog("固定時にはオフセット演算を追加する");
+				this.radioButton4.Checked = true;
+				this.radioButton8.Checked = true;
+				this.radioButton6.Checked = true;
+				this.radioButton4.Update();
+				this.radioButton8.Update();
+				this.radioButton6.Update();
+			}
+		}
+#endif
 		private void MOVE_PIX_XY(int x, int y)
 		{
 			double xum = G.FORM02.PX2UM(x);
@@ -1451,6 +1507,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			public bool retry;
 			public ArrayList y_1st_pos;
 			//---
+			public int ir_nxst;
+			public bool ir_done;
+			public int ir_lsbk;
+			public int ir_chk1;
+			//---
 			public ADATA()
 			{
 //				dt = DateTime.Now;
@@ -1487,6 +1548,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				z_nam = new ArrayList();
 				z_pos = new ArrayList();
 				y_1st_pos = new ArrayList();
+				ir_nxst = 0;
+				ir_done = false;
+				ir_lsbk = 0;
 			}
 		};
 		private ADATA m_adat = new ADATA();
@@ -1695,6 +1759,23 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 
 			return(path);
 		}
+		//---
+		private string to_ir_file(string fold, string path)
+		{
+			string name = System.IO.Path.GetFileName(path);
+
+			if (name.Contains("CT")) {
+				name = name.Replace("CT", "IR");
+			}
+			else {
+				name = name.Replace("CR", "IR");
+			}
+			if (string.IsNullOrEmpty(fold)) {
+				return(name);
+			}
+			return(fold+"\\"+name);
+		}
+
 		private void rename_aut_files()
 		{
 			string buf = System.IO.File.ReadAllText(m_adat.log, Encoding.Default);
@@ -1706,7 +1787,13 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				string path_new = (string)m_adat.f_nam[i];
 				path_new = path_new.Replace("@@", string.Format("{0:00}", i));
 				System.IO.File.Move(path_old, path_new);
-
+#if true//2018.06.04 赤外同時測定
+				if (G.SS.PLM_AUT_IRCK) {
+					string path_old_ir = to_ir_file(m_adat.fold, path_old);
+					string path_new_ir = to_ir_file(m_adat.fold, path_new);
+					System.IO.File.Move(path_old_ir, path_new_ir);
+				}
+#endif
 				if (true) {
 					int	idx = path_old.LastIndexOf('\\');
 					string src = path_old.Substring(idx+1);
@@ -1716,6 +1803,13 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					src = src.Substring(0, idx);
 					dst = dst.Substring(0, idx);
 					buf = buf.Replace(src, dst);
+#if true//2018.06.04 赤外同時測定
+					if (G.SS.PLM_AUT_IRCK) {
+						string src_ir = to_ir_file(null, src);
+						string dst_ir = to_ir_file(null, dst);
+						buf = buf.Replace(src_ir, dst_ir);
+					}
+#endif
 					if (m_adat.z_cnt > 1) {
 						for (int q = 1; q < m_adat.z_cnt; q++) {
 							string tmp = (string)m_adat.z_nam[q];
@@ -1723,6 +1817,13 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 							string name_new = dst.Replace("ZP00D", tmp);
 							//---
 							buf = buf.Replace(name_old, name_new);
+#if true//2018.06.04 赤外同時測定
+							if (G.SS.PLM_AUT_IRCK) {
+								string src_ir = to_ir_file(null, name_old);
+								string dst_ir = to_ir_file(null, name_new);
+								buf = buf.Replace(src_ir, dst_ir);
+							}
+#endif
 						}
 					}
 				}
@@ -1734,6 +1835,13 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 							string name_new = path_new.Replace("ZP00D", tmp);
 							//---
 							System.IO.File.Move(name_old, name_new);
+#if true//2018.06.04 赤外同時測定
+							if (G.SS.PLM_AUT_IRCK) {
+								string path_old_ir = to_ir_file(m_adat.fold, name_old);
+								string path_new_ir = to_ir_file(m_adat.fold, name_new);
+								System.IO.File.Move(path_old_ir, path_new_ir);
+							}
+#endif
 						}
 					}
 				}
@@ -1879,9 +1987,14 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 						}
 					}
 				}
+#if true//2018.06.04 赤外同時測定
+				MOVE_ABS_XY(G.SS.PLM_AUT_HP_X, G.SS.PLM_AUT_HP_Y);
+#endif
 				//中上
 				if (G.SS.PLM_AUT_HPOS) {
+#if false//2018.06.04 赤外同時測定
 					MOVE_ABS_XY(G.SS.PLM_AUT_HP_X, G.SS.PLM_AUT_HP_Y);
+#endif
 					if (NXT_STS != 70) {
 						m_retry_cnt_of_hpos = 0;
 						NXT_STS = -(5 - 1);//->5
@@ -1893,13 +2006,16 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 						}
 					}
 				}
+#if false//2018.06.04 赤外同時測定
 				else if (G.bJITAN) {
 					//for debug
 					MOVE_ABS_XY((G.SS.PLM_MLIM[0] + G.SS.PLM_PLIM[0]) / 2, 0);
 				}
 				else {
+					//中上
 					MOVE_ABS_XY((G.SS.PLM_MLIM[0] + G.SS.PLM_PLIM[0]) / 2, G.SS.PLM_MLIM[1]);
 				}
+#endif
 				if (G.SS.PLM_AUT_FINI) {
 					if (NXT_STS < 0) {
 						m_pre_set[2] = true;
@@ -1935,6 +2051,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					//---
 					m_adat.z_nam.Clear();
 					m_adat.z_pos.Clear();
+#if true//2018.06.04 赤外同時測定
+					m_adat.y_1st_pos.Clear();
+#endif
 					//---
 					if (true) {
 						m_adat.z_cnt = 1;
@@ -2071,8 +2190,15 @@ a_write("毛髪判定(AF位置探索):OK");
 					m_adat.h_cnt = m_adat.h_idx;
 #if true
 					if ((NXT_STS = retry_check(NXT_STS)) == 1) {
+						//反射の未検出域に対して透過にてリトライする
 						break;
 					}
+#endif
+#if true//2018.06.04 赤外同時測定
+					if (G.SS.PLM_AUT_IRCK) {
+						NXT_STS = 998;//開始位置へ移動後に終了
+					}
+					else
 #endif
 					//m_adat.trace = true;
 					if (m_adat.f_ttl <= 0 || (G.SS.PLM_AUT_MODE == 0 || G.SS.PLM_AUT_MODE == 5)) {
@@ -2234,6 +2360,12 @@ a_write("AF:終了");
 			case 17://初回AF後
 			case 27://左側探索
 			case 37://右側探索
+#if true//2018.06.04 赤外同時測定
+				if (G.SS.PLM_AUT_IRCK && m_adat.ir_done) {
+					//赤外同時測定の赤外測定後
+				}
+				else {
+#endif
 				if (m_adat.z_idx == 0) {
 					if (this.AUT_STS == 17) {
 						//if ((Environment.TickCount - m_adat.chk1) < 2000) {
@@ -2260,7 +2392,11 @@ a_write("AF:終了");
 						//--- ONCE
 						if (G.SS.PLM_AUT_CNST) {
 							if (G.CAM_GAI_STS == 1 || G.CAM_EXP_STS == 1 || G.CAM_WBL_STS == 1) {/*1:自動*/
+	#if true//2018.06.04 赤外同時測定
+								set_expo_const();
+	#else
 								set_expo_mode(/*const*/0);
+	#endif
 							}
 						}
 					}
@@ -2289,27 +2425,29 @@ a_write("AF:終了");
 					a_write(string.Format("画像保存:{0}", path1));
 				}
 				else if (true) {
-					string path;
-					path = get_aut_path(m_adat.f_idx);
-					G.FORM02.save_image(path);
-					if (m_adat.z_idx == 0) {
-					m_adat.f_dum.Add(path);
-					path = get_aut_path(-1);
-					m_adat.f_nam.Add(path);
-					}
-				a_write(string.Format("画像保存:{0}{1}_{2}_{3}", m_adat.h_idx, m_adat.pref, m_adat.f_idx, m_adat.z_nam[m_adat.z_idx]));
+					G.mlog("ここにはこない！！！");
 				}
 				else {
-					string path;
-					path = string.Format("{0}\\Z{5:00}_{1:0}{2}_{3:00}.{4}", m_adat.fold, m_adat.h_idx, m_adat.pref, m_adat.f_idx, m_adat.ext, m_adat.z_nam[m_adat.z_idx]);
-					G.FORM02.save_image(path);
-					m_adat.f_dum.Add(path);
-					path = string.Format("{0}\\Z{4:00}_{1:0}{2}_@@.{3}"    , m_adat.fold, m_adat.h_idx, m_adat.pref, m_adat.ext, m_adat.z_idx);
-					m_adat.f_nam.Add(path);
-				a_write(string.Format("画像保存:{0}{1}_{2}_{3}", m_adat.h_idx, m_adat.pref, m_adat.f_idx, m_adat.z_nam[m_adat.z_idx]));
+					G.mlog("ここにはこない！！！");
 				}
 				//画像保存
 				Console.Beep(800, 250);
+#if true//2018.06.04 赤外同時測定
+				}
+				if (G.SS.PLM_AUT_IRCK) {
+					if (m_adat.ir_done == false) {
+						m_adat.ir_nxst = this.AUT_STS;
+						m_adat.ir_lsbk = G.LED_PWR_STS;
+						m_adat.ir_chk1 = m_adat.chk1;
+						NXT_STS = 440;//赤外に切替
+						break;
+					}
+					else {
+						//毛髪判定ステータスを元に戻す
+						m_adat.chk1 = m_adat.ir_chk1;
+					}
+				}
+#endif
 				if (m_adat.z_cnt > 1) {
 					if (++m_adat.z_idx >= m_adat.z_cnt) {
 						m_adat.z_idx = 0;
@@ -2446,6 +2584,7 @@ a_write("AF:終了");
 				m_adat.h_idx++;
 				break;
 			case 100:
+			case 400://赤外同時測定
 				//光源切り替え(->透過)
 				G.FORM10.LED_SET(1, false);//反射
 				G.FORM10.LED_SET(2, false);//赤外
@@ -2453,9 +2592,16 @@ a_write("AF:終了");
 				m_adat.pref = "CT";//白色(透過)
 				m_adat.chk1 = Environment.TickCount;
 a_write("光源切替:->透過");
+#if true//2018.06.04 赤外同時測定
+				if (this.AUT_STS == 400) {
+					G.CAM_PRC = G.CAM_STS.STS_AUTO;
+					break;
+				}
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_ATIR;
 				break;
 			case 120:
+			case 420://赤外同時測定
 				//光源切り替え(->反射)
 				G.FORM10.LED_SET(0, false);//透過
 				G.FORM10.LED_SET(2, false);//赤外
@@ -2463,9 +2609,16 @@ a_write("光源切替:->透過");
 				m_adat.pref = "CR";//白色(反射)
 				m_adat.chk1 = Environment.TickCount;
 a_write("光源切替:->反射");
+#if true//2018.06.04 赤外同時測定
+				if (this.AUT_STS == 420) {
+					G.CAM_PRC = G.CAM_STS.STS_AUTO;
+					break;
+				}
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_ATIR;
 				break;
 			case 140:
+			case 440://赤外同時測定
 				//光源切り替え(->赤外)
 				G.FORM10.LED_SET(0, false);//透過
 				G.FORM10.LED_SET(1, false);//反射
@@ -2479,6 +2632,11 @@ a_write("光源切替:->赤外");
 			case 101://透過:トレース
 			case 121://反射:トレース
 			case 141://赤外:トレース
+#if true//2018.06.04 赤外同時測定
+			case 401://赤外同時測定
+			case 421://赤外同時測定
+			case 441://赤外同時測定
+#endif
 //■■■■■■■■■■if (this.AUT_STS == 71 || G.SS.PLM_AUT_EXAT == 1) {
 //■■■■■■■■■■		set_expo_mode(/*auto*/1);
 //■■■■■■■■■■}
@@ -2487,15 +2645,32 @@ a_write("光源切替:->赤外");
 			case 102://透過:トレース
 			case 122://反射:トレース
 			case 142://赤外:トレース
+#if true//2018.06.04 赤外同時測定
+			case 402://赤外同時測定
+			case 422://赤外同時測定
+			case 442://赤外同時測定
+#endif
 				//カメラ安定待機
 				if ((Environment.TickCount - m_adat.chk1) < (G.SS.ETC_LED_WAIT*1000)) {
 					NXT_STS = this.AUT_STS;
 				}
 				else if (G.SS.PLM_AUT_CNST && this.AUT_STS != 72) {
 					if (G.CAM_GAI_STS == 1 || G.CAM_EXP_STS == 1 || G.CAM_WBL_STS == 1) {/*1:自動*/
-						set_expo_mode(/*const*/0);
+#if true//2018.06.04 赤外同時測定
+							set_expo_const();
+#else
+							set_expo_mode(/*const*/0);
+#endif
 					}
 				}
+#if true//2018.06.04 赤外同時測定
+				if (this.AUT_STS == 402 || this.AUT_STS == 422) {
+					NXT_STS = m_adat.ir_nxst;
+					if (NXT_STS != 17 && NXT_STS != 27 && NXT_STS != 37) {
+						NXT_STS = NXT_STS;
+					}
+				}
+#endif
 				break;
 			case 73:
 				NXT_STS = 1;
@@ -2546,6 +2721,9 @@ a_write("次へ移動");
 			case 114://透過:トレース
 			case 134://反射:トレース
 			case 154://赤外:トレース
+#if true//2018.06.04 赤外同時測定
+			case 443://赤外同時測定
+#endif
 				if (true) {
 					string path0, path1;
 					path0 = get_aut_path(m_adat.f_idx);
@@ -2555,6 +2733,18 @@ a_write("次へ移動");
 					G.FORM02.save_image(path1);
 a_write(string.Format("画像保存:{0}", path0));
 				}
+#if true//2018.06.04 赤外同時測定
+				if (this.AUT_STS == 443) {
+					m_adat.ir_done = true;
+					if ((m_adat.ir_lsbk & 1)!=0) {
+						NXT_STS = 400;//透過に戻す
+					}
+					else {
+						NXT_STS = 420;//反射に戻す
+					}
+					break;
+				}
+#endif
 				if (m_adat.z_idx == 0) {
 					m_adat.z_cur = G.PLM_POS[2];
 				}
@@ -2612,8 +2802,12 @@ a_write(string.Format("画像保存:{0}", path0));
 #endif
 				}
 				else {
+#if true//2018.06.04 赤外同時測定
+					MOVE_ABS_XY(G.SS.PLM_AUT_HP_X, G.SS.PLM_AUT_HP_Y);
+#else
 					//中上
 					MOVE_ABS_XY((G.SS.PLM_MLIM[0] + G.SS.PLM_PLIM[0]) / 2, G.SS.PLM_MLIM[1]);
+#endif
 				}
 a_write("開始位置へ移動");
 				break;
@@ -2780,6 +2974,9 @@ a_write("光源切替:->反射");
 				}
 				else {
 					//f軸停止待ち
+#if true//2018.06.04 赤外同時測定
+					m_adat.ir_done = false;
+#endif
 					if ((G.PLM_STS & (1|2|4)) == 0) {
 						if (m_bsla[0] != 0 || m_bsla[1] != 0) {
 #if true//2018.05.23(毛髪右端での繰り返し発生対応)

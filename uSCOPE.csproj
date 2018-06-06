@@ -165,23 +165,11 @@
     <Compile Include="Form21.Designer.cs">
       <DependentUpon>Form21.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form10BAK.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form10BAK.Designer.cs">
-      <DependentUpon>Form10BAK.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form30.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form30.designer.cs">
       <DependentUpon>Form30.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmSettingsBAK.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmSettingsBAK.designer.cs">
-      <DependentUpon>frmSettingsBAK.cs</DependentUpon>
     </Compile>
     <Compile Include="Form31.cs">
       <SubType>Form</SubType>
@@ -201,23 +189,11 @@
     <Compile Include="Form33.designer.cs">
       <DependentUpon>Form33.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form21BAK.cs">
+    <Compile Include="Form22.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form21BAK.Designer.cs">
-      <DependentUpon>Form21BAK.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form11BAK.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form11BAK.Designer.cs">
-      <DependentUpon>Form11BAK.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form12BAK.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form12BAK.Designer.cs">
-      <DependentUpon>Form12BAK.cs</DependentUpon>
+    <Compile Include="Form22.Designer.cs">
+      <DependentUpon>Form22.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="DlgProgress.resx">
       <DependentUpon>DlgProgress.cs</DependentUpon>
@@ -271,14 +247,8 @@
     <EmbeddedResource Include="Form21.resx">
       <DependentUpon>Form21.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form10BAK.resx">
-      <DependentUpon>Form10BAK.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form30.resx">
       <DependentUpon>Form30.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmSettingsBAK.resx">
-      <DependentUpon>frmSettingsBAK.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form31.resx">
       <DependentUpon>Form31.cs</DependentUpon>
@@ -289,14 +259,8 @@
     <EmbeddedResource Include="Form33.resx">
       <DependentUpon>Form33.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form21BAK.resx">
-      <DependentUpon>Form21BAK.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form11BAK.resx">
-      <DependentUpon>Form11BAK.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form12BAK.resx">
-      <DependentUpon>Form12BAK.cs</DependentUpon>
+    <EmbeddedResource Include="Form22.resx">
+      <DependentUpon>Form22.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

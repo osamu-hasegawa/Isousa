@@ -33,6 +33,10 @@
 			this.textBox12 = new System.Windows.Forms.TextBox();
 			this.textBox8 = new System.Windows.Forms.TextBox();
 			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.checkBox10 = new System.Windows.Forms.CheckBox();
+			this.checkBox9 = new System.Windows.Forms.CheckBox();
+			this.checkBox8 = new System.Windows.Forms.CheckBox();
+			this.checkBox7 = new System.Windows.Forms.CheckBox();
 			this.label33 = new System.Windows.Forms.Label();
 			this.textBox11 = new System.Windows.Forms.TextBox();
 			this.textBox71 = new System.Windows.Forms.TextBox();
@@ -42,6 +46,7 @@
 			this.textBox6 = new System.Windows.Forms.TextBox();
 			this.textBox9 = new System.Windows.Forms.TextBox();
 			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
@@ -153,11 +158,6 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textBox67 = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.checkBox7 = new System.Windows.Forms.CheckBox();
-			this.checkBox8 = new System.Windows.Forms.CheckBox();
-			this.checkBox9 = new System.Windows.Forms.CheckBox();
-			this.checkBox10 = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -275,6 +275,50 @@
 			this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox2.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
 			// 
+			// checkBox10
+			// 
+			this.checkBox10.AutoSize = true;
+			this.checkBox10.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox10.Location = new System.Drawing.Point(280, 259);
+			this.checkBox10.Name = "checkBox10";
+			this.checkBox10.Size = new System.Drawing.Size(40, 16);
+			this.checkBox10.TabIndex = 8;
+			this.checkBox10.Text = "ON";
+			this.checkBox10.UseVisualStyleBackColor = false;
+			// 
+			// checkBox9
+			// 
+			this.checkBox9.AutoSize = true;
+			this.checkBox9.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox9.Location = new System.Drawing.Point(220, 259);
+			this.checkBox9.Name = "checkBox9";
+			this.checkBox9.Size = new System.Drawing.Size(40, 16);
+			this.checkBox9.TabIndex = 8;
+			this.checkBox9.Text = "ON";
+			this.checkBox9.UseVisualStyleBackColor = false;
+			// 
+			// checkBox8
+			// 
+			this.checkBox8.AutoSize = true;
+			this.checkBox8.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox8.Location = new System.Drawing.Point(157, 259);
+			this.checkBox8.Name = "checkBox8";
+			this.checkBox8.Size = new System.Drawing.Size(40, 16);
+			this.checkBox8.TabIndex = 8;
+			this.checkBox8.Text = "ON";
+			this.checkBox8.UseVisualStyleBackColor = false;
+			// 
+			// checkBox7
+			// 
+			this.checkBox7.AutoSize = true;
+			this.checkBox7.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox7.Location = new System.Drawing.Point(98, 259);
+			this.checkBox7.Name = "checkBox7";
+			this.checkBox7.Size = new System.Drawing.Size(40, 16);
+			this.checkBox7.TabIndex = 8;
+			this.checkBox7.Text = "ON";
+			this.checkBox7.UseVisualStyleBackColor = false;
+			// 
 			// label33
 			// 
 			this.label33.AutoSize = true;
@@ -361,6 +405,15 @@
 			this.textBox5.TabIndex = 4;
 			this.textBox5.Text = "0";
 			this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(8, 259);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(63, 12);
+			this.label4.TabIndex = 1;
+			this.label4.Text = "パワーセーブ";
 			// 
 			// label11
 			// 
@@ -1349,6 +1402,7 @@
 			// 
 			// comboBox4
 			// 
+			this.comboBox4.BackColor = System.Drawing.Color.Gold;
 			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox4.FormattingEnabled = true;
 			this.comboBox4.Items.AddRange(new object[] {
@@ -1453,59 +1507,6 @@
 			this.textBox67.TabIndex = 0;
 			this.textBox67.Text = "0";
 			this.textBox67.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(8, 259);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(63, 12);
-			this.label4.TabIndex = 1;
-			this.label4.Text = "パワーセーブ";
-			// 
-			// checkBox7
-			// 
-			this.checkBox7.AutoSize = true;
-			this.checkBox7.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox7.Location = new System.Drawing.Point(98, 259);
-			this.checkBox7.Name = "checkBox7";
-			this.checkBox7.Size = new System.Drawing.Size(40, 16);
-			this.checkBox7.TabIndex = 8;
-			this.checkBox7.Text = "ON";
-			this.checkBox7.UseVisualStyleBackColor = false;
-			// 
-			// checkBox8
-			// 
-			this.checkBox8.AutoSize = true;
-			this.checkBox8.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox8.Location = new System.Drawing.Point(157, 259);
-			this.checkBox8.Name = "checkBox8";
-			this.checkBox8.Size = new System.Drawing.Size(40, 16);
-			this.checkBox8.TabIndex = 8;
-			this.checkBox8.Text = "ON";
-			this.checkBox8.UseVisualStyleBackColor = false;
-			// 
-			// checkBox9
-			// 
-			this.checkBox9.AutoSize = true;
-			this.checkBox9.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox9.Location = new System.Drawing.Point(220, 259);
-			this.checkBox9.Name = "checkBox9";
-			this.checkBox9.Size = new System.Drawing.Size(40, 16);
-			this.checkBox9.TabIndex = 8;
-			this.checkBox9.Text = "ON";
-			this.checkBox9.UseVisualStyleBackColor = false;
-			// 
-			// checkBox10
-			// 
-			this.checkBox10.AutoSize = true;
-			this.checkBox10.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox10.Location = new System.Drawing.Point(280, 259);
-			this.checkBox10.Name = "checkBox10";
-			this.checkBox10.Size = new System.Drawing.Size(40, 16);
-			this.checkBox10.TabIndex = 8;
-			this.checkBox10.Text = "ON";
-			this.checkBox10.UseVisualStyleBackColor = false;
 			// 
 			// Form30
 			// 
