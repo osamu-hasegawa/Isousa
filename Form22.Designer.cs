@@ -93,13 +93,8 @@
             -2147483648});
 			this.numericUpDown11.Name = "numericUpDown11";
 			this.numericUpDown11.Size = new System.Drawing.Size(51, 19);
-			this.numericUpDown11.TabIndex = 5;
+			this.numericUpDown11.TabIndex = 1;
 			this.numericUpDown11.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown11.Value = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
 			// 
 			// label11
 			// 
@@ -132,13 +127,8 @@
             -2147483648});
 			this.numericUpDown10.Name = "numericUpDown10";
 			this.numericUpDown10.Size = new System.Drawing.Size(51, 19);
-			this.numericUpDown10.TabIndex = 5;
+			this.numericUpDown10.TabIndex = 0;
 			this.numericUpDown10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown10.Value = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
 			// 
 			// Form22
 			// 

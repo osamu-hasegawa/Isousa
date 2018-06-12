@@ -90,8 +90,8 @@ namespace uSCOPE
 				//---
 				DDV.DDX(bUpdate, this.checkBox2      , ref m_ss.PLM_AUT_HPOS);
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton4, this.radioButton5}, ref G.SS.PLM_AUT_HMOD);
-				DDV.DDX(bUpdate, this.numericUpDown10 , ref m_ss.PLM_AUT_HP_X);
-				DDV.DDX(bUpdate, this.numericUpDown11 , ref m_ss.PLM_AUT_HP_Y);
+				DDV.DDX(bUpdate, this.numericUpDown10 , ref m_ss.PLM_AUT_HP_X, G.SS.PLM_MLIM[0], G.SS.PLM_PLIM[0]);
+				DDV.DDX(bUpdate, this.numericUpDown11 , ref m_ss.PLM_AUT_HP_Y, G.SS.PLM_MLIM[1], G.SS.PLM_PLIM[1]);
 				DDV.DDX(bUpdate, this.numericUpDown12, ref m_ss.PLM_AUT_HPRT);
 				DDV.DDX(bUpdate, this.numericUpDown13, ref m_ss.PLM_AUT_HPMN);
 				DDV.DDX(bUpdate, this.numericUpDown14, ref m_ss.PLM_AUT_HPMX);
