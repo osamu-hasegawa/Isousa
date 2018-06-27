@@ -112,6 +112,11 @@
 			this.numericUpDown19 = new System.Windows.Forms.NumericUpDown();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
+			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.label32 = new System.Windows.Forms.Label();
+			this.comboBox7 = new System.Windows.Forms.ComboBox();
+			this.label33 = new System.Windows.Forms.Label();
+			this.comboBox9 = new System.Windows.Forms.ComboBox();
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -135,6 +140,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown40)).BeginInit();
 			this.groupBox6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown19)).BeginInit();
+			this.groupBox5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox3
@@ -144,7 +150,7 @@
 			this.groupBox3.Controls.Add(this.label8);
 			this.groupBox3.Controls.Add(this.label10);
 			this.groupBox3.Controls.Add(this.label7);
-			this.groupBox3.Location = new System.Drawing.Point(12, 317);
+			this.groupBox3.Location = new System.Drawing.Point(12, 391);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(288, 64);
 			this.groupBox3.TabIndex = 48;
@@ -260,13 +266,9 @@
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.checkBox8);
-			this.groupBox2.Controls.Add(this.label31);
-			this.groupBox2.Controls.Add(this.label30);
-			this.groupBox2.Controls.Add(this.label27);
 			this.groupBox2.Controls.Add(this.label29);
 			this.groupBox2.Controls.Add(this.label28);
 			this.groupBox2.Controls.Add(this.button4);
-			this.groupBox2.Controls.Add(this.checkBox9);
 			this.groupBox2.Controls.Add(this.label4);
 			this.groupBox2.Controls.Add(this.comboBox8);
 			this.groupBox2.Controls.Add(this.label26);
@@ -275,11 +277,9 @@
 			this.groupBox2.Controls.Add(this.radioButton1);
 			this.groupBox2.Controls.Add(this.radioButton2);
 			this.groupBox2.Controls.Add(this.button3);
-			this.groupBox2.Controls.Add(this.numericUpDown6);
-			this.groupBox2.Controls.Add(this.numericUpDown5);
 			this.groupBox2.Location = new System.Drawing.Point(12, 12);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(289, 244);
+			this.groupBox2.Size = new System.Drawing.Size(289, 201);
 			this.groupBox2.TabIndex = 50;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "毛髪画像";
@@ -287,7 +287,7 @@
 			// checkBox8
 			// 
 			this.checkBox8.AutoSize = true;
-			this.checkBox8.Location = new System.Drawing.Point(31, 219);
+			this.checkBox8.Location = new System.Drawing.Point(31, 177);
 			this.checkBox8.Name = "checkBox8";
 			this.checkBox8.Size = new System.Drawing.Size(211, 16);
 			this.checkBox8.TabIndex = 57;
@@ -297,7 +297,7 @@
 			// label31
 			// 
 			this.label31.AutoSize = true;
-			this.label31.Location = new System.Drawing.Point(205, 196);
+			this.label31.Location = new System.Drawing.Point(205, 34);
 			this.label31.Name = "label31";
 			this.label31.Size = new System.Drawing.Size(17, 12);
 			this.label31.TabIndex = 38;
@@ -307,22 +307,20 @@
 			// label30
 			// 
 			this.label30.AutoSize = true;
-			this.label30.Location = new System.Drawing.Point(231, 176);
+			this.label30.Location = new System.Drawing.Point(231, 14);
 			this.label30.Name = "label30";
 			this.label30.Size = new System.Drawing.Size(29, 12);
 			this.label30.TabIndex = 38;
 			this.label30.Text = "列数";
-			this.label30.Visible = false;
 			// 
 			// label27
 			// 
 			this.label27.AutoSize = true;
-			this.label27.Location = new System.Drawing.Point(172, 175);
+			this.label27.Location = new System.Drawing.Point(172, 13);
 			this.label27.Name = "label27";
 			this.label27.Size = new System.Drawing.Size(29, 12);
 			this.label27.TabIndex = 38;
 			this.label27.Text = "行数";
-			this.label27.Visible = false;
 			// 
 			// label29
 			// 
@@ -336,7 +334,7 @@
 			// label28
 			// 
 			this.label28.AutoSize = true;
-			this.label28.Location = new System.Drawing.Point(27, 150);
+			this.label28.Location = new System.Drawing.Point(27, 149);
 			this.label28.Name = "label28";
 			this.label28.Size = new System.Drawing.Size(36, 12);
 			this.label28.TabIndex = 38;
@@ -356,13 +354,13 @@
 			// checkBox9
 			// 
 			this.checkBox9.AutoSize = true;
-			this.checkBox9.Location = new System.Drawing.Point(31, 193);
+			this.checkBox9.Location = new System.Drawing.Point(29, 31);
 			this.checkBox9.Name = "checkBox9";
 			this.checkBox9.Size = new System.Drawing.Size(100, 16);
 			this.checkBox9.TabIndex = 11;
 			this.checkBox9.Text = "深度合成を行う";
 			this.checkBox9.UseVisualStyleBackColor = true;
-			this.checkBox9.Visible = false;
+			this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
 			// 
 			// comboBox8
 			// 
@@ -374,7 +372,7 @@
             "Z10 (AF位置)",
             "Z11 (+側)",
             "Z12 (+側)"});
-			this.comboBox8.Location = new System.Drawing.Point(162, 147);
+			this.comboBox8.Location = new System.Drawing.Point(162, 145);
 			this.comboBox8.Name = "comboBox8";
 			this.comboBox8.Size = new System.Drawing.Size(75, 20);
 			this.comboBox8.TabIndex = 0;
@@ -435,7 +433,7 @@
 			// 
 			// numericUpDown6
 			// 
-			this.numericUpDown6.Location = new System.Drawing.Point(223, 192);
+			this.numericUpDown6.Location = new System.Drawing.Point(223, 30);
 			this.numericUpDown6.Minimum = new decimal(new int[] {
             1,
             0,
@@ -450,11 +448,10 @@
             0,
             0,
             0});
-			this.numericUpDown6.Visible = false;
 			// 
 			// numericUpDown5
 			// 
-			this.numericUpDown5.Location = new System.Drawing.Point(162, 191);
+			this.numericUpDown5.Location = new System.Drawing.Point(162, 29);
 			this.numericUpDown5.Minimum = new decimal(new int[] {
             1,
             0,
@@ -469,12 +466,11 @@
             0,
             0,
             0});
-			this.numericUpDown5.Visible = false;
 			// 
 			// button1
 			// 
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button1.Location = new System.Drawing.Point(76, 576);
+			this.button1.Location = new System.Drawing.Point(76, 650);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 26);
 			this.button1.TabIndex = 51;
@@ -485,7 +481,7 @@
 			// button2
 			// 
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(174, 576);
+			this.button2.Location = new System.Drawing.Point(174, 650);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 26);
 			this.button2.TabIndex = 52;
@@ -506,7 +502,7 @@
 			this.groupBox4.Controls.Add(this.numericUpDown2);
 			this.groupBox4.Controls.Add(this.label3);
 			this.groupBox4.Controls.Add(this.label46);
-			this.groupBox4.Location = new System.Drawing.Point(12, 386);
+			this.groupBox4.Location = new System.Drawing.Point(12, 460);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(289, 179);
 			this.groupBox4.TabIndex = 48;
@@ -676,7 +672,7 @@
 			this.groupBox1.Controls.Add(this.numericUpDown3);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Location = new System.Drawing.Point(14, 262);
+			this.groupBox1.Location = new System.Drawing.Point(14, 336);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(286, 49);
 			this.groupBox1.TabIndex = 57;
@@ -1278,12 +1274,78 @@
 			// label25
 			// 
 			this.label25.AutoSize = true;
-			this.label25.Location = new System.Drawing.Point(7, 583);
+			this.label25.Location = new System.Drawing.Point(7, 657);
 			this.label25.Name = "label25";
 			this.label25.Size = new System.Drawing.Size(47, 12);
 			this.label25.TabIndex = 55;
 			this.label25.Text = "320, 620";
 			this.label25.Visible = false;
+			// 
+			// groupBox5
+			// 
+			this.groupBox5.Controls.Add(this.numericUpDown6);
+			this.groupBox5.Controls.Add(this.label31);
+			this.groupBox5.Controls.Add(this.label32);
+			this.groupBox5.Controls.Add(this.numericUpDown5);
+			this.groupBox5.Controls.Add(this.label30);
+			this.groupBox5.Controls.Add(this.comboBox7);
+			this.groupBox5.Controls.Add(this.comboBox9);
+			this.groupBox5.Controls.Add(this.checkBox9);
+			this.groupBox5.Controls.Add(this.label27);
+			this.groupBox5.Controls.Add(this.label33);
+			this.groupBox5.Location = new System.Drawing.Point(14, 220);
+			this.groupBox5.Name = "groupBox5";
+			this.groupBox5.Size = new System.Drawing.Size(286, 109);
+			this.groupBox5.TabIndex = 60;
+			this.groupBox5.TabStop = false;
+			this.groupBox5.Text = "深度合成";
+			// 
+			// label32
+			// 
+			this.label32.AutoSize = true;
+			this.label32.Location = new System.Drawing.Point(30, 57);
+			this.label32.Name = "label32";
+			this.label32.Size = new System.Drawing.Size(91, 12);
+			this.label32.TabIndex = 38;
+			this.label32.Text = "コントラスト値計算";
+			// 
+			// comboBox7
+			// 
+			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox7.FormattingEnabled = true;
+			this.comboBox7.Items.AddRange(new object[] {
+            "カラー画像",
+            "赤外画像",
+            "カラーと赤外"});
+			this.comboBox7.Location = new System.Drawing.Point(160, 55);
+			this.comboBox7.Name = "comboBox7";
+			this.comboBox7.Size = new System.Drawing.Size(88, 20);
+			this.comboBox7.TabIndex = 0;
+			// 
+			// label33
+			// 
+			this.label33.AutoSize = true;
+			this.label33.Location = new System.Drawing.Point(27, 82);
+			this.label33.Name = "label33";
+			this.label33.Size = new System.Drawing.Size(104, 12);
+			this.label33.TabIndex = 17;
+			this.label33.Text = "画像・平滑化フィルタ";
+			// 
+			// comboBox9
+			// 
+			this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox9.FormattingEnabled = true;
+			this.comboBox9.Items.AddRange(new object[] {
+            "無し",
+            "3x3",
+            "5x5",
+            "7x7",
+            "9x9",
+            "11x11"});
+			this.comboBox9.Location = new System.Drawing.Point(160, 79);
+			this.comboBox9.Name = "comboBox9";
+			this.comboBox9.Size = new System.Drawing.Size(88, 20);
+			this.comboBox9.TabIndex = 0;
 			// 
 			// Form21
 			// 
@@ -1291,7 +1353,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(315, 622);
+			this.ClientSize = new System.Drawing.Size(315, 684);
+			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.label25);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox1);
@@ -1336,6 +1399,8 @@
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown19)).EndInit();
+			this.groupBox5.ResumeLayout(false);
+			this.groupBox5.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1427,6 +1492,11 @@
 		private System.Windows.Forms.CheckBox checkBox9;
 		private System.Windows.Forms.NumericUpDown numericUpDown6;
 		private System.Windows.Forms.NumericUpDown numericUpDown5;
+		private System.Windows.Forms.GroupBox groupBox5;
+		private System.Windows.Forms.Label label32;
+		private System.Windows.Forms.ComboBox comboBox7;
+		private System.Windows.Forms.ComboBox comboBox9;
+		private System.Windows.Forms.Label label33;
 
 	}
 }

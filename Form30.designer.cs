@@ -1402,7 +1402,7 @@
 			// 
 			// comboBox4
 			// 
-			this.comboBox4.BackColor = System.Drawing.Color.Gold;
+			this.comboBox4.BackColor = System.Drawing.Color.DarkOrange;
 			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox4.FormattingEnabled = true;
 			this.comboBox4.Items.AddRange(new object[] {
@@ -1482,7 +1482,7 @@
 			// 
 			// label3
 			// 
-			this.label3.BackColor = System.Drawing.SystemColors.Control;
+			this.label3.BackColor = System.Drawing.Color.DarkOrange;
 			this.label3.Location = new System.Drawing.Point(15, 114);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(108, 28);

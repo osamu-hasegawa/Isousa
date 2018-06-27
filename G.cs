@@ -260,7 +260,9 @@ namespace uSCOPE
 			public int ETC_UIF_BACK =  0;
 			public bool ETC_UIF_CUTI = false;
 			public bool ETC_LED_IRGR = true;
+#if false//2018.06.07
 			public int ETC_CLF_CTCR = 1;
+#endif
 			//---
 			public int ETC_DAN_MODE = 0;
 			public int ETC_HIS_MODE = 0;
@@ -310,7 +312,13 @@ namespace uSCOPE
 			public bool MOZ_IRC_CK02 = true;
 			public bool MOZ_IRC_CK03 = true;
 			public int MOZ_IRC_DISP = 0;
-			//
+			//---
+			public bool MOZ_FST_CK00 = false;
+			public int MOZ_FST_RCNT = 3;
+			public int MOZ_FST_CCNT = 3;
+			public int MOZ_FST_MODE = 0;
+			public int MOZ_FST_FCOF = 0;
+			//---
 			public int TST_PAR_GAUS = 0;
 			public bool TST_PAR_CHK1 = true;
 			public bool TST_PAR_CHK2 = false;

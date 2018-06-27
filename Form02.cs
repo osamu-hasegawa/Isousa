@@ -3329,6 +3329,8 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 		[DllImport("IMGSUB.DLL")]
 		private static extern void OCV_DILATE(Int32 I, Int32 H, Int32 kernel_size, Int32 cnt);
 
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_MINMAX_ROI(Int32 I, Int32 x, Int32 y, Int32 w, Int32 h, ref Int32 pmin, ref Int32 pmax);
 		
 		private static int PF2BPP(PixelFormat pf)
 		{
@@ -4717,6 +4719,46 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				}
 				G.IR.CIR_CNT = 1;
 			}
+		}
+		static public double[] DO_PROC_FOCUS(Bitmap bi, int FLT_COEF, int rcnt, int ccnt)
+		{
+			int	ret;
+			BitmapData bmpData;
+			int	imin = 0, imax = 0;
+			double fcnt;
+			ArrayList ar = new ArrayList();
+
+			//---
+			bmpData = bi.LockBits(new Rectangle(0, 0, bi.Width, bi.Height), ImageLockMode.ReadWrite, bi.PixelFormat);
+			ret = OCV_SET_IMG(bmpData.Scan0, bmpData.Width, bmpData.Height, bmpData.Stride, PF2BPP(bmpData.PixelFormat));
+			bi.UnlockBits(bmpData);
+			//---
+			//グレースケール画像
+			OCV_TO_GRAY((Int32)IMG.IMG_A, (Int32)IMG.IMG_G);
+			//---
+			if (FLT_COEF > 0) {
+				//フィルタ適用
+				int[] cofs = { 3, 5, 7, 9, 11 };
+				int cof = cofs[FLT_COEF-1];
+				
+				OCV_SMOOTH((int)IMG.IMG_G, cof);
+			}
+			int wid = bmpData.Width / ccnt;
+			int hei = bmpData.Height / rcnt;
+
+			for (int r = 0; r < rcnt; r++) {
+				for (int c = 0; c < ccnt; c++) {
+					int x = c*wid;
+					int y = r*hei;
+					int w = (c == (ccnt-1) ? (bmpData.Width -x): wid);
+					int h = (r == (rcnt-1) ? (bmpData.Height-y): hei);
+
+					OCV_MINMAX_ROI((Int32)IMG.IMG_G, x, y, w, h, ref imin, ref imax);
+					fcnt = (double)(imax - imin) / (double)(imax + imin);
+					ar.Add(fcnt);
+				}
+			}
+			return((double[])ar.ToArray(typeof(double)));
 		}
 
 		private void pictureBox1_MouseDoubleClick(object sender, MouseEventArgs e)

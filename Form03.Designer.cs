@@ -56,23 +56,26 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.panel10 = new System.Windows.Forms.Panel();
-			this.label9 = new System.Windows.Forms.Label();
-			this.label28 = new System.Windows.Forms.Label();
-			this.checkBox9 = new System.Windows.Forms.CheckBox();
-			this.checkBox10 = new System.Windows.Forms.CheckBox();
-			this.comboBox8 = new System.Windows.Forms.ComboBox();
-			this.checkBox8 = new System.Windows.Forms.CheckBox();
-			this.checkBox2 = new System.Windows.Forms.CheckBox();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.label7 = new System.Windows.Forms.Label();
+			this.panel11 = new System.Windows.Forms.Panel();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.radioButton3 = new System.Windows.Forms.RadioButton();
+			this.radioButton4 = new System.Windows.Forms.RadioButton();
+			this.panel5 = new System.Windows.Forms.Panel();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.panel8 = new System.Windows.Forms.Panel();
-			this.panel5 = new System.Windows.Forms.Panel();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.radioButton4 = new System.Windows.Forms.RadioButton();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label7 = new System.Windows.Forms.Label();
-			this.radioButton3 = new System.Windows.Forms.RadioButton();
+			this.checkBox9 = new System.Windows.Forms.CheckBox();
+			this.checkBox2 = new System.Windows.Forms.CheckBox();
+			this.checkBox8 = new System.Windows.Forms.CheckBox();
+			this.checkBox10 = new System.Windows.Forms.CheckBox();
+			this.panel10 = new System.Windows.Forms.Panel();
+			this.panel13 = new System.Windows.Forms.Panel();
+			this.label28 = new System.Windows.Forms.Label();
+			this.comboBox8 = new System.Windows.Forms.ComboBox();
+			this.label9 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.comboBox2 = new System.Windows.Forms.ComboBox();
 			this.checkBox12 = new System.Windows.Forms.CheckBox();
@@ -102,9 +105,6 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			this.panel11 = new System.Windows.Forms.Panel();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-			this.panel13 = new System.Windows.Forms.Panel();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
 			this.groupBox2.SuspendLayout();
@@ -114,14 +114,14 @@
 			this.panel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
+			this.panel11.SuspendLayout();
+			this.panel13.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.groupBox5.SuspendLayout();
-			this.panel11.SuspendLayout();
-			this.flowLayoutPanel1.SuspendLayout();
-			this.panel13.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
@@ -347,102 +347,112 @@
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "画像";
 			// 
-			// panel10
+			// flowLayoutPanel1
 			// 
-			this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel10.Location = new System.Drawing.Point(8, 243);
-			this.panel10.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
-			this.panel10.Name = "panel10";
-			this.panel10.Size = new System.Drawing.Size(130, 2);
-			this.panel10.TabIndex = 12;
+			this.flowLayoutPanel1.Controls.Add(this.panel11);
+			this.flowLayoutPanel1.Controls.Add(this.radioButton3);
+			this.flowLayoutPanel1.Controls.Add(this.radioButton4);
+			this.flowLayoutPanel1.Controls.Add(this.panel5);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox1);
+			this.flowLayoutPanel1.Controls.Add(this.panel8);
+			this.flowLayoutPanel1.Controls.Add(this.label7);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox9);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox2);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox8);
+			this.flowLayoutPanel1.Controls.Add(this.checkBox10);
+			this.flowLayoutPanel1.Controls.Add(this.panel10);
+			this.flowLayoutPanel1.Controls.Add(this.panel13);
+			this.flowLayoutPanel1.Controls.Add(this.label9);
+			this.flowLayoutPanel1.Controls.Add(this.button1);
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 15);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 296);
+			this.flowLayoutPanel1.TabIndex = 0;
 			// 
-			// label9
+			// label7
 			// 
-			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(10, 289);
-			this.label9.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(135, 24);
-			this.label9.TabIndex = 38;
-			this.label9.Text = "グラフ表示には反映されません";
+			this.label7.AutoSize = true;
+			this.flowLayoutPanel1.SetFlowBreak(this.label7, true);
+			this.label7.Location = new System.Drawing.Point(10, 123);
+			this.label7.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(53, 12);
+			this.label7.TabIndex = 0;
+			this.label7.Text = "赤外画像";
 			// 
-			// label28
+			// panel11
 			// 
-			this.label28.AutoSize = true;
-			this.label28.Location = new System.Drawing.Point(3, 10);
-			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(36, 12);
-			this.label28.TabIndex = 38;
-			this.label28.Text = "Z位置";
+			this.panel11.Controls.Add(this.comboBox1);
+			this.panel11.Controls.Add(this.label3);
+			this.panel11.Controls.Add(this.label2);
+			this.panel11.Location = new System.Drawing.Point(7, 3);
+			this.panel11.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+			this.panel11.Name = "panel11";
+			this.panel11.Size = new System.Drawing.Size(131, 35);
+			this.panel11.TabIndex = 39;
 			// 
-			// checkBox9
+			// comboBox1
 			// 
-			this.checkBox9.AutoSize = true;
-			this.checkBox9.Checked = true;
-			this.checkBox9.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox9.Location = new System.Drawing.Point(10, 148);
-			this.checkBox9.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBox9.Name = "checkBox9";
-			this.checkBox9.Size = new System.Drawing.Size(60, 16);
-			this.checkBox9.TabIndex = 11;
-			this.checkBox9.Text = "毛髄径";
-			this.checkBox9.UseVisualStyleBackColor = true;
-			this.checkBox9.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Location = new System.Drawing.Point(55, 8);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(40, 20);
+			this.comboBox1.TabIndex = 1;
+			this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
 			// 
-			// checkBox10
+			// label3
 			// 
-			this.checkBox10.Location = new System.Drawing.Point(10, 192);
-			this.checkBox10.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBox10.Name = "checkBox10";
-			this.checkBox10.Size = new System.Drawing.Size(123, 45);
-			this.checkBox10.TabIndex = 11;
-			this.checkBox10.Text = "カラー画像の代わりに赤外の毛髪抽出画像を表示する";
-			this.checkBox10.UseVisualStyleBackColor = true;
-			this.checkBox10.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(1, 11);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(29, 12);
+			this.label3.TabIndex = 0;
+			this.label3.Text = "毛髪";
 			// 
-			// comboBox8
+			// label2
 			// 
-			this.comboBox8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox8.FormattingEnabled = true;
-			this.comboBox8.Items.AddRange(new object[] {
-            "Z08 (-側)",
-            "Z09 (-側)",
-            "Z10 (AF位置)",
-            "Z11 (+側)",
-            "Z12 (+側)"});
-			this.comboBox8.Location = new System.Drawing.Point(45, 7);
-			this.comboBox8.Name = "comboBox8";
-			this.comboBox8.Size = new System.Drawing.Size(50, 20);
-			this.comboBox8.TabIndex = 0;
-			this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(101, 11);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(21, 12);
+			this.label2.TabIndex = 0;
+			this.label2.Text = "/ 1";
 			// 
-			// checkBox8
+			// radioButton3
 			// 
-			this.checkBox8.AutoSize = true;
-			this.checkBox8.Checked = true;
-			this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox8.Location = new System.Drawing.Point(10, 170);
-			this.checkBox8.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBox8.Name = "checkBox8";
-			this.checkBox8.Size = new System.Drawing.Size(74, 16);
-			this.checkBox8.TabIndex = 11;
-			this.checkBox8.Text = "中心ライン";
-			this.checkBox8.UseVisualStyleBackColor = true;
-			this.checkBox8.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			this.radioButton3.AutoSize = true;
+			this.radioButton3.Location = new System.Drawing.Point(10, 44);
+			this.radioButton3.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.radioButton3.Name = "radioButton3";
+			this.radioButton3.Size = new System.Drawing.Size(71, 16);
+			this.radioButton3.TabIndex = 0;
+			this.radioButton3.Text = "毛髪全体";
+			this.radioButton3.UseVisualStyleBackColor = true;
+			this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
-			// checkBox2
+			// radioButton4
 			// 
-			this.checkBox2.AutoSize = true;
-			this.checkBox2.Checked = true;
-			this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox2.Location = new System.Drawing.Point(83, 148);
-			this.checkBox2.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBox2.Name = "checkBox2";
-			this.checkBox2.Size = new System.Drawing.Size(48, 16);
-			this.checkBox2.TabIndex = 11;
-			this.checkBox2.Text = "輪郭";
-			this.checkBox2.UseVisualStyleBackColor = true;
-			this.checkBox2.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			this.radioButton4.AutoSize = true;
+			this.radioButton4.Checked = true;
+			this.radioButton4.Location = new System.Drawing.Point(10, 66);
+			this.radioButton4.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.radioButton4.Name = "radioButton4";
+			this.radioButton4.Size = new System.Drawing.Size(93, 16);
+			this.radioButton4.TabIndex = 0;
+			this.radioButton4.TabStop = true;
+			this.radioButton4.Text = "画像ファイル毎";
+			this.radioButton4.UseVisualStyleBackColor = true;
+			// 
+			// panel5
+			// 
+			this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel5.Location = new System.Drawing.Point(8, 88);
+			this.panel5.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
+			this.panel5.Name = "panel5";
+			this.panel5.Size = new System.Drawing.Size(130, 2);
+			this.panel5.TabIndex = 10;
 			// 
 			// checkBox1
 			// 
@@ -467,78 +477,112 @@
 			this.panel8.Size = new System.Drawing.Size(130, 2);
 			this.panel8.TabIndex = 10;
 			// 
-			// panel5
+			// checkBox9
 			// 
-			this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel5.Location = new System.Drawing.Point(8, 88);
-			this.panel5.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
-			this.panel5.Name = "panel5";
-			this.panel5.Size = new System.Drawing.Size(130, 2);
-			this.panel5.TabIndex = 10;
+			this.checkBox9.AutoSize = true;
+			this.checkBox9.Checked = true;
+			this.checkBox9.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox9.Location = new System.Drawing.Point(10, 148);
+			this.checkBox9.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.checkBox9.Name = "checkBox9";
+			this.checkBox9.Size = new System.Drawing.Size(60, 16);
+			this.checkBox9.TabIndex = 11;
+			this.checkBox9.Text = "毛髄径";
+			this.checkBox9.UseVisualStyleBackColor = true;
+			this.checkBox9.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
-			// comboBox1
+			// checkBox2
 			// 
-			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(55, 8);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(40, 20);
-			this.comboBox1.TabIndex = 1;
-			this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+			this.checkBox2.AutoSize = true;
+			this.checkBox2.Checked = true;
+			this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox2.Location = new System.Drawing.Point(83, 148);
+			this.checkBox2.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.checkBox2.Name = "checkBox2";
+			this.checkBox2.Size = new System.Drawing.Size(48, 16);
+			this.checkBox2.TabIndex = 11;
+			this.checkBox2.Text = "輪郭";
+			this.checkBox2.UseVisualStyleBackColor = true;
+			this.checkBox2.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
-			// label2
+			// checkBox8
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(101, 11);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(21, 12);
-			this.label2.TabIndex = 0;
-			this.label2.Text = "/ 1";
+			this.checkBox8.AutoSize = true;
+			this.checkBox8.Checked = true;
+			this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox8.Location = new System.Drawing.Point(10, 170);
+			this.checkBox8.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.checkBox8.Name = "checkBox8";
+			this.checkBox8.Size = new System.Drawing.Size(74, 16);
+			this.checkBox8.TabIndex = 11;
+			this.checkBox8.Text = "中心ライン";
+			this.checkBox8.UseVisualStyleBackColor = true;
+			this.checkBox8.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
-			// radioButton4
+			// checkBox10
 			// 
-			this.radioButton4.AutoSize = true;
-			this.radioButton4.Checked = true;
-			this.radioButton4.Location = new System.Drawing.Point(10, 66);
-			this.radioButton4.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.radioButton4.Name = "radioButton4";
-			this.radioButton4.Size = new System.Drawing.Size(93, 16);
-			this.radioButton4.TabIndex = 0;
-			this.radioButton4.TabStop = true;
-			this.radioButton4.Text = "画像ファイル毎";
-			this.radioButton4.UseVisualStyleBackColor = true;
+			this.checkBox10.Location = new System.Drawing.Point(10, 192);
+			this.checkBox10.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.checkBox10.Name = "checkBox10";
+			this.checkBox10.Size = new System.Drawing.Size(123, 45);
+			this.checkBox10.TabIndex = 11;
+			this.checkBox10.Text = "カラー画像の代わりに赤外の毛髪抽出画像を表示する";
+			this.checkBox10.UseVisualStyleBackColor = true;
+			this.checkBox10.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
-			// label3
+			// panel10
 			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(1, 11);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(29, 12);
-			this.label3.TabIndex = 0;
-			this.label3.Text = "毛髪";
+			this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel10.Location = new System.Drawing.Point(8, 243);
+			this.panel10.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
+			this.panel10.Name = "panel10";
+			this.panel10.Size = new System.Drawing.Size(130, 2);
+			this.panel10.TabIndex = 12;
 			// 
-			// label7
+			// panel13
 			// 
-			this.label7.AutoSize = true;
-			this.flowLayoutPanel1.SetFlowBreak(this.label7, true);
-			this.label7.Location = new System.Drawing.Point(10, 123);
-			this.label7.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(53, 12);
-			this.label7.TabIndex = 0;
-			this.label7.Text = "赤外画像";
+			this.panel13.Controls.Add(this.label28);
+			this.panel13.Controls.Add(this.comboBox8);
+			this.panel13.Location = new System.Drawing.Point(7, 251);
+			this.panel13.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+			this.panel13.Name = "panel13";
+			this.panel13.Size = new System.Drawing.Size(131, 35);
+			this.panel13.TabIndex = 2;
 			// 
-			// radioButton3
+			// label28
 			// 
-			this.radioButton3.AutoSize = true;
-			this.radioButton3.Location = new System.Drawing.Point(10, 44);
-			this.radioButton3.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.radioButton3.Name = "radioButton3";
-			this.radioButton3.Size = new System.Drawing.Size(71, 16);
-			this.radioButton3.TabIndex = 0;
-			this.radioButton3.Text = "毛髪全体";
-			this.radioButton3.UseVisualStyleBackColor = true;
-			this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			this.label28.AutoSize = true;
+			this.label28.Location = new System.Drawing.Point(3, 10);
+			this.label28.Name = "label28";
+			this.label28.Size = new System.Drawing.Size(36, 12);
+			this.label28.TabIndex = 38;
+			this.label28.Text = "Z位置";
+			// 
+			// comboBox8
+			// 
+			this.comboBox8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox8.FormattingEnabled = true;
+			this.comboBox8.Items.AddRange(new object[] {
+            "Z08 (-側)",
+            "Z09 (-側)",
+            "Z10 (AF位置)",
+            "Z11 (+側)",
+            "Z12 (+側)"});
+			this.comboBox8.Location = new System.Drawing.Point(45, 7);
+			this.comboBox8.Name = "comboBox8";
+			this.comboBox8.Size = new System.Drawing.Size(77, 20);
+			this.comboBox8.TabIndex = 0;
+			this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
+			// 
+			// label9
+			// 
+			this.label9.AutoSize = true;
+			this.label9.Location = new System.Drawing.Point(10, 289);
+			this.label9.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(135, 24);
+			this.label9.TabIndex = 38;
+			this.label9.Text = "グラフ表示には反映されません";
 			// 
 			// groupBox4
 			// 
@@ -867,50 +911,6 @@
 			this.label5.TabIndex = 0;
 			this.label5.Text = "光学倍率";
 			// 
-			// panel11
-			// 
-			this.panel11.Controls.Add(this.comboBox1);
-			this.panel11.Controls.Add(this.label3);
-			this.panel11.Controls.Add(this.label2);
-			this.panel11.Location = new System.Drawing.Point(7, 3);
-			this.panel11.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
-			this.panel11.Name = "panel11";
-			this.panel11.Size = new System.Drawing.Size(131, 35);
-			this.panel11.TabIndex = 39;
-			// 
-			// flowLayoutPanel1
-			// 
-			this.flowLayoutPanel1.Controls.Add(this.panel11);
-			this.flowLayoutPanel1.Controls.Add(this.radioButton3);
-			this.flowLayoutPanel1.Controls.Add(this.radioButton4);
-			this.flowLayoutPanel1.Controls.Add(this.panel5);
-			this.flowLayoutPanel1.Controls.Add(this.checkBox1);
-			this.flowLayoutPanel1.Controls.Add(this.panel8);
-			this.flowLayoutPanel1.Controls.Add(this.label7);
-			this.flowLayoutPanel1.Controls.Add(this.checkBox9);
-			this.flowLayoutPanel1.Controls.Add(this.checkBox2);
-			this.flowLayoutPanel1.Controls.Add(this.checkBox8);
-			this.flowLayoutPanel1.Controls.Add(this.checkBox10);
-			this.flowLayoutPanel1.Controls.Add(this.panel10);
-			this.flowLayoutPanel1.Controls.Add(this.panel13);
-			this.flowLayoutPanel1.Controls.Add(this.label9);
-			this.flowLayoutPanel1.Controls.Add(this.button1);
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 15);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 296);
-			this.flowLayoutPanel1.TabIndex = 0;
-			// 
-			// panel13
-			// 
-			this.panel13.Controls.Add(this.label28);
-			this.panel13.Controls.Add(this.comboBox8);
-			this.panel13.Location = new System.Drawing.Point(7, 251);
-			this.panel13.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
-			this.panel13.Name = "panel13";
-			this.panel13.Size = new System.Drawing.Size(131, 35);
-			this.panel13.TabIndex = 2;
-			// 
 			// Form03
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -936,6 +936,12 @@
 			this.panel1.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.groupBox3.ResumeLayout(false);
+			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
+			this.panel11.ResumeLayout(false);
+			this.panel11.PerformLayout();
+			this.panel13.ResumeLayout(false);
+			this.panel13.PerformLayout();
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
@@ -943,12 +949,6 @@
 			this.panel3.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
-			this.panel11.ResumeLayout(false);
-			this.panel11.PerformLayout();
-			this.flowLayoutPanel1.ResumeLayout(false);
-			this.flowLayoutPanel1.PerformLayout();
-			this.panel13.ResumeLayout(false);
-			this.panel13.PerformLayout();
 			this.ResumeLayout(false);
 
 		}

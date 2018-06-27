@@ -42,7 +42,7 @@ namespace uSCOPE
 		private int		m_thm_wid, m_thm_hei;
 		private ArrayList m_zpos_org = new ArrayList();
 		private ArrayList m_zpos_val = new ArrayList();
-
+		private string m_fold_of_dept;
 		//---
 		public Form03()
 		{
@@ -924,6 +924,11 @@ retry:
 			string key = seg.name_of_dm;
 			Point	pnt_of_pls;
 			bool ret;
+
+			if (key.Contains("ZDEPT")) {
+				key = key.Replace("ZDEPT", "ZP00D");
+			}
+
 			if ((ret = m_log_info.map_of_pos.TryGetValue(key, out pnt_of_pls))) {
 			}
 			else {
@@ -1191,20 +1196,20 @@ retry:
 			this.checkBox8.Enabled = 
 			this.checkBox9.Enabled = b;
 		}
-		private int get_hair_cnt(string zpos)
+		private int get_hair_cnt(string pext, string zpos)
 		{
 			int cnt = 0;
 #if true
 			for (int q = 0; q < 10; q++) {
 				string buf = q.ToString();
 				string[] files_cl =
-					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, buf + "CL_??"+zpos+".*");
+					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "CL_??"+zpos+".*");
 				string[] files_cr =
-					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, buf + "CR_??"+zpos+".*");
+					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "CR_??"+zpos+".*");
 				string[] files_ct =
-					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, buf + "CT_??"+zpos+".*");
+					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "CT_??"+zpos+".*");
 				string[] files_ir =
-					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, buf + "IR_??"+zpos+".*");
+					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "IR_??"+zpos+".*");
 				if (files_ct.Length <= 0 && files_cr.Length <= 0 && files_cl.Length <= 0) {
 					break;
 				}
@@ -1278,20 +1283,240 @@ retry:
 			}
 		}
 		//---
+		private bool make_focus_stack3(ArrayList ar_con, ArrayList ar_bmp_dep, out Bitmap bmp_dep)
+		{
+			bool ret = false;
+
+			bmp_dep = null;
+
+			try {
+				//string pat;
+				//string tmp = System.IO.Path.GetFileName(file);
+				//string[] ZXXXD;
+
+				//pat = tmp.Replace("ZP00D", "Z???D");
+				//ZXXXD = System.IO.Directory.GetFiles(path, pat);
+				bmp_dep = (Bitmap)((Bitmap)ar_bmp_dep[0]).Clone();
+
+				int wid = bmp_dep.Width / G.SS.MOZ_FST_CCNT;
+				int hei = bmp_dep.Height/ G.SS.MOZ_FST_RCNT;
+				int k = 0;
+				Graphics gr = Graphics.FromImage(bmp_dep);
+
+				for (int r = 0; r < G.SS.MOZ_FST_RCNT; r++) {
+					for (int c = 0; c < G.SS.MOZ_FST_CCNT; c++, k++) {
+						double fmax = -1;
+						int imax = 0;
+						//最大コントラストの画像を検索
+						for (int j = 0; j < ar_bmp_dep.Count; j++) {
+							double[] fcnt = (double[])ar_con[j];
+							if (fmax < fcnt[k]) {
+								fmax = fcnt[k];
+								imax = j;
+							}
+						}
+						int x = c*wid;
+						int y = r*hei;
+						int w = (c == (G.SS.MOZ_FST_CCNT-1) ? (bmp_dep.Width -x): wid);
+						int h = (r == (G.SS.MOZ_FST_RCNT-1) ? (bmp_dep.Height-y): hei);							
+							
+						Bitmap bmp = (Bitmap)ar_bmp_dep[imax];
+						Rectangle srt = new Rectangle(x, y, w, h);
+						gr.DrawImage(bmp, x, y, srt, GraphicsUnit.Pixel);
+					}
+				}
+				gr.Dispose();
+				ret = true;
+			}
+			catch (Exception ex) {
+				G.mlog(ex.ToString());
+			}
+			return(ret);
+		}
+		//---
+		private string[] fst_to_ir_file(string path, string[] cl_files)
+		{
+			ArrayList ar = new ArrayList();
+			for (int i = 0; i < cl_files.Length; i++) {
+				string tmp = System.IO.Path.GetFileName(cl_files[i]);
+				tmp = tmp.Replace("CT_", "IR_");
+				tmp = tmp.Replace("CR_", "IR_");
+				ar.Add(path + "\\" + tmp);
+			}
+			return((string[])ar.ToArray(typeof(string)));
+		}
+		//---
+		private bool fst_calc_contrast(string[] ZXXXD, ArrayList ar_con, ArrayList ar_bmp_dep)
+		{
+			bool ret = false;
+			try {
+				if (ar_con != null) {
+					ar_con.Clear();
+				}
+				if (ar_bmp_dep != null) {
+					ar_bmp_dep.Clear();
+				}
+
+				for (int j = 0; j < ZXXXD.Length; j++) {
+					Bitmap bmp = new Bitmap(ZXXXD[j]);
+					if (true) {
+						ar_bmp_dep.Add(bmp);
+					}
+					if (ar_con != null) {
+						double[] fctr;
+						fctr = Form02.DO_PROC_FOCUS(bmp, G.SS.MOZ_FST_FCOF, G.SS.MOZ_FST_RCNT, G.SS.MOZ_FST_CCNT);
+						ar_con.Add(fctr);
+					}
+				}
+				ret = true;
+			}
+			catch (Exception ex) {
+				G.mlog(ex.ToString());
+			}
+			return(ret);
+		}
+		//---
+		private bool fst_make()
+		{
+			try {
+				string path = this.MOZ_CND_FOLD;
+				string[] CL_ZP00D = null, IR_ZP00D = null;
+				string pat;
+				Bitmap bmp_dep;
+				string path_dep;
+				m_fold_of_dept  = string.Format("\\{0}x{1}", G.SS.MOZ_FST_RCNT, G.SS.MOZ_FST_CCNT);
+				switch (G.SS.MOZ_FST_MODE) {
+				case   /*CL*/  0:m_fold_of_dept += "_CL"; break;
+				case   /*IR*/  1:m_fold_of_dept += "_IR"; break;
+				default/*CL,IR*/:m_fold_of_dept += "_CL_IR"; break;
+				}
+				path_dep = path + m_fold_of_dept;
+				System.IO.Directory.CreateDirectory(path_dep);
+
+				for (int q = 0; q < 10; q++) {
+					//---
+					pat = string.Format("{0}C?_??_ZP00D.*", q);//カラー
+					CL_ZP00D = System.IO.Directory.GetFiles(path, pat);
+					//---
+					if (q == 0 && CL_ZP00D.Length > 0) {
+						//opencvのセットアップのため呼び出し
+						Bitmap bmp = new Bitmap(CL_ZP00D[0]);
+						G.CAM_PRC = G.CAM_STS.STS_NONE;
+						G.FORM02.load_file(bmp, false);
+					}
+					//---
+					//if (CL_ZP00D.Length > 0) {
+						IR_ZP00D = fst_to_ir_file(path, CL_ZP00D);
+					//}
+					//---
+					//---
+					for (int i = 0; i < CL_ZP00D.Length; i++) {
+						ArrayList ar_cl_con = new ArrayList();
+						ArrayList ar_ir_con = new ArrayList();
+						ArrayList ar_cl_bmp_dep = new ArrayList();
+						ArrayList ar_ir_bmp_dep = new ArrayList();
+						string tmp;
+						string[] CL_ZXXD, IR_ZXXD;
+						if (true) {
+							tmp = System.IO.Path.GetFileName(CL_ZP00D[i]);
+							CL_ZXXD = System.IO.Directory.GetFiles(path, tmp.Replace("ZP00D", "Z???D"));
+							IR_ZXXD = fst_to_ir_file(path, CL_ZXXD);
+						}
+
+						switch (G.SS.MOZ_FST_MODE) {
+						case /*CL*/0:
+							if (!fst_calc_contrast(CL_ZXXD, ar_cl_con, ar_cl_bmp_dep)) {
+								return(false);
+							}
+							if (!fst_calc_contrast(IR_ZXXD, null     , ar_ir_bmp_dep)) {
+								return(false);
+							}
+							ar_ir_con = ar_cl_con;
+						break;
+						case /*IR*/1:
+							if (!fst_calc_contrast(CL_ZXXD, null     , ar_cl_bmp_dep)) {
+								return(false);
+							}
+							if (!fst_calc_contrast(IR_ZXXD, ar_ir_con, ar_ir_bmp_dep)) {
+								return(false);
+							}
+							ar_cl_con = ar_ir_con;
+						break;
+						default/*CL,IR*/:
+							if (!fst_calc_contrast(CL_ZXXD, ar_cl_con, ar_cl_bmp_dep)) {
+								return(false);
+							}
+							if (!fst_calc_contrast(IR_ZXXD, ar_ir_con, ar_ir_bmp_dep)) {
+								return(false);
+							}
+						break;
+						}
+
+						if (true) {
+							string name = System.IO.Path.GetFileName(CL_ZP00D[i]);// name: xCx_xx_ZP00D.xxx
+
+							if (!make_focus_stack3(ar_cl_con, ar_cl_bmp_dep, out bmp_dep)) {
+								return(false);
+							}
+							name = name.Replace("ZP00D", "ZDEPT");
+							bmp_dep.Save(path_dep + "\\" + name);
+							bmp_dep.Dispose();
+							bmp_dep = null;
+						}
+						if (true) {
+							string name = System.IO.Path.GetFileName(IR_ZP00D[i]);// name: xIR_xx_ZP00D.xxx
+
+							if (!make_focus_stack3(ar_ir_con, ar_ir_bmp_dep, out bmp_dep)) {
+								return(false);
+							}
+							name = name.Replace("ZP00D", "ZDEPT");
+							bmp_dep.Save(path_dep + "\\" + name);
+							bmp_dep.Dispose();
+							bmp_dep = null;
+						}
+
+						for (int j = 0; j < ar_cl_bmp_dep.Count; j++) {
+							Bitmap bmp;
+							bmp = (Bitmap)ar_cl_bmp_dep[j];
+							bmp.Dispose();
+							bmp = (Bitmap)ar_ir_bmp_dep[j];
+							bmp.Dispose();
+						}
+					}
+				}
+			}
+			catch (Exception ex) {
+			}
+			return(true);
+		}
+		//---
 		private void load()
 		{
 			var dlg = new DlgProgress();
 			try {
 			int cnt_of_hair = 0;
 			string zpos = G.SS.MOZ_CND_ZPOS;
+			string pext = "";
+
+			dlg.Show("毛髄径算出", G.FORM01);
+			G.bCANCEL = false;
+#if true
+			if (G.SS.MOZ_FST_CK00) {
+				dlg.SetStatus("深度合成中");
+				fst_make();
+			}
+#endif
 			if (string.IsNullOrEmpty(zpos)) {
 				zpos = "";
+			}
+			else if (string.Compare(zpos, "深度合成") == 0) {
+				zpos = "_ZDEPT";
+				pext = m_fold_of_dept;
 			}
 			else {
 				zpos = "_" + zpos;
 			}
-			dlg.Show("毛髄径算出", G.FORM01);
-			G.bCANCEL = false;
+
 			enable_forms(false);
 
 			if (true) {
@@ -1305,6 +1530,9 @@ retry:
 				}
 				else {
 					this.comboBox8.Tag = true;
+					if (G.SS.MOZ_FST_CK00) {
+						this.comboBox8.Items.Add("深度合成");
+					}
 					if (true) {
 						string path = this.MOZ_CND_FOLD;
 						string[] zary = null;
@@ -1329,16 +1557,6 @@ retry:
 						sort_zpos();
 						this.comboBox8.Items.AddRange(m_zpos_val.ToArray());
 					}
-					else {
-						int zno = 10 - G.SS.MOZ_CND_ZCNT/2;
-						for (int i = 0; i < G.SS.MOZ_CND_ZCNT; i++) {
-							string str = string.Format("Z{0:00}", zno++);
-							if (str == G.SS.MOZ_CND_ZPOS) {
-								str += "*";
-							}
-							this.comboBox8.Items.Add(str);
-						}
-					}
 					this.comboBox8.SelectedIndex = this.comboBox8.FindString(ZORG2VAL(G.SS.MOZ_CND_ZPOS));
 				}
 			}
@@ -1356,7 +1574,7 @@ retry:
 			//G.mlog("コントラ計算範囲が画面全体だとerror発生...");
 			//G.mlog("検出パラメータを元に戻す");
 			//---
-			cnt_of_hair = get_hair_cnt(zpos);
+			cnt_of_hair = get_hair_cnt(pext, zpos);
 			//---
 			for (int q = 0; q < 10; q++) {
 				int width = 0;//(int)(2592/8);//2592/8=324
@@ -1368,9 +1586,9 @@ retry:
 				string buf = q.ToString();
 				int cnt_of_seg;
 
-				files_ct = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD,  buf +  "CT_??"+zpos+".*");
-				files_cr = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD,  buf +  "CR_??"+zpos+".*");
-				files_ir = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD,  buf +  "IR_??"+zpos+".*");
+				files_ct = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD+pext,  buf +  "CT_??"+zpos+".*");
+				files_cr = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD+pext,  buf +  "CR_??"+zpos+".*");
+				files_ir = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD+pext,  buf +  "IR_??"+zpos+".*");
 				if (files_ct.Length <= 0 && files_cr.Length <= 0) {
 					break;//終了
 				}
@@ -1858,6 +2076,13 @@ retry:
 			seg_of_hair seg;
 			Image thm;
 			//---
+			string pext;
+			if (string.Compare(zpos, "ZDEPT") == 0) {
+				pext = m_fold_of_dept;
+			}
+			else {
+				pext = "";
+			}
 			//---
 			for (int q = 0;; q++) {
 				if (q >= hr.seg.Length) {
@@ -1868,9 +2093,13 @@ retry:
 					continue;
 				}
 
-				buf_cl = this.textBox1.Text + "\\" + seg.name_of_dm;
-				buf_ir = this.textBox1.Text + "\\" + seg.name_of_ir;
-				if (true) {
+				buf_cl = this.textBox1.Text + pext + "\\" + seg.name_of_dm;
+				buf_ir = this.textBox1.Text + pext + "\\" + seg.name_of_ir;
+				if (seg.name_of_dm.Contains("_ZDEPT")) {
+					buf_cl = Regex.Replace(buf_cl, "_ZDEPT", "_"+zpos);
+					buf_ir = Regex.Replace(buf_ir, "_ZDEPT", "_"+zpos);
+				}
+				else {
 					buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", "_"+zpos);
 					buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", "_"+zpos);
 				}
@@ -1904,9 +2133,17 @@ retry:
 			//---
 			int idx = m_isel;
 			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
-			string zpos = ZVAL2ORG(this.comboBox8.Text);
+			string zpos, pext;
 			ImageList il_dm = null, il_ir = null;
 
+			if (string.Compare(this.comboBox8.Text, "深度合成") == 0) {
+				zpos = "ZDEPT";
+				pext = m_fold_of_dept;
+			}
+			else {
+				zpos = ZVAL2ORG(this.comboBox8.Text);
+				pext = "";
+			}
 			if (this.radioButton3.Checked) {
 				bmp_all_cl = new Bitmap((int)(hr.width_of_hair/Z), (int)(hr.height_of_hair/Z));
 				bmp_all_ir = new Bitmap((int)(hr.width_of_hair/Z), (int)(hr.height_of_hair/Z));
@@ -1969,14 +2206,21 @@ retry:
 				else {
 					//個別表示
 					if (true) {
-						buf_cl = this.textBox1.Text + "\\" + seg.name_of_dm;
-						buf_ir = this.textBox1.Text + "\\" + seg.name_of_ir;
+						buf_cl = this.textBox1.Text + pext + "\\" + seg.name_of_dm;
+						buf_ir = this.textBox1.Text + pext + "\\" + seg.name_of_ir;
 						zpos = zpos.Replace("*", "");
 
 						if (!string.IsNullOrEmpty(zpos)) {
 							zpos = "_" + zpos;
-							buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", zpos);
-							buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", zpos);
+
+							if (seg.name_of_dm.Contains("_ZDEPT")) {
+								buf_cl = Regex.Replace(buf_cl, "_ZDEPT", zpos);
+								buf_ir = Regex.Replace(buf_ir, "_ZDEPT", zpos);
+							}
+							else {
+								buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", zpos);
+								buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", zpos);
+							}
 						}
 					}
 					if (this.checkBox10.Checked) {

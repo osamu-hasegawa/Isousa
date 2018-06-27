@@ -149,7 +149,9 @@ namespace uSCOPE
 					DDV.DDX(bUpdate, this.textBox67, ref m_ss.ETC_LED_WAIT);
 					DDV.DDX(bUpdate, this.comboBox1, ref m_ss.ETC_UIF_LEVL);
 					DDV.DDX(bUpdate, this.checkBox3, ref m_ss.ETC_LED_IRGR);
+		#if false//2018.06.07
 					DDV.DDX(bUpdate, this.comboBox4, ref m_ss.ETC_CLF_CTCR);
+		#endif
 					DDV.DDX(bUpdate, this.checkBox4, ref m_ss.ETC_UIF_CUTI);
 					DDV.DDX(bUpdate, this.checkBox5, ref m_ss.PLM_AUT_FINI);
 					DDV.DDX(bUpdate, this.checkBox6, ref m_ss.PLM_AUT_ZINI);

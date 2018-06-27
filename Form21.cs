@@ -124,6 +124,9 @@ namespace uSCOPE
 						this.comboBox8.Items.Add(string.Format("Z{0:00}", 10+i));
 					}
 				}
+				if (G.SS.MOZ_FST_CK00) {
+					this.comboBox8.Items.Insert(0, "深度合成");
+				}
 				this.comboBox8.SelectedIndex = this.comboBox8.FindString(G.SS.MOZ_CND_ZPOS);
 
 				int idx = this.comboBox8.FindString(G.SS.MOZ_CND_ZPOS);
@@ -157,8 +160,15 @@ namespace uSCOPE
 				e.Cancel = true;
 				return;
 			}
-			string[] files_cl, files_ct, files_cr, files_ir, files_10;
-			string zpos = G.SS.MOZ_CND_ZPOS;
+			string[] files_ct, files_cr, files_ir, files_10;
+			string zpos;
+
+			if (string.Compare(G.SS.MOZ_CND_ZPOS, "深度合成") == 0) {
+				zpos = "ZP00D";
+			}
+			else {
+				zpos = G.SS.MOZ_CND_ZPOS;
+			}
 
 			if (string.IsNullOrEmpty(zpos)) {
 				zpos = "";
@@ -169,14 +179,7 @@ namespace uSCOPE
 
 			files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
 
-			if (false /*files_10.Length > 0*/) {
-			files_cl = System.IO.Directory.GetFiles(path, "?CL_??_Z10.*");
-			files_ct = System.IO.Directory.GetFiles(path, "?CT_??_Z10.*");
-			files_cr = System.IO.Directory.GetFiles(path, "?CR_??_Z10.*");
-			files_ir = System.IO.Directory.GetFiles(path, "?IR_??_Z10.*");
-			}
-			else {
-			files_cl = System.IO.Directory.GetFiles(path, "?CL_??" +zpos+ ".*");
+			if (true) {
 			files_ct = System.IO.Directory.GetFiles(path, "?CT_??" +zpos+ ".*");
 			files_cr = System.IO.Directory.GetFiles(path, "?CR_??" +zpos+ ".*");
 			files_ir = System.IO.Directory.GetFiles(path, "?IR_??" +zpos+ ".*");
@@ -291,7 +294,12 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox5      , ref G.SS.MOZ_IRC_CK02);
 				DDV.DDX(bUpdate, this.checkBox6      , ref G.SS.MOZ_IRC_CK03);
 				DDV.DDX(bUpdate, this.comboBox4      , ref G.SS.MOZ_IRC_DISP);
-
+				//---
+				DDV.DDX(bUpdate, this.checkBox9      , ref G.SS.MOZ_FST_CK00);
+				DDV.DDX(bUpdate, this.numericUpDown5 , ref G.SS.MOZ_FST_RCNT);
+				DDV.DDX(bUpdate, this.numericUpDown6 , ref G.SS.MOZ_FST_CCNT);
+				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.MOZ_FST_MODE);
+				DDV.DDX(bUpdate, this.comboBox9      , ref G.SS.MOZ_FST_FCOF);
 				//---
 				if (bUpdate == false) {
 					if (G.SS.MOZ_CND_FMOD == 1 && this.textBox1.Text == "") {
@@ -368,6 +376,24 @@ namespace uSCOPE
 			}
 			else {
 				this.groupBox6.Enabled = false;
+			}
+		}
+
+		private void checkBox9_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.checkBox9.Checked) {
+				if (this.comboBox8.FindString("深度合成") < 0) {
+					this.comboBox8.Items.Insert(0, "深度合成");
+					this.comboBox8.SelectedIndex = 0;
+				}
+			}
+			else {
+				if (this.comboBox8.FindString("深度合成") >= 0) {
+					this.comboBox8.Items.Remove("深度合成");
+					if (this.comboBox8.SelectedIndex < 0) {
+						this.comboBox8.SelectedIndex = this.comboBox8.FindString("ZP00D");
+					}
+				}
 			}
 		}
 	}
