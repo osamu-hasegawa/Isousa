@@ -234,6 +234,9 @@ namespace uSCOPE
 			public int PLM_AUT_HMOD = 0;
 			public int PLM_AUT_HP_X = 0;
 			public int PLM_AUT_HP_Y = -3000;
+#if true//2018.07.02
+			public int PLM_AUT_HP_Z = 0;
+#endif
 			public int PLM_AUT_HPRT = 5;
 			public int PLM_AUT_HPMN = 3000;
 			public int PLM_AUT_HPMX = 6000;
@@ -314,6 +317,9 @@ namespace uSCOPE
 			public int MOZ_IRC_DISP = 0;
 			//---
 			public bool MOZ_FST_CK00 = false;
+#if true//2018.07.02
+			public bool MOZ_FST_CK01 = false;
+#endif
 			public int MOZ_FST_RCNT = 3;
 			public int MOZ_FST_CCNT = 3;
 			public int MOZ_FST_MODE = 0;

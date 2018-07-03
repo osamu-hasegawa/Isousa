@@ -42,7 +42,9 @@ namespace uSCOPE
 			try {
 				DDV.DDX(bUpdate, this.numericUpDown10 , ref m_ss.PLM_AUT_HP_X, G.SS.PLM_MLIM[0], G.SS.PLM_PLIM[0]);
 				DDV.DDX(bUpdate, this.numericUpDown11 , ref m_ss.PLM_AUT_HP_Y, G.SS.PLM_MLIM[1], G.SS.PLM_PLIM[1]);
-
+#if true//2018.07.02
+				DDV.DDX(bUpdate, this.numericUpDown12 , ref m_ss.PLM_AUT_HP_Z, G.SS.PLM_MLIM[2], G.SS.PLM_PLIM[2]);
+#endif
                 rc = true;
             }
             catch (Exception e)

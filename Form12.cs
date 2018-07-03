@@ -2016,6 +2016,18 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					MOVE_ABS_XY((G.SS.PLM_MLIM[0] + G.SS.PLM_PLIM[0]) / 2, G.SS.PLM_MLIM[1]);
 				}
 #endif
+#if true//2018.07.02
+				if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/) {
+					if (NXT_STS < 0) {
+						m_pre_set[2] = true;
+						m_pre_pos[2] = G.SS.PLM_AUT_HP_Z;
+					}
+					else {
+						MOVE_ABS_Z(G.SS.PLM_AUT_HP_Z);//FOCUS/Z軸
+					}
+				}
+				else
+#endif
 				if (G.SS.PLM_AUT_FINI) {
 					if (NXT_STS < 0) {
 						m_pre_set[2] = true;
@@ -2087,30 +2099,6 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					        m_adat.z_pos.Add(pos);
 					    }
 					}
-//                    if (G.SS.PLM_AUT_ZMUL) {
-//                        int z;
-//                        int zstp = G.SS.PLM_AUT_ZSTP;
-//                        int zhan = zstp * (G.SS.PLM_AUT_ZHAN / zstp);//念のため;
-//                        int znam = 10 - (zhan/zstp);
-//                        var ar_z_nam = new ArrayList();
-//                        var ar_z_pos = new ArrayList();
-//                        for (z = -zhan; z <= +zhan; z += zstp, znam++) {
-//                            if (z == 0) {
-//                                continue;
-//                            }
-//                            m_adat.z_cnt++;
-//                            ar_z_nam.Add(string.Format("Z{0:00}", znam));
-//                            ar_z_pos.Add(z);
-//                        }
-//#if true//2018.05.22(バックラッシュ方向反転対応)
-//                        if (G.SS.PLM_BSLA[2] < 0) {
-//                            ar_z_nam.Reverse();
-//                            ar_z_pos.Reverse();
-//                        }
-//#endif
-//                        m_adat.z_nam.AddRange(ar_z_nam);
-//                        m_adat.z_pos.AddRange(ar_z_pos);
-//                    }
 				}
 				NXT_STS = 12;
 				break;
@@ -2221,7 +2209,6 @@ a_write("毛髪判定(AF位置探索):OK");
 			case 11:
 a_write("移動:下へ");
 				//画面サイズ分↓へ
-//				MOVE_PIX_XY(0, (int)(G.CAM_HEI * 0.9));
 				MOVE_PIX_XY(0, (int)(G.CAM_HEI * (1 - G.SS.PLM_AUT_OVLP / 100.0)));
 
 				NXT_STS = -this.AUT_STS;
@@ -2423,12 +2410,6 @@ a_write("AF:終了");
 						m_adat.f_nam.Add(path3);
 					}
 					a_write(string.Format("画像保存:{0}", path1));
-				}
-				else if (true) {
-					G.mlog("ここにはこない！！！");
-				}
-				else {
-					G.mlog("ここにはこない！！！");
 				}
 				//画像保存
 				Console.Beep(800, 250);

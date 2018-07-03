@@ -296,6 +296,9 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.comboBox4      , ref G.SS.MOZ_IRC_DISP);
 				//---
 				DDV.DDX(bUpdate, this.checkBox9      , ref G.SS.MOZ_FST_CK00);
+#if true//2018.07.02
+				DDV.DDX(bUpdate, this.checkBox10     , ref G.SS.MOZ_FST_CK01);
+#endif
 				DDV.DDX(bUpdate, this.numericUpDown5 , ref G.SS.MOZ_FST_RCNT);
 				DDV.DDX(bUpdate, this.numericUpDown6 , ref G.SS.MOZ_FST_CCNT);
 				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.MOZ_FST_MODE);

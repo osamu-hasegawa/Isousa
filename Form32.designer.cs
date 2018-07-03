@@ -1352,12 +1352,12 @@
 			this.numericUpDown33.DecimalPlaces = 6;
 			this.numericUpDown33.Location = new System.Drawing.Point(446, 349);
 			this.numericUpDown33.Maximum = new decimal(new int[] {
-            999,
+            10000000,
             0,
             0,
             0});
 			this.numericUpDown33.Minimum = new decimal(new int[] {
-            999,
+            10000000,
             0,
             0,
             -2147483648});
@@ -1376,12 +1376,12 @@
 			this.numericUpDown32.DecimalPlaces = 6;
 			this.numericUpDown32.Location = new System.Drawing.Point(285, 349);
 			this.numericUpDown32.Maximum = new decimal(new int[] {
-            999,
+            10000000,
             0,
             0,
             0});
 			this.numericUpDown32.Minimum = new decimal(new int[] {
-            999,
+            10000000,
             0,
             0,
             -2147483648});
@@ -1400,12 +1400,12 @@
 			this.numericUpDown31.DecimalPlaces = 6;
 			this.numericUpDown31.Location = new System.Drawing.Point(117, 349);
 			this.numericUpDown31.Maximum = new decimal(new int[] {
-            999,
+            10000000,
             0,
             0,
             0});
 			this.numericUpDown31.Minimum = new decimal(new int[] {
-            999,
+            10000000,
             0,
             0,
             -2147483648});

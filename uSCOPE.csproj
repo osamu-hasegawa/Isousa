@@ -51,6 +51,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\Icon1.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Basler.Pylon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e389355f398382ab, processorArchitecture=x86" />
     <Reference Include="PresentationCore" />
@@ -263,6 +266,7 @@
       <DependentUpon>Form22.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

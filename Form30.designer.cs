@@ -148,14 +148,12 @@
 			this.label17 = new System.Windows.Forms.Label();
 			this.label15 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.comboBox4 = new System.Windows.Forms.ComboBox();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.checkBox6 = new System.Windows.Forms.CheckBox();
 			this.checkBox5 = new System.Windows.Forms.CheckBox();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
 			this.label22 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textBox67 = new System.Windows.Forms.TextBox();
 			this.groupBox2.SuspendLayout();
@@ -1383,14 +1381,12 @@
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Controls.Add(this.comboBox4);
 			this.groupBox3.Controls.Add(this.comboBox1);
 			this.groupBox3.Controls.Add(this.checkBox6);
 			this.groupBox3.Controls.Add(this.checkBox5);
 			this.groupBox3.Controls.Add(this.checkBox4);
 			this.groupBox3.Controls.Add(this.checkBox3);
 			this.groupBox3.Controls.Add(this.label22);
-			this.groupBox3.Controls.Add(this.label3);
 			this.groupBox3.Controls.Add(this.label18);
 			this.groupBox3.Controls.Add(this.textBox67);
 			this.groupBox3.Location = new System.Drawing.Point(371, 323);
@@ -1399,19 +1395,6 @@
 			this.groupBox3.TabIndex = 5;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "その他";
-			// 
-			// comboBox4
-			// 
-			this.comboBox4.BackColor = System.Drawing.Color.DarkOrange;
-			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox4.FormattingEnabled = true;
-			this.comboBox4.Items.AddRange(new object[] {
-            "透過画像",
-            "反射画像"});
-			this.comboBox4.Location = new System.Drawing.Point(129, 109);
-			this.comboBox4.Name = "comboBox4";
-			this.comboBox4.Size = new System.Drawing.Size(118, 20);
-			this.comboBox4.TabIndex = 1;
 			// 
 			// comboBox1
 			// 
@@ -1431,7 +1414,7 @@
 			// 
 			this.checkBox6.AutoSize = true;
 			this.checkBox6.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox6.Location = new System.Drawing.Point(17, 204);
+			this.checkBox6.Location = new System.Drawing.Point(17, 160);
 			this.checkBox6.Name = "checkBox6";
 			this.checkBox6.Size = new System.Drawing.Size(269, 16);
 			this.checkBox6.TabIndex = 2;
@@ -1442,7 +1425,7 @@
 			// 
 			this.checkBox5.AutoSize = true;
 			this.checkBox5.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox5.Location = new System.Drawing.Point(17, 180);
+			this.checkBox5.Location = new System.Drawing.Point(17, 135);
 			this.checkBox5.Name = "checkBox5";
 			this.checkBox5.Size = new System.Drawing.Size(244, 16);
 			this.checkBox5.TabIndex = 2;
@@ -1453,7 +1436,7 @@
 			// 
 			this.checkBox4.AutoSize = true;
 			this.checkBox4.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox4.Location = new System.Drawing.Point(17, 153);
+			this.checkBox4.Location = new System.Drawing.Point(17, 109);
 			this.checkBox4.Name = "checkBox4";
 			this.checkBox4.Size = new System.Drawing.Size(194, 16);
 			this.checkBox4.TabIndex = 2;
@@ -1479,15 +1462,6 @@
 			this.label22.Size = new System.Drawing.Size(84, 26);
 			this.label22.TabIndex = 1;
 			this.label22.Text = "光源切り替え時待ち時間(s)";
-			// 
-			// label3
-			// 
-			this.label3.BackColor = System.Drawing.Color.DarkOrange;
-			this.label3.Location = new System.Drawing.Point(15, 114);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(108, 28);
-			this.label3.TabIndex = 1;
-			this.label3.Text = "\'CL\'名称画像ファイルの扱い";
 			// 
 			// label18
 			// 
@@ -1666,8 +1640,6 @@
 		private System.Windows.Forms.Label label47;
 		private System.Windows.Forms.TextBox textBox77;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.ComboBox comboBox4;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.CheckBox checkBox4;
 		private System.Windows.Forms.CheckBox checkBox6;
 		private System.Windows.Forms.CheckBox checkBox5;

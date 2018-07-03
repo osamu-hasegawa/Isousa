@@ -34,15 +34,18 @@
 			this.numericUpDown11 = new System.Windows.Forms.NumericUpDown();
 			this.label11 = new System.Windows.Forms.Label();
 			this.numericUpDown10 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown12 = new System.Windows.Forms.NumericUpDown();
+			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// button2
 			// 
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(189, 82);
+			this.button2.Location = new System.Drawing.Point(189, 108);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 26);
 			this.button2.TabIndex = 1;
@@ -53,7 +56,7 @@
 			// button1
 			// 
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button1.Location = new System.Drawing.Point(94, 82);
+			this.button1.Location = new System.Drawing.Point(94, 108);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 26);
 			this.button1.TabIndex = 0;
@@ -64,11 +67,13 @@
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.numericUpDown11);
+			this.groupBox3.Controls.Add(this.label1);
 			this.groupBox3.Controls.Add(this.label11);
+			this.groupBox3.Controls.Add(this.numericUpDown12);
 			this.groupBox3.Controls.Add(this.numericUpDown10);
 			this.groupBox3.Location = new System.Drawing.Point(19, 12);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(323, 59);
+			this.groupBox3.Size = new System.Drawing.Size(323, 78);
 			this.groupBox3.TabIndex = 0;
 			this.groupBox3.TabStop = false;
 			// 
@@ -130,6 +135,40 @@
 			this.numericUpDown10.TabIndex = 0;
 			this.numericUpDown10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// numericUpDown12
+			// 
+			this.numericUpDown12.BackColor = System.Drawing.SystemColors.Window;
+			this.numericUpDown12.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.numericUpDown12.Location = new System.Drawing.Point(166, 50);
+			this.numericUpDown12.Maximum = new decimal(new int[] {
+            8388607,
+            0,
+            0,
+            0});
+			this.numericUpDown12.Minimum = new decimal(new int[] {
+            8388607,
+            0,
+            0,
+            -2147483648});
+			this.numericUpDown12.Name = "numericUpDown12";
+			this.numericUpDown12.Size = new System.Drawing.Size(51, 19);
+			this.numericUpDown12.TabIndex = 0;
+			this.numericUpDown12.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.BackColor = System.Drawing.SystemColors.Control;
+			this.label1.Location = new System.Drawing.Point(106, 54);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(33, 12);
+			this.label1.TabIndex = 57;
+			this.label1.Text = "z(pls)";
+			// 
 			// Form22
 			// 
 			this.AcceptButton = this.button1;
@@ -137,7 +176,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(354, 114);
+			this.ClientSize = new System.Drawing.Size(354, 149);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
@@ -153,6 +192,7 @@
 			this.groupBox3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -165,5 +205,7 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown11;
 		private System.Windows.Forms.NumericUpDown numericUpDown10;
 		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.NumericUpDown numericUpDown12;
 	}
 }

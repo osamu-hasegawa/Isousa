@@ -103,9 +103,17 @@ namespace uSCOPE
 				//DDV.DDX(bUpdate, this.numericUpDown18, ref m_ss.PLM_AUT_ZSTP);
 				//---
 				DDV.DDX(bUpdate, this.checkBox6      , ref m_ss.PLM_AUT_ZDCK);//Ｚ測定:深度合成用
+#if true//2018.07.02
+				DDV.DDX(bUpdate, this.textBox3       , ref m_ss.PLM_AUT_ZDEP, 50, -99, +99);
+#else
 				DDV.DDX(bUpdate, this.textBox3       , ref m_ss.PLM_AUT_ZDEP, 20, -99, +99);
+#endif
 				DDV.DDX(bUpdate, this.checkBox7      , ref m_ss.PLM_AUT_ZKCK);//Ｚ測定:毛髪径判定用
+#if true//2018.07.02
+				DDV.DDX(bUpdate, this.textBox4       , ref m_ss.PLM_AUT_ZKEI, 50, -99, +99);
+#else
 				DDV.DDX(bUpdate, this.textBox4       , ref m_ss.PLM_AUT_ZKEI, 20, -99, +99);
+#endif
 				//---
 				DDV.DDX(bUpdate, this.checkBox4      , ref m_ss.PLM_AUT_IRCK);//カラーと同時に赤外測定
 

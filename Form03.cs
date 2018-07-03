@@ -1376,6 +1376,8 @@ retry:
 			return(ret);
 		}
 		//---
+		// 深度合成処理
+		//---
 		private bool fst_make()
 		{
 			try {
@@ -1392,7 +1394,16 @@ retry:
 				}
 				path_dep = path + m_fold_of_dept;
 				System.IO.Directory.CreateDirectory(path_dep);
-
+#if true//2018.07.02
+				if (G.SS.MOZ_FST_CK01) {
+					//既に合成済みの場合は合成処理をスキップする
+					string[] CL_ZDEPT = null;
+					CL_ZDEPT = System.IO.Directory.GetFiles(path_dep, "?C?_??_ZDEPT.*");
+					if (CL_ZDEPT.Length > 0) {
+						return(true);
+					}
+				}
+#endif
 				for (int q = 0; q < 10; q++) {
 					//---
 					pat = string.Format("{0}C?_??_ZP00D.*", q);//カラー
@@ -1927,6 +1938,12 @@ retry:
 			}
 			if (true) {
 				if (G.UIF_LEVL == 0) {
+#if true//2018.07.02
+					/*0:ユーザ用(暫定版)*/
+					this.checkBox10.Visible = false;//カラー画像の代わりに赤外の毛髪抽出画像を表示する
+					this.label9.Visible = false;//グラフ表示には反映されません
+					this.panel13.Visible = false;//Z位置とZ選択用コンボ
+#endif
 				}
 				if (G.SS.MOZ_CND_NOMZ) {
 					this.groupBox4.Visible = false;
