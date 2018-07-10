@@ -1942,7 +1942,9 @@ retry:
 					/*0:ユーザ用(暫定版)*/
 					this.checkBox10.Visible = false;//カラー画像の代わりに赤外の毛髪抽出画像を表示する
 					this.label9.Visible = false;//グラフ表示には反映されません
+#if false//2018.07.10
 					this.panel13.Visible = false;//Z位置とZ選択用コンボ
+#endif
 #endif
 				}
 				if (G.SS.MOZ_CND_NOMZ) {

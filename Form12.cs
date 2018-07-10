@@ -78,8 +78,9 @@ namespace uSCOPE
 			//this.button12.Location = lc2;
 			this.button27.Visible = true;
 			//this.button27.Location = lc1;
+#if false//2018.07.10
 			this.checkBox11.Visible = true;//深度合成
-
+#endif
 			//---[パラメータ]
 			this.button3.Visible = false;	//透過用
 			this.button16.Visible = false;	//反射用
@@ -455,9 +456,11 @@ this.SPE_COD = 0;
 				DDV.DDX(bUpdate, this.numericUpDown41, ref G.SS.TST_PAR_SMAX);	//面積:MAX
 				DDV.DDX(bUpdate, this.numericUpDown42, ref G.SS.TST_PAR_LMIN);	//周囲長:MIN
 				DDV.DDX(bUpdate, this.numericUpDown40, ref G.SS.TST_PAR_LMAX);	//周囲長:MAX
+#if false//2018.07.10
 				if (G.UIF_LEVL == 0) {
 				DDV.DDX(bUpdate, this.checkBox11, ref G.SS.PLM_AUT_ZDCK);
 				}
+#endif
 				//---
 				rc = true;
 			}
@@ -2015,6 +2018,12 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					//中上
 					MOVE_ABS_XY((G.SS.PLM_MLIM[0] + G.SS.PLM_PLIM[0]) / 2, G.SS.PLM_MLIM[1]);
 				}
+#endif
+#if true//2018.07.10
+				if (G.SS.PLM_AUT_HPOS) {
+					//AF位置探索
+				}
+				else
 #endif
 #if true//2018.07.02
 				if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/) {
