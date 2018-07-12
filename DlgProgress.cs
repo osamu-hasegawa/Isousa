@@ -88,5 +88,15 @@ namespace uSCOPE
 				m_bAlive = true;
 			}
 		}
+#if true//2018.07.11
+		private void DlgProgress_Shown(object sender, EventArgs e)
+		{
+			//コントロールボックスが非表示だと
+			//DPI変化によるダイアログボックスのリサイズ
+			//が正しく行われないことが判明
+			//コード上で非表示にすることとする
+			this.ControlBox = false;
+		}
+#endif
 	}
 }

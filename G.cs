@@ -278,6 +278,16 @@ namespace uSCOPE
 				get { return ColorTranslator.ToHtml(this.ETC_BAK_COLOR); }
 				set { this.ETC_BAK_COLOR = ColorTranslator.FromHtml(value); }
 			}
+#if true
+			[XmlIgnoreAttribute]
+			public Color ETC_CRS_COLOR = Color.FromArgb(0, 255, 255);
+			[XmlElement("ETC_CRS_COLOR")]
+			public string ETC_CRS_COLOR_STR {
+				get { return ColorTranslator.ToHtml(this.ETC_CRS_COLOR); }
+				set { this.ETC_CRS_COLOR = ColorTranslator.FromHtml(value); }
+			}
+			public int ETC_CRS_LENGTH = 50;
+#endif
 			//---
 			public int MOZ_CND_FMOD = 0;
 			[XmlIgnoreAttribute]

@@ -146,6 +146,9 @@ namespace uSCOPE
 		private Point[] m_pt_of_marker = new Point[9];//2点間断面(0,1), コントラスト矩形(2,3), 距離(4,5,6)
 		private int m_mouse_icap=-1;
 		private CALC_LEN m_calc_len = new CALC_LEN();
+#if true//2018.07.11
+		private Point[] m_pt_of_cross = new Point[4];//十字マーク
+#endif
 		//---
 		public Form02()
 		{
@@ -4934,6 +4937,13 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				gr.DrawString(buf, fnt, Brushes.LimeGreen, rt, sf);
 				gr.DrawLine(pen1/*Pens.Green*/, m_pt_of_marker[6], pt);
 			}
+#if true//2018.07.11
+			if (this.toolStripMenuItem50.Checked) {
+				Pen pen = new Pen(G.SS.ETC_CRS_COLOR);
+				gr.DrawLine(pen, m_pt_of_cross[0], m_pt_of_cross[1]);
+				gr.DrawLine(pen, m_pt_of_cross[2], m_pt_of_cross[3]);
+			}
+#endif
 			if (this.chart5.Visible) {
 				set_hisval();
 			}
@@ -5094,6 +5104,18 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 							m_pt_of_marker[4+i] = BMPCD_TO_IMGCD(m_calc_len.get_pt(i));
 						}
 					}
+#if true//2018.07.11
+					//十字マーク
+					int	CLEN = G.SS.ETC_CRS_LENGTH;
+					Point pt0 = new Point(m_width/2-CLEN, m_height/2);
+					Point pt1 = new Point(m_width/2+CLEN, m_height/2);
+					Point pt2 = new Point(m_width/2, m_height/2-CLEN);
+					Point pt3 = new Point(m_width/2, m_height/2+CLEN);
+					m_pt_of_cross[0] = BMPCD_TO_IMGCD(pt0);
+					m_pt_of_cross[1] = BMPCD_TO_IMGCD(pt1);
+					m_pt_of_cross[2] = BMPCD_TO_IMGCD(pt2);
+					m_pt_of_cross[3] = BMPCD_TO_IMGCD(pt3);
+#endif
 				}
 				disp_extr(null);
 			}
@@ -5231,6 +5253,12 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 					m_pt_of_marker[6].X = m_pt_of_marker[6].Y = -1;
 				}
 			}
+#if true//2018.07.11
+			else if (sender == this.toolStripMenuItem50) {
+				//十字マーク
+				this.toolStripMenuItem50.Checked = !this.toolStripMenuItem50.Checked;
+			}
+#endif
 		}
 
 		private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)

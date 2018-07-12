@@ -35,16 +35,15 @@
 			// 
 			this.Label1.Location = new System.Drawing.Point(23, 9);
 			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(136, 40);
+			this.Label1.Size = new System.Drawing.Size(143, 40);
 			this.Label1.TabIndex = 4;
 			this.Label1.Text = "000000000000000000000ZZZZZZZZZZZZZZZZZZZZZ333333333333333333333";
 			this.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// Cancel_Button
 			// 
-			this.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.Cancel_Button.Location = new System.Drawing.Point(60, 52);
+			this.Cancel_Button.Location = new System.Drawing.Point(60, 53);
 			this.Cancel_Button.Name = "Cancel_Button";
 			this.Cancel_Button.Size = new System.Drawing.Size(67, 21);
 			this.Cancel_Button.TabIndex = 3;
@@ -57,10 +56,10 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.Cancel_Button;
 			this.ClientSize = new System.Drawing.Size(189, 82);
-			this.ControlBox = false;
 			this.Controls.Add(this.Label1);
 			this.Controls.Add(this.Cancel_Button);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.Margin = new System.Windows.Forms.Padding(2);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "DlgProgress";
@@ -68,6 +67,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "xxx";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DlgProgress_FormClosed);
+			this.Shown += new System.EventHandler(this.DlgProgress_Shown);
 			this.VisibleChanged += new System.EventHandler(this.DlgProgress_VisibleChanged);
 			this.ResumeLayout(false);
 
@@ -75,7 +75,8 @@
 
 		#endregion
 
-		internal System.Windows.Forms.Label Label1;
-		internal System.Windows.Forms.Button Cancel_Button;
+		private System.Windows.Forms.Label Label1;
+		private System.Windows.Forms.Button Cancel_Button;
+
 	}
 }

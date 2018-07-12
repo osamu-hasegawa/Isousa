@@ -3021,7 +3021,17 @@ a_write("光源切替:->反射");
 
 		private void button12_Click(object sender, EventArgs e)
 		{
+#if true//2018.07.11(解析画面ユーザ用条件画面の追加)
+			Form frm;
+			if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/) {
+				frm = new Form23();
+			}
+			else {
+				frm = new Form21();
+			}
+#else
 			Form21 frm = new Form21();
+#endif
 			if (frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				if (G.FORM02 != null) {
 					if (G.FORM02.isCONNECTED()) {
