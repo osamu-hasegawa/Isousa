@@ -2112,6 +2112,12 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				NXT_STS = 12;
 				break;
 			case 5:
+#if true//2018.07.30(終了位置指定)
+				if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ && G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
+					NXT_STS = 999;
+				}
+				else
+#endif
 				if ((G.PLM_STS_BIT[1] & (int)G.PLM_STS_BITS.BIT_LMT_P) != 0) {
 					//SOFT.LIMIT(+)
 #if true
@@ -2166,6 +2172,14 @@ a_write("毛髪判定(AF位置探索):OK");
 			break;
 			case 10:
 				//a_write("毛髪探索中:LIMIT.CHECK");
+#if true//2018.07.30(終了位置指定)
+				if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ && G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
+					//NXT_STS = 999;
+					NXT_STS = 40;
+				}
+				else
+#endif
+
 				if ((G.PLM_STS_BIT[1] & (int)G.PLM_STS_BITS.BIT_LMT_P) != 0) {
 					//SOFT.LIMIT(+)
 					NXT_STS = 40;
@@ -2228,6 +2242,12 @@ a_write("移動:下へ");
 			case 112:
 			case 132:
 			case 152:
+#if true//2018.07.30(終了位置指定)
+				if (this.AUT_STS == 12 && G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ && G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
+					NXT_STS = 10;
+					break;
+				}
+#endif
 				m_dcur = m_didx;
 				break;
 			case 13:

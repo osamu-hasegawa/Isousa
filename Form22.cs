@@ -54,6 +54,16 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox2      , ref m_ss.PLM_AUT_HPOS);
 				DDV.DDX(bUpdate, this.checkBox6      , ref m_ss.PLM_AUT_ZDCK);//Ｚ測定:深度合成用
 				DDV.DDX(bUpdate, this.textBox3       , ref m_ss.PLM_AUT_ZDEP, 50, -99, +99);
+#if true//2018.07.30(終了位置指定)
+				DDV.DDX(bUpdate, this.numericUpDown14 , ref m_ss.PLM_AUT_ED_Y, G.SS.PLM_MLIM[1], G.SS.PLM_PLIM[1]);
+                if (bUpdate == false) {
+					if (m_ss.PLM_AUT_ED_Y <= m_ss.PLM_AUT_HP_Y) {
+						G.mlog("終了ステージ位置:yは開始位置:yより大きい値を指定してください.");
+						this.numericUpDown14.Focus();
+						return(false);
+					}
+                }
+#endif
 				if (bUpdate == false) {
 					if (m_ss.PLM_AUT_ZDEP != null) {
 						for (int i = 0; i < m_ss.PLM_AUT_ZDEP.Length; i++) {
@@ -97,5 +107,11 @@ namespace uSCOPE
 			textBox3.Enabled = (this.checkBox6.Checked == true);
 		}
 #endif
-	}
+#if true//2018.07.30
+        private void numericUpDown10_ValueChanged(object sender, EventArgs e)
+        {
+            this.numericUpDown13.Value = this.numericUpDown10.Value;
+        }
+#endif
+    }
 }

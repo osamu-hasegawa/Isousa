@@ -237,6 +237,9 @@ namespace uSCOPE
 #if true//2018.07.02
 			public int PLM_AUT_HP_Z = 0;
 #endif
+#if true//2018.07.30
+            public int PLM_AUT_ED_Y = +3000;
+#endif
 			public int PLM_AUT_HPRT = 5;
 			public int PLM_AUT_HPMN = 3000;
 			public int PLM_AUT_HPMX = 6000;
