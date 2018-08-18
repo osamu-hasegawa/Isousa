@@ -95,32 +95,43 @@ namespace uSCOPE
 			string[] files_10;
 			string[] zpos = null;
 			//
-			if (true) {
-				zpos = System.IO.Directory.GetFiles(path, "0CR_00_*.*");
-				if (zpos.Length <= 0) {
-				zpos = System.IO.Directory.GetFiles(path, "0CT_00_*.*");
+#if true//2018.08.13
+			files_10 = new string[] {};
+			zpos = new string[] {};
+			try {
+#endif
+				if (true) {
+					zpos = System.IO.Directory.GetFiles(path, "0CR_00_*.*");
+					if (zpos.Length <= 0) {
+					zpos = System.IO.Directory.GetFiles(path, "0CT_00_*.*");
+					}
+					if (zpos.Length <= 0) {
+						//古い形式のファイルもしくはフォルダが空
+						this.comboBox8.Items.Clear();
+						this.comboBox8.Enabled = false;
+						return;
+					}
+					for (int i = 0; i < zpos.Length; i++) {
+						string tmp = System.IO.Path.GetFileNameWithoutExtension(zpos[i]);
+						zpos[i] = tmp.Substring(7);
+					}
 				}
-				if (zpos.Length <= 0) {
+				//files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
+				files_10 = System.IO.Directory.GetFiles(path, "*_ZP00D.*");
+				files_10 = cut_IZ(files_10);
+
+				if (files_10.Length <= 0) {
 					//古い形式のファイルもしくはフォルダが空
 					this.comboBox8.Items.Clear();
 					this.comboBox8.Enabled = false;
 					return;
 				}
-				for (int i = 0; i < zpos.Length; i++) {
-					string tmp = System.IO.Path.GetFileNameWithoutExtension(zpos[i]);
-					zpos[i] = tmp.Substring(7);
-				}
+#if true//2018.08.13
 			}
-			//files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
-			files_10 = System.IO.Directory.GetFiles(path, "*_ZP00D.*");
-			files_10 = cut_IZ(files_10);
-
-			if (files_10.Length <= 0) {
-				//古い形式のファイルもしくはフォルダが空
-				this.comboBox8.Items.Clear();
-				this.comboBox8.Enabled = false;
-				return;
+			catch (Exception ex) {
+				G.mlog(ex.Message);
 			}
+#endif
 			if (true) {
 				string[] files_pl, files_mi;
 				this.comboBox8.Items.Clear();
@@ -174,7 +185,9 @@ namespace uSCOPE
 			else {
 				path = this.textBox1.Text;
 			}
-
+#if true//2018.08.13
+			G.SS.MOZ_IRC_SAVE = false;//常にOFF(IZファイルを保存するとエラー発生のため)
+#endif
 			if (!System.IO.Directory.Exists(path)) {
 				G.mlog("指定されたフォルダは存在しません.\r\r" + path);
 				e.Cancel = true;

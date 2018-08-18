@@ -357,6 +357,17 @@ namespace uSCOPE
 			{
 				ctrlKeyFlg = true;
 			}
+#if true//2018.08.13(CTRL+ABCからCTRL+IOPに変更)
+			if(e.KeyCode == Keys.I) {
+				AKeyFlg = true;
+			}
+			if(e.KeyCode == Keys.O) {
+				BKeyFlg = true;
+			}
+			if(e.KeyCode == Keys.P) {
+				CKeyFlg = true;
+			}
+#else
 			if(e.KeyCode == Keys.A)
 			{
 				AKeyFlg = true;
@@ -369,6 +380,7 @@ namespace uSCOPE
 			{
 				CKeyFlg = true;
 			}
+#endif
 
             if(ctrlKeyFlg && AKeyFlg && BKeyFlg && CKeyFlg)
             {
@@ -395,6 +407,20 @@ namespace uSCOPE
 				ctrlKeyFlg = false;
                 flag = false;
 			}
+#if true//2018.08.13(CTRL+ABCからCTRL+IOPに変更)
+			if(e.KeyCode == Keys.I) {
+				AKeyFlg = false;
+                flag = false;
+			}
+			if(e.KeyCode == Keys.O) {
+				BKeyFlg = false;
+                flag = false;
+			}
+			if(e.KeyCode == Keys.P) {
+				CKeyFlg = false;
+                flag = false;
+			}
+#else
 			if(e.KeyCode == Keys.A)
 			{
 				AKeyFlg = false;
@@ -410,7 +436,7 @@ namespace uSCOPE
 				CKeyFlg = false;
                 flag = false;
 			}
-
+#endif
         }
 
         private void timer1_Tick(object sender, EventArgs e)
