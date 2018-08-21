@@ -260,6 +260,10 @@ namespace uSCOPE
 			public int[] PLM_AUT_ZKEI = null;
 			//---
 			public bool PLM_AUT_IRCK = false;
+#if true//2018.08.16
+			public bool PLM_AUT_ZORG = false;
+			public bool PLM_AUT_ZNOR = false;
+#endif
 			//---
 			public int ETC_LED_WAIT = 18;
 			public int ETC_UIF_LEVL =  0;

@@ -116,7 +116,10 @@ namespace uSCOPE
 #endif
 				//---
 				DDV.DDX(bUpdate, this.checkBox4      , ref m_ss.PLM_AUT_IRCK);//カラーと同時に赤外測定
-
+#if true//2018.08.16
+				DDV.DDX(bUpdate, this.checkBox8, ref m_ss.PLM_AUT_ZORG);//Z軸原点
+				DDV.DDX(bUpdate, this.checkBox9, ref m_ss.PLM_AUT_ZNOR);//右側カット
+#endif
 				if (bUpdate == false) {
 					if (this.textBox2.Text == "") {
 						G.mlog("フォルダを指定してください.");

@@ -2542,6 +2542,12 @@ a_write("AF:終了");
 				NXT_STS = -(30 - 1);//->30
 				break;
 			case 30:
+#if true//2018.08.16(右側カット)
+				if (G.SS.PLM_AUT_ZNOR) {
+					NXT_STS = 39;
+				}
+#endif
+
 				if ((G.PLM_STS_BIT[0] & (int)G.PLM_STS_BITS.BIT_LMT_P) != 0) {
 					//SOFT.LIMIT(+)
 					NXT_STS = 39;
@@ -2592,6 +2598,12 @@ a_write("AF:終了");
 				rename_aut_files();
 				//---
 				m_adat.h_idx++;
+#if true//2018.08.16(Z軸再原点)
+				if (G.SS.PLM_AUT_ZORG) {
+					m_pre_set[2] = false;
+					NXT_STS = -(500-1);	//500を経由して10へ遷移
+				}
+#endif
 				break;
 			case 100:
 			case 400://赤外同時測定
@@ -2953,6 +2965,17 @@ a_write("光源切替:->反射");
 			case 357:
 				NXT_STS = -3-200+this.AUT_STS;
 				break;
+#if true//2018.08.16(Z軸再原点)
+			case 500:
+				D.SET_STG_ORG(2);
+				G.PLM_STS |= (1 << 2);
+				NXT_STS = -this.AUT_STS;
+			break;
+			case 501:
+				MOVE_ABS_Z(m_adat.sta_pos_z);
+				NXT_STS = -(10 - 1);//->10
+			break;
+#endif
 			case 999:
 				if (m_adat.h_cnt == 0 && G.SS.PLM_AUT_RTRY) {
 					if (G.SS.PLM_AUT_MODE == 5 || G.SS.PLM_AUT_MODE == 8) {
