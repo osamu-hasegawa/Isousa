@@ -33,15 +33,19 @@
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
 			System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-			System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation3 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
 			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation4 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
 			System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+			System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation5 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
+			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation6 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
+			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+			System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
@@ -49,7 +53,6 @@
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.button1 = new System.Windows.Forms.Button();
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -57,7 +60,6 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-			this.label7 = new System.Windows.Forms.Label();
 			this.panel11 = new System.Windows.Forms.Panel();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
@@ -67,13 +69,18 @@
 			this.panel5 = new System.Windows.Forms.Panel();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.panel8 = new System.Windows.Forms.Panel();
+			this.label7 = new System.Windows.Forms.Label();
 			this.checkBox9 = new System.Windows.Forms.CheckBox();
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox8 = new System.Windows.Forms.CheckBox();
-			this.checkBox10 = new System.Windows.Forms.CheckBox();
 			this.panel10 = new System.Windows.Forms.Panel();
+			this.label10 = new System.Windows.Forms.Label();
 			this.panel13 = new System.Windows.Forms.Panel();
+			this.label12 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
 			this.label28 = new System.Windows.Forms.Label();
+			this.comboBox12 = new System.Windows.Forms.ComboBox();
+			this.comboBox10 = new System.Windows.Forms.ComboBox();
 			this.comboBox8 = new System.Windows.Forms.ComboBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -95,6 +102,9 @@
 			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+			this.pictureBox3 = new System.Windows.Forms.PictureBox();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.listView2 = new System.Windows.Forms.ListView();
 			this.panel3 = new System.Windows.Forms.Panel();
@@ -119,6 +129,9 @@
 			this.panel13.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.groupBox6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -129,16 +142,16 @@
 			this.groupBox1.Controls.Add(this.propertyGrid1);
 			this.groupBox1.Controls.Add(this.chart2);
 			this.groupBox1.ForeColor = System.Drawing.Color.White;
-			this.groupBox1.Location = new System.Drawing.Point(311, 256);
+			this.groupBox1.Location = new System.Drawing.Point(415, 345);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(288, 165);
+			this.groupBox1.Size = new System.Drawing.Size(191, 165);
 			this.groupBox1.TabIndex = 16;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "毛髄径";
 			// 
 			// propertyGrid1
 			// 
-			this.propertyGrid1.Location = new System.Drawing.Point(234, 29);
+			this.propertyGrid1.Location = new System.Drawing.Point(158, 29);
 			this.propertyGrid1.Name = "propertyGrid1";
 			this.propertyGrid1.Size = new System.Drawing.Size(53, 38);
 			this.propertyGrid1.TabIndex = 1;
@@ -177,13 +190,7 @@
 			series1.Legend = "Legend1";
 			series1.LegendText = "毛髄径";
 			series1.Name = "Series1";
-			series2.ChartArea = "ChartArea1";
-			series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-			series2.Legend = "Legend1";
-			series2.LegendText = "毛髪径";
-			series2.Name = "Series2";
 			this.chart2.Series.Add(series1);
-			this.chart2.Series.Add(series2);
 			this.chart2.Size = new System.Drawing.Size(263, 147);
 			this.chart2.TabIndex = 0;
 			this.chart2.Text = "chart1";
@@ -192,9 +199,9 @@
 			// 
 			this.groupBox2.Controls.Add(this.chart1);
 			this.groupBox2.ForeColor = System.Drawing.Color.White;
-			this.groupBox2.Location = new System.Drawing.Point(3, 256);
+			this.groupBox2.Location = new System.Drawing.Point(3, 345);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(289, 165);
+			this.groupBox2.Size = new System.Drawing.Size(198, 165);
 			this.groupBox2.TabIndex = 16;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "断面";
@@ -227,36 +234,36 @@
 			this.chart1.Legends.Add(legend2);
 			this.chart1.Location = new System.Drawing.Point(3, 15);
 			this.chart1.Name = "chart1";
+			series2.ChartArea = "ChartArea1";
+			series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+			series2.Legend = "Legend1";
+			series2.LegendText = "R*0";
+			series2.Name = "Series1";
 			series3.ChartArea = "ChartArea1";
 			series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
 			series3.Legend = "Legend1";
-			series3.LegendText = "R*0";
-			series3.Name = "Series1";
+			series3.LegendText = "R*+50%";
+			series3.Name = "Series2";
 			series4.ChartArea = "ChartArea1";
 			series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
 			series4.Legend = "Legend1";
-			series4.LegendText = "R*+50%";
-			series4.Name = "Series2";
+			series4.LegendText = "R*-50%";
+			series4.Name = "Series3";
 			series5.ChartArea = "ChartArea1";
 			series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
 			series5.Legend = "Legend1";
-			series5.LegendText = "R*-50%";
-			series5.Name = "Series3";
+			series5.LegendText = "R+3um";
+			series5.Name = "Series4";
 			series6.ChartArea = "ChartArea1";
 			series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
 			series6.Legend = "Legend1";
-			series6.LegendText = "R+3um";
-			series6.Name = "Series4";
-			series7.ChartArea = "ChartArea1";
-			series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-			series7.Legend = "Legend1";
-			series7.LegendText = "R-3um";
-			series7.Name = "Series5";
+			series6.LegendText = "R-3um";
+			series6.Name = "Series5";
+			this.chart1.Series.Add(series2);
 			this.chart1.Series.Add(series3);
 			this.chart1.Series.Add(series4);
 			this.chart1.Series.Add(series5);
 			this.chart1.Series.Add(series6);
-			this.chart1.Series.Add(series7);
 			this.chart1.Size = new System.Drawing.Size(280, 144);
 			this.chart1.TabIndex = 0;
 			this.chart1.Text = "chart1";
@@ -269,18 +276,6 @@
 			this.textBox1.Size = new System.Drawing.Size(135, 19);
 			this.textBox1.TabIndex = 3;
 			this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// button1
-			// 
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.button1.Location = new System.Drawing.Point(3, 316);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(25, 21);
-			this.button1.TabIndex = 1;
-			this.button1.Text = "button1";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// listView1
 			// 
@@ -305,7 +300,7 @@
 			// 
 			// pictureBox2
 			// 
-			this.pictureBox2.Location = new System.Drawing.Point(311, 3);
+			this.pictureBox2.Location = new System.Drawing.Point(415, 3);
 			this.pictureBox2.Name = "pictureBox2";
 			this.pictureBox2.Size = new System.Drawing.Size(190, 129);
 			this.pictureBox2.TabIndex = 18;
@@ -315,9 +310,9 @@
 			// 
 			this.panel1.Controls.Add(this.tableLayoutPanel2);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel1.Location = new System.Drawing.Point(617, 0);
+			this.panel1.Location = new System.Drawing.Point(620, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(162, 506);
+			this.panel1.Size = new System.Drawing.Size(162, 684);
 			this.panel1.TabIndex = 19;
 			// 
 			// tableLayoutPanel2
@@ -330,9 +325,9 @@
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 2;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 63.24111F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36.75889F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(162, 506);
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(162, 684);
 			this.tableLayoutPanel2.TabIndex = 4;
 			// 
 			// groupBox3
@@ -342,7 +337,7 @@
 			this.groupBox3.ForeColor = System.Drawing.Color.White;
 			this.groupBox3.Location = new System.Drawing.Point(3, 3);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(156, 314);
+			this.groupBox3.Size = new System.Drawing.Size(156, 336);
 			this.groupBox3.TabIndex = 4;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "画像";
@@ -359,27 +354,15 @@
 			this.flowLayoutPanel1.Controls.Add(this.checkBox9);
 			this.flowLayoutPanel1.Controls.Add(this.checkBox2);
 			this.flowLayoutPanel1.Controls.Add(this.checkBox8);
-			this.flowLayoutPanel1.Controls.Add(this.checkBox10);
 			this.flowLayoutPanel1.Controls.Add(this.panel10);
+			this.flowLayoutPanel1.Controls.Add(this.label10);
 			this.flowLayoutPanel1.Controls.Add(this.panel13);
 			this.flowLayoutPanel1.Controls.Add(this.label9);
-			this.flowLayoutPanel1.Controls.Add(this.button1);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 15);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 296);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 318);
 			this.flowLayoutPanel1.TabIndex = 0;
-			// 
-			// label7
-			// 
-			this.label7.AutoSize = true;
-			this.flowLayoutPanel1.SetFlowBreak(this.label7, true);
-			this.label7.Location = new System.Drawing.Point(10, 123);
-			this.label7.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(53, 12);
-			this.label7.TabIndex = 0;
-			this.label7.Text = "赤外画像";
 			// 
 			// panel11
 			// 
@@ -477,6 +460,17 @@
 			this.panel8.Size = new System.Drawing.Size(130, 2);
 			this.panel8.TabIndex = 10;
 			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.flowLayoutPanel1.SetFlowBreak(this.label7, true);
+			this.label7.Location = new System.Drawing.Point(10, 123);
+			this.label7.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(53, 12);
+			this.label7.TabIndex = 0;
+			this.label7.Text = "赤外画像";
+			// 
 			// checkBox9
 			// 
 			this.checkBox9.AutoSize = true;
@@ -519,44 +513,97 @@
 			this.checkBox8.UseVisualStyleBackColor = true;
 			this.checkBox8.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
-			// checkBox10
-			// 
-			this.checkBox10.Location = new System.Drawing.Point(10, 192);
-			this.checkBox10.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBox10.Name = "checkBox10";
-			this.checkBox10.Size = new System.Drawing.Size(123, 45);
-			this.checkBox10.TabIndex = 11;
-			this.checkBox10.Text = "カラー画像の代わりに赤外の毛髪抽出画像を表示する";
-			this.checkBox10.UseVisualStyleBackColor = true;
-			this.checkBox10.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-			// 
 			// panel10
 			// 
 			this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel10.Location = new System.Drawing.Point(8, 243);
+			this.panel10.Location = new System.Drawing.Point(8, 192);
 			this.panel10.Margin = new System.Windows.Forms.Padding(8, 3, 3, 3);
 			this.panel10.Name = "panel10";
 			this.panel10.Size = new System.Drawing.Size(130, 2);
 			this.panel10.TabIndex = 12;
 			// 
+			// label10
+			// 
+			this.label10.AutoSize = true;
+			this.label10.Location = new System.Drawing.Point(10, 197);
+			this.label10.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(36, 12);
+			this.label10.TabIndex = 38;
+			this.label10.Text = "Z位置";
+			// 
 			// panel13
 			// 
+			this.panel13.Controls.Add(this.label12);
+			this.panel13.Controls.Add(this.label11);
 			this.panel13.Controls.Add(this.label28);
+			this.panel13.Controls.Add(this.comboBox12);
+			this.panel13.Controls.Add(this.comboBox10);
 			this.panel13.Controls.Add(this.comboBox8);
-			this.panel13.Location = new System.Drawing.Point(7, 251);
+			this.panel13.Location = new System.Drawing.Point(7, 212);
 			this.panel13.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
 			this.panel13.Name = "panel13";
-			this.panel13.Size = new System.Drawing.Size(131, 35);
+			this.panel13.Size = new System.Drawing.Size(131, 86);
 			this.panel13.TabIndex = 2;
+			// 
+			// label12
+			// 
+			this.label12.AutoSize = true;
+			this.label12.Location = new System.Drawing.Point(2, 62);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(41, 12);
+			this.label12.TabIndex = 38;
+			this.label12.Text = "毛髄径";
+			// 
+			// label11
+			// 
+			this.label11.AutoSize = true;
+			this.label11.Location = new System.Drawing.Point(3, 36);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(41, 12);
+			this.label11.TabIndex = 38;
+			this.label11.Text = "毛髪径";
 			// 
 			// label28
 			// 
 			this.label28.AutoSize = true;
 			this.label28.Location = new System.Drawing.Point(3, 10);
 			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(36, 12);
+			this.label28.Size = new System.Drawing.Size(29, 12);
 			this.label28.TabIndex = 38;
-			this.label28.Text = "Z位置";
+			this.label28.Text = "断面";
+			// 
+			// comboBox12
+			// 
+			this.comboBox12.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox12.FormattingEnabled = true;
+			this.comboBox12.Items.AddRange(new object[] {
+            "Z08 (-側)",
+            "Z09 (-側)",
+            "Z10 (AF位置)",
+            "Z11 (+側)",
+            "Z12 (+側)"});
+			this.comboBox12.Location = new System.Drawing.Point(45, 59);
+			this.comboBox12.Name = "comboBox12";
+			this.comboBox12.Size = new System.Drawing.Size(77, 20);
+			this.comboBox12.TabIndex = 0;
+			this.comboBox12.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
+			// 
+			// comboBox10
+			// 
+			this.comboBox10.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox10.FormattingEnabled = true;
+			this.comboBox10.Items.AddRange(new object[] {
+            "Z08 (-側)",
+            "Z09 (-側)",
+            "Z10 (AF位置)",
+            "Z11 (+側)",
+            "Z12 (+側)"});
+			this.comboBox10.Location = new System.Drawing.Point(45, 7);
+			this.comboBox10.Name = "comboBox10";
+			this.comboBox10.Size = new System.Drawing.Size(77, 20);
+			this.comboBox10.TabIndex = 0;
+			this.comboBox10.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
 			// 
 			// comboBox8
 			// 
@@ -568,7 +615,7 @@
             "Z10 (AF位置)",
             "Z11 (+側)",
             "Z12 (+側)"});
-			this.comboBox8.Location = new System.Drawing.Point(45, 7);
+			this.comboBox8.Location = new System.Drawing.Point(45, 33);
 			this.comboBox8.Name = "comboBox8";
 			this.comboBox8.Size = new System.Drawing.Size(77, 20);
 			this.comboBox8.TabIndex = 0;
@@ -577,7 +624,7 @@
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(10, 289);
+			this.label9.Location = new System.Drawing.Point(10, 301);
 			this.label9.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(135, 24);
@@ -604,9 +651,9 @@
 			this.groupBox4.Controls.Add(this.radioButton1);
 			this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox4.ForeColor = System.Drawing.Color.White;
-			this.groupBox4.Location = new System.Drawing.Point(3, 323);
+			this.groupBox4.Location = new System.Drawing.Point(3, 345);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(156, 180);
+			this.groupBox4.Size = new System.Drawing.Size(156, 336);
 			this.groupBox4.TabIndex = 4;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "グラフ";
@@ -794,21 +841,81 @@
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.BackColor = System.Drawing.Color.Black;
-			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.ColumnCount = 3;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.tableLayoutPanel1.Controls.Add(this.groupBox2, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.pictureBox2, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.groupBox1, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.groupBox1, 2, 1);
+			this.tableLayoutPanel1.Controls.Add(this.groupBox6, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.pictureBox2, 2, 0);
+			this.tableLayoutPanel1.Controls.Add(this.pictureBox3, 1, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(617, 506);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(620, 684);
 			this.tableLayoutPanel1.TabIndex = 20;
+			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.chart3);
+			this.groupBox6.ForeColor = System.Drawing.Color.White;
+			this.groupBox6.Location = new System.Drawing.Point(209, 345);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(199, 162);
+			this.groupBox6.TabIndex = 19;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "毛髪径";
+			// 
+			// chart3
+			// 
+			textAnnotation5.AllowMoving = true;
+			textAnnotation5.Height = 100D;
+			textAnnotation5.Name = "TextAnnotation1";
+			textAnnotation5.Text = "[um]";
+			textAnnotation5.Width = 100D;
+			textAnnotation5.X = 45D;
+			textAnnotation5.Y = 46D;
+			textAnnotation6.Alignment = System.Drawing.ContentAlignment.TopLeft;
+			textAnnotation6.Height = 100D;
+			textAnnotation6.Name = "TextAnnotation2";
+			textAnnotation6.Text = "[um]";
+			textAnnotation6.Width = 100D;
+			textAnnotation6.X = 10D;
+			textAnnotation6.Y = 0D;
+			this.chart3.Annotations.Add(textAnnotation5);
+			this.chart3.Annotations.Add(textAnnotation6);
+			chartArea3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+			chartArea3.Name = "ChartArea1";
+			this.chart3.ChartAreas.Add(chartArea3);
+			this.chart3.Dock = System.Windows.Forms.DockStyle.Left;
+			legend3.Alignment = System.Drawing.StringAlignment.Far;
+			legend3.DockedToChartArea = "ChartArea1";
+			legend3.Name = "Legend1";
+			this.chart3.Legends.Add(legend3);
+			this.chart3.Location = new System.Drawing.Point(3, 15);
+			this.chart3.Name = "chart3";
+			series7.ChartArea = "ChartArea1";
+			series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+			series7.Legend = "Legend1";
+			series7.LegendText = "毛髪径";
+			series7.Name = "Series1";
+			this.chart3.Series.Add(series7);
+			this.chart3.Size = new System.Drawing.Size(263, 144);
+			this.chart3.TabIndex = 1;
+			this.chart3.Text = "chart1";
+			// 
+			// pictureBox3
+			// 
+			this.pictureBox3.Location = new System.Drawing.Point(209, 3);
+			this.pictureBox3.Name = "pictureBox3";
+			this.pictureBox3.Size = new System.Drawing.Size(190, 129);
+			this.pictureBox3.TabIndex = 18;
+			this.pictureBox3.TabStop = false;
 			// 
 			// panel2
 			// 
@@ -816,9 +923,9 @@
 			this.panel2.Controls.Add(this.listView1);
 			this.panel2.Controls.Add(this.panel3);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel2.Location = new System.Drawing.Point(0, 506);
+			this.panel2.Location = new System.Drawing.Point(0, 684);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(779, 120);
+			this.panel2.Size = new System.Drawing.Size(782, 120);
 			this.panel2.TabIndex = 21;
 			// 
 			// listView2
@@ -838,7 +945,7 @@
 			// 
 			this.panel3.Controls.Add(this.groupBox5);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel3.Location = new System.Drawing.Point(617, 0);
+			this.panel3.Location = new System.Drawing.Point(620, 0);
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(162, 120);
 			this.panel3.TabIndex = 20;
@@ -916,7 +1023,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(779, 626);
+			this.ClientSize = new System.Drawing.Size(782, 804);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.panel2);
@@ -945,6 +1052,9 @@
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
+			this.groupBox6.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
 			this.panel2.ResumeLayout(false);
 			this.panel3.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
@@ -960,7 +1070,6 @@
 		private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
 		private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
 		private System.Windows.Forms.ListView listView1;
-		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.PictureBox pictureBox2;
@@ -1005,7 +1114,6 @@
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.RadioButton radioButton3;
 		private System.Windows.Forms.PropertyGrid propertyGrid1;
-		private System.Windows.Forms.CheckBox checkBox10;
 		private System.Windows.Forms.CheckBox checkBox12;
 		private System.Windows.Forms.CheckBox checkBox11;
 		private System.Windows.Forms.Panel panel9;
@@ -1017,5 +1125,13 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Panel panel11;
 		private System.Windows.Forms.Panel panel13;
+		private System.Windows.Forms.GroupBox groupBox6;
+		private System.Windows.Forms.PictureBox pictureBox3;
+		private System.Windows.Forms.DataVisualization.Charting.Chart chart3;
+		private System.Windows.Forms.ComboBox comboBox12;
+		private System.Windows.Forms.ComboBox comboBox10;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.Label label11;
 	}
 }

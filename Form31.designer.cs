@@ -28,6 +28,13 @@
 		private void InitializeComponent()
 		{
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.panel18 = new System.Windows.Forms.Panel();
+			this.panel17 = new System.Windows.Forms.Panel();
+			this.comboBox10 = new System.Windows.Forms.ComboBox();
+			this.panel16 = new System.Windows.Forms.Panel();
+			this.label45 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.numericUpDown71 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown74 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown73 = new System.Windows.Forms.NumericUpDown();
@@ -48,7 +55,6 @@
 			this.label21 = new System.Windows.Forms.Label();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.label45 = new System.Windows.Forms.Label();
 			this.label34 = new System.Windows.Forms.Label();
 			this.label31 = new System.Windows.Forms.Label();
 			this.label40 = new System.Windows.Forms.Label();
@@ -97,6 +103,7 @@
 			this.comboBox8 = new System.Windows.Forms.ComboBox();
 			this.comboBox6 = new System.Windows.Forms.ComboBox();
 			this.comboBox4 = new System.Windows.Forms.ComboBox();
+			this.comboBox9 = new System.Windows.Forms.ComboBox();
 			this.comboBox2 = new System.Windows.Forms.ComboBox();
 			this.numericUpDown70 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown55 = new System.Windows.Forms.NumericUpDown();
@@ -128,6 +135,7 @@
 			this.numericUpDown44 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown25 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
+			this.label2 = new System.Windows.Forms.Label();
 			this.label56 = new System.Windows.Forms.Label();
 			this.numericUpDown64 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown49 = new System.Windows.Forms.NumericUpDown();
@@ -159,14 +167,12 @@
 			this.label50 = new System.Windows.Forms.Label();
 			this.label49 = new System.Windows.Forms.Label();
 			this.label26 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.panel16 = new System.Windows.Forms.Panel();
-			this.label2 = new System.Windows.Forms.Label();
-			this.comboBox9 = new System.Windows.Forms.ComboBox();
-			this.comboBox10 = new System.Windows.Forms.ComboBox();
-			this.panel17 = new System.Windows.Forms.Panel();
-			this.panel18 = new System.Windows.Forms.Panel();
-			this.label3 = new System.Windows.Forms.Label();
+			this.checkBox6 = new System.Windows.Forms.CheckBox();
+			this.checkBox5 = new System.Windows.Forms.CheckBox();
+			this.checkBox4 = new System.Windows.Forms.CheckBox();
+			this.checkBox3 = new System.Windows.Forms.CheckBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.comboBox11 = new System.Windows.Forms.ComboBox();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown71)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown74)).BeginInit();
@@ -235,6 +241,12 @@
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.label4);
+			this.groupBox2.Controls.Add(this.comboBox11);
+			this.groupBox2.Controls.Add(this.checkBox6);
+			this.groupBox2.Controls.Add(this.checkBox5);
+			this.groupBox2.Controls.Add(this.checkBox4);
+			this.groupBox2.Controls.Add(this.checkBox3);
 			this.groupBox2.Controls.Add(this.label3);
 			this.groupBox2.Controls.Add(this.panel18);
 			this.groupBox2.Controls.Add(this.panel17);
@@ -379,6 +391,81 @@
 			this.groupBox2.Size = new System.Drawing.Size(711, 544);
 			this.groupBox2.TabIndex = 0;
 			this.groupBox2.TabStop = false;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(226, 456);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(97, 12);
+			this.label3.TabIndex = 63;
+			this.label3.Text = "自動測定パラメータ";
+			// 
+			// panel18
+			// 
+			this.panel18.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel18.Location = new System.Drawing.Point(390, 471);
+			this.panel18.Name = "panel18";
+			this.panel18.Size = new System.Drawing.Size(150, 2);
+			this.panel18.TabIndex = 62;
+			// 
+			// panel17
+			// 
+			this.panel17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel17.Location = new System.Drawing.Point(227, 471);
+			this.panel17.Name = "panel17";
+			this.panel17.Size = new System.Drawing.Size(150, 2);
+			this.panel17.TabIndex = 61;
+			// 
+			// comboBox10
+			// 
+			this.comboBox10.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox10.FormattingEnabled = true;
+			this.comboBox10.Items.AddRange(new object[] {
+            "画像全体",
+            "毛髪矩形+0%",
+            "毛髪矩形+25%",
+            "毛髪矩形+50%",
+            "毛髪矩形+100%",
+            "毛髪範囲10%",
+            "毛髪範囲25%",
+            "毛髪範囲50%",
+            "毛髪範囲75%",
+            "毛髪範囲100%",
+            "毛髪範囲10% (横1/3)",
+            "毛髪範囲10% (横1/4)",
+            "毛髪範囲10% (横1/5)"});
+			this.comboBox10.Location = new System.Drawing.Point(237, 498);
+			this.comboBox10.Name = "comboBox10";
+			this.comboBox10.Size = new System.Drawing.Size(135, 20);
+			this.comboBox10.TabIndex = 59;
+			// 
+			// panel16
+			// 
+			this.panel16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel16.Location = new System.Drawing.Point(6, 471);
+			this.panel16.Name = "panel16";
+			this.panel16.Size = new System.Drawing.Size(207, 2);
+			this.panel16.TabIndex = 58;
+			// 
+			// label45
+			// 
+			this.label45.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.label45.Location = new System.Drawing.Point(553, 493);
+			this.label45.Name = "label45";
+			this.label45.Size = new System.Drawing.Size(149, 42);
+			this.label45.TabIndex = 1;
+			this.label45.Text = "抽出パラメータ\r\n　K：曲率(積算値)\r\n　K/L：輪郭のギザギザの度合";
+			this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(6, 456);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(97, 12);
+			this.label1.TabIndex = 57;
+			this.label1.Text = "自動測定パラメータ";
 			// 
 			// numericUpDown71
 			// 
@@ -591,16 +678,6 @@
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(2, 505);
 			this.panel2.TabIndex = 50;
-			// 
-			// label45
-			// 
-			this.label45.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.label45.Location = new System.Drawing.Point(553, 483);
-			this.label45.Name = "label45";
-			this.label45.Size = new System.Drawing.Size(149, 42);
-			this.label45.TabIndex = 1;
-			this.label45.Text = "抽出パラメータ\r\n　K：曲率(積算値)\r\n　K/L：輪郭のギザギザの度合";
-			this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label34
 			// 
@@ -1323,6 +1400,31 @@
 			this.comboBox4.Tag = "1";
 			this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
 			// 
+			// comboBox9
+			// 
+			this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox9.FormattingEnabled = true;
+			this.comboBox9.Items.AddRange(new object[] {
+            "画像全体",
+            "毛髪矩形+0%",
+            "毛髪矩形+25%",
+            "毛髪矩形+50%",
+            "毛髪矩形+100%",
+            "毛髪範囲10%",
+            "毛髪範囲25%",
+            "毛髪範囲50%",
+            "毛髪範囲75%",
+            "毛髪範囲100%",
+            "毛髪範囲10% (横1/3)",
+            "毛髪範囲10% (横1/4)",
+            "毛髪範囲10% (横1/5)"});
+			this.comboBox9.Location = new System.Drawing.Point(65, 498);
+			this.comboBox9.Name = "comboBox9";
+			this.comboBox9.Size = new System.Drawing.Size(135, 20);
+			this.comboBox9.TabIndex = 6;
+			this.comboBox9.Tag = "0";
+			this.comboBox9.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+			// 
 			// comboBox2
 			// 
 			this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1975,6 +2077,15 @@
             0,
             0});
 			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(17, 483);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(103, 12);
+			this.label2.TabIndex = 17;
+			this.label2.Text = "コントラスト計算範囲";
+			// 
 			// label56
 			// 
 			this.label56.AutoSize = true;
@@ -2438,104 +2549,66 @@
 			this.label26.TabIndex = 1;
 			this.label26.Text = "平滑化";
 			// 
-			// label1
+			// checkBox6
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(6, 456);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(97, 12);
-			this.label1.TabIndex = 57;
-			this.label1.Text = "自動測定パラメータ";
+			this.checkBox6.AutoSize = true;
+			this.checkBox6.Location = new System.Drawing.Point(659, 455);
+			this.checkBox6.Name = "checkBox6";
+			this.checkBox6.Size = new System.Drawing.Size(56, 16);
+			this.checkBox6.TabIndex = 67;
+			this.checkBox6.Text = "K, K/L";
+			this.checkBox6.UseVisualStyleBackColor = true;
 			// 
-			// panel16
+			// checkBox5
 			// 
-			this.panel16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel16.Location = new System.Drawing.Point(6, 471);
-			this.panel16.Name = "panel16";
-			this.panel16.Size = new System.Drawing.Size(207, 2);
-			this.panel16.TabIndex = 58;
+			this.checkBox5.AutoSize = true;
+			this.checkBox5.Location = new System.Drawing.Point(630, 455);
+			this.checkBox5.Name = "checkBox5";
+			this.checkBox5.Size = new System.Drawing.Size(32, 16);
+			this.checkBox5.TabIndex = 66;
+			this.checkBox5.Text = "C";
+			this.checkBox5.UseVisualStyleBackColor = true;
 			// 
-			// label2
+			// checkBox4
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(17, 483);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(103, 12);
-			this.label2.TabIndex = 17;
-			this.label2.Text = "コントラスト計算範囲";
+			this.checkBox4.AutoSize = true;
+			this.checkBox4.Location = new System.Drawing.Point(594, 455);
+			this.checkBox4.Name = "checkBox4";
+			this.checkBox4.Size = new System.Drawing.Size(39, 16);
+			this.checkBox4.TabIndex = 65;
+			this.checkBox4.Text = "S,L";
+			this.checkBox4.UseVisualStyleBackColor = true;
 			// 
-			// comboBox9
+			// checkBox3
 			// 
-			this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox9.FormattingEnabled = true;
-			this.comboBox9.Items.AddRange(new object[] {
-            "画像全体",
-            "毛髪矩形+0%",
-            "毛髪矩形+25%",
-            "毛髪矩形+50%",
-            "毛髪矩形+100%",
-            "毛髪範囲10%",
-            "毛髪範囲25%",
-            "毛髪範囲50%",
-            "毛髪範囲75%",
-            "毛髪範囲100%",
-            "毛髪範囲10% (横1/3)",
-            "毛髪範囲10% (横1/4)",
-            "毛髪範囲10% (横1/5)"});
-			this.comboBox9.Location = new System.Drawing.Point(65, 498);
-			this.comboBox9.Name = "comboBox9";
-			this.comboBox9.Size = new System.Drawing.Size(135, 20);
-			this.comboBox9.TabIndex = 6;
-			this.comboBox9.Tag = "0";
-			this.comboBox9.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+			this.checkBox3.AutoSize = true;
+			this.checkBox3.Location = new System.Drawing.Point(551, 455);
+			this.checkBox3.Name = "checkBox3";
+			this.checkBox3.Size = new System.Drawing.Size(48, 16);
+			this.checkBox3.TabIndex = 64;
+			this.checkBox3.Text = "輪郭";
+			this.checkBox3.UseVisualStyleBackColor = true;
 			// 
-			// comboBox10
+			// label4
 			// 
-			this.comboBox10.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox10.FormattingEnabled = true;
-			this.comboBox10.Items.AddRange(new object[] {
-            "画像全体",
-            "毛髪矩形+0%",
-            "毛髪矩形+25%",
-            "毛髪矩形+50%",
-            "毛髪矩形+100%",
-            "毛髪範囲10%",
-            "毛髪範囲25%",
-            "毛髪範囲50%",
-            "毛髪範囲75%",
-            "毛髪範囲100%",
-            "毛髪範囲10% (横1/3)",
-            "毛髪範囲10% (横1/4)",
-            "毛髪範囲10% (横1/5)"});
-			this.comboBox10.Location = new System.Drawing.Point(237, 498);
-			this.comboBox10.Name = "comboBox10";
-			this.comboBox10.Size = new System.Drawing.Size(135, 20);
-			this.comboBox10.TabIndex = 59;
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(565, 475);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(53, 12);
+			this.label4.TabIndex = 69;
+			this.label4.Text = "表示画像";
 			// 
-			// panel17
+			// comboBox11
 			// 
-			this.panel17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel17.Location = new System.Drawing.Point(227, 471);
-			this.panel17.Name = "panel17";
-			this.panel17.Size = new System.Drawing.Size(150, 2);
-			this.panel17.TabIndex = 61;
-			// 
-			// panel18
-			// 
-			this.panel18.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel18.Location = new System.Drawing.Point(390, 471);
-			this.panel18.Name = "panel18";
-			this.panel18.Size = new System.Drawing.Size(150, 2);
-			this.panel18.TabIndex = 62;
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(226, 456);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(97, 12);
-			this.label3.TabIndex = 63;
-			this.label3.Text = "自動測定パラメータ";
+			this.comboBox11.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox11.FormattingEnabled = true;
+			this.comboBox11.Items.AddRange(new object[] {
+            "生画像",
+            "２値化"});
+			this.comboBox11.Location = new System.Drawing.Point(629, 471);
+			this.comboBox11.Name = "comboBox11";
+			this.comboBox11.Size = new System.Drawing.Size(73, 20);
+			this.comboBox11.TabIndex = 68;
 			// 
 			// Form31
 			// 
@@ -2763,6 +2836,12 @@
 		private System.Windows.Forms.Panel panel18;
 		private System.Windows.Forms.Panel panel17;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.CheckBox checkBox6;
+		private System.Windows.Forms.CheckBox checkBox5;
+		private System.Windows.Forms.CheckBox checkBox4;
+		private System.Windows.Forms.CheckBox checkBox3;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.ComboBox comboBox11;
 
 	}
 }

@@ -33,7 +33,13 @@ namespace uSCOPE
 			//G.SS.MOZ_CND_FMOD = 1;
 			//G.SS.ETC_NOZ_FOLD = "C:\\temp\\test_20171102_225530";
 			//G.SS.ETC_NOZ_FOLD = "C:\\temp\\test_20171108_024440";
+#if false//2018.08.21
 			this.groupBox6.Enabled = false;
+#else
+			this.button4.Visible = false;
+			this.comboBox6.SelectedIndex = 0;
+			this.comboBox6.Enabled = false;
+#endif
 			if (G.UIF_LEVL == 0) {
 #if false
 				this.groupBox1.Visible = false;
@@ -56,8 +62,9 @@ namespace uSCOPE
                 this.label33.Visible = false;
                 this.comboBox7.Visible = false;
                 this.comboBox9.Visible = false;
-
+#if false//2018.08.21
                 this.label26.Visible = false;
+#endif
                 this.comboBox6.Visible = false;
                 this.button4.Visible = false;
 
@@ -73,10 +80,9 @@ namespace uSCOPE
             DDX(true);
 			//---
 			radioButton1_Click(null, null);
-			//check_z10(G.SS.MOZ_CND_FMOD == 0 ? G.SS.AUT_BEF_PATH: this.textBox1.Text);
 			//---
 		}
-		private string[] cut_IZ(string[] files)
+		static public string[] cut_IZ(string[] files)
 		{
 			ArrayList ar = new ArrayList();
 
@@ -90,6 +96,16 @@ namespace uSCOPE
 			}
 			return((string[])ar.ToArray(typeof(string)));
 		}
+		static public void select_default(ComboBox cmb, string zpos)
+		{
+			int idx = cmb.FindString(zpos);
+			if (idx < 0) {
+				cmb.SelectedIndex = cmb.FindString("ZP00D");
+			}
+			else {
+				cmb.SelectedIndex = idx;
+			}
+		}
 		private void check_z10(string path)
 		{
 			string[] files_10;
@@ -100,6 +116,14 @@ namespace uSCOPE
 			zpos = new string[] {};
 			try {
 #endif
+#if true //2018.08.21
+				this.comboBox8.Items.Clear();
+				this.comboBox8.Enabled = false;
+				this.comboBox10.Items.Clear();
+				this.comboBox12.Items.Clear();
+				this.comboBox10.Enabled = false;
+				this.comboBox12.Enabled = false;
+#endif
 				if (true) {
 					zpos = System.IO.Directory.GetFiles(path, "0CR_00_*.*");
 					if (zpos.Length <= 0) {
@@ -107,8 +131,10 @@ namespace uSCOPE
 					}
 					if (zpos.Length <= 0) {
 						//古い形式のファイルもしくはフォルダが空
+#if false//2018.08.21
 						this.comboBox8.Items.Clear();
 						this.comboBox8.Enabled = false;
+#endif
 						return;
 					}
 					for (int i = 0; i < zpos.Length; i++) {
@@ -122,8 +148,10 @@ namespace uSCOPE
 
 				if (files_10.Length <= 0) {
 					//古い形式のファイルもしくはフォルダが空
+#if false//2018.08.21
 					this.comboBox8.Items.Clear();
 					this.comboBox8.Enabled = false;
+#endif
 					return;
 				}
 #if true//2018.08.13
@@ -133,31 +161,32 @@ namespace uSCOPE
 			}
 #endif
 			if (true) {
+#if false//2018.08.21
 				string[] files_pl, files_mi;
 				this.comboBox8.Items.Clear();
+#endif
 				this.comboBox8.Enabled = true;
+#if true //2018.08.21
+				this.comboBox10.Enabled = true;
+				this.comboBox12.Enabled = true;
+#endif
 				if (true) {
 					for (int i = 0; i < zpos.Length; i++) {
 						this.comboBox8.Items.Add(zpos[i]);
-					}
-				}
-				else {
-					this.comboBox8.Items.Add("ZP00D");
-					for (int i = 1; i < 10; i++) {
-						files_mi = System.IO.Directory.GetFiles(path, string.Format("*_Z{0:00}.*", 10-i));
-						files_pl = System.IO.Directory.GetFiles(path, string.Format("*_Z{0:00}.*", 10+i));
-						files_mi = cut_IZ(files_mi);
-						files_pl = cut_IZ(files_pl);
-						if (files_pl.Length != files_10.Length || files_mi.Length != files_10.Length) {
-							break;
-						}
-						this.comboBox8.Items.Insert(0, string.Format("Z{0:00}", 10-i));
-						this.comboBox8.Items.Add(string.Format("Z{0:00}", 10+i));
+#if true //2018.08.21
+						this.comboBox10.Items.Add(zpos[i]);
+						this.comboBox12.Items.Add(zpos[i]);
+#endif
 					}
 				}
 				if (G.SS.MOZ_FST_CK00) {
 					this.comboBox8.Items.Insert(0, "深度合成");
+#if true //2018.08.21
+					this.comboBox10.Items.Insert(0, "深度合成");
+					this.comboBox12.Items.Insert(0, "深度合成");
+#endif
 				}
+#if false//2018.08.21
 				this.comboBox8.SelectedIndex = this.comboBox8.FindString(G.SS.MOZ_CND_ZPOS);
 
 				int idx = this.comboBox8.FindString(G.SS.MOZ_CND_ZPOS);
@@ -167,6 +196,11 @@ namespace uSCOPE
 				else {
 					this.comboBox8.SelectedIndex = idx;
 				}
+#else
+				select_default(this.comboBox10, G.SS.MOZ_CND_ZPCT);
+				select_default(this.comboBox8 , G.SS.MOZ_CND_ZPHL);
+				select_default(this.comboBox12, G.SS.MOZ_CND_ZPML);
+#endif
 			}
 		}
 		private void Form21_FormClosing(object sender, FormClosingEventArgs e)
@@ -185,7 +219,7 @@ namespace uSCOPE
 			else {
 				path = this.textBox1.Text;
 			}
-#if true//2018.08.13
+#if false//2018.08.13
 			G.SS.MOZ_IRC_SAVE = false;//常にOFF(IZファイルを保存するとエラー発生のため)
 #endif
 			if (!System.IO.Directory.Exists(path)) {
@@ -195,93 +229,64 @@ namespace uSCOPE
 			}
 			string[] files_ct, files_cr, files_ir, files_10;
 			string zpos;
-
-			if (string.Compare(G.SS.MOZ_CND_ZPOS, "深度合成") == 0) {
-				zpos = "ZP00D";
-			}
-			else {
-				zpos = G.SS.MOZ_CND_ZPOS;
-			}
-
-			if (string.IsNullOrEmpty(zpos)) {
-				zpos = "";
-			}
-			else {
-				zpos = "_" + zpos;
-			}
-
-			files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
-
-			if (true) {
-			files_ct = System.IO.Directory.GetFiles(path, "?CT_??" +zpos+ ".*");
-			files_cr = System.IO.Directory.GetFiles(path, "?CR_??" +zpos+ ".*");
-			files_ir = System.IO.Directory.GetFiles(path, "?IR_??" +zpos+ ".*");
-			}
-	#if true
-			if (true) {
-				int ttl = files_ct.Length + files_cr.Length;
-				if (ttl <= 0) {
-					G.mlog("指定されたフォルダには毛髪画像ファイルがありません.\r\r" + path);
-					e.Cancel = true;
-					return;
+#if true//2018.08.21
+			for (int i = 0; i < 3; i++) {
+				switch (i) {
+					case  0: zpos = G.SS.MOZ_CND_ZPCT; break;//CL
+					case  1: zpos = G.SS.MOZ_CND_ZPHL; break;//CL
+					default: zpos = G.SS.MOZ_CND_ZPML; break;//IR
 				}
-			}
-			//画像表示のみの場合
-			if (G.SS.MOZ_CND_NOMZ) {
-				return;
-			}
-			//赤外画像
-			if (G.SS.MOZ_CND_PDFL == 1) {
-				if (files_ir.Length <= 0) {
-					G.mlog("指定されたフォルダには赤外画像ファイル('IR')がありません.\r\r" + path);
-					e.Cancel = true;
-					return;
+				if (zpos == "深度合成") {
+					zpos = "ZP00D";
 				}
-			}
-	#else
-			//画像表示のみの場合
-			if (G.SS.MOZ_CND_NOMZ) {
-				int ttl = 0;
-				ttl += files_cl.Length + files_ct.Length;
-				ttl += files_cr.Length + files_ir.Length;
-				if (ttl <= 0) {
-					G.mlog("指定されたフォルダには毛髪画像ファイルがありません.\r\r" + path);
-					e.Cancel = true;
-				}
-				return;
-			}
-			//透過画像
-			if (/*位置検出*/G.SS.MOZ_CND_PDFL == 0 || /*カラー断面*/G.SS.MOZ_CND_DMFL == 0) {
-				if (files_ct.Length > 0 || (G.SS.ETC_CLF_CTCR == 0 && files_cl.Length > 0)) {
-					// ok
+#else
+				if (string.Compare(G.SS.MOZ_CND_ZPOS, "深度合成") == 0) {
+					zpos = "ZP00D";
 				}
 				else {
-					G.mlog("指定されたフォルダには透過画像ファイル('CT')がありません.\r\r" + path);
-					e.Cancel = true;
-					return;
+					zpos = G.SS.MOZ_CND_ZPOS;
 				}
-			}
-			
-			//反射画像
-			if (/*位置検出*/G.SS.MOZ_CND_PDFL == 1 || /*カラー断面*/G.SS.MOZ_CND_DMFL == 1) {
-				if (files_cr.Length > 0 || (G.SS.ETC_CLF_CTCR == 1 && files_cl.Length > 0)) {
-					// ok
+#endif
+				if (string.IsNullOrEmpty(zpos)) {
+					zpos = "";
 				}
 				else {
-					G.mlog("指定されたフォルダには反射画像ファイル('CR')がありません.\r\r" + path);
-					e.Cancel = true;
+					zpos = "_" + zpos;
+				}
+#if false//2018.08.21
+				files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
+#endif
+				if (true) {
+					files_ct = System.IO.Directory.GetFiles(path, "?CT_??" + zpos + ".*");
+					files_cr = System.IO.Directory.GetFiles(path, "?CR_??" + zpos + ".*");
+					files_ir = System.IO.Directory.GetFiles(path, "?IR_??" + zpos + ".*");
+				}
+#if true
+				if (true) {
+					int ttl = files_ct.Length + files_cr.Length;
+					if (ttl <= 0) {
+						G.mlog("指定されたフォルダには毛髪画像ファイルがありません.\r\r" + path);
+						e.Cancel = true;
+						return;
+					}
+				}
+				//画像表示のみの場合
+				if (G.SS.MOZ_CND_NOMZ) {
 					return;
 				}
-			}
-			//赤外画像
-			if (G.SS.MOZ_CND_PDFL == 2) {
-				if (files_ir.Length <= 0) {
-					G.mlog("指定されたフォルダには赤外画像ファイル('IR')がありません.\r\r" + path);
-					e.Cancel = true;
-					return;
+				//赤外画像
+				if (G.SS.MOZ_CND_PDFL == 1) {
+					if (files_ir.Length <= 0) {
+						G.mlog("指定されたフォルダには赤外画像ファイル('IR')がありません.\r\r" + path);
+						e.Cancel = true;
+						return;
+					}
 				}
+#else
+#endif
+#if true//2018.08.21
 			}
-	#endif
+#endif
 		}
 		private bool DDX(bool bUpdate)
         {
@@ -300,11 +305,19 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox1      , ref G.SS.MOZ_CND_CTRA);
 				DDV.DDX(bUpdate, this.numericUpDown4 , ref G.SS.MOZ_CND_HANI);
 				//---
+#if true//2018.08.21
+				G.SS.MOZ_CND_PDFL = 0;//カラー固定
+				DDV.DDX(bUpdate, this.comboBox10     , ref G.SS.MOZ_CND_ZPCT);
+				DDV.DDX(bUpdate, this.comboBox8      , ref G.SS.MOZ_CND_ZPHL);
+				DDV.DDX(bUpdate, this.comboBox12     , ref G.SS.MOZ_CND_ZPML);
+#else
 				DDV.DDX(bUpdate, this.comboBox6      , ref G.SS.MOZ_CND_PDFL);
 //				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.MOZ_CND_DMFL);
 				DDV.DDX(bUpdate, this.comboBox8      , ref G.SS.MOZ_CND_ZPOS);
-				DDV.DDX(bUpdate, this.checkBox8      , ref G.SS.MOZ_CND_NOMZ);
+#endif
+				DDV.DDX(bUpdate, this.checkBox8, ref G.SS.MOZ_CND_NOMZ);
 				//---
+#if false//2018.08.21
 				DDV.DDX(bUpdate, this.comboBox5      , ref  G.SS.IMP_FLT_COEF[3]);
 				G.SS.IMP_BIN_MODE[3] = 1;//GRAY-SCALE
 				DDV.DDX(bUpdate, this.numericUpDown30, ref G.SS.IMP_BIN_BVAL[3]);
@@ -319,18 +332,21 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown39, ref G.SS.IMP_GIZ_UPPR[3]);
 				DDV.DDX(bUpdate, this.numericUpDown40, ref G.SS.IMP_GIZ_LOWR[3]);
 				DDV.DDX(bUpdate, this.numericUpDown19, ref G.SS.IMP_OPT_MAGN[3]);
+
 				//---
 				DDV.DDX(bUpdate, this.checkBox7      , ref G.SS.MOZ_IRC_NOMZ);
 				DDV.DDX(bUpdate, this.checkBox2      , ref G.SS.MOZ_IRC_SAVE);
+
 				DDV.DDX(bUpdate, this.checkBox3      , ref G.SS.MOZ_IRC_CK00);
 				DDV.DDX(bUpdate, this.checkBox4      , ref G.SS.MOZ_IRC_CK01);
 				DDV.DDX(bUpdate, this.checkBox5      , ref G.SS.MOZ_IRC_CK02);
 				DDV.DDX(bUpdate, this.checkBox6      , ref G.SS.MOZ_IRC_CK03);
 				DDV.DDX(bUpdate, this.comboBox4      , ref G.SS.MOZ_IRC_DISP);
+#endif
 				//---
-				DDV.DDX(bUpdate, this.checkBox9      , ref G.SS.MOZ_FST_CK00);
+				DDV.DDX(bUpdate, this.checkBox9      , ref G.SS.MOZ_FST_CK00);	//深度合成を行う
 #if true//2018.07.02
-				DDV.DDX(bUpdate, this.checkBox10     , ref G.SS.MOZ_FST_CK01);
+				DDV.DDX(bUpdate, this.checkBox10, ref G.SS.MOZ_FST_CK01);		//合成済時スキップ
 #endif
 				DDV.DDX(bUpdate, this.numericUpDown5 , ref G.SS.MOZ_FST_RCNT);
 				DDV.DDX(bUpdate, this.numericUpDown6 , ref G.SS.MOZ_FST_CCNT);
@@ -374,6 +390,7 @@ namespace uSCOPE
 				}
 			}
 			else if (sender == this.button4) {
+#if false//2018.08.21
 				// [>>]
 				if (this.button4.Text == ">>") {
 					this.Width = this.groupBox6.Location.X + this.groupBox6.Width+GAP;
@@ -391,6 +408,7 @@ namespace uSCOPE
 					this.button4.Enabled = true;
 					this.button4.Text = ">>";
 				}
+#endif
 			}
 		}
 
@@ -407,16 +425,39 @@ namespace uSCOPE
 
 		private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
 		{
+#if false//2018.08.21
 			if (this.comboBox6.SelectedIndex == 2 && this.button4.Text == "<<") {
 				this.groupBox6.Enabled = true;
 			}
 			else {
 				this.groupBox6.Enabled = false;
 			}
+#endif
 		}
-
+		static public void check_fst(ComboBox cmb, bool bChecked)
+		{
+			if (bChecked) {
+				if (cmb.FindString("深度合成") < 0) {
+					cmb.Items.Insert(0, "深度合成");
+//					cmb.SelectedIndex = 0;
+				}
+			}
+			else {
+				if (cmb.FindString("深度合成") >= 0) {
+					cmb.Items.Remove("深度合成");
+					if (cmb.SelectedIndex < 0) {
+						cmb.SelectedIndex = cmb.FindString("ZP00D");
+					}
+				}
+			}
+		}
 		private void checkBox9_CheckedChanged(object sender, EventArgs e)
 		{
+#if true//2018.08.21
+			check_fst(this.comboBox10, this.checkBox9.Checked);
+			check_fst(this.comboBox8 , this.checkBox9.Checked);
+			check_fst(this.comboBox12, this.checkBox9.Checked);
+#else
 			if (this.checkBox9.Checked) {
 				if (this.comboBox8.FindString("深度合成") < 0) {
 					this.comboBox8.Items.Insert(0, "深度合成");
@@ -431,6 +472,7 @@ namespace uSCOPE
 					}
 				}
 			}
+#endif
 		}
 	}
 }

@@ -151,6 +151,13 @@ namespace uSCOPE
 				}
 				DDV.DDX(bUpdate, this.comboBox9, ref m_ss.IMP_AUT_AFMD[0]);
 				DDV.DDX(bUpdate, this.comboBox10, ref m_ss.IMP_AUT_AFMD[1]);
+#if true//2018.08.21
+				DDV.DDX(bUpdate, this.checkBox3, ref G.SS.MOZ_IRC_CK00);
+				DDV.DDX(bUpdate, this.checkBox4, ref G.SS.MOZ_IRC_CK01);
+				DDV.DDX(bUpdate, this.checkBox5, ref G.SS.MOZ_IRC_CK02);
+				DDV.DDX(bUpdate, this.checkBox6, ref G.SS.MOZ_IRC_CK03);
+				DDV.DDX(bUpdate, this.comboBox11, ref G.SS.MOZ_IRC_DISP);
+#endif
 				//-----
                 rc = true;
             }

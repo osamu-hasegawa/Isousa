@@ -32,13 +32,19 @@ namespace uSCOPE
 		private Bitmap	m_bmp_dm1, m_bmp_dm0, m_bmp_dm2;
 		private Bitmap	m_bmp_ir1, m_bmp_ir0, m_bmp_ir2;
 		private Bitmap	m_bmp_pd1;
-		private Point[]	m_dia_top;
+#if true//2018.08.21
+		private Bitmap	m_bmp_pd0, m_bmp_pd2;
+#endif
+		private Point[] m_dia_top;
 		private Point[]	m_dia_btm;
 		private int		m_dia_cnt;
 		private int		m_chk1, m_chk2;
 		//---
 		public Dictionary<string, ImageList> m_map_of_dml;
 		public Dictionary<string, ImageList> m_map_of_irl;
+#if true//2018.08.21
+		public Dictionary<string, ImageList> m_map_of_pdl;//毛髪径:位置検出
+#endif
 		private int		m_thm_wid, m_thm_hei;
 		private ArrayList m_zpos_org = new ArrayList();
 		private ArrayList m_zpos_val = new ArrayList();
@@ -402,6 +408,9 @@ retry:
 			public seg_of_hair[]	seg;
 			public ImageList il_dm;
 			public ImageList il_ir;
+#if true//2018.08.21
+			public ImageList il_pd;
+#endif
 			public string[] name_of_cl;
 			public string[] name_of_ir;
 			public double width_of_hair;
@@ -924,7 +933,9 @@ retry:
 			string key = seg.name_of_dm;
 			Point	pnt_of_pls;
 			bool ret;
-
+#if true//2018.08.21
+			key = key.ToUpper();
+#endif
 			if (key.Contains("ZDEPT")) {
 				key = key.Replace("ZDEPT", "ZP00D");
 			}
@@ -1051,49 +1062,112 @@ retry:
 			}
 			return(fold+"\\"+buf);
 		}
-#if false
-		//---
-		private string to_pd_file(string path)
+#if true//2018.08.21
+		private string[] to_name_arr(int k, seg_of_hair[] segs)
 		{
-			if (true) {
-				return(path);
+			seg_of_hair seg;
+			ArrayList ar = new ArrayList();
+
+			for (int q = 0; ; q++) {
+				if (q >= segs.Length) {
+					break;
+				}
+				seg = (seg_of_hair)segs[q];
+				if (seg == null) {
+					continue;
+				}
+				string str;
+				switch (k) {
+					case  0: str = seg.name_of_dm; break;
+					case  1: str = seg.name_of_pd; break;
+					default: str = seg.name_of_ir; break;
+				}
+				ar.Add(str);
+			}
+			return ((string[])ar.ToArray(typeof(string)));
+		}
+		private Image to_img_from_file(string path)
+		{
+			Image img = null;
+			if (System.IO.File.Exists(path)) {
+				try {
+					img = Bitmap.FromFile(path);
+				}
+				catch (Exception ex) {
+				}
+			}
+			return (img);
+		}
+		private string to_xx_path(string path, string zpos)
+		{
+			string fold, name, buf, pext = "";
+			string file;
+
+			fold = System.IO.Path.GetDirectoryName(path);
+			fold = this.MOZ_CND_FOLD;
+			name = System.IO.Path.GetFileName(path);
+
+			if (string.IsNullOrEmpty(name)) {
+				return (null);
+			}
+			if (zpos == "深度合成" || zpos == "ZDEPT") {
+				zpos = "ZDEPT";
+				pext = m_fold_of_dept;
+				pext = pext.Replace("\\", "");
+			}
+			// '_ZP99D', '_ZM99D', '_ZDEPT'
+			if (name.Contains("_ZDEPT")) {
+				//G.mlog("pathをひとつ上に戻す必要が…");
+				buf = name.Replace("_ZDEPT", "_" + zpos);
 			}
 			else {
-				string fold = System.IO.Path.GetDirectoryName(path);
-				string name = System.IO.Path.GetFileName(path);
-				string buf = null, tmp = null;
-
-				if (string.IsNullOrEmpty(path)) {
-					return(null);
-				}
-				if (name.Contains("CT")) {
-					buf = name.Replace("CT", "@@");
-				}
-				else if (name.Contains("CR")) {
-					buf = name.Replace("CR", "@@");
-				}
-				else {
-					buf = name.Replace("CL", "@@");
-				}
-				//---
-				switch (/*位置検出*/G.SS.MOZ_CND_PDFL) {
-				case  0:/*透過*/ tmp = buf.Replace("@@", "CT"); break;
-				case  1:/*反射*/ tmp = buf.Replace("@@", "CR"); break;
-				default:/*赤外*/ tmp = buf.Replace("@@", "IR"); break;
-				}
-				if (System.IO.File.Exists(fold + "\\" + tmp)) {
-					return(fold + "\\" +tmp);
-				}
-				//---
-				//if (G.SS.ETC_CLF_CTCR == G.SS.MOZ_CND_PDFL) {
-				//    tmp = buf.Replace("@@", "CL");
-				//    if (System.IO.File.Exists(fold + "\\" +tmp)) {
-				//        return(fold + "\\" +tmp);
-				//    }
-				//}
-				//---
-				return(null);
+				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
 			}
+			//
+			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
+			//file = fold + pext + buf;//fold + "\\" + buf
+			//
+			if (!System.IO.File.Exists(file)) {
+				return (null);
+			}
+			return (file);
+		}
+		// k=0(キューティクル/断面用), 1(毛髪検出/毛髪径用), 2(毛髄用) 
+		private string to_xx_file(int k, string path)
+		{
+			string fold, name, buf, zpos, pext = "";
+			string file;
+			switch (k) {
+			case  0:zpos = G.SS.MOZ_CND_ZPCT; break;
+			case  1:zpos = G.SS.MOZ_CND_ZPHL; break;
+			default:zpos = G.SS.MOZ_CND_ZPML; path = to_ir_file(path); break;
+			}
+			fold = System.IO.Path.GetDirectoryName(path);
+			name = System.IO.Path.GetFileName(path);
+
+			if (string.IsNullOrEmpty(name)) {
+				return (null);
+			}
+			if (zpos == "深度合成") {
+				zpos = "ZDEPT";
+				pext = m_fold_of_dept;
+			}
+			// '_ZP99D', '_ZM99D', '_ZDEPT'
+			if (name.Contains("_ZDEPT")) {
+				//G.mlog("pathをひとつ上に戻す必要が…");
+				buf = name.Replace("_ZDEPT", "_"+zpos);
+			}
+			else {
+				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_"+zpos);
+			}
+			//
+			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
+			file = fold + pext + "\\" + buf;
+			//
+			if (!System.IO.File.Exists(file)) {
+				return (null);
+			}
+			return (file);
 		}
 #endif
 		private void dispose_bmp(ref Bitmap bmp)
@@ -1136,6 +1210,48 @@ retry:
 			}
 			return(name);
 		}
+#if true//2018.08.21
+		private void load_bmp(seg_of_hair[] segs, int i, string path_dm1, string path_dm2, string path_ir1, string path_ir2, ref Bitmap bmp_dm0, ref Bitmap bmp_dm1, ref Bitmap bmp_dm2, ref Bitmap bmp_ir0, ref Bitmap bmp_ir1, ref Bitmap bmp_ir2)
+		{
+			dispose_bmp(ref bmp_dm0);
+			dispose_bmp(ref bmp_ir0);
+			//---
+			bmp_dm0 = bmp_dm1;
+			bmp_ir0 = bmp_ir1;
+			//---
+			bmp_dm1 = bmp_dm2;
+			bmp_ir1 = bmp_ir2;
+			//---
+			if (i == 0) {
+				bmp_dm1 = new Bitmap(path_dm1);
+				bmp_dm1.Tag = segs[i].pix_pos;
+				//--
+				if (path_ir1 != null) {
+					bmp_ir1 = new Bitmap(path_ir1);
+					bmp_ir1.Tag = bmp_dm1.Tag;
+				}
+				else {
+					bmp_ir1 = null;
+				}
+			}
+			if (!string.IsNullOrEmpty(path_dm2)) {
+				bmp_dm2 = new Bitmap(path_dm2);
+				bmp_dm2.Tag = segs[i+1].pix_pos;
+				//--
+				if (path_ir2 != null) {
+					bmp_ir2 = new Bitmap(path_ir2);
+					bmp_ir2.Tag = bmp_dm2.Tag;
+				}
+				else {
+					bmp_ir2 = null;
+				}
+			}
+			else {
+				bmp_dm2 = null;
+				bmp_ir2 = null;
+			}
+		}
+#else
 		private void load_bmp(seg_of_hair[] segs, int i, string path_dm1, string path_dm2, ref Bitmap bmp_dm0, ref Bitmap bmp_dm1, ref Bitmap bmp_dm2, ref Bitmap bmp_ir0, ref Bitmap bmp_ir1, ref Bitmap bmp_ir2)
 		{
 			string path_ir1 = to_ir_file(path_dm1);
@@ -1179,13 +1295,18 @@ retry:
 				bmp_ir2 = null;
 			}
 		}
+#endif
 		private void enable_forms(bool b)
 		{
 			//this.Enabled = false;
 			this.radioButton1.Enabled = this.radioButton2.Enabled = 
 			this.radioButton3.Enabled = this.radioButton4.Enabled = 
 			this.radioButton7.Enabled = this.radioButton8.Enabled = b;
+#if true//2018.08.21
+			this.button3.Enabled = b;
+#else
 			this.button1.Enabled = this.button3.Enabled = b;
+#endif
 			this.checkBox1.Enabled = 
 			this.checkBox2.Enabled = 
 			this.checkBox3.Enabled = 
@@ -1247,11 +1368,27 @@ retry:
 			bo = null;
 
 		}
+#if true//2018.08.21
+		private string ZPOS(string pos)
+		{
+			pos = pos.Replace("(*)", "");
+			pos = pos.Replace("*", "");
+			return (pos);
+		}
+#endif
 		private string ZVAL2ORG(string val)
 		{
+#if true//2018.08.21
+			val = ZPOS(val);
+#endif
 			int idx = m_zpos_val.IndexOf(val);
 			if (idx < 0) {
-				return("");
+#if true//2018.08.21
+				if (val == "深度合成") {
+					return ("ZDEPT");
+				}
+#endif
+				return ("");
 			}
 			return((string)m_zpos_org[idx]);
 		}
@@ -1506,7 +1643,11 @@ retry:
 			var dlg = new DlgProgress();
 			try {
 			int cnt_of_hair = 0;
+#if true//2018.08.21
+			string zpos = "ZP00D";
+#else
 			string zpos = G.SS.MOZ_CND_ZPOS;
+#endif
 			string pext = "";
 
 			dlg.Show("毛髄径算出", G.FORM01);
@@ -1536,13 +1677,25 @@ retry:
 				this.textBox1.SelectionStart = this.textBox1.Text.Length;
 				G.CAM_PRC = G.CAM_STS.STS_HAIR;
 				this.comboBox8.Items.Clear();
+#if true//2018.08.21
+				this.comboBox10.Items.Clear();
+				this.comboBox12.Items.Clear();
+#endif
 				if (G.SS.MOZ_CND_ZCNT <= 0) {
 					this.comboBox8.Enabled = false;
+#if true//2018.08.21
+					this.comboBox10.Enabled = false;
+					this.comboBox12.Enabled = false;
+#endif
 				}
 				else {
 					this.comboBox8.Tag = true;
 					if (G.SS.MOZ_FST_CK00) {
 						this.comboBox8.Items.Add("深度合成");
+#if true//2018.08.21
+						this.comboBox10.Items.Add("深度合成");
+						this.comboBox12.Items.Add("深度合成");
+#endif
 					}
 					if (true) {
 						string path = this.MOZ_CND_FOLD;
@@ -1567,8 +1720,28 @@ retry:
 						}
 						sort_zpos();
 						this.comboBox8.Items.AddRange(m_zpos_val.ToArray());
+#if true//2018.08.21
+						this.comboBox10.Items.AddRange(m_zpos_val.ToArray());
+						this.comboBox12.Items.AddRange(m_zpos_val.ToArray());
+#endif
 					}
+#if true//2018.08.21
+					this.comboBox10.SelectedIndex = this.comboBox10.FindString(ZORG2VAL(G.SS.MOZ_CND_ZPCT));
+					this.comboBox8 .SelectedIndex = this.comboBox8 .FindString(ZORG2VAL(G.SS.MOZ_CND_ZPHL));
+					this.comboBox12.SelectedIndex = this.comboBox12.FindString(ZORG2VAL(G.SS.MOZ_CND_ZPML));
+					//
+					object obj;
+					obj = this.comboBox10.Items[this.comboBox10.SelectedIndex];
+					this.comboBox10.Items[this.comboBox10.SelectedIndex] = obj.ToString() + "(*)";
+					//
+					obj = this.comboBox8.Items[this.comboBox8.SelectedIndex];
+					this.comboBox8.Items[this.comboBox8.SelectedIndex] = obj.ToString() + "(*)";
+					//
+					obj = this.comboBox12.Items[this.comboBox12.SelectedIndex];
+					this.comboBox12.Items[this.comboBox12.SelectedIndex] = obj.ToString() + "(*)";
+#else
 					this.comboBox8.SelectedIndex = this.comboBox8.FindString(ZORG2VAL(G.SS.MOZ_CND_ZPOS));
+#endif
 				}
 			}
 			test_log();
@@ -1624,7 +1797,11 @@ retry:
 				default:/*赤外  */files_pd = files_ir; break;
 				}
 				//カラー断面
+#if true//2018.08.21
 				files_dm = files_cl;
+#else
+				files_dm = files_cl;
+#endif
 				//---
 				m_back_of_x = 0;
 				//---
@@ -1632,9 +1809,15 @@ retry:
 				var ar_seg = new ArrayList();
 				seg_of_hair[] segs = null;
 				for (int i = 0; i < cnt_of_seg; i++) {
+#if true//2018.08.21
+					string path_dm1 = to_xx_file(0, files_dm[i]);
+					string path_ir1 = to_xx_file(2, files_dm[i]);
+					string path_pd1 = to_xx_file(1, files_dm[i]);
+#else
 					string path_dm1 = files_dm[i];
 					string path_ir1 = to_ir_file(path_dm1);
 					string path_pd1 = files_pd[i];
+#endif
 					string name_dm1 = get_name_of_path(path_dm1);
 					string name_ir1 = get_name_of_path(path_ir1);
 					string name_pd1 = get_name_of_path(path_pd1);
@@ -1671,12 +1854,23 @@ retry:
 					string name_dm1 = segs[i].name_of_dm;
 					string name_ir1 = segs[i].name_of_ir;
 					string name_pd1 = segs[i].name_of_pd;
+#if true//2018.08.21
+					string path_ir1 = segs[i].path_of_ir;
+					string path_ir2 = (i != (segs.Length-1)) ? (segs[i+1].path_of_ir): null;
 
+					load_bmp(segs, i,
+						path_dm1, path_dm2,
+						path_ir1, path_ir2,
+						ref m_bmp_dm0, ref m_bmp_dm1, ref m_bmp_dm2,
+						ref m_bmp_ir0, ref m_bmp_ir1, ref m_bmp_ir2
+					);
+#else
 					load_bmp(segs, i,
 						path_dm1, path_dm2,
 						ref m_bmp_dm0, ref m_bmp_dm1, ref m_bmp_dm2,
 						ref m_bmp_ir0, ref m_bmp_ir1, ref m_bmp_ir2
 					);
+#endif
 					if (true) {
 						dispose_bmp(ref m_bmp_pd1);
 						if (name_pd1.Equals(name_dm1)) {
@@ -1716,12 +1910,19 @@ retry:
 					if (m_hair.Count == 0) {
 						Image tmp1 = this.pictureBox1.Image;
 						Image tmp2 = this.pictureBox2.Image;
+#if true//2018.08.21
+						Image tmp3 = this.pictureBox3.Image;
+						this.pictureBox3.Image = (Bitmap)m_bmp_pd1.Clone();
+#endif
 						this.pictureBox1.Image = (Bitmap)m_bmp_dm1.Clone();
 						if (m_bmp_ir1 != null) {
 						this.pictureBox2.Image = (Bitmap)m_bmp_ir1.Clone();
 						}
 						this.pictureBox1.Update();
 						this.pictureBox2.Update();
+#if true//2018.08.21
+						this.pictureBox3.Update();
+#endif
 						//;
 						this.listView1.Items.Add(name_dm1, i);
 						this.listView2.Items.Add(name_ir1, i);
@@ -1736,6 +1937,12 @@ retry:
 							tmp2.Dispose();
 							tmp2 = null;
 						}
+#if true//2018.08.21
+						if (tmp3 != null) {
+							tmp3.Dispose();
+							tmp3 = null;
+						}
+#endif
 					}
 					if (false) {
 					}
@@ -1756,18 +1963,22 @@ retry:
 						G.FORM02.load_file(bmp_ir, false);
 						G.CAM_PRC = G.CAM_STS.STS_HAIR;
 						Form02.DO_PROC_IR(bmp_ir, out bo);
+#if false//2018.08.21
 						if (G.SS.MOZ_IRC_SAVE) {
 							save_iz(path_of_bo, ref bo);
 						}
+#endif
 						bmp_ir.Dispose();
 						bmp_ir = null;
 					}
 					if (G.SS.MOZ_CND_NOMZ) {
 						//断面・毛髄径計算は行わない
 					}
+#if false//2018.08.21
 					else if (G.SS.MOZ_CND_PDFL == 1 && G.SS.MOZ_IRC_NOMZ) {
 						G.SS.MOZ_IRC_NOMZ = G.SS.MOZ_IRC_NOMZ;//断面・毛髄径計算は行わない
 					}
+#endif
 					else if (G.IR.CIR_CNT > 0) {
 						if (m_bmp_ir1 != null && G.SS.MOZ_CND_FTCF > 0) {
 							Form02.DO_SMOOTH(m_bmp_ir1, this.MOZ_CND_FTCF, this.MOZ_CND_FTCT);
@@ -1855,12 +2066,6 @@ retry:
 						this.radioButton8.Enabled = false;
 						this.radioButton8.BackColor = Color.FromArgb(64,64,64);
 					}
-					//this.comboBox1.Enabled = false;
-					//this.comboBox1.SelectedIndex = 0;
-					//this.comboBox1.Enabled = true;
-					//int isel = ((hair)m_hair[0]).cnt_of_seg / 2;
-					//this.listView1.Items[isel].Selected = true;
-					//this.listView1.Items[isel].EnsureVisible();
 				}
 			}
 			}
@@ -1876,12 +2081,7 @@ retry:
 		}
 		private void init()
 		{
-			if (false) {
-			Image tmp = this.pictureBox1.Image;
-			this.pictureBox1.Image = this.pictureBox2.Image;
-			this.pictureBox2.Image = tmp;
-			}
-			else {
+			if (true) {
 			this.groupBox1.Dock = DockStyle.Fill;
 			this.groupBox2.Dock = DockStyle.Fill;
 			//---
@@ -1893,6 +2093,12 @@ retry:
 			this.pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
 			this.pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
 			}
+#if true//2018.08.21
+			this.groupBox6.Dock = DockStyle.Fill;
+			this.chart3.Dock = DockStyle.Fill;
+			this.pictureBox3.Dock = DockStyle.Fill;
+			this.pictureBox3.SizeMode = PictureBoxSizeMode.Zoom;
+#endif
 			//---
 			this.listView1.Dock = DockStyle.Fill;
 			this.listView2.Visible = false;
@@ -1923,12 +2129,17 @@ retry:
 			this.MOZ_CND_SMCF = C_SMTH_COFS[G.SS.MOZ_CND_SMCF];//重み係数=11
 			this.MOZ_CND_FOLD = (G.SS.MOZ_CND_FMOD == 0) ? G.SS.AUT_BEF_PATH: G.SS.MOZ_CND_FOLD;
 			//---
+#if false//2018.08.21
 			this.button1.Visible = false;
+#endif
 			//---
 			//this.checkBox10.Checked = (G.SS.MOZ_CND_USIR == 1);
 			//---
 			m_map_of_dml = new Dictionary<string,ImageList>();
 			m_map_of_irl = new Dictionary<string,ImageList>();
+#if true//2018.08.21
+			m_map_of_pdl = new Dictionary<string,ImageList>();
+#endif
 		}
 
 		private void Form03_Load(object sender, EventArgs e)
@@ -1940,7 +2151,9 @@ retry:
 				if (G.UIF_LEVL == 0) {
 #if true//2018.07.02
 					/*0:ユーザ用(暫定版)*/
+#if false//2018.08.21
 					this.checkBox10.Visible = false;//カラー画像の代わりに赤外の毛髪抽出画像を表示する
+#endif
 					this.label9.Visible = false;//グラフ表示には反映されません
 #if false//2018.07.10
 					this.panel13.Visible = false;//Z位置とZ選択用コンボ
@@ -1951,12 +2164,17 @@ retry:
 					this.groupBox4.Visible = false;
 					this.groupBox1.Visible = false;
 					this.groupBox2.Visible = false;
+#if true//2018.08.21
+					this.groupBox6.Visible = false;
+#endif
 					//---
 					this.checkBox1.Visible = false;
 					this.checkBox9.Visible = false;
 					this.checkBox2.Visible = false;
 					this.checkBox8.Visible = false;
+#if false//2018.08.21
 					this.checkBox10.Visible = false;
+#endif
 					this.panel5.Visible = false;
 					this.panel8.Visible = false;
 					this.label7.Visible = false;
@@ -2076,7 +2294,7 @@ retry:
 				}
 			}
 		}
-
+#if false//2018.08.21
 		private void CreateImageList(int hidx, string zpos)
 		{
 			hair hr = (hair)m_hair[hidx];
@@ -2144,56 +2362,342 @@ retry:
 		}
 		private void draw_image(hair hr)
 		{
-			string buf_cl, buf_ir;
-			Image bmp_cl = null, bmp_ir = null;
-			Bitmap bmp_all_cl = null, bmp_all_ir = null;
+			string buf_cl, buf_ir, buf_pd;
+			Image bmp_cl = null, bmp_ir = null, bmp_pd = null;
+			Bitmap bmp_all_cl = null, bmp_all_ir = null, bmp_all_pd = null;
+			int Z = 8;
+			float pw = 5;
+			//---
+			int idx = m_isel;
+			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
+			string zpos, pext;
+			ImageList il_dm = null, il_ir = null, il_pd = null;
+			PictureBox[] pbox = { this.pictureBox1, this.pictureBox2, this.pictureBox3};
+			for (int u = 0; u < 3; u++) {
+				if (string.Compare(this.comboBox8.Text, "深度合成") == 0) {
+					zpos = "ZDEPT";
+					pext = m_fold_of_dept;
+				}
+				else {
+					zpos = ZVAL2ORG(this.comboBox8.Text);
+					pext = "";
+				}
+				if (this.radioButton3.Checked) {
+					bmp_all_cl = new Bitmap((int)(hr.width_of_hair / Z), (int)(hr.height_of_hair / Z));
+					bmp_all_ir = new Bitmap((int)(hr.width_of_hair / Z), (int)(hr.height_of_hair / Z));
+					pw = 15;
+					//---
+					if (string.IsNullOrEmpty(zpos) || zpos.Contains("*")) {
+						//条件設定値を選択中
+						il_dm = hr.il_dm;
+						il_ir = hr.il_ir;
+					}
+					else {
+						string key = m_i.ToString() + zpos;
+						if (m_map_of_dml.TryGetValue(key, out il_dm)) {
+							m_map_of_irl.TryGetValue(key, out il_ir);
+						}
+						else {
+							var dlg = new DlgProgress();
+							dlg.Show("@", this);
+							dlg.SetStatus("画像読込中...");
+							CreateImageList(m_i, zpos);
+							m_map_of_dml.TryGetValue(key, out il_dm);
+							m_map_of_irl.TryGetValue(key, out il_ir);
+							dlg.Hide();
+							dlg.Dispose();
+							dlg = null;
+						}
+					}
+				}
+				//---
+				dispose_img(this.pictureBox1);
+				dispose_img(this.pictureBox2);
+				//---
+				for (int q = 0; ; q++) {
+					if (this.radioButton3.Checked) {
+						//全体表示
+						if (q >= hr.seg.Length) {
+							break;
+						}
+						seg = (seg_of_hair)hr.seg[q];
+						if (seg == null) {
+							continue;
+						}
+						if (seg.cnt_of_moz <= 0) {
+							//						continue;
+						}
+						bmp_cl = new Bitmap(seg.width / Z, seg.height / Z);
+						if (!string.IsNullOrEmpty(seg.name_of_ir)) {
+							bmp_ir = new Bitmap(seg.width / Z, seg.height / Z);
+						}
+						Graphics gr;
+						gr = Graphics.FromImage(bmp_cl);
+						gr.DrawImage(/*hr.*/il_dm.Images[q], 0, 0, seg.width / Z, seg.height / Z);
+						gr.Dispose();
+						if (!string.IsNullOrEmpty(seg.name_of_ir)) {
+							gr = Graphics.FromImage(bmp_ir);
+							gr.DrawImage(/*hr.*/il_ir.Images[q], 0, 0, seg.width / Z, seg.height / Z);
+							gr.Dispose();
+						}
+					}
+					else {
+						//個別表示
+						if (true) {
+							buf_cl = this.textBox1.Text + pext + "\\" + seg.name_of_dm;
+							buf_ir = this.textBox1.Text + pext + "\\" + seg.name_of_ir;
+							zpos = zpos.Replace("*", "");
+
+							if (!string.IsNullOrEmpty(zpos)) {
+								zpos = "_" + zpos;
+
+								if (seg.name_of_dm.Contains("_ZDEPT")) {
+									buf_cl = Regex.Replace(buf_cl, "_ZDEPT", zpos);
+									buf_ir = Regex.Replace(buf_ir, "_ZDEPT", zpos);
+								}
+								else {
+									buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", zpos);
+									buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", zpos);
+								}
+							}
+						}
+						if (false/*this.checkBox10.Checked*/) {
+							if (System.IO.File.Exists(buf_ir)) {
+								string tmp;
+								tmp = this.textBox1.Text + "\\" + seg.name_of_ir.Replace("IR", "IZ");
+								if (System.IO.File.Exists(tmp)) {
+									buf_cl = tmp;
+								}
+							}
+						}
+
+						bmp_cl = Bitmap.FromFile(buf_cl);
+						if (System.IO.File.Exists(buf_ir)) {
+							bmp_ir = Bitmap.FromFile(buf_ir);
+						}
+						else {
+							bmp_ir = null;
+						}
+					}
+
+					if (this.checkBox1.Checked && seg.val_xum.Count > 0) {//断面・ライン
+						Graphics gr = Graphics.FromImage(bmp_cl);
+						Pen pen = new Pen(Color.Green, 4);
+						if (this.radioButton3.Checked) {
+							//全体表示
+							gr.ScaleTransform(1f / Z, 1f / Z);
+						}
+						if (this.checkBox3.Checked) {//R*0
+							pen = new Pen(this.chart1.Series[0].Color, pw);
+							Point[] ap = (Point[])seg.pts_cen.ToArray(typeof(Point));
+							gr.DrawLines(pen, ap);
+						}
+						if (this.checkBox4.Checked) {//R*+50%
+							pen = new Pen(this.chart1.Series[1].Color, pw);
+							Point[] ap = (Point[])seg.pts_phf.ToArray(typeof(Point));
+							gr.DrawLines(pen, ap);
+						}
+						if (this.checkBox5.Checked) {//R*-50%
+							pen = new Pen(this.chart1.Series[2].Color, pw);
+							Point[] ap = (Point[])seg.pts_mph.ToArray(typeof(Point));
+							gr.DrawLines(pen, ap);
+						}
+						if (this.checkBox6.Checked) {//R+5u
+							pen = new Pen(this.chart1.Series[3].Color, pw);
+							Point[] ap = (Point[])seg.pts_p5u.ToArray(typeof(Point));
+							gr.DrawLines(pen, ap);
+						}
+						if (this.checkBox7.Checked) {//R-5u
+							pen = new Pen(this.chart1.Series[4].Color, pw);
+							Point[] ap = (Point[])seg.pts_m5u.ToArray(typeof(Point));
+							gr.DrawLines(pen, ap);
+						}
+						pen.Dispose();
+						gr.Dispose();
+					}
+
+					if (bmp_ir != null && seg.val_xum.Count > 0) {//赤外あり？
+						object obj = seg.moz_zpb[0];
+						//System.Diagnostics.Debug.WriteLine(obj);
+						Graphics gr = Graphics.FromImage(bmp_ir);
+						Pen pen = null;
+						Point[] ap;
+						if (this.radioButton3.Checked) {
+							//全体表示
+							gr.ScaleTransform(1f / Z, 1f / Z);
+						}
+						if (this.checkBox2.Checked) {//赤外・輪郭
+							pen = new Pen(Color.Blue, pw);
+							ap = (Point[])seg.moz_top.ToArray(typeof(Point));
+							gr.DrawLines(pen, ap);
+							//---
+							ap = (Point[])seg.moz_btm.ToArray(typeof(Point));
+							gr.DrawLines(pen, ap);
+						}
+						if (this.checkBox8.Checked) {//赤外・中心ライン
+							pen = new Pen(this.chart1.Series[0].Color, pw);
+							ap = (Point[])seg.pts_cen.ToArray(typeof(Point));
+							gr.DrawLines(pen, ap);
+						}
+						if (this.checkBox9.Checked) {//赤外・毛髄径
+							pen = new Pen(Color.Green, pw);
+							for (int i = 0; i < seg.moz_zpb.Count; i += 1) {
+								Point p1 = (Point)seg.moz_zpb[i];
+								Point p2 = (Point)seg.moz_zpt[i];
+
+								//if (p1.X != 0 && p1.Y != 0) {
+								//    i = i;
+								//}
+								//if (true) {
+								//    gr.DrawLine(Pens.LightGreen,  (Point)seg.moz_btm[i], (Point)seg.moz_top[i]);
+								//}
+								if (p1.X == 0 && p2.Y == 0) {
+								}
+								else if (p1.X == p2.X && p1.Y == p2.Y) {
+									//i = i;
+									//gr.FillRectangle(Brushes.LightGreen, p1.X-3, p1.Y-3, 7, 7);
+								}
+								else {
+									//gr.DrawLine(pen, p1.X, p1.Y, p1.X+1, p1.Y+2);
+									//gr.DrawLine(pen, p2.X, p2.Y, p2.X+1, p2.Y+2);
+									gr.DrawLine(pen, p1, p2);
+								}
+							}
+						}
+						if (pen != null) {
+							pen.Dispose();
+						}
+						gr.Dispose();
+					}
+					if (!this.radioButton3.Checked) {
+						break;
+					}
+					if (true) {
+						Graphics gr;
+						gr = Graphics.FromImage(bmp_all_cl);
+						gr.DrawImage(bmp_cl, (seg.pix_pos.X / Z), (seg.pix_pos.Y / Z), seg.width / Z, seg.height / Z);
+						gr.Dispose();
+					}
+					if (bmp_ir != null) {
+						Graphics gr;
+						gr = Graphics.FromImage(bmp_all_ir);
+						gr.DrawImage(bmp_ir, (seg.pix_pos.X / Z), (seg.pix_pos.Y / Z), seg.width / Z, seg.height / Z);
+						gr.Dispose();
+					}
+					dispose_bmp(ref bmp_cl);
+					dispose_bmp(ref bmp_ir);
+				}
+				if (this.radioButton3.Checked) {
+					this.pictureBox1.Image = bmp_all_cl;
+					if (bmp_all_ir != null) {
+						this.pictureBox2.Image = bmp_all_ir;
+					}
+				}
+				else {
+					this.pictureBox1.Image = bmp_cl;
+					if (bmp_ir != null) {
+						this.pictureBox2.Image = bmp_ir;
+					}
+				}
+			}
+		}
+#else
+		private void CreateImageList(int hidx, string[] names, Dictionary<string, ImageList> map, string zpos)
+		{
+			string path;
+			Image bmp = null;
+			ImageList il;
+			Image thm;
+
+			il = new ImageList();
+			il.ColorDepth = ColorDepth.Depth24Bit;
+			il.ImageSize = new Size((int)(0.8 * 100), (int)(0.8 * 80));
+			//---
+			for (int q = 0; q < names.Length; q++) {				
+				path = to_xx_path(names[q], zpos);
+				bmp = to_img_from_file(path);
+
+				if (bmp != null) {
+					thm = createThumbnail(bmp, m_thm_wid, m_thm_hei);
+					il.Images.Add(thm);
+				}
+				dispose_bmp(ref bmp);
+			}
+			map.Add(hidx.ToString() + zpos, il);
+		}
+		private void prep_image_list(hair hr, int hidx, ref ImageList il_dm, ref ImageList il_pd, ref ImageList il_ir)
+		{
+			string kh = hidx.ToString();
+			Dictionary<string, ImageList>[] maps = { m_map_of_dml, m_map_of_pdl, m_map_of_irl };
+			ImageList il;
+			ImageList[] ils = {null, null, null};
+			string[] zary = { null, null, null};
+
+			zary[0] = ZVAL2ORG(this.comboBox10.Text); //danmen
+			zary[1] = ZVAL2ORG(this.comboBox8.Text); //kei
+			zary[2] = ZVAL2ORG(this.comboBox12.Text); //mouzui
+
+			for (int i = 0; i < 3; i++) {
+				if (!maps[i].TryGetValue(kh + zary[i], out il)) {
+					il = null;//ng
+				}
+				ils[i] = il;
+			}
+			if (ils[0] == null || ils[1] == null || ils[2] == null) {
+				var dlg = new DlgProgress();
+				dlg.Show("@", this);
+				dlg.SetStatus("画像読込中...");
+				for (int i = 0; i < 3; i++) {
+					if (ils[i] != null) {
+						continue;
+					}
+					string[] names = to_name_arr(i, hr.seg);
+					CreateImageList(m_i, names, maps[i], zary[i]);
+
+					maps[i].TryGetValue(kh + zary[i], out il);
+					ils[i] = il;
+				}
+				dlg.Hide();
+				dlg.Dispose();
+				dlg = null;
+			}
+			il_dm = ils[0];
+			il_pd = ils[1];
+			il_ir = ils[2];
+		}
+		private void draw_image(hair hr)
+		{
+			string buf_dm, buf_ir, buf_pd;
+			Image bmp_dm = null, bmp_ir = null, bmp_pd = null;
+			Bitmap bmp_all_dm = null, bmp_all_ir = null, bmp_all_pd = null;
 			int	Z = 8;
 			float pw = 5;
 			//---
 			int idx = m_isel;
 			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
 			string zpos, pext;
-			ImageList il_dm = null, il_ir = null;
+			ImageList il_dm = null, il_ir = null, il_pd = null;
 
-			if (string.Compare(this.comboBox8.Text, "深度合成") == 0) {
-				zpos = "ZDEPT";
-				pext = m_fold_of_dept;
-			}
-			else {
-				zpos = ZVAL2ORG(this.comboBox8.Text);
-				pext = "";
-			}
+			//if (string.Compare(this.comboBox8.Text, "深度合成") == 0) {
+			//    zpos = "ZDEPT";
+			//    pext = m_fold_of_dept;
+			//}
+			//else {
+			//    zpos = ZVAL2ORG(this.comboBox8.Text);
+			//    pext = "";
+			//}
 			if (this.radioButton3.Checked) {
-				bmp_all_cl = new Bitmap((int)(hr.width_of_hair/Z), (int)(hr.height_of_hair/Z));
-				bmp_all_ir = new Bitmap((int)(hr.width_of_hair/Z), (int)(hr.height_of_hair/Z));
+				bmp_all_dm = new Bitmap((int)(hr.width_of_hair/Z), (int)(hr.height_of_hair/Z));
+				bmp_all_ir = (Bitmap)bmp_all_dm.Clone();
+				bmp_all_pd = (Bitmap)bmp_all_dm.Clone();
 				pw = 15;
 				//---
-				if (string.IsNullOrEmpty(zpos) || zpos.Contains("*")) {
-					//条件設定値を選択中
-					il_dm = hr.il_dm;
-					il_ir = hr.il_ir;
-				}
-				else {
-					string key = m_i.ToString() + zpos;
-					if (m_map_of_dml.TryGetValue(key, out il_dm)) {
-						m_map_of_irl.TryGetValue(key, out il_ir);
-					}
-					else {
-						var dlg = new DlgProgress();
-						dlg.Show("@", this);
-						dlg.SetStatus("画像読込中...");
-						CreateImageList(m_i, zpos);
-						m_map_of_dml.TryGetValue(key, out il_dm);
-						m_map_of_irl.TryGetValue(key, out il_ir);
-						dlg.Hide();
-						dlg.Dispose();
-						dlg = null;
-					}
-				}
+				prep_image_list(hr, m_i, ref il_dm, ref il_pd, ref il_ir);
 			}
 			//---
 			dispose_img(this.pictureBox1);
 			dispose_img(this.pictureBox2);
+			dispose_img(this.pictureBox3);
 			//---
 			for (int q = 0;; q++) {
 				if (this.radioButton3.Checked) {
@@ -2208,63 +2712,54 @@ retry:
 					if (seg.cnt_of_moz <= 0) {
 //						continue;
 					}
-					bmp_cl = new Bitmap(seg.width/Z, seg.height/Z);
+					if (true) {
+						bmp_dm = new Bitmap(seg.width / Z, seg.height / Z);
+						bmp_pd = new Bitmap(seg.width / Z, seg.height / Z);
+					}
 					if (!string.IsNullOrEmpty(seg.name_of_ir)) {
-					bmp_ir = new Bitmap(seg.width/Z, seg.height/Z);
+						bmp_ir = new Bitmap(seg.width / Z, seg.height / Z);
 					}
 					Graphics gr;
-					gr = Graphics.FromImage(bmp_cl);
-					gr.DrawImage(/*hr.*/il_dm.Images[q], 0, 0, seg.width/Z, seg.height/Z);
-					gr.Dispose();
+					if (true) {
+						gr = Graphics.FromImage(bmp_dm);
+						gr.DrawImage(/*hr.*/il_dm.Images[q], 0, 0, seg.width / Z, seg.height / Z);
+						gr.Dispose();
+					}
+					if (true) {
+						gr = Graphics.FromImage(bmp_pd);
+						gr.DrawImage(/*hr.*/il_pd.Images[q], 0, 0, seg.width / Z, seg.height / Z);
+						gr.Dispose();
+					}
 					if (!string.IsNullOrEmpty(seg.name_of_ir)) {
-					gr = Graphics.FromImage(bmp_ir);
-					gr.DrawImage(/*hr.*/il_ir.Images[q], 0, 0, seg.width/Z, seg.height/Z);
-					gr.Dispose();
+						gr = Graphics.FromImage(bmp_ir);
+						gr.DrawImage(/*hr.*/il_ir.Images[q], 0, 0, seg.width/Z, seg.height/Z);
+						gr.Dispose();
 					}
 				}
 				else {
 					//個別表示
 					if (true) {
-						buf_cl = this.textBox1.Text + pext + "\\" + seg.name_of_dm;
-						buf_ir = this.textBox1.Text + pext + "\\" + seg.name_of_ir;
-						zpos = zpos.Replace("*", "");
-
-						if (!string.IsNullOrEmpty(zpos)) {
-							zpos = "_" + zpos;
-
-							if (seg.name_of_dm.Contains("_ZDEPT")) {
-								buf_cl = Regex.Replace(buf_cl, "_ZDEPT", zpos);
-								buf_ir = Regex.Replace(buf_ir, "_ZDEPT", zpos);
-							}
-							else {
-								buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", zpos);
-								buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", zpos);
-							}
-						}
+						buf_dm = to_xx_path(seg.path_of_dm, ZVAL2ORG(this.comboBox10.Text));
+						buf_pd = to_xx_path(seg.path_of_pd, ZVAL2ORG(this.comboBox8.Text));
+						buf_ir = to_xx_path(seg.path_of_ir, ZVAL2ORG(this.comboBox12.Text));
 					}
-					if (this.checkBox10.Checked) {
-						//string tmp =buf_cl.Replace("CL", "IZ");
-
+					if (false/*this.checkBox10.Checked*/) {
 						if (System.IO.File.Exists(buf_ir)) {
 							string tmp;
 							tmp = this.textBox1.Text + "\\" + seg.name_of_ir.Replace("IR", "IZ");
 							if (System.IO.File.Exists(tmp)) {
-								buf_cl = tmp;
+								buf_dm = tmp;
 							}
 						}
 					}
 
-					bmp_cl = Bitmap.FromFile(buf_cl);
-					if (System.IO.File.Exists(buf_ir)) {
-					bmp_ir = Bitmap.FromFile(buf_ir);
-					}
-					else {
-					bmp_ir = null;
-					}
+					bmp_dm = to_img_from_file(buf_dm);
+					bmp_pd = to_img_from_file(buf_pd);
+					bmp_ir = to_img_from_file(buf_ir);
 				}
 
 				if (this.checkBox1.Checked && seg.val_xum.Count > 0) {//断面・ライン
-					Graphics gr = Graphics.FromImage(bmp_cl);
+					Graphics gr = Graphics.FromImage(bmp_dm);
 					Pen pen = new Pen(Color.Green, 4);
 					if (this.radioButton3.Checked) {
 						//全体表示
@@ -2302,25 +2797,29 @@ retry:
 				if (bmp_ir != null && seg.val_xum.Count > 0) {//赤外あり？
 					object obj = seg.moz_zpb[0];
 					//System.Diagnostics.Debug.WriteLine(obj);
-					Graphics gr = Graphics.FromImage(bmp_ir);
+					Graphics gr_ir = Graphics.FromImage(bmp_ir);
+					Graphics gr_pd = Graphics.FromImage(bmp_pd);
 					Pen pen = null;
 					Point[] ap;
 					if (this.radioButton3.Checked) {
 						//全体表示
-						gr.ScaleTransform(1f/Z, 1f/Z);
+						gr_ir.ScaleTransform(1f/Z, 1f/Z);
 					}
 					if (this.checkBox2.Checked) {//赤外・輪郭
 						pen = new Pen(Color.Blue, pw);
 						ap = (Point[])seg.moz_top.ToArray(typeof(Point));
-						gr.DrawLines(pen, ap);
+						gr_ir.DrawLines(pen, ap);
+						gr_pd.DrawLines(pen, ap);
 						//---
 						ap = (Point[])seg.moz_btm.ToArray(typeof(Point));
-						gr.DrawLines(pen, ap);
+						gr_ir.DrawLines(pen, ap);
+						gr_pd.DrawLines(pen, ap);
 					}
 					if (this.checkBox8.Checked) {//赤外・中心ライン
 						pen = new Pen(this.chart1.Series[0].Color, pw);
 						ap = (Point[])seg.pts_cen.ToArray(typeof(Point));
-						gr.DrawLines(pen, ap);
+						gr_ir.DrawLines(pen, ap);
+						gr_pd.DrawLines(pen, ap);
 					}
 					if (this.checkBox9.Checked) {//赤外・毛髄径
 						pen = new Pen(Color.Green, pw);
@@ -2343,22 +2842,23 @@ retry:
 							else {
 							//gr.DrawLine(pen, p1.X, p1.Y, p1.X+1, p1.Y+2);
 							//gr.DrawLine(pen, p2.X, p2.Y, p2.X+1, p2.Y+2);
-								gr.DrawLine(pen, p1, p2);
+								gr_ir.DrawLine(pen, p1, p2);
 							}
 						}
 					}
 					if (pen != null) {
 						pen.Dispose();
 					}
-					gr.Dispose();
+					gr_pd.Dispose();
+					gr_ir.Dispose();
 				}
 				if (!this.radioButton3.Checked) {
 					break;
 				}
 				if (true) {
 					Graphics gr;
-					gr = Graphics.FromImage(bmp_all_cl);
-					gr.DrawImage(bmp_cl, (seg.pix_pos.X/Z), (seg.pix_pos.Y/Z), seg.width/Z, seg.height/Z);
+					gr = Graphics.FromImage(bmp_all_dm);
+					gr.DrawImage(bmp_dm, (seg.pix_pos.X/Z), (seg.pix_pos.Y/Z), seg.width/Z, seg.height/Z);
 					gr.Dispose();
 				}
 				if (bmp_ir != null) {
@@ -2367,22 +2867,36 @@ retry:
 					gr.DrawImage(bmp_ir, (seg.pix_pos.X/Z), (seg.pix_pos.Y/Z), seg.width/Z, seg.height/Z);
 					gr.Dispose();
 				}
-				dispose_bmp(ref bmp_cl);
+				if (bmp_pd != null) {
+					Graphics gr;
+					gr = Graphics.FromImage(bmp_all_pd);
+					gr.DrawImage(bmp_pd, (seg.pix_pos.X / Z), (seg.pix_pos.Y / Z), seg.width / Z, seg.height / Z);
+					gr.Dispose();
+				}
+				dispose_bmp(ref bmp_dm);
 				dispose_bmp(ref bmp_ir);
+				dispose_bmp(ref bmp_pd);
 			}
 			if (this.radioButton3.Checked) {
-				this.pictureBox1.Image = bmp_all_cl;
+				if (true) {
+					this.pictureBox1.Image = bmp_all_dm;
+					this.pictureBox3.Image = bmp_all_pd;
+				}
 				if (bmp_all_ir != null) {
-				this.pictureBox2.Image = bmp_all_ir;
+					this.pictureBox2.Image = bmp_all_ir;
 				}
 			}
 			else {
-				this.pictureBox1.Image = bmp_cl;
+				if (true) {
+					this.pictureBox1.Image = bmp_dm;
+					this.pictureBox3.Image = bmp_pd;
+				}
 				if (bmp_ir != null) {
-				this.pictureBox2.Image = bmp_ir;
+					this.pictureBox2.Image = bmp_ir;
 				}
 			}
 		}
+#endif
 		private void draw_graph(hair hr)
 		{
 			try {
@@ -2390,6 +2904,9 @@ retry:
 			int idx = m_isel;
 			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
 			double moz_kei_max = -1;
+#if true//2018.08.21
+			double mou_kei_max = -1;
+#endif
 			//---
 			this.chart1.Series[0].Points.Clear();
 			this.chart1.Series[1].Points.Clear();
@@ -2397,13 +2914,22 @@ retry:
 			this.chart1.Series[3].Points.Clear();
 			this.chart1.Series[4].Points.Clear();
 			this.chart2.Series[0].Points.Clear();
+#if false//2018.08.21
 			this.chart2.Series[1].Points.Clear();
+#else
+			this.chart3.Series[0].Points.Clear();
+#endif
 			this.chart1.ChartAreas[0].AxisX.Minimum = 0;
 			this.chart1.ChartAreas[0].AxisX.Maximum = double.NaN;
 			this.chart1.ChartAreas[0].AxisX.Interval = double.NaN;
 			this.chart2.ChartAreas[0].AxisX.Minimum = 0;
 			this.chart2.ChartAreas[0].AxisX.Maximum = double.NaN;
 			this.chart2.ChartAreas[0].AxisX.Interval = double.NaN;
+#if true//2018.08.21
+			this.chart3.ChartAreas[0].AxisX.Minimum = 0;
+			this.chart3.ChartAreas[0].AxisX.Maximum = double.NaN;
+			this.chart3.ChartAreas[0].AxisX.Interval = double.NaN;
+#endif
 			if (seg == null) {
 				return;
 			}
@@ -2450,7 +2976,11 @@ retry:
 						this.chart1.Series[3].Points.AddXY(x0, double.NaN);
 						this.chart1.Series[4].Points.AddXY(x0, double.NaN);
 						this.chart2.Series[0].Points.AddXY(x0, double.NaN);
+#if false//2018.08.21
 						this.chart2.Series[1].Points.AddXY(x0, double.NaN);
+#else
+						this.chart3.Series[0].Points.AddXY(x0, double.NaN);
+#endif
 						offs += um;
 						continue;
 					}
@@ -2499,10 +3029,17 @@ retry:
 						}
 					}
 					if (this.checkBox12.Checked) {
+#if false//2018.08.21
 						this.chart2.Series[1].Points.AddXY(x0, y6);
 						if (moz_kei_max < y6) {
 							moz_kei_max = y6;
 						}
+#else
+						this.chart3.Series[0].Points.AddXY(x0, y6);
+						if (mou_kei_max < y6) {
+							mou_kei_max = y6;
+						}
+#endif
 					}
 				}
 				if (!this.radioButton1.Checked) {
@@ -2529,7 +3066,11 @@ retry:
 				this.chart1.Series[3].Enabled = this.checkBox6.Checked;
 				this.chart1.Series[4].Enabled = this.checkBox7.Checked;
 				this.chart2.Series[0].Enabled = this.checkBox11.Checked;
+#if false//2018.08.21
 				this.chart2.Series[1].Enabled = this.checkBox12.Checked;
+#else
+				this.chart3.Series[0].Enabled = this.checkBox12.Checked;
+#endif
 				//---
 				//this.chart1.ChartAreas[0].AxisX.Title = "[um]";
 				//this.chart1.ChartAreas[0].AxisY.Title = "PIXEL VALUE";
@@ -2582,6 +3123,32 @@ retry:
 				//this.chart2.ChartAreas[0].AxisX.Minimum = 0;
 //				this.chart2.ChartAreas[0].AxisX.Maximum = Math.Ceiling(fmax);
 //				this.chart2.ChartAreas[0].AxisX.Interval = 100;
+#if true//2018.08.21
+				this.chart3.ChartAreas[0].AxisX.Minimum = xmin;
+				this.chart3.ChartAreas[0].AxisX.IntervalOffset = -xmin;
+				//---
+				if (mou_kei_max < 50) {
+					this.chart3.ChartAreas[0].AxisY.Maximum = 50;
+					this.chart3.ChartAreas[0].AxisY.Interval = 10;
+				}
+				else if (mou_kei_max < 100) {
+					this.chart3.ChartAreas[0].AxisY.Maximum = 100;
+					this.chart3.ChartAreas[0].AxisY.Interval = 25;
+				}
+				else if (mou_kei_max < 125) {
+					this.chart3.ChartAreas[0].AxisY.Maximum = 125;
+					this.chart3.ChartAreas[0].AxisY.Interval = 25;
+				}
+				else if (mou_kei_max < 150) {
+					this.chart3.ChartAreas[0].AxisY.Maximum = 150;
+					this.chart3.ChartAreas[0].AxisY.Interval = 25;
+				}
+				else {
+					this.chart3.ChartAreas[0].AxisY.Maximum = Math.Ceiling(mou_kei_max);
+					this.chart3.ChartAreas[0].AxisY.Interval = 25;
+				}
+				this.chart3.ChartAreas[0].AxisY.Minimum = 0;
+#endif
 				//this.chart1.ChartAreas[0].AxisX.IsMarginVisible = false;
 				int interval;
 				fmax = this.chart1.ChartAreas[0].AxisX.Maximum;
@@ -2602,6 +3169,9 @@ retry:
 				}
 				this.chart1.ChartAreas[0].AxisX.Interval = interval;
 				this.chart2.ChartAreas[0].AxisX.Interval = interval;
+#if true//2018.08.21
+				this.chart3.ChartAreas[0].AxisX.Interval = interval;
+#endif
 				//if (this.radioButton1.Checked) {
 				////this.chart1.ChartAreas[0].AxisX.Crossing = this.chart1.ChartAreas[0].AxisX.Maximum/10;
 				//}

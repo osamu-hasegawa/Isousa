@@ -310,7 +310,13 @@ namespace uSCOPE
 			//---
 			public int MOZ_CND_PDFL = 0;//位置検出
 			public int MOZ_CND_DMFL = 0;//断面画像
+#if true//2018.08.21
+			public string MOZ_CND_ZPCT;//Z位置:キューティクル
+			public string MOZ_CND_ZPHL;//Z位置:毛髪径(位置検出)
+			public string MOZ_CND_ZPML;//Z位置:毛髄径
+#else
 			public string MOZ_CND_ZPOS;
+#endif
 			public int MOZ_CND_ZCNT;
 			public bool MOZ_CND_NOMZ;//画像表示のみ
 			//public int MOZ_IRC_FILT = 5;
@@ -325,12 +331,21 @@ namespace uSCOPE
 			//public int MOZ_IRC_KMIN = 0;
 			//public double MOZ_IRC_UMAX = 0.25;
 			//public double MOZ_IRC_UMIN = 0;
+#if false//2018.08.21
 			public bool MOZ_IRC_NOMZ = true;
 			public bool MOZ_IRC_SAVE = true;
+#endif
+#if true//2018.08.21
+			public bool MOZ_IRC_CK00 = false;
+			public bool MOZ_IRC_CK01 = false;
+			public bool MOZ_IRC_CK02 = false;
+			public bool MOZ_IRC_CK03 = false;
+#else
 			public bool MOZ_IRC_CK00 = true;
 			public bool MOZ_IRC_CK01 = true;
 			public bool MOZ_IRC_CK02 = true;
 			public bool MOZ_IRC_CK03 = true;
+#endif
 			public int MOZ_IRC_DISP = 0;
 			//---
 			public bool MOZ_FST_CK00 = false;
