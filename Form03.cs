@@ -1321,7 +1321,13 @@ retry:
 		{
 			int cnt = 0;
 #if true
-			for (int q = 0; q < 10; q++) {
+			for (int q = 0; q <
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+				24
+#else
+				10
+#endif
+				; q++) {
 				string buf = q.ToString();
 				string[] files_cl =
 					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "CL_??"+zpos+".*");
@@ -1760,7 +1766,13 @@ retry:
 			//---
 			cnt_of_hair = get_hair_cnt(pext, zpos);
 			//---
-			for (int q = 0; q < 10; q++) {
+			for (int q = 0; q <
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+				24
+#else
+				10
+#endif
+				; q++) {
 				int width = 0;//(int)(2592/8);//2592/8=324
 				int height =0;//(int)(1944/8);//1944/8=243
 				//string path;
@@ -1781,11 +1793,19 @@ retry:
 				}
 				if (files_ct.Length > 0) {
 					files_cl = files_ct;//透過
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+					G.set_imp_param(/*透過*/3, -1);
+#else
 					G.set_imp_param(/*透過*/0, -1);
+#endif
 				}
 				else {
 					files_cl = files_cr;//反射
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+					G.set_imp_param(/*反射*/4, -1);
+#else
 					G.set_imp_param(/*反射*/1, -1);
+#endif
 				}
 				cnt_of_seg = files_cl.Length;
 				//---
@@ -1955,6 +1975,11 @@ retry:
 						//---
 					}
 					else {/*赤外*/
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+						//カラー固定のため(G.SS.MOZ_CND_PDFL == 0)ここは通らない
+						throw new Exception("Internal Error");
+#else
+						//カラー固定
 						string path_of_bo = this.textBox1.Text + "\\" + segs[i].name_of_ir;
 						Bitmap bo;
 						Bitmap bmp_ir = (Bitmap)m_bmp_ir1.Clone();
@@ -1970,6 +1995,7 @@ retry:
 #endif
 						bmp_ir.Dispose();
 						bmp_ir = null;
+#endif
 					}
 					if (G.SS.MOZ_CND_NOMZ) {
 						//断面・毛髄径計算は行わない

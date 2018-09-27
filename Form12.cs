@@ -1534,7 +1534,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				pos_z = new ArrayList();
 				f_nam = new ArrayList();
 				f_dum = new ArrayList();
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+				f_cnt = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+#else
 				f_cnt = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+#endif
 				//z_pls = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 				f_ttl = 0;
 				h_idx = 0;

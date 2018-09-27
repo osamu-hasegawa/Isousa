@@ -4500,7 +4500,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 
 			return(1/r);
 		}
-
+#if false//2018.09.27(20本対応と解析用パラメータ追加)
 		static public void DO_PROC_IR(Bitmap bi, out Bitmap bo)
 		{
 			int ret;
@@ -4723,6 +4723,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				G.IR.CIR_CNT = 1;
 			}
 		}
+#endif
 		static public double[] DO_PROC_FOCUS(Bitmap bi, int FLT_COEF, int rcnt, int ccnt)
 		{
 			int	ret;

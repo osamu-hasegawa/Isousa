@@ -183,6 +183,32 @@ namespace uSCOPE
 			public int CAM_FCS_FAVG = 1;
 			public bool CAM_FCS_USSD = false;
 			//---
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+			public int[] IMP_FLT_COEF = {5,5,5,5,5,5};
+			public int[] IMP_BIN_MODE = {1,1,0,1,1,0};
+			public int[] IMP_BIN_BVAL = {128,128,1,128,128,1};
+			public int[] IMP_HUE_LOWR = {300,300,300,300,300,300};
+			public int[] IMP_HUE_UPPR = {60,60,60,60,60,60};
+			public int[] IMP_SAT_LOWR = {30,30,30,30,30,30};
+			public int[] IMP_SAT_UPPR = {200,200,200,200,200,200};
+			public int[] IMP_VAL_LOWR = {64,64,64,64,64,64};
+			public int[] IMP_VAL_UPPR = {255,255,255,255,255,255};
+			public int[] IMP_SUM_LOWR = {  10000,  10000,  10000,  10000,  10000,  10000};
+			public int[] IMP_SUM_UPPR = {2500000,2500000,2500000,2500000,2500000,2500000};
+			public int[] IMP_LEN_LOWR = {  1000,  1000,  1000,  1000,  1000,  1000};
+			public int[] IMP_LEN_UPPR = {100000,100000,100000,100000,100000,100000};
+			public double[] IMP_CIR_LOWR = {0.0,0.0,0.0,0.0,0.0,0.0};
+			public double[] IMP_CIR_UPPR = {0.3,0.3,0.3,0.3,0.3,0.3};
+
+			public int[] IMP_CUV_LOWR = {0,0,0,0,0,0};
+			public int[] IMP_CUV_UPPR = {0,0,0,0,0,0};
+			public double[] IMP_GIZ_LOWR = {0,0,0,0,0,0};
+			public double[] IMP_GIZ_UPPR = {0,0,0,0,0,0};
+
+			public int[] IMP_POL_PREC = {28,28,28,28,28,28};
+			public double[] IMP_OPT_MAGN = {8.0,8.0,8.0,8.0,8.0,8.0};
+			public int[] IMP_AUT_AFMD = {0, 0, 0, 0, 0, 0};
+#else
 			public int[] IMP_FLT_COEF = {5,5,5,5};
 			public int[] IMP_BIN_MODE = {1,1,0,0};
 			public int[] IMP_BIN_BVAL = {128,128,1,125};
@@ -207,6 +233,7 @@ namespace uSCOPE
 			public int[] IMP_POL_PREC = {28,28,28,28};
 			public double[] IMP_OPT_MAGN = {8.0,8.0,8.0,8.0};
 			public int[] IMP_AUT_AFMD = {0, 0, 0, 0};
+#endif
 			//---
 			public bool PLM_AUT_FINI = true;
 			public bool PLM_AUT_ZINI = true;
@@ -539,6 +566,31 @@ namespace uSCOPE
 						}
 					}
 				}
+#endif
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+				//設定ファイルにて新規のサイズ6が旧サイズ4に上書きされてしまうため...
+				RESIZE_ARRAY(ref cln.IMP_FLT_COEF, ref G.SS.IMP_FLT_COEF);
+				RESIZE_ARRAY(ref cln.IMP_BIN_MODE, ref G.SS.IMP_BIN_MODE);
+				RESIZE_ARRAY(ref cln.IMP_BIN_BVAL, ref G.SS.IMP_BIN_BVAL);
+				RESIZE_ARRAY(ref cln.IMP_HUE_LOWR, ref G.SS.IMP_HUE_LOWR);
+				RESIZE_ARRAY(ref cln.IMP_HUE_UPPR, ref G.SS.IMP_HUE_UPPR);
+				RESIZE_ARRAY(ref cln.IMP_SAT_LOWR, ref G.SS.IMP_SAT_LOWR);
+				RESIZE_ARRAY(ref cln.IMP_SAT_UPPR, ref G.SS.IMP_SAT_UPPR);
+				RESIZE_ARRAY(ref cln.IMP_VAL_LOWR, ref G.SS.IMP_VAL_LOWR);
+				RESIZE_ARRAY(ref cln.IMP_VAL_UPPR, ref G.SS.IMP_VAL_UPPR);
+				RESIZE_ARRAY(ref cln.IMP_SUM_LOWR, ref G.SS.IMP_SUM_LOWR);
+				RESIZE_ARRAY(ref cln.IMP_SUM_UPPR, ref G.SS.IMP_SUM_UPPR);
+				RESIZE_ARRAY(ref cln.IMP_LEN_LOWR, ref G.SS.IMP_LEN_LOWR);
+				RESIZE_ARRAY(ref cln.IMP_LEN_UPPR, ref G.SS.IMP_LEN_UPPR);
+				RESIZE_ARRAY(ref cln.IMP_CIR_LOWR, ref G.SS.IMP_CIR_LOWR);
+				RESIZE_ARRAY(ref cln.IMP_CIR_UPPR, ref G.SS.IMP_CIR_UPPR);
+				RESIZE_ARRAY(ref cln.IMP_CUV_LOWR, ref G.SS.IMP_CUV_LOWR);
+				RESIZE_ARRAY(ref cln.IMP_CUV_UPPR, ref G.SS.IMP_CUV_UPPR);
+				RESIZE_ARRAY(ref cln.IMP_GIZ_LOWR, ref G.SS.IMP_GIZ_LOWR);
+				RESIZE_ARRAY(ref cln.IMP_GIZ_UPPR, ref G.SS.IMP_GIZ_UPPR);
+				RESIZE_ARRAY(ref cln.IMP_POL_PREC, ref G.SS.IMP_POL_PREC);
+				RESIZE_ARRAY(ref cln.IMP_OPT_MAGN, ref G.SS.IMP_OPT_MAGN);
+				RESIZE_ARRAY(ref cln.IMP_AUT_AFMD, ref G.SS.IMP_AUT_AFMD);
 #endif
 				return (cln);
 			}

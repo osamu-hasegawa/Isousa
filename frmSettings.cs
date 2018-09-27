@@ -23,7 +23,12 @@ namespace uSCOPE
 		private void frmSettings_Load(object sender, EventArgs e)
 		{
 			Form30 f1 = new Form30();
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+			Form34 f2 = new Form34();
+			Form34 f5 = new Form34();
+#else
 			Form31 f2 = new Form31();
+#endif
 			Form32 f3 = new Form32();
 			Form33 f4 = new Form33();
 		//f1.BringToFront();
@@ -48,6 +53,15 @@ namespace uSCOPE
 			f2.Visible = true;
 			f3.Visible = true;
 			f4.Visible = true;
+#if true//2018.09.27(20本対応と解析用パラメータ追加)
+			f5.m_ss = m_ss;
+			f5.TopLevel = false;
+			this.tabPage5.Controls.Add(f5);
+			this.tabPage5.Text = "領域抽出パラメータ(解析)";
+			f5.Visible = true;
+			f2.Q = 0;
+			f5.Q = 3;
+#endif
 			//---
 			DDX(true);
 			this.tabControl1.SelectedIndex = m_last_idx;
