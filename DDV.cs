@@ -181,6 +181,23 @@ namespace uSCOPE
 				idx = ctl.SelectedIndex;
 			}
 		}
+#if true//2018.09.29(キューティクルライン検出)
+		static public void C2V(bool bUpdate, ComboBox ctl, ref int val)
+		{
+			if (bUpdate) {
+				int idx = ctl.FindString(val.ToString());
+				ctl.SelectedIndex = idx;
+			}
+			else {
+				if (ctl.SelectedItem != null) {
+					val = int.Parse(ctl.SelectedItem.ToString());
+				}
+				else {
+					val = 0;
+				}
+			}
+		}
+#endif
 		static public void DDX(bool bUpdate, DateTimePicker ctl, ref DateTime tim)
 		{
 			if (bUpdate) {

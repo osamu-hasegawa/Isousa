@@ -4953,6 +4953,62 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				gr = null;
 			}
 		}
+#if true//2018.09.29(キューティクルライン検出)
+		private void save_text()
+		{
+			SaveFileDialog dlg = new SaveFileDialog();
+			string path = G.SS.BEFORE_PATH;
+			if (m_bcontinuous) {
+				m_bcontinuous = false;
+				Stop();
+			}
+			dlg.Filter = "csv (*.csv)|*.csv|All files (*.*)|*.*";
+			dlg.FilterIndex = 0;
+			dlg.DefaultExt = "ext";
+			dlg.InitialDirectory = G.SS.BEFORE_PATH;
+			dlg.FileName = "";
+			if (dlg.ShowDialog() != DialogResult.OK) {
+				return;
+			}
+			try {
+				path = dlg.FileName;
+				CSV csv = new CSV();
+				csv.set(0, 0, "始点");
+				csv.set(1, 0, "終点");
+				csv.set(2, 0, "長さ");
+				csv.set(0, 1, string.Format("'({0},{1})'", m_rtDanBmp.Left, m_rtDanBmp.Top));
+				csv.set(1, 1, string.Format("'({0},{1})'", m_rtDanBmp.Right, m_rtDanBmp.Bottom));
+				csv.set(2, 1, "'" + this.label3.Text +"pix, " + this.label4.Text + "um'");
+			
+				if (G.SS.ETC_DAN_MODE == 0) {
+				csv.set(0, 2, "PIX.IDX");
+				csv.set(1, 2, "R");
+				csv.set(2, 2, "G");
+				csv.set(3, 2, "B");
+				csv.set(4, 2, "GRAY");
+				}
+				else {
+				csv.set(0, 2, "PIX.IDX");
+				csv.set(1, 2, "H");
+				csv.set(2, 2, "S");
+				csv.set(3, 2, "V");
+				csv.set(4, 2, "GRAY");
+				}
+				for (int i = 0; i < this.chart1.Series[0].Points.Count; i++) {
+					csv.set(0, 3+i, string.Format("{0:F0}", i));
+					csv.set(1, 3+i, string.Format("{0:F1}", this.chart1.Series[0].Points[i].YValues[0]));
+					csv.set(2, 3+i, string.Format("{0:F1}", this.chart2.Series[0].Points[i].YValues[0]));
+					csv.set(3, 3+i, string.Format("{0:F1}", this.chart3.Series[0].Points[i].YValues[0]));
+					csv.set(4, 3+i, string.Format("{0:F1}", this.chart4.Series[0].Points[i].YValues[0]));
+				}
+				csv.save(path);
+			}
+			catch (Exception ex) {
+				G.mlog("#e" + ex.Message);
+			}
+			G.SS.BEFORE_PATH = System.IO.Path.GetDirectoryName(dlg.FileName);
+		}
+#endif
 		private ImageFormat to_imf(string ext)
 		{
 			ImageFormat imf = null;
@@ -5193,6 +5249,12 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 					m_pt_of_marker[1].Y = -1;
 				}
 			}
+#if true//2018.09.29
+			else if (sender == this.toolStripMenuItem7) {
+				//断面データを保存
+				save_text();
+			}
+#endif
 			else if (sender == this.toolStripMenuItem20) {
 				//ヒストグラム
 				if (this.toolStripMenuItem20.Checked) {

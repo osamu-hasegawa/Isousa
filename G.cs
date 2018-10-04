@@ -328,7 +328,11 @@ namespace uSCOPE
 			public string MOZ_CND_FOLD = "";
 			public int MOZ_CND_CUTE = 5;
 			public int MOZ_CND_ZVAL = 50;
+#if true//2018.09.29(キューティクルライン検出)
+			public double MOZ_CND_DSUM = 1;
+#else
 			public int MOZ_CND_DSUM = 3;
+#endif
 			public int MOZ_CND_FTCF = 5;//11x11
 			public int MOZ_CND_FTCT = 0;//1回
 			public int MOZ_CND_SMCF = 9;//重み係数=21
@@ -361,6 +365,22 @@ namespace uSCOPE
 #if false//2018.08.21
 			public bool MOZ_IRC_NOMZ = true;
 			public bool MOZ_IRC_SAVE = true;
+#endif
+#if true//2018.09.29(キューティクルライン検出)
+			public int MOZ_CND_CTYP = 0;//キューティクル(0:BPF,1:2d)
+			public double MOZ_CND_BPF1 = 0.047;
+			public double MOZ_CND_BPF2 = 0.300;
+			public int MOZ_CND_BPSL = 1;//1:スロープ=普通
+			public double MOZ_CND_BPVL = 25;
+			public int MOZ_CND_2DC0 = 7;
+			public int MOZ_CND_2DC1 = 0;
+			public int MOZ_CND_2DC2 = 0;
+			public double MOZ_CND_2DVL = 4.0;
+			//---
+			public int MOZ_CND_HWID = 10;
+			public int MOZ_CND_HMAX = 70;
+			[XmlIgnoreAttribute]
+			public int MOZ_CND_HCNT = (70/10);
 #endif
 #if true//2018.08.21
 			public bool MOZ_IRC_CK00 = false;

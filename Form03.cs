@@ -12,6 +12,8 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
+using System.Windows.Forms.DataVisualization.Charting;
+using VectorD = System.Collections.Generic.List<double>;
 
 namespace uSCOPE
 {
@@ -351,6 +353,12 @@ retry:
 			public ArrayList val_cen;//断面:中心
 			public ArrayList val_mph;//断面:下側中点
 			public ArrayList val_m5u;//断面:下端-5um
+#if true//2018.09.29(キューティクルライン検出)
+			public ArrayList val_cen_fil;//断面:中心のフィルター処理後
+			public ArrayList pts_cen_cut;//中心ライン上のキューティクル・ライン該当・点
+			public List<bool>flg_cen_cut;//中心ライン上のキューティクル・ライン該当・フラグ
+			public List<int> his_cen_cut;
+#endif
 			//---
 			public int	 cnt_of_pos;
 			//public ArrayList	 pts_x;
@@ -883,6 +891,11 @@ retry:
 				//    break;
 				//}
 			}
+#if true//2018.09.29(キューティクルライン検出)
+			//キューティクル断面のフィルター処理
+			apply_filter(seg.val_cen, out seg.val_cen_fil);
+			find_cuticle_line(seg.pts_cen, seg.val_cen_fil, out seg.pts_cen_cut, out seg.flg_cen_cut, out seg.his_cen_cut);
+#endif
 			//m_offset_of_hair = s;
 			m_back_of_x = pf.X;
 		}
@@ -1547,7 +1560,13 @@ retry:
 					}
 				}
 #endif
-				for (int q = 0; q < 10; q++) {
+				for (int q = 0; q <
+#if true//2018.09.29(キューティクルライン検出)
+					24
+#else
+					10
+#endif
+					; q++) {
 					//---
 					pat = string.Format("{0}C?_??_ZP00D.*", q);//カラー
 					CL_ZP00D = System.IO.Directory.GetFiles(path, pat);
@@ -1828,6 +1847,11 @@ retry:
 				var hr = new hair();
 				var ar_seg = new ArrayList();
 				seg_of_hair[] segs = null;
+#if true//2018.09.29(キューティクルライン検出)
+				if (q == 10) {
+					q = q;
+				}
+#endif
 				for (int i = 0; i < cnt_of_seg; i++) {
 #if true//2018.08.21
 					string path_dm1 = to_xx_file(0, files_dm[i]);
@@ -2231,6 +2255,14 @@ retry:
 				//this.timer1.Enabled = true;
 				this.BeginInvoke(new G.DLG_VOID_VOID(this.load));
 			}
+#if true//2018.09.29(キューティクルライン検出)
+			if (G.UIF_LEVL == 0) {
+				/*0:ユーザ用(暫定版)*/
+				this.tabControl2.TabPages.Remove(this.tabPage5);//キューティクル条件ページ
+			}
+			G.SS.MOZ_CND_HCNT = (G.SS.MOZ_CND_HMAX/G.SS.MOZ_CND_HWID);
+			DDX(true);
+#endif
 		}
 		private void Form03_FormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -2319,314 +2351,13 @@ retry:
 					this.listView2.Items[m_isel].Selected = true;
 				}
 			}
+#if true//2018.09.29(キューティクルライン検出)
+			if (this.radioButton4.Checked) {
+				draw_cuticle(hr);
+			}
+#endif
 		}
 #if false//2018.08.21
-		private void CreateImageList(int hidx, string zpos)
-		{
-			hair hr = (hair)m_hair[hidx];
-			ImageList il_dm, il_ir;
-
-			il_dm = new ImageList();
-			il_dm.ColorDepth = ColorDepth.Depth24Bit;
-			il_dm.ImageSize = new Size((int)(0.8*100), (int)(0.8*80));
-			il_ir = new ImageList();
-			il_ir.ColorDepth = ColorDepth.Depth24Bit;
-			il_ir.ImageSize = new Size((int)(0.8*100), (int)(0.8*80));
-			//---
-			string buf_cl, buf_ir;
-			Image bmp_cl = null, bmp_ir = null;
-			//---
-			seg_of_hair seg;
-			Image thm;
-			//---
-			string pext;
-			if (string.Compare(zpos, "ZDEPT") == 0) {
-				pext = m_fold_of_dept;
-			}
-			else {
-				pext = "";
-			}
-			//---
-			for (int q = 0;; q++) {
-				if (q >= hr.seg.Length) {
-					break;
-				}
-				seg = (seg_of_hair)hr.seg[q];
-				if (seg == null) {
-					continue;
-				}
-
-				buf_cl = this.textBox1.Text + pext + "\\" + seg.name_of_dm;
-				buf_ir = this.textBox1.Text + pext + "\\" + seg.name_of_ir;
-				if (seg.name_of_dm.Contains("_ZDEPT")) {
-					buf_cl = Regex.Replace(buf_cl, "_ZDEPT", "_"+zpos);
-					buf_ir = Regex.Replace(buf_ir, "_ZDEPT", "_"+zpos);
-				}
-				else {
-					buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", "_"+zpos);
-					buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", "_"+zpos);
-				}
-				bmp_cl = Bitmap.FromFile(buf_cl);
-				if (System.IO.File.Exists(buf_ir)) {
-				bmp_ir = Bitmap.FromFile(buf_ir);
-				}
-				else {
-				bmp_ir = null;
-				}
-				thm = createThumbnail(bmp_cl, m_thm_wid, m_thm_hei);
-				il_dm.Images.Add(thm);
-				//
-				if (bmp_ir != null) {
-				thm = createThumbnail(bmp_ir, m_thm_wid, m_thm_hei);
-				il_ir.Images.Add(thm);
-				}
-				dispose_bmp(ref bmp_cl);
-				dispose_bmp(ref bmp_ir);
-			}
-			m_map_of_dml.Add(hidx.ToString() + zpos, il_dm);
-			m_map_of_irl.Add(hidx.ToString() + zpos, il_ir);
-		}
-		private void draw_image(hair hr)
-		{
-			string buf_cl, buf_ir, buf_pd;
-			Image bmp_cl = null, bmp_ir = null, bmp_pd = null;
-			Bitmap bmp_all_cl = null, bmp_all_ir = null, bmp_all_pd = null;
-			int Z = 8;
-			float pw = 5;
-			//---
-			int idx = m_isel;
-			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
-			string zpos, pext;
-			ImageList il_dm = null, il_ir = null, il_pd = null;
-			PictureBox[] pbox = { this.pictureBox1, this.pictureBox2, this.pictureBox3};
-			for (int u = 0; u < 3; u++) {
-				if (string.Compare(this.comboBox8.Text, "深度合成") == 0) {
-					zpos = "ZDEPT";
-					pext = m_fold_of_dept;
-				}
-				else {
-					zpos = ZVAL2ORG(this.comboBox8.Text);
-					pext = "";
-				}
-				if (this.radioButton3.Checked) {
-					bmp_all_cl = new Bitmap((int)(hr.width_of_hair / Z), (int)(hr.height_of_hair / Z));
-					bmp_all_ir = new Bitmap((int)(hr.width_of_hair / Z), (int)(hr.height_of_hair / Z));
-					pw = 15;
-					//---
-					if (string.IsNullOrEmpty(zpos) || zpos.Contains("*")) {
-						//条件設定値を選択中
-						il_dm = hr.il_dm;
-						il_ir = hr.il_ir;
-					}
-					else {
-						string key = m_i.ToString() + zpos;
-						if (m_map_of_dml.TryGetValue(key, out il_dm)) {
-							m_map_of_irl.TryGetValue(key, out il_ir);
-						}
-						else {
-							var dlg = new DlgProgress();
-							dlg.Show("@", this);
-							dlg.SetStatus("画像読込中...");
-							CreateImageList(m_i, zpos);
-							m_map_of_dml.TryGetValue(key, out il_dm);
-							m_map_of_irl.TryGetValue(key, out il_ir);
-							dlg.Hide();
-							dlg.Dispose();
-							dlg = null;
-						}
-					}
-				}
-				//---
-				dispose_img(this.pictureBox1);
-				dispose_img(this.pictureBox2);
-				//---
-				for (int q = 0; ; q++) {
-					if (this.radioButton3.Checked) {
-						//全体表示
-						if (q >= hr.seg.Length) {
-							break;
-						}
-						seg = (seg_of_hair)hr.seg[q];
-						if (seg == null) {
-							continue;
-						}
-						if (seg.cnt_of_moz <= 0) {
-							//						continue;
-						}
-						bmp_cl = new Bitmap(seg.width / Z, seg.height / Z);
-						if (!string.IsNullOrEmpty(seg.name_of_ir)) {
-							bmp_ir = new Bitmap(seg.width / Z, seg.height / Z);
-						}
-						Graphics gr;
-						gr = Graphics.FromImage(bmp_cl);
-						gr.DrawImage(/*hr.*/il_dm.Images[q], 0, 0, seg.width / Z, seg.height / Z);
-						gr.Dispose();
-						if (!string.IsNullOrEmpty(seg.name_of_ir)) {
-							gr = Graphics.FromImage(bmp_ir);
-							gr.DrawImage(/*hr.*/il_ir.Images[q], 0, 0, seg.width / Z, seg.height / Z);
-							gr.Dispose();
-						}
-					}
-					else {
-						//個別表示
-						if (true) {
-							buf_cl = this.textBox1.Text + pext + "\\" + seg.name_of_dm;
-							buf_ir = this.textBox1.Text + pext + "\\" + seg.name_of_ir;
-							zpos = zpos.Replace("*", "");
-
-							if (!string.IsNullOrEmpty(zpos)) {
-								zpos = "_" + zpos;
-
-								if (seg.name_of_dm.Contains("_ZDEPT")) {
-									buf_cl = Regex.Replace(buf_cl, "_ZDEPT", zpos);
-									buf_ir = Regex.Replace(buf_ir, "_ZDEPT", zpos);
-								}
-								else {
-									buf_cl = Regex.Replace(buf_cl, "_Z.[0-9][0-9].", zpos);
-									buf_ir = Regex.Replace(buf_ir, "_Z.[0-9][0-9].", zpos);
-								}
-							}
-						}
-						if (false/*this.checkBox10.Checked*/) {
-							if (System.IO.File.Exists(buf_ir)) {
-								string tmp;
-								tmp = this.textBox1.Text + "\\" + seg.name_of_ir.Replace("IR", "IZ");
-								if (System.IO.File.Exists(tmp)) {
-									buf_cl = tmp;
-								}
-							}
-						}
-
-						bmp_cl = Bitmap.FromFile(buf_cl);
-						if (System.IO.File.Exists(buf_ir)) {
-							bmp_ir = Bitmap.FromFile(buf_ir);
-						}
-						else {
-							bmp_ir = null;
-						}
-					}
-
-					if (this.checkBox1.Checked && seg.val_xum.Count > 0) {//断面・ライン
-						Graphics gr = Graphics.FromImage(bmp_cl);
-						Pen pen = new Pen(Color.Green, 4);
-						if (this.radioButton3.Checked) {
-							//全体表示
-							gr.ScaleTransform(1f / Z, 1f / Z);
-						}
-						if (this.checkBox3.Checked) {//R*0
-							pen = new Pen(this.chart1.Series[0].Color, pw);
-							Point[] ap = (Point[])seg.pts_cen.ToArray(typeof(Point));
-							gr.DrawLines(pen, ap);
-						}
-						if (this.checkBox4.Checked) {//R*+50%
-							pen = new Pen(this.chart1.Series[1].Color, pw);
-							Point[] ap = (Point[])seg.pts_phf.ToArray(typeof(Point));
-							gr.DrawLines(pen, ap);
-						}
-						if (this.checkBox5.Checked) {//R*-50%
-							pen = new Pen(this.chart1.Series[2].Color, pw);
-							Point[] ap = (Point[])seg.pts_mph.ToArray(typeof(Point));
-							gr.DrawLines(pen, ap);
-						}
-						if (this.checkBox6.Checked) {//R+5u
-							pen = new Pen(this.chart1.Series[3].Color, pw);
-							Point[] ap = (Point[])seg.pts_p5u.ToArray(typeof(Point));
-							gr.DrawLines(pen, ap);
-						}
-						if (this.checkBox7.Checked) {//R-5u
-							pen = new Pen(this.chart1.Series[4].Color, pw);
-							Point[] ap = (Point[])seg.pts_m5u.ToArray(typeof(Point));
-							gr.DrawLines(pen, ap);
-						}
-						pen.Dispose();
-						gr.Dispose();
-					}
-
-					if (bmp_ir != null && seg.val_xum.Count > 0) {//赤外あり？
-						object obj = seg.moz_zpb[0];
-						//System.Diagnostics.Debug.WriteLine(obj);
-						Graphics gr = Graphics.FromImage(bmp_ir);
-						Pen pen = null;
-						Point[] ap;
-						if (this.radioButton3.Checked) {
-							//全体表示
-							gr.ScaleTransform(1f / Z, 1f / Z);
-						}
-						if (this.checkBox2.Checked) {//赤外・輪郭
-							pen = new Pen(Color.Blue, pw);
-							ap = (Point[])seg.moz_top.ToArray(typeof(Point));
-							gr.DrawLines(pen, ap);
-							//---
-							ap = (Point[])seg.moz_btm.ToArray(typeof(Point));
-							gr.DrawLines(pen, ap);
-						}
-						if (this.checkBox8.Checked) {//赤外・中心ライン
-							pen = new Pen(this.chart1.Series[0].Color, pw);
-							ap = (Point[])seg.pts_cen.ToArray(typeof(Point));
-							gr.DrawLines(pen, ap);
-						}
-						if (this.checkBox9.Checked) {//赤外・毛髄径
-							pen = new Pen(Color.Green, pw);
-							for (int i = 0; i < seg.moz_zpb.Count; i += 1) {
-								Point p1 = (Point)seg.moz_zpb[i];
-								Point p2 = (Point)seg.moz_zpt[i];
-
-								//if (p1.X != 0 && p1.Y != 0) {
-								//    i = i;
-								//}
-								//if (true) {
-								//    gr.DrawLine(Pens.LightGreen,  (Point)seg.moz_btm[i], (Point)seg.moz_top[i]);
-								//}
-								if (p1.X == 0 && p2.Y == 0) {
-								}
-								else if (p1.X == p2.X && p1.Y == p2.Y) {
-									//i = i;
-									//gr.FillRectangle(Brushes.LightGreen, p1.X-3, p1.Y-3, 7, 7);
-								}
-								else {
-									//gr.DrawLine(pen, p1.X, p1.Y, p1.X+1, p1.Y+2);
-									//gr.DrawLine(pen, p2.X, p2.Y, p2.X+1, p2.Y+2);
-									gr.DrawLine(pen, p1, p2);
-								}
-							}
-						}
-						if (pen != null) {
-							pen.Dispose();
-						}
-						gr.Dispose();
-					}
-					if (!this.radioButton3.Checked) {
-						break;
-					}
-					if (true) {
-						Graphics gr;
-						gr = Graphics.FromImage(bmp_all_cl);
-						gr.DrawImage(bmp_cl, (seg.pix_pos.X / Z), (seg.pix_pos.Y / Z), seg.width / Z, seg.height / Z);
-						gr.Dispose();
-					}
-					if (bmp_ir != null) {
-						Graphics gr;
-						gr = Graphics.FromImage(bmp_all_ir);
-						gr.DrawImage(bmp_ir, (seg.pix_pos.X / Z), (seg.pix_pos.Y / Z), seg.width / Z, seg.height / Z);
-						gr.Dispose();
-					}
-					dispose_bmp(ref bmp_cl);
-					dispose_bmp(ref bmp_ir);
-				}
-				if (this.radioButton3.Checked) {
-					this.pictureBox1.Image = bmp_all_cl;
-					if (bmp_all_ir != null) {
-						this.pictureBox2.Image = bmp_all_ir;
-					}
-				}
-				else {
-					this.pictureBox1.Image = bmp_cl;
-					if (bmp_ir != null) {
-						this.pictureBox2.Image = bmp_ir;
-					}
-				}
-			}
-		}
 #else
 		private void CreateImageList(int hidx, string[] names, Dictionary<string, ImageList> map, string zpos)
 		{
@@ -2795,6 +2526,26 @@ retry:
 						pen = new Pen(this.chart1.Series[0].Color, pw);
 						Point[] ap = (Point[])seg.pts_cen.ToArray(typeof(Point));
 						gr.DrawLines(pen, ap);
+#if true//2018.09.29(キューティクルライン検出)
+						if (seg.val_cen_fil != null && seg.val_cen_fil.Count >= seg.pts_cen.Count) {
+							for (int i = 0; i < seg.pts_cen.Count; i++) {
+								//if (G.SS.MOZ_CND_CTYP == 0 && TO_VAL(seg.val_cen_fil[i]) < G.SS.MOZ_CND_BPVL) {
+								//    //NOT A C.LINE
+								//}
+								//else if (G.SS.MOZ_CND_CTYP == 1 && TO_VAL(seg.val_cen_fil[i]) < G.SS.MOZ_CND_2DVL) {
+								//    //NOT A C.LINE
+								//}
+								if (seg.flg_cen_cut[i] == false) {
+									//NOT A C.LINE
+								}
+								else {
+									Point pt = (Point)seg.pts_cen[i];
+									const int LEN = 7;
+									gr.FillRectangle(Brushes.Yellow, pt.X-LEN, pt.Y-LEN, LEN*2+1, LEN*2+1);
+								}
+							}
+						}
+#endif
 					}
 					if (this.checkBox4.Checked) {//R*+50%
 						pen = new Pen(this.chart1.Series[1].Color, pw);
@@ -2963,7 +2714,7 @@ retry:
 			double		offs = 0;
 			double		xmin = 0;
 
-			if (this.radioButton1.Checked) {
+			if (this.radioButton1.Checked) {//グラフ・全体
 				double um_of_width = G.PX2UM(seg.width, m_log_info.pix_pitch, m_log_info.zoom);
 				for (int q = 0;; q++) {
 					if (q >= hr.seg.Length) {
@@ -3301,6 +3052,11 @@ retry:
 			if ((q & 2) != 0) {
 				draw_graph(hr);
 			}
+#if true//2018.09.29(キューティクルライン検出)
+			if ((q & 2) != 0) {
+				draw_cuticle(hr);
+			}
+#endif
 		}
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -3574,5 +3330,404 @@ retry:
 				draw_image(hr);
 			}
 		}
+		private void do_fir(double[] fil, double[] src, double[] dst)
+		{
+			if (fil.Length < 3 || (fil.Length % 2) == 0) {
+				MessageBox.Show("filterは３ケ以上、奇数ケで指定してください.");
+				return;
+			}
+			for (int i = 0; i < src.Length; i++) {
+				double sum = 0;
+				for (int h = 0; h < fil.Length; h++) {
+					int j = h - fil.Length/2;
+					j = i + j;
+					if (j < 0) {
+						j = 0;
+					}
+					else if (j >= src.Length) {
+						j = src.Length-1;
+					}
+					sum += src[j] * fil[h];
+				}
+				dst[i] = sum;
+			}
+		}
+		private void apply_filter(ArrayList asrc, out ArrayList adst)
+		{
+			bool ret;
+			double[] src = new double[asrc.Count];
+			double[] dst = new double[asrc.Count];
+			//---
+			for (int i = 0; i < src.Length; i++) {
+				src[i] = TO_VAL(asrc[i]);
+			}
+			//---
+			if (G.SS.MOZ_CND_CTYP == 0) {
+				F_REMEZ remez = new F_REMEZ();
+				int ntaps = 11;//(int)this.numericUpDown14.Value;
+				int nbands = 3;//BPF
+				double fs = 1;//1Hz
+				VectorD bands = new VectorD(new double[3*2]);
+				VectorD gain = new VectorD(new double[3]);
+				VectorD weight =new VectorD(new double[3]);
+				VectorD deviat =new VectorD(new double[3]);
+				gain[0] = 0;
+				gain[1] = 1;
+				gain[2] = 0;
+				weight[0] = 1;
+				weight[1] = 1;
+				weight[2] = 1;
+				bands[0] = 0.00;//BAND#1:下側
+				bands[1] = 0.03;//BAND#1:上側
+				bands[2] = G.SS.MOZ_CND_BPF1;//0.05;//BAND#2:下側
+				bands[3] = G.SS.MOZ_CND_BPF2;// 0.30;//BAND#2:上側
+				bands[4] = 0.40;//BAND#3:下側
+				bands[5] = 0.50;//BAND#3:上側
+				switch (G.SS.MOZ_CND_BPSL) {
+					case 0://緩やか
+						bands[1] = bands[2]-0.01;
+						bands[4] = bands[3]+0.01;
+					break;
+					case 2://急
+						bands[1] = bands[2]-0.001;
+						bands[4] = bands[3]+0.001;
+					break;
+					default://普通
+						bands[1] = bands[2]-0.005;
+						bands[4] = bands[3]+0.005;
+					break;
+				}
+				if (bands[1] <= bands[0]) {
+					bands[1] = (bands[0]+bands[2])/2;
+				}
+				if (bands[4] >= bands[5]) {
+					bands[4] = (bands[3]+bands[5])/2;
+				}
+				ret = remez.Remez(ntaps, nbands, bands, gain, weight, deviat, /*type*/0, fs);
+				if (ret) {
+					double[] fil = new double[ntaps];
+					for (int i = 0; i < ntaps; i++) {
+						fil[i] = remez.hk[i];
+					}
+					do_fir(fil, src, dst);
+				}
+			}
+			else {
+				double fmax, fmin;
+				if (G.SS.MOZ_CND_2DC1 > 0) {
+					T.SG_POL_SMOOTH(src, src, src.Length, G.SS.MOZ_CND_2DC1, out fmax, out fmin);
+				}
+				if (true) {
+					T.SG_2ND_DERI(src, dst, src.Length, G.SS.MOZ_CND_2DC0, out fmax);
+				}
+				if (G.SS.MOZ_CND_2DC2 > 0) {
+					T.SG_POL_SMOOTH(dst, dst, dst.Length, G.SS.MOZ_CND_2DC2, out fmax, out fmin);
+				}
+				for (int i = 0; i < dst.Length; i++) {
+					dst[i] *= -1;
+				}
+			}
+			adst = new ArrayList(dst);
+		}
+		private void find_cuticle_line(ArrayList apts, ArrayList afil, out ArrayList acut, out List<bool> aflg, out List<int> ahis)
+		{
+			//bool ret;
+			double[] src = new double[apts.Count];
+			double[] dst = new double[apts.Count];
+			bool[] flg = new bool[apts.Count];
+			double	bval = (G.SS.MOZ_CND_CTYP == 0) ? G.SS.MOZ_CND_BPVL: G.SS.MOZ_CND_2DVL;
+			acut = new ArrayList();
+			//---
+			for (int i = 0; i < src.Length; i++) {
+				src[i] = TO_VAL(afil[i]);
+				flg[i] = false;
+			}
+			for (int i = 0; i < src.Length;) {
+				if (src[i] < bval) {
+					i++;continue;
+				}
+				//閾値以上の範囲から最大値の位置を求める
+				int h = i, imax = i;
+				double fmax = src[i];
+				for (; h < src.Length; h++) {
+					if (src[h] < bval) {
+						break;
+					}
+					if (fmax < src[h]) {
+						fmax = src[h];
+						imax = h;
+					}
+				}
+				flg[imax] = true;
+				acut.Add(apts[imax]);
+				i = h+1;
+			}
+			//---
+			aflg = new List<bool>(flg);
+			//---
+			int[] his = new int[G.SS.MOZ_CND_HCNT];
+			//---
+			for (int i = 1; i < acut.Count; i++) {
+				double df = G.diff((Point)acut[i-1], (Point)acut[i]);
+				double um = G.PX2UM(df, m_log_info.pix_pitch, m_log_info.zoom);
+				int k;
+				k = (int)(um / G.SS.MOZ_CND_HWID);
+				if (k >= 0 && k < G.SS.MOZ_CND_HCNT) {
+					his[k]++;
+				}
+			}
+			ahis = new List<int>(his);
+		}
+		private void draw_cuticle(hair hr)
+		{
+			try {
+			//---
+			int idx = m_isel;
+			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
+			//double moz_kei_max = -1;
+			//double mou_kei_max = -1;
+			int[] his = new int[G.SS.MOZ_CND_HCNT];
+			//---
+			this.chart4.Series[0].Points.Clear();
+			this.chart4.ChartAreas[0].AxisX.Minimum = 0;
+			this.chart4.ChartAreas[0].AxisX.Maximum = double.NaN;
+			this.chart4.ChartAreas[0].AxisX.Interval = double.NaN;
+			//
+			this.chart5.Series[0].Points.Clear();
+			this.chart5.ChartAreas[0].AxisX.Minimum = 0;
+			this.chart5.ChartAreas[0].AxisX.Maximum = G.SS.MOZ_CND_HMAX;
+			this.chart5.ChartAreas[0].AxisX.Interval = double.NaN;
+			//
+			if (seg == null) {
+				return;
+			}
+			seg_of_hair seg_bak = seg;
+			double		offs = 0;
+			double		xmin = 0;
+
+			if (this.radioButton1.Checked) {//グラフ・毛髪全体
+				double um_of_width = G.PX2UM(seg.width, m_log_info.pix_pitch, m_log_info.zoom);
+				for (int q = 0;; q++) {
+					if (q >= hr.seg.Length) {
+						return;
+					}
+					seg = (seg_of_hair)hr.seg[q];
+					if (seg != null && seg.val_xum.Count > 0) {
+						break;
+					}
+					offs -= um_of_width;
+				}
+				xmin = offs;
+			}
+			else {//画像ファイル毎
+				if (seg.val_xum.Count <= 0) {
+					return;
+				}
+			}
+
+			for (int q = 0;; q++) {
+				int i0;
+				if (this.radioButton1.Checked) {//グラフ・毛髪全体
+					if (q >= hr.seg.Length) {
+						break;
+					}
+					seg = (seg_of_hair)hr.seg[q];
+					if (seg == null) {
+						continue;
+					}
+					if (seg.val_xum.Count <= 0) {
+						double um = G.PX2UM(seg.width, m_log_info.pix_pitch, m_log_info.zoom);
+						double x0 = um+ offs;
+						this.chart4.Series[0].Points.AddXY(x0, double.NaN);
+						offs += um;
+						continue;
+					}
+					for (i0 = 0; TO_VAL(seg.val_xum[i0]) < 0; i0++) {
+					}
+					if (m_chk1!=0) {
+						i0 = 0;
+					}
+				}
+				else {
+					i0 = 0;
+					offs = -TO_VAL(seg.val_xum[0]);
+				}
+
+				for (int i = i0; i < seg.val_xum.Count; i++) {
+					double x0 = TO_VAL(seg.val_xum[i]) + offs;
+				//	double y0 = TO_VAL(seg.val_p5u[i]);
+				//	double y1 = TO_VAL(seg.val_phf[i]);
+					double y2 = TO_VAL(seg.val_cen_fil[i]);
+				//	double y3 = TO_VAL(seg.val_mph[i]);
+				//	double y4 = TO_VAL(seg.val_m5u[i]);
+					if (this.checkBox3.Checked) {//R*0
+						if (seg.flg_cen_cut[i]) {
+							//キューティクル位置はマーカー表示
+							DataPoint dp = new DataPoint();
+							dp.SetValueXY(x0, y2);
+							dp.MarkerStyle = MarkerStyle.Square;
+							dp.MarkerColor = Color.Yellow;
+							dp.MarkerColor = Color.DarkBlue;
+							this.chart4.Series[0].Points.Add(dp);
+						}
+						else {
+							this.chart4.Series[0].Points.AddXY(x0, y2);
+						}
+					}
+				}
+				if (this.radioButton1.Checked) {//グラフ・毛髪全体
+					for (int i = 0; i < seg.his_cen_cut.Count; i++) {
+						his[i] += seg.his_cen_cut[i];//集計する
+					}
+				}
+				else {
+					//キューティクル間隔のヒストグラム
+					for (int i = 0; i < seg.his_cen_cut.Count; i++) {
+						double x = (G.SS.MOZ_CND_HWID/2.0) + i * G.SS.MOZ_CND_HWID;
+						double y = seg.his_cen_cut[i];
+						this.chart5.Series[0].Points.AddXY(x, y);
+					}
+				}
+
+				if (!this.radioButton1.Checked) {
+					break;
+				}
+				double	dx = TO_VAL(seg.val_xum[1])-TO_VAL(seg.val_xum[0]);
+				//offs += dx * seg.moz_zpl.Count;
+				offs += TO_VAL(seg.val_xum[seg.val_xum.Count-1])+dx;
+			}
+			if (this.radioButton1.Checked) {//毛髪全体
+				//キューティクル間隔のヒストグラム
+				for (int i = 0; i < his.Length; i++) {
+					double x = (G.SS.MOZ_CND_HWID/2.0) + i * G.SS.MOZ_CND_HWID;
+					double y = his[i];
+					this.chart5.Series[0].Points.AddXY(x, y);
+				}
+			}
+
+			if (this.radioButton1.Checked) {
+				seg = seg_bak;
+			}
+			if (true) {
+				this.chart4.Series[0].Color = Color.Cyan;	//R*0
+				this.chart4.Series[1].Color = Color.Green;	//R*+50%
+				this.chart4.Series[2].Color = Color.Magenta;//R*-50%
+				this.chart4.Series[3].Color = Color.Blue;	//R+3um
+				this.chart4.Series[4].Color = Color.Red;	//R-3um
+				//---
+				this.chart5.Series[0].Color = Color.Cyan;	//R*0
+				this.chart5.Series[1].Color = Color.Green;	//R*+50%
+				this.chart5.Series[2].Color = Color.Magenta;//R*-50%
+				this.chart5.Series[3].Color = Color.Blue;	//R+3um
+				this.chart5.Series[4].Color = Color.Red;	//R-3um
+				//---
+				this.chart4.Series[0].Enabled = this.checkBox3.Checked;//R*0
+				this.chart4.Series[1].Enabled = this.checkBox4.Checked;//R*+50%
+				this.chart4.Series[2].Enabled = this.checkBox5.Checked;//R*-50%
+				this.chart4.Series[3].Enabled = this.checkBox6.Checked;//R+3um
+				this.chart4.Series[4].Enabled = this.checkBox7.Checked;//R-3um
+				//---
+				this.chart5.Series[0].Enabled = this.checkBox3.Checked;//R*0
+				this.chart5.Series[1].Enabled = this.checkBox4.Checked;//R*+50%
+				this.chart5.Series[2].Enabled = this.checkBox5.Checked;//R*-50%
+				this.chart5.Series[3].Enabled = this.checkBox6.Checked;//R+3um
+				this.chart5.Series[4].Enabled = this.checkBox7.Checked;//R-3um
+			}
+			//---
+			if (true) {
+				//---
+				this.chart4.ChartAreas[0].RecalculateAxesScale();
+				//---
+				double fmin = this.chart4.ChartAreas[0].AxisX.Minimum;
+				double fmax = this.chart4.ChartAreas[0].AxisX.Maximum;
+				if (G.SS.MOZ_CND_CTYP == 1) {
+				this.chart4.ChartAreas[0].AxisY.Minimum  = -30;
+				this.chart4.ChartAreas[0].AxisY.Maximum  = +30;//double.NaN;//256;
+				this.chart4.ChartAreas[0].AxisY.Interval =  5;//32;
+				}
+				else {
+				this.chart4.ChartAreas[0].AxisY.Minimum  = -30;
+				this.chart4.ChartAreas[0].AxisY.Maximum  = +80;//double.NaN;//256;
+				this.chart4.ChartAreas[0].AxisY.Interval =  10;//32;
+				}
+				//
+				this.chart4.ChartAreas[0].AxisX.Minimum = xmin;
+				this.chart4.ChartAreas[0].AxisX.IntervalOffset = -xmin;
+				//---
+				int interval;
+				fmax = this.chart4.ChartAreas[0].AxisX.Maximum;
+				if (fmax < 300) {
+					interval = 50;
+				}
+				else if (fmax < 500) {
+					interval = 100;
+				}
+				else if (fmax < 1000) {
+					interval = 200;
+				}
+				else if (fmax < 3000) {
+					interval = 500;
+				}
+				else {
+					interval = 1000;
+				}
+				this.chart4.ChartAreas[0].AxisX.Interval = interval;
+			}
+			}
+			catch (Exception ex) {
+				G.mlog(ex.ToString());
+			}
+		}
+#if true//2018.09.29(キューティクルライン検出)
+		private bool DDX(bool bUpdate)
+        {
+            bool rc;
+
+            try {
+				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton5, this.radioButton6}, ref G.SS.MOZ_CND_CTYP);
+				DDV.DDX(bUpdate, this.numericUpDown7 , ref G.SS.MOZ_CND_BPF1);
+				DDV.DDX(bUpdate, this.numericUpDown8 , ref G.SS.MOZ_CND_BPF2);
+				DDV.DDX(bUpdate, this.comboBox4      , ref G.SS.MOZ_CND_BPSL);
+				DDV.DDX(bUpdate, this.numericUpDown9 , ref G.SS.MOZ_CND_BPVL);
+				DDV.C2V(bUpdate, this.comboBox13     , ref G.SS.MOZ_CND_2DC0);
+				DDV.C2V(bUpdate, this.comboBox14     , ref G.SS.MOZ_CND_2DC1);
+				DDV.C2V(bUpdate, this.comboBox15     , ref G.SS.MOZ_CND_2DC2);
+				DDV.DDX(bUpdate, this.numericUpDown10, ref G.SS.MOZ_CND_2DVL);
+                rc = true;
+            }
+            catch (Exception e) {
+                G.mlog(e.Message);
+                rc = false;
+            }
+            return (rc);
+		}
+
+		private void button1_Click_1(object sender, EventArgs e)
+		{//キューティクル・フィルター処理
+			if (DDX(false) == false) {
+				return;
+			}
+			if (this.listView1.Items.Count <= 0) {
+				return;
+			}
+			if (m_i >= m_hair.Count) {
+				return;
+			}
+			hair hr = (hair)m_hair[m_i];
+			if (m_isel >= hr.seg.Count()) {
+				return;
+			}
+			for (int i = 0; i < hr.seg.Length; i++) {
+				seg_of_hair seg = (seg_of_hair)hr.seg[i];
+				if (seg != null) {
+					//キューティクル断面のフィルター処理
+					apply_filter(seg.val_cen, out seg.val_cen_fil);
+					find_cuticle_line(seg.pts_cen, seg.val_cen_fil, out seg.pts_cen_cut, out seg.flg_cen_cut, out seg.his_cen_cut);
+				}
+			}
+			draw_image(hr);
+			draw_cuticle(hr);
+		}
+#endif
 	}
 }

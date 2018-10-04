@@ -148,6 +148,13 @@ namespace uSCOPE
 								this.textBox3.Focus();
 								return(false);
 							}
+#if true//2018.09.29(キューティクルライン検出)
+							if (val == 0) {
+								G.mlog("0が指定されています.");
+								this.textBox3.Focus();
+								return(false);
+							}
+#endif
 						}
 					}
 					if (m_ss.PLM_AUT_ZKEI != null) {
@@ -161,6 +168,13 @@ namespace uSCOPE
 								this.textBox4.Focus();
 								return(false);
 							}
+#if true//2018.09.29(キューティクルライン検出)
+							if (val == 0) {
+								G.mlog("0が指定されています.");
+								this.textBox3.Focus();
+								return(false);
+							}
+#endif
 						}
 					}
 					if (!m_ss.PLM_AUT_ZDCK || !m_ss.PLM_AUT_ZKCK) {
