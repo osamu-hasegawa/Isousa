@@ -115,6 +115,8 @@
 			this.label19 = new System.Windows.Forms.Label();
 			this.comboBox4 = new System.Windows.Forms.ComboBox();
 			this.label25 = new System.Windows.Forms.Label();
+			this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
+			this.label41 = new System.Windows.Forms.Label();
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -134,6 +136,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// groupBox3
@@ -875,6 +878,8 @@
 			// 
 			// groupBox7
 			// 
+			this.groupBox7.Controls.Add(this.numericUpDown13);
+			this.groupBox7.Controls.Add(this.label41);
 			this.groupBox7.Controls.Add(this.panel14);
 			this.groupBox7.Controls.Add(this.label24);
 			this.groupBox7.Controls.Add(this.label35);
@@ -1285,9 +1290,9 @@
 			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox4.FormattingEnabled = true;
 			this.comboBox4.Items.AddRange(new object[] {
-            "緩やか",
-            "普通",
-            "急"});
+            "緩(0.20幅)",
+            "普(0.10幅)",
+            "急(0.05幅)"});
 			this.comboBox4.Location = new System.Drawing.Point(228, 44);
 			this.comboBox4.Name = "comboBox4";
 			this.comboBox4.Size = new System.Drawing.Size(55, 20);
@@ -1302,6 +1307,43 @@
 			this.label25.TabIndex = 55;
 			this.label25.Text = "623, 537";
 			this.label25.Visible = false;
+			// 
+			// numericUpDown13
+			// 
+			this.numericUpDown13.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+			this.numericUpDown13.Location = new System.Drawing.Point(228, 73);
+			this.numericUpDown13.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+			this.numericUpDown13.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.numericUpDown13.Name = "numericUpDown13";
+			this.numericUpDown13.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown13.TabIndex = 60;
+			this.numericUpDown13.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown13.Value = new decimal(new int[] {
+            11,
+            0,
+            0,
+            0});
+			// 
+			// label41
+			// 
+			this.label41.AutoSize = true;
+			this.label41.Location = new System.Drawing.Point(167, 77);
+			this.label41.Name = "label41";
+			this.label41.Size = new System.Drawing.Size(41, 12);
+			this.label41.TabIndex = 59;
+			this.label41.Text = "タップ数";
 			// 
 			// Form21
 			// 
@@ -1355,6 +1397,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1449,6 +1492,8 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown12;
 		private System.Windows.Forms.NumericUpDown numericUpDown11;
 		private System.Windows.Forms.Label label40;
+		private System.Windows.Forms.NumericUpDown numericUpDown13;
+		private System.Windows.Forms.Label label41;
 
 	}
 }

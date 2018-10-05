@@ -371,6 +371,7 @@ namespace uSCOPE
 			public double MOZ_CND_BPF1 = 0.047;
 			public double MOZ_CND_BPF2 = 0.300;
 			public int MOZ_CND_BPSL = 1;//1:スロープ=普通
+			public int MOZ_CND_NTAP = 11;//フィルタタップ数
 			public double MOZ_CND_BPVL = 25;
 			public int MOZ_CND_2DC0 = 7;
 			public int MOZ_CND_2DC1 = 0;

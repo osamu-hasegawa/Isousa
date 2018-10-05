@@ -36,88 +36,94 @@ namespace uSCOPE
 			double csx, deviation=0;
 			int    i, iter, g_size, r;
 			bool   symmetry;
+			bool	rc = false;
+			try {
+				symmetry = (type == BANDPASS) ? true : false;
+				r = ((ntaps % 2)!=0 && symmetry) ? (ntaps/2 + 1) : ntaps/2;    // 極値の数
 
-			symmetry = (type == BANDPASS) ? true : false;
-			r = ((ntaps % 2)!=0 && symmetry) ? (ntaps/2 + 1) : ntaps/2;    // 極値の数
-
-			g_size = 0;
-			if (fs != 1.0)
-				for (i=0; i<nbands*2; i++) bands[i] = bands[i]/fs;
-			for (i=0; i<nbands; i++) {
-				g_size = (int)(g_size + 2*r*GRIDDNS*(bands[2*i+1] - bands[2*i]) + 0.5);
-			}
-			if (!symmetry) g_size--;
-
-			VectorD grid = new VectorD(new double[g_size+1]);
-			VectorD wght = new VectorD(new double[g_size+1]);
-			VectorD desired = new VectorD(new double[g_size+1]);
-			VectorD w_er = new VectorD(new double[g_size+1]);
-			VectorD taps = new VectorD(new double[r+1]);
-			VectorD cwk = new VectorD(new double[r+1]);
-			VectorD ck = new VectorD(new double[r+1]);
-			VectorD bk = new VectorD(new double[r+1]);
-			VectorI ext = new VectorI(new int[2*r+1]);
-
-			SetGrid(r, ntaps, nbands, bands, dg, weight, ref g_size, grid,
-					desired, wght, symmetry);
-		// 極値の初期値
-			for (i=0; i<=r; i++) ext[i] = i*(g_size-1)/r;
-
-			if (type == DIFFERENTIAL) {  // 微分器の場合
-				for (i=0; i<g_size; i++) {
-					desired[i] = desired[i]*grid[i];
-					if (desired[i] > 0.0001) wght[i] = wght[i]/grid[i];
+				g_size = 0;
+				if (fs != 1.0)
+					for (i=0; i<nbands*2; i++) bands[i] = bands[i]/fs;
+				for (i=0; i<nbands; i++) {
+					g_size = (int)(g_size + 2*r*GRIDDNS*(bands[2*i+1] - bands[2*i]) + 0.5);
 				}
-			}
+				if (!symmetry) g_size--;
 
-			if (symmetry) {
-				if (ntaps % 2 == 0) {
-					dw(SC_TYPE.COS, g_size, M_PI, grid, desired, wght);
-				}
-			}
-			else {
-				if ((ntaps % 2)!= 0) {
-					dw(SC_TYPE.SIN, g_size, M_PI2, grid, desired, wght);
-				}
-				else {
-					dw(SC_TYPE.SIN, g_size, M_PI, grid, desired, wght);
-				}
-			}
+				VectorD grid = new VectorD(new double[g_size+1]);
+				VectorD wght = new VectorD(new double[g_size+1]);
+				VectorD desired = new VectorD(new double[g_size+1]);
+				VectorD w_er = new VectorD(new double[g_size+1]);
+				VectorD taps = new VectorD(new double[r+1]);
+				VectorD cwk = new VectorD(new double[r+1]);
+				VectorD ck = new VectorD(new double[r+1]);
+				VectorD bk = new VectorD(new double[r+1]);
+				VectorI ext = new VectorI(new int[2*r+1]);
 
-		// Remez のアルゴリズムの実行
-			for (iter=0; iter<MAX_ITERAT; iter++)
-			{
-				if (!CalcParms(r, ext, grid, desired, wght, bk, cwk, ck)) {
-					return false;
-				}
-				for (int q=0; q<g_size; q++) {
-					w_er[q] = wght[q]*(desired[q] - CalcResp(grid[q], r, bk, cwk, ck));
-				}
-				SearchExtrms(r, ext, g_size, w_er);
-				if (IsConverged(r, ext, w_er, out deviation)) {
-					break;
-				}
-			}
-			if (iter == MAX_ITERAT) return false;   // 収束しない
+				SetGrid(r, ntaps, nbands, bands, dg, weight, ref g_size, grid,
+						desired, wght, symmetry);
+			// 極値の初期値
+				for (i=0; i<=r; i++) ext[i] = i*(g_size-1)/r;
 
-			for (i=0; i<nbands; i++) deviat[i] = deviation/weight[i];
+				if (type == DIFFERENTIAL) {  // 微分器の場合
+					for (i=0; i<g_size; i++) {
+						desired[i] = desired[i]*grid[i];
+						if (desired[i] > 0.0001) wght[i] = wght[i]/grid[i];
+					}
+				}
 
-			if (!CalcParms(r, ext, grid, desired, wght, bk, cwk, ck)) {
-				return false;                       // 収束しない
-			}
-
-			for (i=0; i<=ntaps/2; i++) {
 				if (symmetry) {
-					csx = (ntaps % 2) != 0 ? 1.0 : Math.Cos(M_PI*i/ntaps);
+					if (ntaps % 2 == 0) {
+						dw(SC_TYPE.COS, g_size, M_PI, grid, desired, wght);
+					}
 				}
 				else {
-					csx = (ntaps % 2) != 0 ? Math.Sin(M_PI2*i/ntaps) : Math.Sin(M_PI*i/ntaps);
+					if ((ntaps % 2)!= 0) {
+						dw(SC_TYPE.SIN, g_size, M_PI2, grid, desired, wght);
+					}
+					else {
+						dw(SC_TYPE.SIN, g_size, M_PI, grid, desired, wght);
+					}
 				}
-				taps[i] = CalcResp((double)i/ntaps, r, bk, cwk, ck)*csx;
-			}
 
-			ToCoefs(ntaps, taps, symmetry);
-			return true;    // 収束した
+			// Remez のアルゴリズムの実行
+				for (iter=0; iter<MAX_ITERAT; iter++)
+				{
+					if (!CalcParms(r, ext, grid, desired, wght, bk, cwk, ck)) {
+						return false;
+					}
+					for (int q=0; q<g_size; q++) {
+						w_er[q] = wght[q]*(desired[q] - CalcResp(grid[q], r, bk, cwk, ck));
+					}
+					SearchExtrms(r, ext, g_size, w_er);
+					if (IsConverged(r, ext, w_er, out deviation)) {
+						break;
+					}
+				}
+				if (iter == MAX_ITERAT) return false;   // 収束しない
+
+				for (i=0; i<nbands; i++) deviat[i] = deviation/weight[i];
+
+				if (!CalcParms(r, ext, grid, desired, wght, bk, cwk, ck)) {
+					return false;                       // 収束しない
+				}
+
+				for (i=0; i<=ntaps/2; i++) {
+					if (symmetry) {
+						csx = (ntaps % 2) != 0 ? 1.0 : Math.Cos(M_PI*i/ntaps);
+					}
+					else {
+						csx = (ntaps % 2) != 0 ? Math.Sin(M_PI2*i/ntaps) : Math.Sin(M_PI*i/ntaps);
+					}
+					taps[i] = CalcResp((double)i/ntaps, r, bk, cwk, ck)*csx;
+				}
+
+				ToCoefs(ntaps, taps, symmetry);
+				rc = true;    // 収束した
+			}
+			catch (Exception ex) {
+				rc = false;
+			}
+			return(rc);
 		}
 
 		// 誤差極値の初期値の設定

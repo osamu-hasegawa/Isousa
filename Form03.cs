@@ -2256,10 +2256,10 @@ retry:
 				this.BeginInvoke(new G.DLG_VOID_VOID(this.load));
 			}
 #if true//2018.09.29(キューティクルライン検出)
-			if (G.UIF_LEVL == 0) {
-				/*0:ユーザ用(暫定版)*/
-				this.tabControl2.TabPages.Remove(this.tabPage5);//キューティクル条件ページ
-			}
+			//if (G.UIF_LEVL == 0) {
+			//    /*0:ユーザ用(暫定版)*/
+			//    this.tabControl2.TabPages.Remove(this.tabPage5);//キューティクル条件ページ
+			//}
 			G.SS.MOZ_CND_HCNT = (G.SS.MOZ_CND_HMAX/G.SS.MOZ_CND_HWID);
 			DDX(true);
 #endif
@@ -3371,6 +3371,7 @@ retry:
 				VectorD gain = new VectorD(new double[3]);
 				VectorD weight =new VectorD(new double[3]);
 				VectorD deviat =new VectorD(new double[3]);
+				ntaps = G.SS.MOZ_CND_NTAP;
 				gain[0] = 0;
 				gain[1] = 1;
 				gain[2] = 0;
@@ -3387,14 +3388,20 @@ retry:
 					case 0://緩やか
 						bands[1] = bands[2]-0.01;
 						bands[4] = bands[3]+0.01;
+						bands[1] = bands[2]-0.20;
+						bands[4] = bands[3]+0.20;
 					break;
 					case 2://急
 						bands[1] = bands[2]-0.001;
 						bands[4] = bands[3]+0.001;
+						bands[1] = bands[2]-0.05;
+						bands[4] = bands[3]+0.05;
 					break;
 					default://普通
 						bands[1] = bands[2]-0.005;
 						bands[4] = bands[3]+0.005;
+						bands[1] = bands[2]-0.10;
+						bands[4] = bands[3]+0.10;
 					break;
 				}
 				if (bands[1] <= bands[0]) {
@@ -3410,6 +3417,10 @@ retry:
 						fil[i] = remez.hk[i];
 					}
 					do_fir(fil, src, dst);
+					this.label15.Text = "";
+				}
+				else {
+					this.label15.Text = "フィルタ計算エラー！";
 				}
 			}
 			else {
@@ -3426,6 +3437,7 @@ retry:
 				for (int i = 0; i < dst.Length; i++) {
 					dst[i] *= -1;
 				}
+				this.label15.Text = "";
 			}
 			adst = new ArrayList(dst);
 		}
@@ -3484,8 +3496,8 @@ retry:
 			//---
 			int idx = m_isel;
 			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
-			//double moz_kei_max = -1;
-			//double mou_kei_max = -1;
+			double cut_max = double.MinValue;
+			double cut_min = double.MaxValue;
 			int[] his = new int[G.SS.MOZ_CND_HCNT];
 			//---
 			this.chart4.Series[0].Points.Clear();
@@ -3573,6 +3585,13 @@ retry:
 						else {
 							this.chart4.Series[0].Points.AddXY(x0, y2);
 						}
+						if (cut_max < y2) {
+							cut_max = y2;
+						}
+						if (cut_min > y2) {
+							cut_min = y2;
+						}
+
 					}
 				}
 				if (this.radioButton1.Checked) {//グラフ・毛髪全体
@@ -3641,14 +3660,39 @@ retry:
 				double fmin = this.chart4.ChartAreas[0].AxisX.Minimum;
 				double fmax = this.chart4.ChartAreas[0].AxisX.Maximum;
 				if (G.SS.MOZ_CND_CTYP == 1) {
-				this.chart4.ChartAreas[0].AxisY.Minimum  = -30;
-				this.chart4.ChartAreas[0].AxisY.Maximum  = +30;//double.NaN;//256;
-				this.chart4.ChartAreas[0].AxisY.Interval =  5;//32;
+					cut_min = Math.Abs(cut_min);
+					if (cut_max < cut_min) {
+						cut_max = cut_min;
+					}
+					if (cut_max <= 1.0) {
+						cut_max = 1;
+					}
+					else {
+						cut_max /= 10;
+						if (cut_max <= 1.0) {
+							cut_max = 1;
+						}
+						else {
+							cut_max = Math.Ceiling(cut_max);
+						}
+						cut_max *= 10;
+					}
+					this.chart4.ChartAreas[0].AxisY.Minimum  = -cut_max;
+					this.chart4.ChartAreas[0].AxisY.Maximum  = +cut_max;//double.NaN;//256;
+					if (cut_max >= 40) {
+						this.chart4.ChartAreas[0].AxisY.Interval =  10;//double.NaN;//32;
+					}
+					if (cut_max > 1) {
+						this.chart4.ChartAreas[0].AxisY.Interval =  5;//double.NaN;//32;
+					}
+					else {
+						this.chart4.ChartAreas[0].AxisY.Interval =  0.2;
+					}
 				}
 				else {
-				this.chart4.ChartAreas[0].AxisY.Minimum  = -30;
-				this.chart4.ChartAreas[0].AxisY.Maximum  = +80;//double.NaN;//256;
-				this.chart4.ChartAreas[0].AxisY.Interval =  10;//32;
+					this.chart4.ChartAreas[0].AxisY.Minimum  = -30;
+					this.chart4.ChartAreas[0].AxisY.Maximum  = +80;//double.NaN;//256;
+					this.chart4.ChartAreas[0].AxisY.Interval =  10;//32;
 				}
 				//
 				this.chart4.ChartAreas[0].AxisX.Minimum = xmin;
@@ -3688,6 +3732,7 @@ retry:
 				DDV.DDX(bUpdate, this.numericUpDown7 , ref G.SS.MOZ_CND_BPF1);
 				DDV.DDX(bUpdate, this.numericUpDown8 , ref G.SS.MOZ_CND_BPF2);
 				DDV.DDX(bUpdate, this.comboBox4      , ref G.SS.MOZ_CND_BPSL);
+				DDV.DDX(bUpdate, this.numericUpDown1 , ref G.SS.MOZ_CND_NTAP);
 				DDV.DDX(bUpdate, this.numericUpDown9 , ref G.SS.MOZ_CND_BPVL);
 				DDV.C2V(bUpdate, this.comboBox13     , ref G.SS.MOZ_CND_2DC0);
 				DDV.C2V(bUpdate, this.comboBox14     , ref G.SS.MOZ_CND_2DC1);
@@ -3727,6 +3772,13 @@ retry:
 			}
 			draw_image(hr);
 			draw_cuticle(hr);
+		}
+
+		private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+		{
+			if ((this.numericUpDown1.Value % 2) == 0) {
+				this.numericUpDown1.Value = this.numericUpDown1.Value+1;
+			}
 		}
 #endif
 	}
