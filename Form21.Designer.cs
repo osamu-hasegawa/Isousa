@@ -88,6 +88,8 @@
 			this.label15 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
+			this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
+			this.label41 = new System.Windows.Forms.Label();
 			this.panel14 = new System.Windows.Forms.Panel();
 			this.label24 = new System.Windows.Forms.Label();
 			this.label35 = new System.Windows.Forms.Label();
@@ -115,8 +117,6 @@
 			this.label19 = new System.Windows.Forms.Label();
 			this.comboBox4 = new System.Windows.Forms.ComboBox();
 			this.label25 = new System.Windows.Forms.Label();
-			this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
-			this.label41 = new System.Windows.Forms.Label();
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -130,13 +130,13 @@
 			this.groupBox5.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// groupBox3
@@ -913,6 +913,44 @@
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "キューティクル・ライン検出";
 			// 
+			// numericUpDown13
+			// 
+			this.numericUpDown13.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+			this.numericUpDown13.Location = new System.Drawing.Point(228, 73);
+			this.numericUpDown13.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+			this.numericUpDown13.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.numericUpDown13.Name = "numericUpDown13";
+			this.numericUpDown13.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown13.TabIndex = 60;
+			this.numericUpDown13.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown13.Value = new decimal(new int[] {
+            11,
+            0,
+            0,
+            0});
+			this.numericUpDown13.ValueChanged += new System.EventHandler(this.numericUpDown13_ValueChanged);
+			// 
+			// label41
+			// 
+			this.label41.AutoSize = true;
+			this.label41.Location = new System.Drawing.Point(167, 77);
+			this.label41.Name = "label41";
+			this.label41.Size = new System.Drawing.Size(41, 12);
+			this.label41.TabIndex = 59;
+			this.label41.Text = "タップ数";
+			// 
 			// panel14
 			// 
 			this.panel14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1308,43 +1346,6 @@
 			this.label25.Text = "623, 537";
 			this.label25.Visible = false;
 			// 
-			// numericUpDown13
-			// 
-			this.numericUpDown13.Increment = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-			this.numericUpDown13.Location = new System.Drawing.Point(228, 73);
-			this.numericUpDown13.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-			this.numericUpDown13.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			this.numericUpDown13.Name = "numericUpDown13";
-			this.numericUpDown13.Size = new System.Drawing.Size(54, 19);
-			this.numericUpDown13.TabIndex = 60;
-			this.numericUpDown13.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown13.Value = new decimal(new int[] {
-            11,
-            0,
-            0,
-            0});
-			// 
-			// label41
-			// 
-			this.label41.AutoSize = true;
-			this.label41.Location = new System.Drawing.Point(167, 77);
-			this.label41.Name = "label41";
-			this.label41.Size = new System.Drawing.Size(41, 12);
-			this.label41.TabIndex = 59;
-			this.label41.Text = "タップ数";
-			// 
 			// Form21
 			// 
 			this.AcceptButton = this.button1;
@@ -1391,13 +1392,13 @@
 			this.groupBox6.PerformLayout();
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox7.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

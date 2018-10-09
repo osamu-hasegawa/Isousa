@@ -51,21 +51,24 @@
 			System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 50D);
+			System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(8D, 50D);
 			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation7 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
 			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation8 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
 			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation9 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
 			System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-			System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation10 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
 			System.Windows.Forms.DataVisualization.Charting.TextAnnotation textAnnotation11 = new System.Windows.Forms.DataVisualization.Charting.TextAnnotation();
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
 			System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-			System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			this.tabControl3 = new System.Windows.Forms.TabControl();
 			this.tabPage6 = new System.Windows.Forms.TabPage();
 			this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -78,6 +81,29 @@
 			this.chart4 = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.chart5 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+			this.tabPage7 = new System.Windows.Forms.TabPage();
+			this.button1 = new System.Windows.Forms.Button();
+			this.radioButton5 = new System.Windows.Forms.RadioButton();
+			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+			this.label24 = new System.Windows.Forms.Label();
+			this.label13 = new System.Windows.Forms.Label();
+			this.label19 = new System.Windows.Forms.Label();
+			this.numericUpDown9 = new System.Windows.Forms.NumericUpDown();
+			this.label35 = new System.Windows.Forms.Label();
+			this.radioButton6 = new System.Windows.Forms.RadioButton();
+			this.label20 = new System.Windows.Forms.Label();
+			this.label26 = new System.Windows.Forms.Label();
+			this.label23 = new System.Windows.Forms.Label();
+			this.numericUpDown10 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
+			this.comboBox13 = new System.Windows.Forms.ComboBox();
+			this.comboBox14 = new System.Windows.Forms.ComboBox();
+			this.comboBox4 = new System.Windows.Forms.ComboBox();
+			this.label14 = new System.Windows.Forms.Label();
+			this.comboBox15 = new System.Windows.Forms.ComboBox();
+			this.label22 = new System.Windows.Forms.Label();
+			this.label21 = new System.Windows.Forms.Label();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -133,29 +159,6 @@
 			this.tabControl2 = new System.Windows.Forms.TabControl();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-			this.tabPage5 = new System.Windows.Forms.TabPage();
-			this.label24 = new System.Windows.Forms.Label();
-			this.label35 = new System.Windows.Forms.Label();
-			this.label23 = new System.Windows.Forms.Label();
-			this.comboBox13 = new System.Windows.Forms.ComboBox();
-			this.comboBox15 = new System.Windows.Forms.ComboBox();
-			this.label22 = new System.Windows.Forms.Label();
-			this.comboBox14 = new System.Windows.Forms.ComboBox();
-			this.numericUpDown10 = new System.Windows.Forms.NumericUpDown();
-			this.radioButton6 = new System.Windows.Forms.RadioButton();
-			this.label13 = new System.Windows.Forms.Label();
-			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-			this.numericUpDown9 = new System.Windows.Forms.NumericUpDown();
-			this.label26 = new System.Windows.Forms.Label();
-			this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
-			this.label14 = new System.Windows.Forms.Label();
-			this.label21 = new System.Windows.Forms.Label();
-			this.comboBox4 = new System.Windows.Forms.ComboBox();
-			this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
-			this.label20 = new System.Windows.Forms.Label();
-			this.label19 = new System.Windows.Forms.Label();
-			this.radioButton5 = new System.Windows.Forms.RadioButton();
-			this.button1 = new System.Windows.Forms.Button();
 			this.pictureBox3 = new System.Windows.Forms.PictureBox();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.listView2 = new System.Windows.Forms.ListView();
@@ -167,7 +170,7 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			this.label15 = new System.Windows.Forms.Label();
+			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.tabControl3.SuspendLayout();
 			this.tabPage6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -178,6 +181,12 @@
 			((System.ComponentModel.ISupportInitialize)(this.chart4)).BeginInit();
 			this.tabPage3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart5)).BeginInit();
+			this.tabPage7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			this.panel1.SuspendLayout();
@@ -191,12 +200,6 @@
 			this.tabControl2.SuspendLayout();
 			this.tabPage4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
-			this.tabPage5.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -285,6 +288,7 @@
 			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage3);
+			this.tabControl1.Controls.Add(this.tabPage7);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(3, 345);
 			this.tabControl1.Name = "tabControl1";
@@ -298,7 +302,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(256, 310);
+			this.tabPage1.Size = new System.Drawing.Size(283, 310);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "キューティクル断面";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -361,7 +365,7 @@
 			this.chart1.Series.Add(series4);
 			this.chart1.Series.Add(series5);
 			this.chart1.Series.Add(series6);
-			this.chart1.Size = new System.Drawing.Size(250, 304);
+			this.chart1.Size = new System.Drawing.Size(277, 304);
 			this.chart1.TabIndex = 0;
 			this.chart1.Text = "chart1";
 			// 
@@ -371,7 +375,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(256, 310);
+			this.tabPage2.Size = new System.Drawing.Size(283, 310);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "キューティクルライン";
 			this.tabPage2.UseVisualStyleBackColor = true;
@@ -429,12 +433,22 @@
 			series11.Legend = "Legend1";
 			series11.LegendText = "R-3um";
 			series11.Name = "Series5";
+			series12.ChartArea = "ChartArea1";
+			series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+			series12.IsVisibleInLegend = false;
+			series12.Legend = "Legend1";
+			series12.Name = "Series6";
+			dataPoint2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDotDot;
+			dataPoint2.Color = System.Drawing.Color.Black;
+			series12.Points.Add(dataPoint1);
+			series12.Points.Add(dataPoint2);
 			this.chart4.Series.Add(series7);
 			this.chart4.Series.Add(series8);
 			this.chart4.Series.Add(series9);
 			this.chart4.Series.Add(series10);
 			this.chart4.Series.Add(series11);
-			this.chart4.Size = new System.Drawing.Size(250, 304);
+			this.chart4.Series.Add(series12);
+			this.chart4.Size = new System.Drawing.Size(277, 304);
 			this.chart4.TabIndex = 1;
 			this.chart4.Text = "chart4";
 			// 
@@ -487,34 +501,410 @@
 			this.chart5.Legends.Add(legend4);
 			this.chart5.Location = new System.Drawing.Point(3, 3);
 			this.chart5.Name = "chart5";
-			series12.ChartArea = "ChartArea1";
-			series12.Legend = "Legend1";
-			series12.LegendText = "R*0";
-			series12.Name = "Series1";
 			series13.ChartArea = "ChartArea1";
 			series13.Legend = "Legend1";
-			series13.LegendText = "R*+50%";
-			series13.Name = "Series2";
+			series13.LegendText = "R*0";
+			series13.Name = "Series1";
 			series14.ChartArea = "ChartArea1";
 			series14.Legend = "Legend1";
-			series14.LegendText = "R*-50%";
-			series14.Name = "Series3";
+			series14.LegendText = "R*+50%";
+			series14.Name = "Series2";
 			series15.ChartArea = "ChartArea1";
 			series15.Legend = "Legend1";
-			series15.LegendText = "R+3um";
-			series15.Name = "Series4";
+			series15.LegendText = "R*-50%";
+			series15.Name = "Series3";
 			series16.ChartArea = "ChartArea1";
 			series16.Legend = "Legend1";
-			series16.LegendText = "R-3um";
-			series16.Name = "Series5";
-			this.chart5.Series.Add(series12);
+			series16.LegendText = "R+3um";
+			series16.Name = "Series4";
+			series17.ChartArea = "ChartArea1";
+			series17.Legend = "Legend1";
+			series17.LegendText = "R-3um";
+			series17.Name = "Series5";
 			this.chart5.Series.Add(series13);
 			this.chart5.Series.Add(series14);
 			this.chart5.Series.Add(series15);
 			this.chart5.Series.Add(series16);
+			this.chart5.Series.Add(series17);
 			this.chart5.Size = new System.Drawing.Size(277, 304);
 			this.chart5.TabIndex = 2;
 			this.chart5.Text = "chart5";
+			// 
+			// tabPage7
+			// 
+			this.tabPage7.Controls.Add(this.textBox2);
+			this.tabPage7.Controls.Add(this.button1);
+			this.tabPage7.Controls.Add(this.radioButton5);
+			this.tabPage7.Controls.Add(this.numericUpDown1);
+			this.tabPage7.Controls.Add(this.label24);
+			this.tabPage7.Controls.Add(this.label13);
+			this.tabPage7.Controls.Add(this.label19);
+			this.tabPage7.Controls.Add(this.numericUpDown9);
+			this.tabPage7.Controls.Add(this.label35);
+			this.tabPage7.Controls.Add(this.radioButton6);
+			this.tabPage7.Controls.Add(this.label20);
+			this.tabPage7.Controls.Add(this.label26);
+			this.tabPage7.Controls.Add(this.label23);
+			this.tabPage7.Controls.Add(this.numericUpDown10);
+			this.tabPage7.Controls.Add(this.numericUpDown7);
+			this.tabPage7.Controls.Add(this.numericUpDown8);
+			this.tabPage7.Controls.Add(this.comboBox13);
+			this.tabPage7.Controls.Add(this.comboBox14);
+			this.tabPage7.Controls.Add(this.comboBox4);
+			this.tabPage7.Controls.Add(this.label14);
+			this.tabPage7.Controls.Add(this.comboBox15);
+			this.tabPage7.Controls.Add(this.label22);
+			this.tabPage7.Controls.Add(this.label21);
+			this.tabPage7.Location = new System.Drawing.Point(4, 22);
+			this.tabPage7.Name = "tabPage7";
+			this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage7.Size = new System.Drawing.Size(283, 310);
+			this.tabPage7.TabIndex = 3;
+			this.tabPage7.Text = "キューティクル・検出条件";
+			this.tabPage7.UseVisualStyleBackColor = true;
+			// 
+			// button1
+			// 
+			this.button1.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.button1.Location = new System.Drawing.Point(79, 189);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(181, 30);
+			this.button1.TabIndex = 0;
+			this.button1.Text = "更新";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click_1);
+			// 
+			// radioButton5
+			// 
+			this.radioButton5.AutoSize = true;
+			this.radioButton5.Location = new System.Drawing.Point(6, 18);
+			this.radioButton5.Name = "radioButton5";
+			this.radioButton5.Size = new System.Drawing.Size(221, 16);
+			this.radioButton5.TabIndex = 1;
+			this.radioButton5.TabStop = true;
+			this.radioButton5.Text = "バンドパスフィルタ (0:DC, 0.5:最高周波数)";
+			this.radioButton5.UseVisualStyleBackColor = true;
+			// 
+			// numericUpDown1
+			// 
+			this.numericUpDown1.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+			this.numericUpDown1.Location = new System.Drawing.Point(209, 81);
+			this.numericUpDown1.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+			this.numericUpDown1.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.numericUpDown1.Name = "numericUpDown1";
+			this.numericUpDown1.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown1.TabIndex = 58;
+			this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown1.Value = new decimal(new int[] {
+            11,
+            0,
+            0,
+            0});
+			this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+			// 
+			// label24
+			// 
+			this.label24.AutoSize = true;
+			this.label24.Location = new System.Drawing.Point(206, 110);
+			this.label24.Name = "label24";
+			this.label24.Size = new System.Drawing.Size(61, 12);
+			this.label24.TabIndex = 66;
+			this.label24.Text = "平滑化(後)";
+			// 
+			// label13
+			// 
+			this.label13.AutoSize = true;
+			this.label13.BackColor = System.Drawing.SystemColors.Control;
+			this.label13.Location = new System.Drawing.Point(44, 161);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(29, 12);
+			this.label13.TabIndex = 60;
+			this.label13.Text = "閾値";
+			// 
+			// label19
+			// 
+			this.label19.AutoSize = true;
+			this.label19.BackColor = System.Drawing.SystemColors.Control;
+			this.label19.Location = new System.Drawing.Point(11, 55);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(65, 12);
+			this.label19.TabIndex = 41;
+			this.label19.Text = "周波数範囲";
+			// 
+			// numericUpDown9
+			// 
+			this.numericUpDown9.Location = new System.Drawing.Point(79, 81);
+			this.numericUpDown9.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.numericUpDown9.Minimum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            -2147483648});
+			this.numericUpDown9.Name = "numericUpDown9";
+			this.numericUpDown9.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown9.TabIndex = 58;
+			this.numericUpDown9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown9.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+			// 
+			// label35
+			// 
+			this.label35.AutoSize = true;
+			this.label35.Location = new System.Drawing.Point(76, 110);
+			this.label35.Name = "label35";
+			this.label35.Size = new System.Drawing.Size(53, 12);
+			this.label35.TabIndex = 64;
+			this.label35.Text = "二次微分";
+			// 
+			// radioButton6
+			// 
+			this.radioButton6.AutoSize = true;
+			this.radioButton6.Location = new System.Drawing.Point(6, 106);
+			this.radioButton6.Name = "radioButton6";
+			this.radioButton6.Size = new System.Drawing.Size(71, 16);
+			this.radioButton6.TabIndex = 59;
+			this.radioButton6.TabStop = true;
+			this.radioButton6.Text = "二次微分";
+			this.radioButton6.UseVisualStyleBackColor = true;
+			// 
+			// label20
+			// 
+			this.label20.AutoSize = true;
+			this.label20.Location = new System.Drawing.Point(133, 57);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(17, 12);
+			this.label20.TabIndex = 42;
+			this.label20.Text = "～";
+			// 
+			// label26
+			// 
+			this.label26.AutoSize = true;
+			this.label26.BackColor = System.Drawing.SystemColors.Control;
+			this.label26.Location = new System.Drawing.Point(44, 85);
+			this.label26.Name = "label26";
+			this.label26.Size = new System.Drawing.Size(29, 12);
+			this.label26.TabIndex = 57;
+			this.label26.Text = "閾値";
+			// 
+			// label23
+			// 
+			this.label23.AutoSize = true;
+			this.label23.Location = new System.Drawing.Point(143, 110);
+			this.label23.Name = "label23";
+			this.label23.Size = new System.Drawing.Size(61, 12);
+			this.label23.TabIndex = 65;
+			this.label23.Text = "平滑化(前)";
+			// 
+			// numericUpDown10
+			// 
+			this.numericUpDown10.DecimalPlaces = 1;
+			this.numericUpDown10.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.numericUpDown10.Location = new System.Drawing.Point(79, 156);
+			this.numericUpDown10.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+			this.numericUpDown10.Minimum = new decimal(new int[] {
+            64,
+            0,
+            0,
+            -2147483648});
+			this.numericUpDown10.Name = "numericUpDown10";
+			this.numericUpDown10.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown10.TabIndex = 62;
+			this.numericUpDown10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown10.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+			// 
+			// numericUpDown7
+			// 
+			this.numericUpDown7.DecimalPlaces = 3;
+			this.numericUpDown7.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+			this.numericUpDown7.Location = new System.Drawing.Point(79, 52);
+			this.numericUpDown7.Maximum = new decimal(new int[] {
+            49,
+            0,
+            0,
+            131072});
+			this.numericUpDown7.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+			this.numericUpDown7.Name = "numericUpDown7";
+			this.numericUpDown7.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown7.TabIndex = 40;
+			this.numericUpDown7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown7.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+			// 
+			// numericUpDown8
+			// 
+			this.numericUpDown8.DecimalPlaces = 3;
+			this.numericUpDown8.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+			this.numericUpDown8.Location = new System.Drawing.Point(150, 51);
+			this.numericUpDown8.Maximum = new decimal(new int[] {
+            49,
+            0,
+            0,
+            131072});
+			this.numericUpDown8.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+			this.numericUpDown8.Name = "numericUpDown8";
+			this.numericUpDown8.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown8.TabIndex = 44;
+			this.numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown8.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            65536});
+			// 
+			// comboBox13
+			// 
+			this.comboBox13.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox13.FormattingEnabled = true;
+			this.comboBox13.Items.AddRange(new object[] {
+            "5",
+            "7",
+            "9",
+            "11",
+            "13",
+            "15",
+            "17",
+            "19",
+            "21",
+            "23",
+            "25"});
+			this.comboBox13.Location = new System.Drawing.Point(79, 128);
+			this.comboBox13.Name = "comboBox13";
+			this.comboBox13.Size = new System.Drawing.Size(55, 20);
+			this.comboBox13.TabIndex = 63;
+			// 
+			// comboBox14
+			// 
+			this.comboBox14.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox14.FormattingEnabled = true;
+			this.comboBox14.Items.AddRange(new object[] {
+            "0",
+            "5",
+            "7",
+            "9",
+            "11",
+            "13",
+            "15",
+            "17",
+            "19",
+            "21",
+            "23",
+            "25"});
+			this.comboBox14.Location = new System.Drawing.Point(148, 128);
+			this.comboBox14.Name = "comboBox14";
+			this.comboBox14.Size = new System.Drawing.Size(55, 20);
+			this.comboBox14.TabIndex = 40;
+			// 
+			// comboBox4
+			// 
+			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox4.FormattingEnabled = true;
+			this.comboBox4.Items.AddRange(new object[] {
+            "緩(0.20幅)",
+            "普(0.10幅)",
+            "急(0.05幅)"});
+			this.comboBox4.Location = new System.Drawing.Point(209, 51);
+			this.comboBox4.Name = "comboBox4";
+			this.comboBox4.Size = new System.Drawing.Size(55, 20);
+			this.comboBox4.TabIndex = 43;
+			// 
+			// label14
+			// 
+			this.label14.AutoSize = true;
+			this.label14.Location = new System.Drawing.Point(148, 85);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(41, 12);
+			this.label14.TabIndex = 45;
+			this.label14.Text = "タップ数";
+			// 
+			// comboBox15
+			// 
+			this.comboBox15.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox15.FormattingEnabled = true;
+			this.comboBox15.Items.AddRange(new object[] {
+            "0",
+            "5",
+            "7",
+            "9",
+            "11",
+            "13",
+            "15",
+            "17",
+            "19",
+            "21",
+            "23",
+            "25"});
+			this.comboBox15.Location = new System.Drawing.Point(209, 128);
+			this.comboBox15.Name = "comboBox15";
+			this.comboBox15.Size = new System.Drawing.Size(55, 20);
+			this.comboBox15.TabIndex = 40;
+			// 
+			// label22
+			// 
+			this.label22.AutoSize = true;
+			this.label22.Location = new System.Drawing.Point(21, 133);
+			this.label22.Name = "label22";
+			this.label22.Size = new System.Drawing.Size(52, 12);
+			this.label22.TabIndex = 61;
+			this.label22.Text = "重み係数";
+			// 
+			// label21
+			// 
+			this.label21.AutoSize = true;
+			this.label21.Location = new System.Drawing.Point(214, 36);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(42, 12);
+			this.label21.TabIndex = 45;
+			this.label21.Text = "スロープ";
 			// 
 			// textBox1
 			// 
@@ -1138,7 +1528,6 @@
 			// tabControl2
 			// 
 			this.tabControl2.Controls.Add(this.tabPage4);
-			this.tabControl2.Controls.Add(this.tabPage5);
 			this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl2.Location = new System.Drawing.Point(300, 345);
 			this.tabControl2.Name = "tabControl2";
@@ -1152,7 +1541,7 @@
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(256, 310);
+			this.tabPage4.Size = new System.Drawing.Size(283, 310);
 			this.tabPage4.TabIndex = 0;
 			this.tabPage4.Text = "毛髪径";
 			this.tabPage4.UseVisualStyleBackColor = true;
@@ -1184,391 +1573,15 @@
 			this.chart3.Legends.Add(legend5);
 			this.chart3.Location = new System.Drawing.Point(3, 3);
 			this.chart3.Name = "chart3";
-			series17.ChartArea = "ChartArea1";
-			series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-			series17.Legend = "Legend1";
-			series17.LegendText = "毛髪径";
-			series17.Name = "Series1";
-			this.chart3.Series.Add(series17);
-			this.chart3.Size = new System.Drawing.Size(250, 304);
+			series18.ChartArea = "ChartArea1";
+			series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+			series18.Legend = "Legend1";
+			series18.LegendText = "毛髪径";
+			series18.Name = "Series1";
+			this.chart3.Series.Add(series18);
+			this.chart3.Size = new System.Drawing.Size(277, 304);
 			this.chart3.TabIndex = 1;
 			this.chart3.Text = "chart1";
-			// 
-			// tabPage5
-			// 
-			this.tabPage5.Controls.Add(this.label15);
-			this.tabPage5.Controls.Add(this.label24);
-			this.tabPage5.Controls.Add(this.label35);
-			this.tabPage5.Controls.Add(this.label23);
-			this.tabPage5.Controls.Add(this.comboBox13);
-			this.tabPage5.Controls.Add(this.comboBox15);
-			this.tabPage5.Controls.Add(this.label22);
-			this.tabPage5.Controls.Add(this.comboBox14);
-			this.tabPage5.Controls.Add(this.numericUpDown10);
-			this.tabPage5.Controls.Add(this.radioButton6);
-			this.tabPage5.Controls.Add(this.label13);
-			this.tabPage5.Controls.Add(this.numericUpDown1);
-			this.tabPage5.Controls.Add(this.numericUpDown9);
-			this.tabPage5.Controls.Add(this.label26);
-			this.tabPage5.Controls.Add(this.numericUpDown8);
-			this.tabPage5.Controls.Add(this.label14);
-			this.tabPage5.Controls.Add(this.label21);
-			this.tabPage5.Controls.Add(this.comboBox4);
-			this.tabPage5.Controls.Add(this.numericUpDown7);
-			this.tabPage5.Controls.Add(this.label20);
-			this.tabPage5.Controls.Add(this.label19);
-			this.tabPage5.Controls.Add(this.radioButton5);
-			this.tabPage5.Controls.Add(this.button1);
-			this.tabPage5.Location = new System.Drawing.Point(4, 22);
-			this.tabPage5.Name = "tabPage5";
-			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(283, 310);
-			this.tabPage5.TabIndex = 1;
-			this.tabPage5.Text = "キューティクル・ライン検出条件";
-			this.tabPage5.UseVisualStyleBackColor = true;
-			// 
-			// label24
-			// 
-			this.label24.AutoSize = true;
-			this.label24.Location = new System.Drawing.Point(206, 98);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(61, 12);
-			this.label24.TabIndex = 66;
-			this.label24.Text = "平滑化(後)";
-			// 
-			// label35
-			// 
-			this.label35.AutoSize = true;
-			this.label35.Location = new System.Drawing.Point(76, 98);
-			this.label35.Name = "label35";
-			this.label35.Size = new System.Drawing.Size(53, 12);
-			this.label35.TabIndex = 64;
-			this.label35.Text = "二次微分";
-			// 
-			// label23
-			// 
-			this.label23.AutoSize = true;
-			this.label23.Location = new System.Drawing.Point(143, 98);
-			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(61, 12);
-			this.label23.TabIndex = 65;
-			this.label23.Text = "平滑化(前)";
-			// 
-			// comboBox13
-			// 
-			this.comboBox13.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox13.FormattingEnabled = true;
-			this.comboBox13.Items.AddRange(new object[] {
-            "5",
-            "7",
-            "9",
-            "11",
-            "13",
-            "15",
-            "17",
-            "19",
-            "21",
-            "23",
-            "25"});
-			this.comboBox13.Location = new System.Drawing.Point(79, 116);
-			this.comboBox13.Name = "comboBox13";
-			this.comboBox13.Size = new System.Drawing.Size(55, 20);
-			this.comboBox13.TabIndex = 63;
-			// 
-			// comboBox15
-			// 
-			this.comboBox15.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox15.FormattingEnabled = true;
-			this.comboBox15.Items.AddRange(new object[] {
-            "0",
-            "5",
-            "7",
-            "9",
-            "11",
-            "13",
-            "15",
-            "17",
-            "19",
-            "21",
-            "23",
-            "25"});
-			this.comboBox15.Location = new System.Drawing.Point(209, 116);
-			this.comboBox15.Name = "comboBox15";
-			this.comboBox15.Size = new System.Drawing.Size(55, 20);
-			this.comboBox15.TabIndex = 40;
-			// 
-			// label22
-			// 
-			this.label22.AutoSize = true;
-			this.label22.Location = new System.Drawing.Point(21, 121);
-			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(52, 12);
-			this.label22.TabIndex = 61;
-			this.label22.Text = "重み係数";
-			// 
-			// comboBox14
-			// 
-			this.comboBox14.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox14.FormattingEnabled = true;
-			this.comboBox14.Items.AddRange(new object[] {
-            "0",
-            "5",
-            "7",
-            "9",
-            "11",
-            "13",
-            "15",
-            "17",
-            "19",
-            "21",
-            "23",
-            "25"});
-			this.comboBox14.Location = new System.Drawing.Point(148, 116);
-			this.comboBox14.Name = "comboBox14";
-			this.comboBox14.Size = new System.Drawing.Size(55, 20);
-			this.comboBox14.TabIndex = 40;
-			// 
-			// numericUpDown10
-			// 
-			this.numericUpDown10.DecimalPlaces = 1;
-			this.numericUpDown10.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-			this.numericUpDown10.Location = new System.Drawing.Point(79, 144);
-			this.numericUpDown10.Maximum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
-			this.numericUpDown10.Minimum = new decimal(new int[] {
-            64,
-            0,
-            0,
-            -2147483648});
-			this.numericUpDown10.Name = "numericUpDown10";
-			this.numericUpDown10.Size = new System.Drawing.Size(54, 19);
-			this.numericUpDown10.TabIndex = 62;
-			this.numericUpDown10.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown10.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-			// 
-			// radioButton6
-			// 
-			this.radioButton6.AutoSize = true;
-			this.radioButton6.Location = new System.Drawing.Point(6, 94);
-			this.radioButton6.Name = "radioButton6";
-			this.radioButton6.Size = new System.Drawing.Size(71, 16);
-			this.radioButton6.TabIndex = 59;
-			this.radioButton6.TabStop = true;
-			this.radioButton6.Text = "二次微分";
-			this.radioButton6.UseVisualStyleBackColor = true;
-			// 
-			// label13
-			// 
-			this.label13.AutoSize = true;
-			this.label13.BackColor = System.Drawing.SystemColors.Control;
-			this.label13.Location = new System.Drawing.Point(44, 149);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(29, 12);
-			this.label13.TabIndex = 60;
-			this.label13.Text = "閾値";
-			// 
-			// numericUpDown1
-			// 
-			this.numericUpDown1.Increment = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-			this.numericUpDown1.Location = new System.Drawing.Point(209, 69);
-			this.numericUpDown1.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-			this.numericUpDown1.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			this.numericUpDown1.Name = "numericUpDown1";
-			this.numericUpDown1.Size = new System.Drawing.Size(54, 19);
-			this.numericUpDown1.TabIndex = 58;
-			this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown1.Value = new decimal(new int[] {
-            11,
-            0,
-            0,
-            0});
-			this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-			// 
-			// numericUpDown9
-			// 
-			this.numericUpDown9.Location = new System.Drawing.Point(79, 69);
-			this.numericUpDown9.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-			this.numericUpDown9.Minimum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            -2147483648});
-			this.numericUpDown9.Name = "numericUpDown9";
-			this.numericUpDown9.Size = new System.Drawing.Size(54, 19);
-			this.numericUpDown9.TabIndex = 58;
-			this.numericUpDown9.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown9.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-			// 
-			// label26
-			// 
-			this.label26.AutoSize = true;
-			this.label26.BackColor = System.Drawing.SystemColors.Control;
-			this.label26.Location = new System.Drawing.Point(44, 73);
-			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(29, 12);
-			this.label26.TabIndex = 57;
-			this.label26.Text = "閾値";
-			// 
-			// numericUpDown8
-			// 
-			this.numericUpDown8.DecimalPlaces = 3;
-			this.numericUpDown8.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
-			this.numericUpDown8.Location = new System.Drawing.Point(150, 39);
-			this.numericUpDown8.Maximum = new decimal(new int[] {
-            49,
-            0,
-            0,
-            131072});
-			this.numericUpDown8.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-			this.numericUpDown8.Name = "numericUpDown8";
-			this.numericUpDown8.Size = new System.Drawing.Size(54, 19);
-			this.numericUpDown8.TabIndex = 44;
-			this.numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown8.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            65536});
-			// 
-			// label14
-			// 
-			this.label14.AutoSize = true;
-			this.label14.Location = new System.Drawing.Point(148, 73);
-			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(41, 12);
-			this.label14.TabIndex = 45;
-			this.label14.Text = "タップ数";
-			// 
-			// label21
-			// 
-			this.label21.AutoSize = true;
-			this.label21.Location = new System.Drawing.Point(214, 24);
-			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(42, 12);
-			this.label21.TabIndex = 45;
-			this.label21.Text = "スロープ";
-			// 
-			// comboBox4
-			// 
-			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox4.FormattingEnabled = true;
-			this.comboBox4.Items.AddRange(new object[] {
-            "緩(0.20幅)",
-            "普(0.10幅)",
-            "急(0.05幅)"});
-			this.comboBox4.Location = new System.Drawing.Point(209, 39);
-			this.comboBox4.Name = "comboBox4";
-			this.comboBox4.Size = new System.Drawing.Size(55, 20);
-			this.comboBox4.TabIndex = 43;
-			// 
-			// numericUpDown7
-			// 
-			this.numericUpDown7.DecimalPlaces = 3;
-			this.numericUpDown7.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
-			this.numericUpDown7.Location = new System.Drawing.Point(79, 40);
-			this.numericUpDown7.Maximum = new decimal(new int[] {
-            49,
-            0,
-            0,
-            131072});
-			this.numericUpDown7.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-			this.numericUpDown7.Name = "numericUpDown7";
-			this.numericUpDown7.Size = new System.Drawing.Size(54, 19);
-			this.numericUpDown7.TabIndex = 40;
-			this.numericUpDown7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown7.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            131072});
-			// 
-			// label20
-			// 
-			this.label20.AutoSize = true;
-			this.label20.Location = new System.Drawing.Point(133, 45);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(17, 12);
-			this.label20.TabIndex = 42;
-			this.label20.Text = "～";
-			// 
-			// label19
-			// 
-			this.label19.AutoSize = true;
-			this.label19.BackColor = System.Drawing.SystemColors.Control;
-			this.label19.Location = new System.Drawing.Point(11, 43);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(65, 12);
-			this.label19.TabIndex = 41;
-			this.label19.Text = "周波数範囲";
-			// 
-			// radioButton5
-			// 
-			this.radioButton5.AutoSize = true;
-			this.radioButton5.Location = new System.Drawing.Point(6, 6);
-			this.radioButton5.Name = "radioButton5";
-			this.radioButton5.Size = new System.Drawing.Size(221, 16);
-			this.radioButton5.TabIndex = 1;
-			this.radioButton5.TabStop = true;
-			this.radioButton5.Text = "バンドパスフィルタ (0:DC, 0.5:最高周波数)";
-			this.radioButton5.UseVisualStyleBackColor = true;
-			// 
-			// button1
-			// 
-			this.button1.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.button1.Location = new System.Drawing.Point(79, 208);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(181, 30);
-			this.button1.TabIndex = 0;
-			this.button1.Text = "更新";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click_1);
 			// 
 			// pictureBox3
 			// 
@@ -1679,15 +1692,18 @@
 			this.label5.TabIndex = 0;
 			this.label5.Text = "光学倍率";
 			// 
-			// label15
+			// textBox2
 			// 
-			this.label15.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.label15.ForeColor = System.Drawing.Color.Red;
-			this.label15.Location = new System.Drawing.Point(81, 255);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(179, 24);
-			this.label15.TabIndex = 67;
-			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.textBox2.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
+			this.textBox2.ForeColor = System.Drawing.Color.Red;
+			this.textBox2.Location = new System.Drawing.Point(80, 230);
+			this.textBox2.Multiline = true;
+			this.textBox2.Name = "textBox2";
+			this.textBox2.ReadOnly = true;
+			this.textBox2.Size = new System.Drawing.Size(179, 39);
+			this.textBox2.TabIndex = 68;
+			this.textBox2.Text = "error";
 			// 
 			// Form03
 			// 
@@ -1715,6 +1731,13 @@
 			((System.ComponentModel.ISupportInitialize)(this.chart4)).EndInit();
 			this.tabPage3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.chart5)).EndInit();
+			this.tabPage7.ResumeLayout(false);
+			this.tabPage7.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
 			this.panel1.ResumeLayout(false);
@@ -1732,13 +1755,6 @@
 			this.tabControl2.ResumeLayout(false);
 			this.tabPage4.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();
-			this.tabPage5.ResumeLayout(false);
-			this.tabPage5.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
 			this.panel2.ResumeLayout(false);
 			this.panel3.ResumeLayout(false);
@@ -1826,7 +1842,6 @@
 		private System.Windows.Forms.TabPage tabPage6;
 		private System.Windows.Forms.TabControl tabControl2;
 		private System.Windows.Forms.TabPage tabPage4;
-		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.RadioButton radioButton5;
 		private System.Windows.Forms.NumericUpDown numericUpDown7;
 		private System.Windows.Forms.Label label20;
@@ -1851,6 +1866,7 @@
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.NumericUpDown numericUpDown1;
-		private System.Windows.Forms.Label label15;
+		private System.Windows.Forms.TabPage tabPage7;
+		private System.Windows.Forms.TextBox textBox2;
 	}
 }

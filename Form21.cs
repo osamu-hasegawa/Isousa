@@ -376,6 +376,18 @@ namespace uSCOPE
 					}
 					G.SS.MOZ_CND_ZCNT = this.comboBox8.Items.Count;
 				}
+#if true//2018.09.29(キューティクルライン検出)
+				if ((G.SS.MOZ_CND_NTAP % 2) == 0) {
+					G.mlog("タップ数は奇数を指定してください.");
+					this.numericUpDown13.Focus();
+					return(false);
+				}
+				if (G.SS.MOZ_CND_BPF1 >= G.SS.MOZ_CND_BPF2) {
+					G.mlog("周波数範囲の指定に誤りがあります.");
+					this.numericUpDown7.Focus();
+					return(false);
+				}
+#endif
                 rc = true;
             }
             catch (Exception e) {
@@ -489,5 +501,13 @@ namespace uSCOPE
 			}
 #endif
 		}
+#if true//2018.09.29(キューティクルライン検出)
+		private void numericUpDown13_ValueChanged(object sender, EventArgs e)
+		{
+			if ((this.numericUpDown13.Value % 2) == 0) {
+				this.numericUpDown13.Value = this.numericUpDown13.Value+1;
+			}
+		}
+#endif
 	}
 }

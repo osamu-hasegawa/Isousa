@@ -355,9 +355,28 @@ retry:
 			public ArrayList val_m5u;//断面:下端-5um
 #if true//2018.09.29(キューティクルライン検出)
 			public ArrayList val_cen_fil;//断面:中心のフィルター処理後
+			public ArrayList val_phf_fil;
+			public ArrayList val_mph_fil;
+			public ArrayList val_p5u_fil;
+			public ArrayList val_m5u_fil;
+
 			public ArrayList pts_cen_cut;//中心ライン上のキューティクル・ライン該当・点
+			public ArrayList pts_phf_cut;
+			public ArrayList pts_mph_cut;
+			public ArrayList pts_p5u_cut;
+			public ArrayList pts_m5u_cut;
+
 			public List<bool>flg_cen_cut;//中心ライン上のキューティクル・ライン該当・フラグ
+			public List<bool>flg_phf_cut;
+			public List<bool>flg_mph_cut;
+			public List<bool>flg_p5u_cut;
+			public List<bool>flg_m5u_cut;
+
 			public List<int> his_cen_cut;
+			public List<int> his_phf_cut;
+			public List<int> his_mph_cut;
+			public List<int> his_p5u_cut;
+			public List<int> his_m5u_cut;
 #endif
 			//---
 			public int	 cnt_of_pos;
@@ -894,7 +913,15 @@ retry:
 #if true//2018.09.29(キューティクルライン検出)
 			//キューティクル断面のフィルター処理
 			apply_filter(seg.val_cen, out seg.val_cen_fil);
+			apply_filter(seg.val_phf, out seg.val_phf_fil);
+			apply_filter(seg.val_mph, out seg.val_mph_fil);
+			apply_filter(seg.val_p5u, out seg.val_p5u_fil);
+			apply_filter(seg.val_m5u, out seg.val_m5u_fil);
 			find_cuticle_line(seg.pts_cen, seg.val_cen_fil, out seg.pts_cen_cut, out seg.flg_cen_cut, out seg.his_cen_cut);
+			find_cuticle_line(seg.pts_phf, seg.val_phf_fil, out seg.pts_phf_cut, out seg.flg_phf_cut, out seg.his_phf_cut);
+			find_cuticle_line(seg.pts_mph, seg.val_mph_fil, out seg.pts_mph_cut, out seg.flg_mph_cut, out seg.his_mph_cut);
+			find_cuticle_line(seg.pts_p5u, seg.val_p5u_fil, out seg.pts_p5u_cut, out seg.flg_p5u_cut, out seg.his_p5u_cut);
+			find_cuticle_line(seg.pts_m5u, seg.val_m5u_fil, out seg.pts_m5u_cut, out seg.flg_m5u_cut, out seg.his_m5u_cut);
 #endif
 			//m_offset_of_hair = s;
 			m_back_of_x = pf.X;
@@ -1800,7 +1827,14 @@ retry:
 
 				string buf = q.ToString();
 				int cnt_of_seg;
-
+#if true//2018.09.29(キューティクルライン検出)
+				if (q == 0) {
+					if (!calc_filter_coeff()) {
+						G.mlog("フィルタ係数の計算ができませんでした.パラメータを確認してください.\r"+ F_REMEZ_SCIPY.ERRMSG);
+						break;
+					}
+				}
+#endif
 				files_ct = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD+pext,  buf +  "CT_??"+zpos+".*");
 				files_cr = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD+pext,  buf +  "CR_??"+zpos+".*");
 				files_ir = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD+pext,  buf +  "IR_??"+zpos+".*");
@@ -2258,8 +2292,13 @@ retry:
 #if true//2018.09.29(キューティクルライン検出)
 			//if (G.UIF_LEVL == 0) {
 			//    /*0:ユーザ用(暫定版)*/
-			//    this.tabControl2.TabPages.Remove(this.tabPage5);//キューティクル条件ページ
+			//    this.tabControl2.TabPages.Remove(this.tabPage7);//キューティクル条件ページ
 			//}
+			if (false) {
+				TabPage tmp = this.tabPage7;
+				this.tabControl1.TabPages.Remove(this.tabPage7);
+				this.tabControl2.TabPages.Add(tmp);
+			}
 			G.SS.MOZ_CND_HCNT = (G.SS.MOZ_CND_HMAX/G.SS.MOZ_CND_HWID);
 			DDX(true);
 #endif
@@ -2422,6 +2461,12 @@ retry:
 			il_pd = ils[1];
 			il_ir = ils[2];
 		}
+#if true//2018.09.29(キューティクルライン検出)
+		private void draw_marker(Graphics gr, Brush brs, Point pt, int LEN)
+		{
+			gr.FillRectangle(brs, pt.X-LEN, pt.Y-LEN, LEN*2+1, LEN*2+1);
+		}
+#endif
 		private void draw_image(hair hr)
 		{
 			string buf_dm, buf_ir, buf_pd;
@@ -2434,7 +2479,9 @@ retry:
 			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
 			string zpos, pext;
 			ImageList il_dm = null, il_ir = null, il_pd = null;
-
+#if true//2018.09.29(キューティクルライン検出)
+			const int CUT_LEN = 7;
+#endif
 			//if (string.Compare(this.comboBox8.Text, "深度合成") == 0) {
 			//    zpos = "ZDEPT";
 			//    pext = m_fold_of_dept;
@@ -2529,19 +2576,8 @@ retry:
 #if true//2018.09.29(キューティクルライン検出)
 						if (seg.val_cen_fil != null && seg.val_cen_fil.Count >= seg.pts_cen.Count) {
 							for (int i = 0; i < seg.pts_cen.Count; i++) {
-								//if (G.SS.MOZ_CND_CTYP == 0 && TO_VAL(seg.val_cen_fil[i]) < G.SS.MOZ_CND_BPVL) {
-								//    //NOT A C.LINE
-								//}
-								//else if (G.SS.MOZ_CND_CTYP == 1 && TO_VAL(seg.val_cen_fil[i]) < G.SS.MOZ_CND_2DVL) {
-								//    //NOT A C.LINE
-								//}
-								if (seg.flg_cen_cut[i] == false) {
-									//NOT A C.LINE
-								}
-								else {
-									Point pt = (Point)seg.pts_cen[i];
-									const int LEN = 7;
-									gr.FillRectangle(Brushes.Yellow, pt.X-LEN, pt.Y-LEN, LEN*2+1, LEN*2+1);
+								if (seg.flg_cen_cut[i]) {
+									draw_marker(gr, Brushes.Yellow, (Point)seg.pts_cen[i], CUT_LEN);
 								}
 							}
 						}
@@ -2551,21 +2587,57 @@ retry:
 						pen = new Pen(this.chart1.Series[1].Color, pw);
 						Point[] ap = (Point[])seg.pts_phf.ToArray(typeof(Point));
 						gr.DrawLines(pen, ap);
+#if true//2018.09.29(キューティクルライン検出)
+						if (seg.val_phf_fil != null && seg.val_phf_fil.Count >= seg.pts_phf.Count) {
+							for (int i = 0; i < seg.pts_phf.Count; i++) {
+								if (seg.flg_phf_cut[i]) {
+									draw_marker(gr, Brushes.Yellow, (Point)seg.pts_phf[i], CUT_LEN);
+								}
+							}
+						}
+#endif
 					}
 					if (this.checkBox5.Checked) {//R*-50%
 						pen = new Pen(this.chart1.Series[2].Color, pw);
 						Point[] ap = (Point[])seg.pts_mph.ToArray(typeof(Point));
 						gr.DrawLines(pen, ap);
+#if true//2018.09.29(キューティクルライン検出)
+						if (seg.val_mph_fil != null && seg.val_mph_fil.Count >= seg.pts_mph.Count) {
+							for (int i = 0; i < seg.pts_mph.Count; i++) {
+								if (seg.flg_mph_cut[i]) {
+									draw_marker(gr, Brushes.Yellow, (Point)seg.pts_mph[i], CUT_LEN);
+								}
+							}
+						}
+#endif
 					}
 					if (this.checkBox6.Checked) {//R+5u
 						pen = new Pen(this.chart1.Series[3].Color, pw);
 						Point[] ap = (Point[])seg.pts_p5u.ToArray(typeof(Point));
 						gr.DrawLines(pen, ap);
+#if true//2018.09.29(キューティクルライン検出)
+						if (seg.val_p5u_fil != null && seg.val_p5u_fil.Count >= seg.pts_p5u.Count) {
+							for (int i = 0; i < seg.pts_p5u.Count; i++) {
+								if (seg.flg_p5u_cut[i]) {
+									draw_marker(gr, Brushes.Yellow, (Point)seg.pts_p5u[i], CUT_LEN);
+								}
+							}
+						}
+#endif
 					}
 					if (this.checkBox7.Checked) {//R-5u
 						pen = new Pen(this.chart1.Series[4].Color, pw);
 						Point[] ap = (Point[])seg.pts_m5u.ToArray(typeof(Point));
 						gr.DrawLines(pen, ap);
+#if true//2018.09.29(キューティクルライン検出)
+						if (seg.val_m5u_fil != null && seg.val_m5u_fil.Count >= seg.pts_m5u.Count) {
+							for (int i = 0; i < seg.pts_m5u.Count; i++) {
+								if (seg.flg_m5u_cut[i]) {
+									draw_marker(gr, Brushes.Yellow, (Point)seg.pts_m5u[i], CUT_LEN);
+								}
+							}
+						}
+#endif
 					}
 					pen.Dispose();
 					gr.Dispose();
@@ -3352,32 +3424,21 @@ retry:
 				dst[i] = sum;
 			}
 		}
-		private void apply_filter(ArrayList asrc, out ArrayList adst)
+		private bool calc_filter_coeff()
 		{
-			bool ret;
-			double[] src = new double[asrc.Count];
-			double[] dst = new double[asrc.Count];
+			//bool ret;
 			//---
-			for (int i = 0; i < src.Length; i++) {
-				src[i] = TO_VAL(asrc[i]);
-			}
 			//---
 			if (G.SS.MOZ_CND_CTYP == 0) {
-				F_REMEZ remez = new F_REMEZ();
-				int ntaps = 11;//(int)this.numericUpDown14.Value;
+				//F_REMEZ remez = new F_REMEZ();
+				int ntaps = G.SS.MOZ_CND_NTAP;//11;//(int)this.numericUpDown14.Value;
 				int nbands = 3;//BPF
-				double fs = 1;//1Hz
-				VectorD bands = new VectorD(new double[3*2]);
-				VectorD gain = new VectorD(new double[3]);
-				VectorD weight =new VectorD(new double[3]);
-				VectorD deviat =new VectorD(new double[3]);
-				ntaps = G.SS.MOZ_CND_NTAP;
-				gain[0] = 0;
-				gain[1] = 1;
-				gain[2] = 0;
-				weight[0] = 1;
-				weight[1] = 1;
-				weight[2] = 1;
+				double		fs = 1;//1Hz
+				double[]	bands  = new double[3*2];
+				double[]	gain   = {0,1,0};
+				double[]	weight = {1,1,1};
+				//double[]	deviat = new double[3];
+				double[]	cof = null;
 				bands[0] = 0.00;//BAND#1:下側
 				bands[1] = 0.03;//BAND#1:上側
 				bands[2] = G.SS.MOZ_CND_BPF1;//0.05;//BAND#2:下側
@@ -3410,18 +3471,34 @@ retry:
 				if (bands[4] >= bands[5]) {
 					bands[4] = (bands[3]+bands[5])/2;
 				}
-				ret = remez.Remez(ntaps, nbands, bands, gain, weight, deviat, /*type*/0, fs);
-				if (ret) {
-					double[] fil = new double[ntaps];
-					for (int i = 0; i < ntaps; i++) {
-						fil[i] = remez.hk[i];
-					}
-					do_fir(fil, src, dst);
-					this.label15.Text = "";
+				cof = F_REMEZ_SCIPY.sigtools_remez(ntaps, bands, gain, weight, F_REMEZ_SCIPY.BANDPASS, fs);
+				//ret = remez.Remez(ntaps, nbands, bands, gain, weight, deviat, /*type*/0, fs);
+				if (cof != null) {
+					G.SS.MOZ_CND_FCOF = (double[])cof.Clone();
+					this.textBox2.Text = "";
 				}
 				else {
-					this.label15.Text = "フィルタ計算エラー！";
+					this.textBox2.Text = "フィルタ計算エラー！\r" + F_REMEZ_SCIPY.ERRMSG;
+					return(false);
 				}
+			}
+			else {
+				this.textBox2.Text = "";
+			}
+			return(true);
+		}
+		private void apply_filter(ArrayList asrc, out ArrayList adst)
+		{
+			//bool ret;
+			double[] src = new double[asrc.Count];
+			double[] dst = new double[asrc.Count];
+			//---
+			for (int i = 0; i < src.Length; i++) {
+				src[i] = TO_VAL(asrc[i]);
+			}
+			//---
+			if (G.SS.MOZ_CND_CTYP == 0) {
+				do_fir(G.SS.MOZ_CND_FCOF, src, dst);
 			}
 			else {
 				double fmax, fmin;
@@ -3437,7 +3514,6 @@ retry:
 				for (int i = 0; i < dst.Length; i++) {
 					dst[i] *= -1;
 				}
-				this.label15.Text = "";
 			}
 			adst = new ArrayList(dst);
 		}
@@ -3490,233 +3566,317 @@ retry:
 			}
 			ahis = new List<int>(his);
 		}
+		private void set_max_min(double f, ref double fmin, ref double fmax)
+		{
+			if (fmax < f) {
+				fmax = f;
+			}
+			if (fmin > f) {
+				fmin = f;
+			}
+		}
+		private DataPoint dp_marker(double x, double y, Color c)
+		{
+			DataPoint dp = new DataPoint();
+			dp.SetValueXY(x, y);
+			dp.MarkerStyle = MarkerStyle.Square;
+			dp.MarkerColor = c;
+			return(dp);
+		}
 		private void draw_cuticle(hair hr)
 		{
 			try {
-			//---
-			int idx = m_isel;
-			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
-			double cut_max = double.MinValue;
-			double cut_min = double.MaxValue;
-			int[] his = new int[G.SS.MOZ_CND_HCNT];
-			//---
-			this.chart4.Series[0].Points.Clear();
-			this.chart4.ChartAreas[0].AxisX.Minimum = 0;
-			this.chart4.ChartAreas[0].AxisX.Maximum = double.NaN;
-			this.chart4.ChartAreas[0].AxisX.Interval = double.NaN;
-			//
-			this.chart5.Series[0].Points.Clear();
-			this.chart5.ChartAreas[0].AxisX.Minimum = 0;
-			this.chart5.ChartAreas[0].AxisX.Maximum = G.SS.MOZ_CND_HMAX;
-			this.chart5.ChartAreas[0].AxisX.Interval = double.NaN;
-			//
-			if (seg == null) {
-				return;
-			}
-			seg_of_hair seg_bak = seg;
-			double		offs = 0;
-			double		xmin = 0;
-
-			if (this.radioButton1.Checked) {//グラフ・毛髪全体
-				double um_of_width = G.PX2UM(seg.width, m_log_info.pix_pitch, m_log_info.zoom);
-				for (int q = 0;; q++) {
-					if (q >= hr.seg.Length) {
-						return;
-					}
-					seg = (seg_of_hair)hr.seg[q];
-					if (seg != null && seg.val_xum.Count > 0) {
-						break;
-					}
-					offs -= um_of_width;
-				}
-				xmin = offs;
-			}
-			else {//画像ファイル毎
-				if (seg.val_xum.Count <= 0) {
+				//---
+				int idx = m_isel;
+				seg_of_hair seg = (seg_of_hair)hr.seg[idx];
+				double cut_max = double.MinValue;
+				double cut_min = double.MaxValue;
+				int[] his_p5u = new int[G.SS.MOZ_CND_HCNT];
+				int[] his_phf = new int[G.SS.MOZ_CND_HCNT];
+				int[] his_cen = new int[G.SS.MOZ_CND_HCNT];
+				int[] his_mph = new int[G.SS.MOZ_CND_HCNT];
+				int[] his_m5u = new int[G.SS.MOZ_CND_HCNT];
+				//---
+				this.chart4.Series[0].Points.Clear();
+				this.chart4.Series[1].Points.Clear();
+				this.chart4.Series[2].Points.Clear();
+				this.chart4.Series[3].Points.Clear();
+				this.chart4.Series[4].Points.Clear();
+				this.chart4.ChartAreas[0].AxisX.Minimum = 0;
+				this.chart4.ChartAreas[0].AxisX.Maximum = double.NaN;
+				this.chart4.ChartAreas[0].AxisX.Interval = double.NaN;
+				//
+				this.chart5.Series[0].Points.Clear();
+				this.chart5.Series[1].Points.Clear();
+				this.chart5.Series[2].Points.Clear();
+				this.chart5.Series[3].Points.Clear();
+				this.chart5.Series[4].Points.Clear();
+				this.chart5.ChartAreas[0].AxisX.Minimum = 0;
+				this.chart5.ChartAreas[0].AxisX.Maximum = G.SS.MOZ_CND_HMAX;
+				this.chart5.ChartAreas[0].AxisX.Interval = double.NaN;
+				//
+				if (seg == null) {
 					return;
 				}
-			}
+				seg_of_hair seg_bak = seg;
+				double		offs = 0;
+				double		xmin = 0;
 
-			for (int q = 0;; q++) {
-				int i0;
 				if (this.radioButton1.Checked) {//グラフ・毛髪全体
-					if (q >= hr.seg.Length) {
-						break;
+					double um_of_width = G.PX2UM(seg.width, m_log_info.pix_pitch, m_log_info.zoom);
+					for (int q = 0;; q++) {
+						if (q >= hr.seg.Length) {
+							return;
+						}
+						seg = (seg_of_hair)hr.seg[q];
+						if (seg != null && seg.val_xum.Count > 0) {
+							break;
+						}
+						offs -= um_of_width;
 					}
-					seg = (seg_of_hair)hr.seg[q];
-					if (seg == null) {
-						continue;
-					}
+					xmin = offs;
+				}
+				else {//画像ファイル毎
 					if (seg.val_xum.Count <= 0) {
-						double um = G.PX2UM(seg.width, m_log_info.pix_pitch, m_log_info.zoom);
-						double x0 = um+ offs;
-						this.chart4.Series[0].Points.AddXY(x0, double.NaN);
-						offs += um;
-						continue;
-					}
-					for (i0 = 0; TO_VAL(seg.val_xum[i0]) < 0; i0++) {
-					}
-					if (m_chk1!=0) {
-						i0 = 0;
-					}
-				}
-				else {
-					i0 = 0;
-					offs = -TO_VAL(seg.val_xum[0]);
-				}
-
-				for (int i = i0; i < seg.val_xum.Count; i++) {
-					double x0 = TO_VAL(seg.val_xum[i]) + offs;
-				//	double y0 = TO_VAL(seg.val_p5u[i]);
-				//	double y1 = TO_VAL(seg.val_phf[i]);
-					double y2 = TO_VAL(seg.val_cen_fil[i]);
-				//	double y3 = TO_VAL(seg.val_mph[i]);
-				//	double y4 = TO_VAL(seg.val_m5u[i]);
-					if (this.checkBox3.Checked) {//R*0
-						if (seg.flg_cen_cut[i]) {
-							//キューティクル位置はマーカー表示
-							DataPoint dp = new DataPoint();
-							dp.SetValueXY(x0, y2);
-							dp.MarkerStyle = MarkerStyle.Square;
-							dp.MarkerColor = Color.Yellow;
-							dp.MarkerColor = Color.DarkBlue;
-							this.chart4.Series[0].Points.Add(dp);
-						}
-						else {
-							this.chart4.Series[0].Points.AddXY(x0, y2);
-						}
-						if (cut_max < y2) {
-							cut_max = y2;
-						}
-						if (cut_min > y2) {
-							cut_min = y2;
-						}
-
-					}
-				}
-				if (this.radioButton1.Checked) {//グラフ・毛髪全体
-					for (int i = 0; i < seg.his_cen_cut.Count; i++) {
-						his[i] += seg.his_cen_cut[i];//集計する
-					}
-				}
-				else {
-					//キューティクル間隔のヒストグラム
-					for (int i = 0; i < seg.his_cen_cut.Count; i++) {
-						double x = (G.SS.MOZ_CND_HWID/2.0) + i * G.SS.MOZ_CND_HWID;
-						double y = seg.his_cen_cut[i];
-						this.chart5.Series[0].Points.AddXY(x, y);
+						return;
 					}
 				}
 
-				if (!this.radioButton1.Checked) {
-					break;
-				}
-				double	dx = TO_VAL(seg.val_xum[1])-TO_VAL(seg.val_xum[0]);
-				//offs += dx * seg.moz_zpl.Count;
-				offs += TO_VAL(seg.val_xum[seg.val_xum.Count-1])+dx;
-			}
-			if (this.radioButton1.Checked) {//毛髪全体
-				//キューティクル間隔のヒストグラム
-				for (int i = 0; i < his.Length; i++) {
-					double x = (G.SS.MOZ_CND_HWID/2.0) + i * G.SS.MOZ_CND_HWID;
-					double y = his[i];
-					this.chart5.Series[0].Points.AddXY(x, y);
-				}
-			}
-
-			if (this.radioButton1.Checked) {
-				seg = seg_bak;
-			}
-			if (true) {
-				this.chart4.Series[0].Color = Color.Cyan;	//R*0
-				this.chart4.Series[1].Color = Color.Green;	//R*+50%
-				this.chart4.Series[2].Color = Color.Magenta;//R*-50%
-				this.chart4.Series[3].Color = Color.Blue;	//R+3um
-				this.chart4.Series[4].Color = Color.Red;	//R-3um
-				//---
-				this.chart5.Series[0].Color = Color.Cyan;	//R*0
-				this.chart5.Series[1].Color = Color.Green;	//R*+50%
-				this.chart5.Series[2].Color = Color.Magenta;//R*-50%
-				this.chart5.Series[3].Color = Color.Blue;	//R+3um
-				this.chart5.Series[4].Color = Color.Red;	//R-3um
-				//---
-				this.chart4.Series[0].Enabled = this.checkBox3.Checked;//R*0
-				this.chart4.Series[1].Enabled = this.checkBox4.Checked;//R*+50%
-				this.chart4.Series[2].Enabled = this.checkBox5.Checked;//R*-50%
-				this.chart4.Series[3].Enabled = this.checkBox6.Checked;//R+3um
-				this.chart4.Series[4].Enabled = this.checkBox7.Checked;//R-3um
-				//---
-				this.chart5.Series[0].Enabled = this.checkBox3.Checked;//R*0
-				this.chart5.Series[1].Enabled = this.checkBox4.Checked;//R*+50%
-				this.chart5.Series[2].Enabled = this.checkBox5.Checked;//R*-50%
-				this.chart5.Series[3].Enabled = this.checkBox6.Checked;//R+3um
-				this.chart5.Series[4].Enabled = this.checkBox7.Checked;//R-3um
-			}
-			//---
-			if (true) {
-				//---
-				this.chart4.ChartAreas[0].RecalculateAxesScale();
-				//---
-				double fmin = this.chart4.ChartAreas[0].AxisX.Minimum;
-				double fmax = this.chart4.ChartAreas[0].AxisX.Maximum;
-				if (G.SS.MOZ_CND_CTYP == 1) {
-					cut_min = Math.Abs(cut_min);
-					if (cut_max < cut_min) {
-						cut_max = cut_min;
-					}
-					if (cut_max <= 1.0) {
-						cut_max = 1;
+				for (int q = 0;; q++) {
+					int i0;
+					if (this.radioButton1.Checked) {//グラフ・毛髪全体
+						if (q >= hr.seg.Length) {
+							break;
+						}
+						seg = (seg_of_hair)hr.seg[q];
+						if (seg == null) {
+							continue;
+						}
+						if (seg.val_xum.Count <= 0) {
+							double um = G.PX2UM(seg.width, m_log_info.pix_pitch, m_log_info.zoom);
+							double x0 = um+ offs;
+							this.chart4.Series[0].Points.AddXY(x0, double.NaN);
+							offs += um;
+							continue;
+						}
+						for (i0 = 0; TO_VAL(seg.val_xum[i0]) < 0; i0++) {
+						}
+						if (m_chk1!=0) {
+							i0 = 0;
+						}
 					}
 					else {
-						cut_max /= 10;
+						i0 = 0;
+						offs = -TO_VAL(seg.val_xum[0]);
+					}
+
+					for (int i = i0; i < seg.val_xum.Count; i++) {
+						double x0 = TO_VAL(seg.val_xum[i]) + offs;
+						double y0 = TO_VAL(seg.val_p5u_fil[i]);
+						double y1 = TO_VAL(seg.val_phf_fil[i]);
+						double y2 = TO_VAL(seg.val_cen_fil[i]);
+						double y3 = TO_VAL(seg.val_mph_fil[i]);
+						double y4 = TO_VAL(seg.val_m5u_fil[i]);
+						if (this.checkBox3.Checked) {//R*0
+							if (seg.flg_cen_cut[i]) {
+								//キューティクル位置はマーカー表示
+								/*DataPoint dp = new DataPoint();
+								dp.SetValueXY(x0, y2);
+								dp.MarkerStyle = MarkerStyle.Square;
+								dp.MarkerColor = Color.Yellow;
+								dp.MarkerColor = Color.DarkBlue;*/
+								this.chart4.Series[0].Points.Add(dp_marker(x0, y2, Color.DarkBlue));
+							}
+							else {
+								this.chart4.Series[0].Points.AddXY(x0, y2);
+							}
+							set_max_min(y2, ref cut_min, ref cut_max);
+							//if (cut_max < y2) {
+							//    cut_max = y2;
+							//}
+							//if (cut_min > y2) {
+							//    cut_min = y2;
+							//}
+						}
+						if (this.checkBox4.Checked) {//R*+50%
+							if (seg.flg_phf_cut[i]) {//キューティクル位置はマーカー表示
+								this.chart4.Series[1].Points.Add(dp_marker(x0, y1, Color.DarkBlue));
+							}
+							else {
+								this.chart4.Series[1].Points.AddXY(x0, y1);
+							}
+							set_max_min(y1, ref cut_min, ref cut_max);
+						}
+						if (this.checkBox5.Checked) {//R*-50%
+							if (seg.flg_mph_cut[i]) {//キューティクル位置はマーカー表示
+								this.chart4.Series[2].Points.Add(dp_marker(x0, y3, Color.DarkBlue));
+							}
+							else {
+								this.chart4.Series[2].Points.AddXY(x0, y3);
+							}
+							set_max_min(y3, ref cut_min, ref cut_max);
+						}
+						if (this.checkBox6.Checked) {//R+5u
+							if (seg.flg_p5u_cut[i]) {//キューティクル位置はマーカー表示
+								this.chart4.Series[3].Points.Add(dp_marker(x0, y0, Color.DarkBlue));
+							}
+							else {
+								this.chart4.Series[3].Points.AddXY(x0, y0);
+							}
+							set_max_min(y0, ref cut_min, ref cut_max);
+						}
+						if (this.checkBox7.Checked) {//R-5u
+							if (seg.flg_m5u_cut[i]) {//キューティクル位置はマーカー表示
+								this.chart4.Series[4].Points.Add(dp_marker(x0, y4, Color.DarkBlue));
+							}
+							else {
+								this.chart4.Series[4].Points.AddXY(x0, y4);
+							}
+							set_max_min(y4, ref cut_min, ref cut_max);
+						}
+					}
+					if (seg.his_cen_cut.Count != G.SS.MOZ_CND_HCNT) {
+						G.mlog("Internal Error");
+					}
+					if (this.radioButton1.Checked) {//グラフ・毛髪全体
+						for (int i = 0; i < G.SS.MOZ_CND_HCNT; i++) {
+							his_cen[i] += seg.his_cen_cut[i];//集計する
+							his_phf[i] += seg.his_phf_cut[i];//集計する
+							his_mph[i] += seg.his_mph_cut[i];//集計する
+							his_p5u[i] += seg.his_p5u_cut[i];//集計する
+							his_m5u[i] += seg.his_m5u_cut[i];//集計する
+						}
+					}
+					else {
+						//キューティクル間隔のヒストグラム
+						for (int i = 0; i < G.SS.MOZ_CND_HCNT; i++) {
+							double x = (G.SS.MOZ_CND_HWID/2.0) + i * G.SS.MOZ_CND_HWID;
+							this.chart5.Series[0].Points.AddXY(x, seg.his_cen_cut[i]);
+							this.chart5.Series[1].Points.AddXY(x, seg.his_phf_cut[i]);
+							this.chart5.Series[2].Points.AddXY(x, seg.his_mph_cut[i]);
+							this.chart5.Series[3].Points.AddXY(x, seg.his_p5u_cut[i]);
+							this.chart5.Series[4].Points.AddXY(x, seg.his_m5u_cut[i]);
+						}
+					}
+
+					if (!this.radioButton1.Checked) {
+						break;
+					}
+					double	dx = TO_VAL(seg.val_xum[1])-TO_VAL(seg.val_xum[0]);
+					//offs += dx * seg.moz_zpl.Count;
+					offs += TO_VAL(seg.val_xum[seg.val_xum.Count-1])+dx;
+				}
+				if (this.radioButton1.Checked) {//毛髪全体
+					//キューティクル間隔のヒストグラム
+					for (int i = 0; i < G.SS.MOZ_CND_HCNT; i++) {
+						double x = (G.SS.MOZ_CND_HWID/2.0) + i * G.SS.MOZ_CND_HWID;
+						this.chart5.Series[0].Points.AddXY(x, his_cen[i]);
+						this.chart5.Series[1].Points.AddXY(x, his_phf[i]);
+						this.chart5.Series[2].Points.AddXY(x, his_mph[i]);
+						this.chart5.Series[3].Points.AddXY(x, his_p5u[i]);
+						this.chart5.Series[4].Points.AddXY(x, his_m5u[i]);
+					}
+				}
+
+				if (this.radioButton1.Checked) {
+					seg = seg_bak;
+				}
+				if (true) {
+					this.chart4.Series[0].Color = Color.Cyan;	//R*0
+					this.chart4.Series[1].Color = Color.Green;	//R*+50%
+					this.chart4.Series[2].Color = Color.Magenta;//R*-50%
+					this.chart4.Series[3].Color = Color.Blue;	//R+3um
+					this.chart4.Series[4].Color = Color.Red;	//R-3um
+					//---
+					this.chart5.Series[0].Color = Color.Cyan;	//R*0
+					this.chart5.Series[1].Color = Color.Green;	//R*+50%
+					this.chart5.Series[2].Color = Color.Magenta;//R*-50%
+					this.chart5.Series[3].Color = Color.Blue;	//R+3um
+					this.chart5.Series[4].Color = Color.Red;	//R-3um
+					//---
+					this.chart4.Series[0].Enabled = this.checkBox3.Checked;//R*0
+					this.chart4.Series[1].Enabled = this.checkBox4.Checked;//R*+50%
+					this.chart4.Series[2].Enabled = this.checkBox5.Checked;//R*-50%
+					this.chart4.Series[3].Enabled = this.checkBox6.Checked;//R+3um
+					this.chart4.Series[4].Enabled = this.checkBox7.Checked;//R-3um
+					//---
+					this.chart5.Series[0].Enabled = this.checkBox3.Checked;//R*0
+					this.chart5.Series[1].Enabled = this.checkBox4.Checked;//R*+50%
+					this.chart5.Series[2].Enabled = this.checkBox5.Checked;//R*-50%
+					this.chart5.Series[3].Enabled = this.checkBox6.Checked;//R+3um
+					this.chart5.Series[4].Enabled = this.checkBox7.Checked;//R-3um
+				}
+				//---
+				if (true) {
+					//---
+					this.chart4.ChartAreas[0].RecalculateAxesScale();
+					//---
+					double fmin = this.chart4.ChartAreas[0].AxisX.Minimum;
+					double fmax = this.chart4.ChartAreas[0].AxisX.Maximum;
+					if (G.SS.MOZ_CND_CTYP == 1) {
+						cut_min = Math.Abs(cut_min);
+						if (cut_max < cut_min) {
+							cut_max = cut_min;
+						}
 						if (cut_max <= 1.0) {
 							cut_max = 1;
 						}
 						else {
-							cut_max = Math.Ceiling(cut_max);
+							cut_max /= 10;
+							if (cut_max <= 1.0) {
+								cut_max = 1;
+							}
+							else {
+								cut_max = Math.Ceiling(cut_max);
+							}
+							cut_max *= 10;
 						}
-						cut_max *= 10;
-					}
-					this.chart4.ChartAreas[0].AxisY.Minimum  = -cut_max;
-					this.chart4.ChartAreas[0].AxisY.Maximum  = +cut_max;//double.NaN;//256;
-					if (cut_max >= 40) {
-						this.chart4.ChartAreas[0].AxisY.Interval =  10;//double.NaN;//32;
-					}
-					if (cut_max > 1) {
-						this.chart4.ChartAreas[0].AxisY.Interval =  5;//double.NaN;//32;
+						this.chart4.ChartAreas[0].AxisY.Minimum  = -cut_max;
+						this.chart4.ChartAreas[0].AxisY.Maximum  = +cut_max;//double.NaN;//256;
+						if (cut_max >= 40) {
+							this.chart4.ChartAreas[0].AxisY.Interval =  10;//double.NaN;//32;
+						}
+						if (cut_max > 1) {
+							this.chart4.ChartAreas[0].AxisY.Interval =  5;//double.NaN;//32;
+						}
+						else {
+							this.chart4.ChartAreas[0].AxisY.Interval =  0.2;
+						}
 					}
 					else {
-						this.chart4.ChartAreas[0].AxisY.Interval =  0.2;
+						this.chart4.ChartAreas[0].AxisY.Minimum  = -30;
+						this.chart4.ChartAreas[0].AxisY.Maximum  = +80;//double.NaN;//256;
+						this.chart4.ChartAreas[0].AxisY.Interval =  10;//32;
 					}
+					//
+					this.chart4.ChartAreas[0].AxisX.Minimum = xmin;
+					this.chart4.ChartAreas[0].AxisX.IntervalOffset = -xmin;
+					//---
+					int interval;
+					fmax = this.chart4.ChartAreas[0].AxisX.Maximum;
+					if (fmax < 300) {
+						interval = 50;
+					}
+					else if (fmax < 500) {
+						interval = 100;
+					}
+					else if (fmax < 1000) {
+						interval = 200;
+					}
+					else if (fmax < 3000) {
+						interval = 500;
+					}
+					else {
+						interval = 1000;
+					}
+					this.chart4.ChartAreas[0].AxisX.Interval = interval;
 				}
-				else {
-					this.chart4.ChartAreas[0].AxisY.Minimum  = -30;
-					this.chart4.ChartAreas[0].AxisY.Maximum  = +80;//double.NaN;//256;
-					this.chart4.ChartAreas[0].AxisY.Interval =  10;//32;
+				if (true) {
+					double	bval = (G.SS.MOZ_CND_CTYP == 0) ? G.SS.MOZ_CND_BPVL: G.SS.MOZ_CND_2DVL;
+					this.chart4.Series[5].Points[0].YValues[0] = bval;
+					this.chart4.Series[5].Points[1].YValues[0] = bval;
+					this.chart4.Series[5].Points[1].XValue     = this.chart4.ChartAreas[0].AxisX.Maximum;
 				}
-				//
-				this.chart4.ChartAreas[0].AxisX.Minimum = xmin;
-				this.chart4.ChartAreas[0].AxisX.IntervalOffset = -xmin;
-				//---
-				int interval;
-				fmax = this.chart4.ChartAreas[0].AxisX.Maximum;
-				if (fmax < 300) {
-					interval = 50;
-				}
-				else if (fmax < 500) {
-					interval = 100;
-				}
-				else if (fmax < 1000) {
-					interval = 200;
-				}
-				else if (fmax < 3000) {
-					interval = 500;
-				}
-				else {
-					interval = 1000;
-				}
-				this.chart4.ChartAreas[0].AxisX.Interval = interval;
-			}
 			}
 			catch (Exception ex) {
 				G.mlog(ex.ToString());
@@ -3762,12 +3922,24 @@ retry:
 			if (m_isel >= hr.seg.Count()) {
 				return;
 			}
+			if (!calc_filter_coeff()) {
+				return;
+			}
 			for (int i = 0; i < hr.seg.Length; i++) {
 				seg_of_hair seg = (seg_of_hair)hr.seg[i];
 				if (seg != null) {
 					//キューティクル断面のフィルター処理
 					apply_filter(seg.val_cen, out seg.val_cen_fil);
+					apply_filter(seg.val_phf, out seg.val_phf_fil);
+					apply_filter(seg.val_mph, out seg.val_mph_fil);
+					apply_filter(seg.val_p5u, out seg.val_p5u_fil);
+					apply_filter(seg.val_m5u, out seg.val_m5u_fil);
 					find_cuticle_line(seg.pts_cen, seg.val_cen_fil, out seg.pts_cen_cut, out seg.flg_cen_cut, out seg.his_cen_cut);
+					find_cuticle_line(seg.pts_phf, seg.val_phf_fil, out seg.pts_phf_cut, out seg.flg_phf_cut, out seg.his_phf_cut);
+					find_cuticle_line(seg.pts_mph, seg.val_mph_fil, out seg.pts_mph_cut, out seg.flg_mph_cut, out seg.his_mph_cut);
+					find_cuticle_line(seg.pts_p5u, seg.val_p5u_fil, out seg.pts_p5u_cut, out seg.flg_p5u_cut, out seg.his_p5u_cut);
+					find_cuticle_line(seg.pts_m5u, seg.val_m5u_fil, out seg.pts_m5u_cut, out seg.flg_m5u_cut, out seg.his_m5u_cut);
+
 				}
 			}
 			draw_image(hr);

@@ -382,6 +382,8 @@ namespace uSCOPE
 			public int MOZ_CND_HMAX = 70;
 			[XmlIgnoreAttribute]
 			public int MOZ_CND_HCNT = (70/10);
+			[XmlIgnoreAttribute]
+			public double[] MOZ_CND_FCOF = null;
 #endif
 #if true//2018.08.21
 			public bool MOZ_IRC_CK00 = false;
