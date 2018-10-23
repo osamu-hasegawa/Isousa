@@ -336,7 +336,23 @@ namespace uSCOPE
 			public int MOZ_CND_FTCF = 5;//11x11
 			public int MOZ_CND_FTCT = 0;//1回
 			public int MOZ_CND_SMCF = 9;//重み係数=21
+#if true//2018.10.10(毛髪径算出・改造)
+			public int MOZ_CND_OTW1 = 21;		//外れ値判定:幅  (毛髄長さ)
+			public double MOZ_CND_OTV1 = 1.6;	//外れ値判定:閾値(毛髄長さ)
+
+			public int MOZ_CND_OTW2 = 31;		//外れ値判定:幅  (毛髄中心)
+			public double MOZ_CND_OTV2 = 1.2;	//外れ値判定:閾値(毛髄中心)
+			public int MOZ_CND_OTMD = 1;		//外れ値判定:補間,1:直線補間
+
+			//0:無し
+			//1:毛髪上下端全範囲
+			//2:毛髄判定範囲
+			//3:毛髄判定範囲で上下別々に(等面積)
+			//4:毛髄判定範囲で上下別々に(等最大値)
+			public int MOZ_CND_CNTR = 1;//コントラスト補正
+#else
 			public bool MOZ_CND_CTRA = true;//コントラスト補正
+#endif
 			public int MOZ_CND_HANI = 75;//毛髄判定範囲[%]
 			//---
 			public int MOZ_CND_PDFL = 0;//位置検出
@@ -384,6 +400,11 @@ namespace uSCOPE
 			public int MOZ_CND_HCNT = (70/10);
 			[XmlIgnoreAttribute]
 			public double[] MOZ_CND_FCOF = null;
+#endif
+#if true//2018.10.10(毛髪径算出・改造)
+			public double MOZ_CND_S2VL;//S1,S2閾値
+			public int MOZ_CND_BKVL;//上下端黒除外・閾値
+
 #endif
 #if true//2018.08.21
 			public bool MOZ_IRC_CK00 = false;
@@ -672,8 +693,14 @@ namespace uSCOPE
 					fs.Close();
 					ret = true;
 				}
+#if true//2018.10.10(毛髪径算出・改造)
+				catch (Exception ex) {
+					G.mlog(ex.Message);
+				}
+#else
 				catch (Exception /*ex*/) {
 				}
+#endif
 				return (ret);
 			}
 		};
@@ -797,6 +824,9 @@ namespace uSCOPE
 		static public Form11	FORM11 = null;
 		static public Form12	FORM12 = null;
 		static public Form13	FORM13 = null;
+#if true//2018.10.10(毛髪径算出・改造)
+		static public Form24	FORM24 = null;
+#endif
 		static public int PLM_STS = 0;
 		static public int[] PLM_POS = { 0, 0, 0, 0 };
 		static public byte[] PLM_STS_BIT = new byte[16];

@@ -73,7 +73,9 @@ namespace uSCOPE
                 this.comboBox1.Visible = false;
                 this.comboBox2.Visible = false;
                 this.comboBox3.Visible = false;
+#if false//2018.10.10(毛髪径算出・改造)
                 this.checkBox1.Visible = false;
+#endif
 #endif
             }
             //---
@@ -129,6 +131,21 @@ namespace uSCOPE
 					if (zpos.Length <= 0) {
 					zpos = System.IO.Directory.GetFiles(path, "0CT_00_*.*");
 					}
+#if true//2018.10.10(毛髪径算出・改造)
+					if (zpos.Length <= 0) {
+						for (int i = 1; i <= 23; i++) {
+							string NS = i.ToString();
+							zpos = System.IO.Directory.GetFiles(path, NS + "CR_00_*.*");
+							if (zpos.Length > 0) {
+								break;
+							}
+							zpos = System.IO.Directory.GetFiles(path, NS + "CT_00_*.*");
+							if (zpos.Length > 0) {
+								break;
+							}
+						}
+					}
+#endif
 					if (zpos.Length <= 0) {
 						//古い形式のファイルもしくはフォルダが空
 #if false//2018.08.21
@@ -302,7 +319,11 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.comboBox1      , ref G.SS.MOZ_CND_FTCF);
 				DDV.DDX(bUpdate, this.comboBox2      , ref G.SS.MOZ_CND_FTCT);
 				DDV.DDX(bUpdate, this.comboBox3      , ref G.SS.MOZ_CND_SMCF);
+#if true//2018.10.10(毛髪径算出・改造)
+				DDV.DDX(bUpdate, this.comboBox5      , ref G.SS.MOZ_CND_CNTR);
+#else
 				DDV.DDX(bUpdate, this.checkBox1      , ref G.SS.MOZ_CND_CTRA);
+#endif
 				DDV.DDX(bUpdate, this.numericUpDown4 , ref G.SS.MOZ_CND_HANI);
 				//---
 #if true//2018.08.21
@@ -366,6 +387,13 @@ namespace uSCOPE
 				//---
 				DDV.DDX(bUpdate, this.numericUpDown11, ref G.SS.MOZ_CND_HMAX);
 				DDV.DDX(bUpdate, this.numericUpDown12, ref G.SS.MOZ_CND_HWID);
+#endif
+#if true//2018.10.10(毛髪径算出・改造)
+				DDV.DDX(bUpdate, this.numericUpDown14, ref G.SS.MOZ_CND_OTW1);//外れ値判定:幅  (毛髄長さ)
+				DDV.DDX(bUpdate, this.numericUpDown15, ref G.SS.MOZ_CND_OTV1);//外れ値判定:閾値(毛髄長さ)
+				DDV.DDX(bUpdate, this.numericUpDown16, ref G.SS.MOZ_CND_OTW2);//外れ値判定:幅  (毛髄中心)
+				DDV.DDX(bUpdate, this.numericUpDown17, ref G.SS.MOZ_CND_OTV2);//外れ値判定:閾値(毛髄中心)
+				DDV.DDX(bUpdate, this.comboBox11     , ref G.SS.MOZ_CND_OTMD);//外れ値判定:補間,1:直線補間
 #endif
 				//---
 				if (bUpdate == false) {

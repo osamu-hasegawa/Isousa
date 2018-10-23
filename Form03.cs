@@ -51,6 +51,9 @@ namespace uSCOPE
 		private ArrayList m_zpos_org = new ArrayList();
 		private ArrayList m_zpos_val = new ArrayList();
 		private string m_fold_of_dept;
+#if true//2018.10.10(毛髪径算出・改造)
+		public string m_errstr;
+#endif
 		//---
 		public Form03()
 		{
@@ -185,6 +188,7 @@ retry:
 			}
 			return(pf);
 		}
+#if false//2018.10.10(毛髪径算出・改造)
 		private ArrayList test_p1(int idx, int cnt)
 		{
 			var ar = new ArrayList();
@@ -258,6 +262,7 @@ retry:
 			}
 			return(ar);
 		}
+#endif
 		private bool IsContainsBmp(Bitmap bmp, Point pt)
 		{
 			if (pt.X < 0 || pt.Y < 0) {
@@ -328,6 +333,25 @@ retry:
 			}
 			return(null);
 		}
+#if true//2018.10.10(毛髪径算出・改造)
+		public struct seg_of_mouz {
+			//毛髄径方向データ(一列分)
+			public Point[]		pf;//座標バッファ(毛髪下端から上端まで)
+			public Point		pc;//中心
+			public double[]		bf;//画素バッファ(毛髪下端から上端まで)
+			public int			ic;//バッファの中心インデックス
+			public int			il;//バッファの毛髄上端のインデックス
+			public int			ir;//バッファの毛髄下端のインデックス
+			public void clear() {
+				if (pf != null) {
+					pf = null;
+				}
+				if (bf != null) {
+					bf = null;
+				}
+			}
+		}
+#endif
 		//
 		//
 		//
@@ -396,10 +420,31 @@ retry:
 			public ArrayList moz_zpl;//毛髄:長さ径
 			public ArrayList moz_top;
 			public ArrayList moz_btm;
+#if true//2018.10.10(毛髪径算出・改造)
+			public List<seg_of_mouz>
+								moz_inf;
+			public List<bool>	moz_fs2;//S1,S2区分,S1:true, S2:false
+			public List<double>	moz_avg;//毛髄:毛髄範囲の画素平均値(生画像による)
+			public List<bool>	moz_out;
+			public List<Point>	moz_hpt;//毛髄:上側点:補間後
+			public List<Point>	moz_hpb;//毛髄:下側点:補間後
+			public List<double>	moz_hpl;//毛髄:長さ径:補間後
+#endif
 			//---
+#if true//2018.10.10(毛髪径算出・改造)
+			public int		IR_PLY_XMIN;
+			public int		IR_PLY_XMAX;
+			public int		IR_WIDTH;
+			//---
+			public Point[]	dia_top;//輪郭・頂点(上側)
+			public Point[]	dia_btm;//輪郭・頂点(下側)
+			public Point[]	han_top;
+			public Point[]	han_btm;
+#else
 			public ArrayList dia_top;//輪郭・頂点(上側)
 			public ArrayList dia_btm;//輪郭・頂点(下側)
-			public int       dia_cnt;//輪郭・頂点数
+#endif
+			public int		dia_cnt;//輪郭・頂点数
 			//---
 			public seg_of_hair() {
 				this.cnt_of_val = 0;
@@ -427,6 +472,15 @@ retry:
 				this.moz_zpl = new ArrayList();//毛髄:長さ径
 				this.moz_top = new ArrayList();
 				this.moz_btm = new ArrayList();
+#if true//2018.10.10(毛髪径算出・改造)
+				this.moz_inf = new List<seg_of_mouz>();
+				this.moz_fs2 = new List<bool>();//S1,S2区分,S1:true, S2:false
+				this.moz_avg = new List<double>();//毛髄:毛髄範囲の画素平均値(生画像による)
+				this.moz_out = new List<bool>();
+				this.moz_hpt = new List<Point>();//毛髄:上側点:補間後
+				this.moz_hpb = new List<Point>();//毛髄:下側点:補間後
+				this.moz_hpl = new List<double>();//毛髄:長さ径:補間後
+#endif
 			}
 		};
 
@@ -501,6 +555,11 @@ retry:
 						i2--;
 						break;
 					}
+#if true//2018.10.10(毛髪径算出・改造)
+					if (i2 >= hr) {
+						break;
+					}
+#endif
 				}
 				if (i2 >= af.Length) {
 					i2 = af.Length-1;
@@ -510,26 +569,448 @@ retry:
 						i0++;
 						break;
 					}
+#if true//2018.10.10(毛髪径算出・改造)
+					if (i0 <= hl) {
+						break;
+					}
+#endif
 				}
 				if (i0 < 0) {
 					i0 = 0;
 				}
 				il = i0;
 				ir = i2;
+#if true//2018.10.10(毛髪径算出・改造)
+				if (il == ir) {
+					il = ir;
+				}
+#endif
 			}
 			return(true);
 		}
+#if true//2018.10.10(毛髪径算出・改造)
+		void detect_outliers(seg_of_hair seg)
+		{
+			//seg.moz_zpt.Add(u1);//毛髄:上側点
+			//seg.moz_zpb.Add(u2);//毛髄:下側点
+			//seg.moz_zpl.Add(l1);//毛髄:長さ径
+			////---
+			//seg.moz_top.Add(Point.Round(p2));
+			//seg.moz_btm.Add(Point.Round(p3));
+			int WID_OF_AVG;
+			double THR_OF_VAL;
+			double avg = 0, div = 0, std = 0, evl;
+			int cnt;
+
+			int len = seg.moz_zpl.Count;
+			double[] buf;
+			bool[] otl = Enumerable.Repeat<bool>(false, len).ToArray();
+
+			for (int z = 0; z < 2; z++) {
+				if (z == 0) {
+					// 毛髄径
+					buf = (double[])seg.moz_zpl.ToArray(typeof(double));
+					WID_OF_AVG = G.SS.MOZ_CND_OTW1;
+					THR_OF_VAL = G.SS.MOZ_CND_OTV1;
+				}
+				else {
+					//毛髄センター
+					buf = new double[len];
+					for (int i = 0; i < len; i++) {
+						Point u1 = (Point)seg.moz_zpt[i];//毛髄:上側点
+						Point u2 = (Point)seg.moz_zpb[i];//毛髄:下側点
+						buf[i] = (u1.Y+u2.Y)/2.0;
+					}
+					WID_OF_AVG = G.SS.MOZ_CND_OTW2;
+					THR_OF_VAL = G.SS.MOZ_CND_OTV2;
+				}
+				cnt = WID_OF_AVG;
+				if (cnt > seg.moz_zpl.Count) {
+					cnt = seg.moz_zpl.Count;
+				}
+				for (int i = 0; i < len; i++) {
+					int h = i-cnt/2;
+					if (h < 0) {
+						h = 0;
+					}
+					if ((h + cnt) >= len) {
+						h = len-cnt;
+					}
+					avg = div = 0;
+					for (int j = 0; j < cnt; j++) {
+						if (j == (cnt-1)) {
+							j = j;
+						}
+						avg += buf[h+j];
+					}
+					avg /= cnt;
+					//---
+					for (int j = 0; j < cnt; j++) {
+						div += Math.Pow(buf[h+j] - avg, 2);
+					}
+					div /= cnt;
+					std = Math.Sqrt(div);
+					//---
+					//外れ度
+					evl = Math.Abs((buf[i] - avg)/std);
+					if (evl >= THR_OF_VAL) {
+						otl[i] = true;
+					}
+				}
+			}
+			if (seg.moz_out != null) {
+				seg.moz_out.Clear();
+				seg.moz_out = null;
+			}
+			seg.moz_out = new List<bool>(otl);
+		}
+		void interp_outliers(seg_of_hair seg)
+		{
+			//seg.moz_zpt.Add(u1);//毛髄:上側点
+			//seg.moz_zpb.Add(u2);//毛髄:下側点
+			//seg.moz_zpl.Add(l1);//毛髄:長さ径
+			////---
+			//seg.moz_top.Add(Point.Round(p2));
+			//seg.moz_btm.Add(Point.Round(p3));
+
+			int len = seg.moz_zpl.Count;
+			List<Point> rawtL = new List<Point>();
+			List<Point> rawbL = new List<Point>();
+			List<Point> rawtR = new List<Point>();
+			List<Point> rawbR = new List<Point>();
+			List<Point> hpt = new List<Point>();
+			List<Point> hpb = new List<Point>();
+			List<double> hpl = new List<double>();
+			//bool[] otl = Enumerable.Repeat<bool>(false, len).ToArray();
+
+			//if (true) {
+			//    // 毛髄径
+			//    buf = (double[])seg.moz_zpl.ToArray(typeof(double));
+			//    WID_OF_AVG = G.SS.MOZ_CND_OTW1;
+			//    THR_OF_VAL = G.SS.MOZ_CND_OTV1;
+			//}
+			//else {
+			//    //毛髄センター
+			//    buf = new double[len];
+			//    for (int i = 0; i < len; i++) {
+			//        Point u1 = (Point)seg.moz_zpt[i];//毛髄:上側点
+			//        Point u2 = (Point)seg.moz_zpb[i];//毛髄:下側点
+			//        buf[i] = (u1.Y+u2.Y)/2.0;
+			//    }
+			//    WID_OF_AVG = G.SS.MOZ_CND_OTW2;
+			//    THR_OF_VAL = G.SS.MOZ_CND_OTV2;
+			//}
+			//cnt = WID_OF_AVG;
+			//if (cnt > seg.moz_zpl.Count) {
+			//    cnt = seg.moz_zpl.Count;
+			//}
+			for (int i = 0; i < len; i++) {
+				Point pt = (Point)seg.moz_zpt[i];
+				Point pb = (Point)seg.moz_zpb[i];
+				double pl = (double)seg.moz_zpl[i];
+				double pl_bak = pl;
+				int cnt = 0;
+				int jcnt;
+				int jmax;
+				if (!seg.moz_out[i]) {
+					hpt.Add(pt);
+					hpb.Add(pb);
+					hpl.Add(pl);
+					continue;
+				}
+				switch (G.SS.MOZ_CND_OTMD) {
+					case  1:jmax = 1;break;//直線補間
+					case  2:jmax = 2;break;//ラグランジュ補間
+					case  0:
+					default:jmax = 0;break;//補間しない
+				}
+				rawtL.Clear();
+				rawbL.Clear();
+				rawtR.Clear();
+				rawbR.Clear();
+				jcnt = 0;
+
+				//手前からjmax点採集
+				for (int j = i-1; j >= 0 && jcnt < jmax; j--) {
+					if (!seg.moz_out[j]) {
+						rawtL.Add((Point)seg.moz_zpt[j]);
+						rawbL.Add((Point)seg.moz_zpb[j]);
+						cnt++;
+						jcnt++;
+					}
+				}
+				//後方からjmax点採集
+				jcnt = 0;
+				for (int j = i+1; j < len && jcnt < jmax; j++) {
+					if (!seg.moz_out[j]) {
+						rawtR.Add((Point)seg.moz_zpt[j]);
+						rawbR.Add((Point)seg.moz_zpb[j]);
+						cnt++;
+						jcnt++;
+					}
+				}
+				if (rawtL.Count >= 2 && rawtR.Count >= 2) {
+					//ラグランジュ補間を行う
+					pt.Y = (int)(0.5+T.lagran(
+						rawtL[1].X, rawtL[0].X, rawtR[0].X, rawtR[1].X,
+						rawtL[1].Y, rawtL[0].Y, rawtR[0].Y, rawtR[1].Y,
+						pt.X));
+					//---
+					pb.Y = (int)(0.5+T.lagran(
+						rawbL[1].X, rawbL[0].X, rawbR[0].X, rawbR[1].X,
+						rawbL[1].Y, rawbL[0].Y, rawbR[0].Y, rawbR[1].Y,
+						pb.X));
+					pl = G.diff(pt, pb);
+					pl = G.PX2UM(pl, m_log_info.pix_pitch, m_log_info.zoom);
+				}
+				else if (rawtL.Count >= 1 && rawtR.Count >= 1) {
+					//直線補間を行う
+					FN1D fn;
+					//---
+					fn = new FN1D(rawtL[0], rawtR[0]);
+					pt.Y = (int)(0.5+fn.GetYatX(pt.X));
+					//---
+					fn = new FN1D(rawbL[0], rawbR[0]);
+					pb.Y = (int)(0.5+fn.GetYatX(pb.X));
+					pl = G.diff(pt, pb);
+					pl = G.PX2UM(pl, m_log_info.pix_pitch, m_log_info.zoom);
+				}
+				else {
+					//補間できない
+					pt = seg.moz_inf[i].pc;
+					pb = seg.moz_inf[i].pc;
+					pl = 0;
+				}
+				if (pl_bak > 0 && pl <= 0) {
+					pl = pl;
+				}
+				hpt.Add(pt);
+				hpb.Add(pb);
+				hpl.Add(pl);
+			}
+			if (seg.moz_hpt != null) {
+				seg.moz_hpt.Clear();
+				seg.moz_hpt = null;
+			}
+			if (seg.moz_hpb != null) {
+				seg.moz_hpb.Clear();
+				seg.moz_hpb = null;
+			}
+			if (seg.moz_hpl != null) {
+				seg.moz_hpl.Clear();
+				seg.moz_hpl = null;
+			}
+			seg.moz_hpt = hpt;
+			seg.moz_hpb = hpb;
+			seg.moz_hpl = hpl;
+		}
+		// il, irの範囲をsmin,smaxで正規化する
+		void normalize_array(double[]af, double smin=0, double smax=1, int il=0, int ir=0, bool bALL=false)
+		{
+			double fmax, fmin;
+
+			fmax = double.MinValue;
+			fmin = double.MaxValue;
+			if (il == 0 && ir == 0) {
+				ir = af.Length-1;
+			}
+			for (int i = il; i <= ir; i++) {
+				if (fmin > af[i]) {
+					fmin = af[i];
+				}
+				if (fmax < af[i]) {
+					fmax = af[i];
+				}
+			}
+			//コントラスト最大化(0-255範囲にマッピング)
+			FN1D fn = new FN1D(new PointF((float)fmin, (float)smin), new PointF((float)fmax, (float)smax));
+			if (bALL) {
+				for (int i = 0; i < af.Length; i++) {
+					af[i] = fn.GetYatX(af[i]);
+				}
+			}
+			else {
+				for (int i = il; i <= ir; i++) {
+					af[i] = fn.GetYatX(af[i]);
+				}
+			}
+		}
+		// il, irの範囲を面積でバランス
+		void normalize_balance_s(double[]af, double smin=0, double smax=1, int il=0, int ir=0, bool bALL=false)
+		{
+			double fmax, fmin, S1 = 0, S2 = 0, R, A,L2;
+			int ic, len;
+			FN1D fn;
+			double[]bf = new double[af.Length];
+
+			fmax = double.MinValue;
+			fmin = double.MaxValue;
+			if (il == 0 && ir == 0) {
+				ir = af.Length-1;
+			}
+
+			ic= (il+ir)/2;
+			len = (ir-il+1);
+			L2 = len/2.0;
+			for (int i = il; i <= ic; i++) {
+				S1 += af[i];
+			}
+			for (int i = ic; i <= ir; i++) {
+				S2 += af[i];
+			}
+			R = (S1/S2);
+			A = (3-R)/(1+R);
+			fn = new FN1D((1-A)/L2, 1);
+			if (fn.GetYatX(-L2) < 0 || fn.GetYatX(+L2) < 0) {
+				A = A;
+			}
+			for (int i = il; i <= ir; i++) {
+				bf[i] = af[i] * fn.GetYatX(i-ic);
+				if (fmin > bf[i]) {
+					fmin = bf[i];
+				}
+				if (fmax < bf[i]) {
+					fmax = bf[i];
+				}
+			}
+			//コントラスト最大化(0-255範囲にマッピング)
+			fn = new FN1D(new PointF((float)fmin, (float)smin), new PointF((float)fmax, (float)smax));
+			if (bALL) {
+				for (int i = 0; i < af.Length; i++) {
+					af[i] = fn.GetYatX(bf[i]);
+				}
+			}
+			else {
+				for (int i = il; i <= ir; i++) {
+					af[i] = fn.GetYatX(bf[i]);
+				}
+			}
+		}
+		// il, irの範囲を面積でバランス
+		void normalize_balance_m(double[]af, double smin=0, double smax=1, int il=0, int ir=0, bool bALL=false)
+		{
+			double M1, M2, R, A, L1, L2;
+			int	I1=0, I2=0;
+			int ic, len;
+			double fmin, fmax;
+			FN1D fn;
+			double[]bf = new double[af.Length];
+
+			M1 = double.MinValue;
+			M2 = double.MinValue;
+			if (il == 0 && ir == 0) {
+				ir = af.Length-1;
+			}
+
+			ic= (il+ir)/2;
+			len = (ir-il+1);
+			for (int i = il; i < ic; i++) {
+				if (M1 < af[i]) {
+					M1 = af[i];
+					I1 = i;
+				}
+			}
+			for (int i = ic+1; i <= ir; i++) {
+				if (M2 < af[i]) {
+					M2 = af[i];
+					I2 = i;
+				}
+			}
+			L1 = ic-I1;
+			L2 = I2-ic;
+			R = (M2-M1)/(M1*(-L1)-M2*L2);
+			A = R*(L1+L2)/(1.0+L2/L1);
+			fn = new FN1D(A*(1.0+L2/L1)/(L1+L2), 1);
+			if (fn.GetYatX(-L2) < 0 || fn.GetYatX(+L2) < 0) {
+//				A = A;
+			}
+			double test3 = fn.GetYatX(-L1) * M1;
+			double test4 = fn.GetYatX(+L2) * M2;
+
+			fmin = double.MaxValue;
+			fmax = double.MinValue;
+			for (int i = il; i <= ir; i++) {
+				if (i == I1 || i == I2) {
+					i = i;
+				}
+				bf[i] = af[i] * fn.GetYatX(i-ic);
+				if (fmin > bf[i]) {
+					fmin = bf[i];
+				}
+				if (fmax < bf[i]) {
+					fmax = bf[i];
+				}
+			}
+			//コントラスト最大化(0-255範囲にマッピング)
+			fn = new FN1D(new PointF((float)fmin, (float)smin), new PointF((float)fmax, (float)smax));
+			double test1 = fn.GetYatX(fmin);
+			double test2 = fn.GetYatX(fmax);
+			if (bALL) {
+				for (int i = 0; i < af.Length; i++) {
+					af[i] = fn.GetYatX(bf[i]);
+				}
+			}
+			else {
+				for (int i = il; i <= ir; i++) {
+					af[i] = fn.GetYatX(bf[i]);
+				}
+			}
+		}
+		double[] TO_DBL_ARY(List<object> objs)
+		{
+			List<double> ls = new List<double>();
+			for (int i = 0; i < objs.Count; i++) {
+				double f;
+				if (objs[i] == null) {
+					f = double.NaN;
+				}
+				else {
+					f = ((Color)objs[i]).G;
+				}
+				ls.Add(f);
+			}
+			return(ls.ToArray());
+		}
+		double get_avg(double[]ar, int idx, int len)
+		{
+			double avg = 0;
+			int h = idx;
+			if (ar == null || idx < 0 || (idx+len) >= ar.Length) {
+				return(double.NaN);
+			}
+			for (int i = 0; i < len; i++, h++) {
+				avg += ar[h];
+			}
+			return(avg/len);
+		}
 		//ArrayList m_pt_zpl = new ArrayList();//毛髄:長さ径
+		//---
+		// p3:毛髪上端の点
+		// p2:毛髪下端の点
 		//---
 		void test_ir(seg_of_hair seg, FN1D f2, PointF p2, PointF p3, int sx)
 		{
 			Point tx = Point.Truncate(p2);
 			Point t3 = Point.Truncate(p3);
 			PointF fx = p2;
-			ArrayList fp = new ArrayList();
-			ArrayList fc = new ArrayList();
+			List<Point> fp = new List<Point>();
+			List<object> fc = new List<object>();
 			double df = G.diff(p2, p3);
+			double[] af;
+			double[] bf;
+			int	ic, ll,lr,ir_of_all, il_of_all;
+			int  rcnt = 0;
+
+			List<Point > u1_buf = new List<Point>();
+			List<Point > u2_buf = new List<Point>();
+			List<double> ud_buf = new List<double>();
+			List<double> l1_buf = new List<double>();
+
+			if (sx == 92) {
+				sx = sx;//for bp
+			}
 			for (int i = 1;; i++) {
+				//毛髪下端から上端に向かって走査する
 				PointF f0 = f2.GetScanPt1Ext(p2, p3, i);
 				//Point  t0 = Point.Round(f0);
 				Point  t0 = Point.Truncate(f0);
@@ -545,7 +1026,244 @@ retry:
 					fp.Add(t0);
 					fc.Add(TO_IR(t0));
 					if ((ff = G.diff(p2, f0)) > df /*t0.Equals(t3)*/) {
-						break;
+						break;//毛髪上端に達した
+					}
+					tx = t0;
+				}
+			}
+
+			af = TO_DBL_ARY(fc);
+			bf = (double[])af.Clone();
+			if (true) {
+				ic = af.Length/2;
+				ll = (af.Length *  G.SS.MOZ_CND_HANI)/100/2;
+				lr = ll;
+				if ((ic+lr) >= af.Length) {
+					lr--;
+				}
+				if ((ic-ll) < 0) {
+					ll--;
+				}
+				il_of_all = ic-ll;
+				ir_of_all = ic+lr;
+			}
+			if (this.MOZ_CND_SMCF > 0) {
+				double fmax, fmin;
+				T.SG_POL_SMOOTH(af, af, af.Length, this.MOZ_CND_SMCF, out fmax, out fmin);
+			}
+			if (true) {
+				const
+				double WID_OF_BALANCE = 0.98;//エッジ部分を含めないようにするため...
+				int wg = (int)(af.Length * (1.0-WID_OF_BALANCE));
+				int wl = wg/2;
+				int wr = af.Length-wg/2;
+				//---
+				switch (G.SS.MOZ_CND_CNTR) {
+					case 1://上下端全範囲=A
+						normalize_array(af, 0.0, 255.0, 0, af.Length-1, false);
+					break;
+					case 2://毛髄判定範囲=B
+						normalize_array(af, 0.0, 255.0, ic-ll, ic+lr, false);
+						//normalize_array(af, 0.0, 255.0, ic-ll, ic+ 0, false);
+						//normalize_array(af, 0.0, 255.0, ic+ 1, ic+lr, false);
+					break;
+					case 3://上下で等面積(A)
+						normalize_balance_s(af, 0.0, 255.0, wl, wr, false);
+					break;
+					case 4://上下で等面積(B)
+						normalize_balance_s(af, 0.0, 255.0, ic-ll, ic+lr, false);
+					break;
+					case 5://上下で等最大値(A)
+						normalize_balance_m(af, 0.0, 255.0, wl, wr, false);
+					break;
+					case 6://上下で等最大値(B)
+						normalize_balance_m(af, 0.0, 255.0, ic-ll, ic+lr, false);
+					break;
+					case 0://コントラスト補正無し
+					default:
+					break;
+				}
+			}
+			if (false) {
+				try {
+					StreamWriter wr;
+					string path = System.IO.Path.GetFileNameWithoutExtension(seg.name_of_ir);
+					path += ".csv";
+					path = "c:\\temp\\ir_" + path;
+					wr = new StreamWriter(path, true, Encoding.Default);
+					wr.Write(string.Format("{0},", sx));
+#if true//2018.10.10(毛髪径算出・改造)
+					for (int i = ic-ll; i <= ic+lr; i++) {
+						wr.Write(string.Format("{0:F0}", af[i]));
+						if (i < (fc.Count-1)) {
+							wr.Write(",");
+						}
+					}
+#else
+					for (int i = 0; i < fc.Count; i++) {
+						wr.Write(string.Format("{0:F0}", af[i]));
+						if (i < (fc.Count-1)) {
+							wr.Write(",");
+						}
+					}
+#endif
+					wr.WriteLine("");
+					wr.Close();
+				}
+				catch (Exception ex) {
+				}
+			}
+retry:
+			//Color cl;
+			Point u1;
+			Point u2;//= new Point(0,0), u2=new Point(0,0);
+			double l1;// = 0;
+			//最小値の位置を探索
+			//中心から＋、中心から－の二段階探索に分ける、
+			//同値の場合はセンター寄りにするため
+			if (true) {
+				//最小値位置から＋側と－側へ閾値外になる位置を探索
+				int il, ir;
+				bool rc;
+				bool flag;
+				rc = select_zval_hani(af, (ic-ll), (ic+lr), G.SS.MOZ_CND_ZVAL, out il, out ir);
+				flag = (il == il_of_all) || (ir == ir_of_all);//判定範囲に達した？
+				if (!rc) {
+					u1 = fp[ic];
+					u2 = fp[ic];
+					l1 = 0;
+				}
+				else {
+					int gap = (int)(af.Length *0.05);
+					u1 = fp[il];
+					u2 = fp[ir];
+					l1 = Math.Sqrt(Math.Pow(u2.X - u1.X, 2) + Math.Pow(u2.Y - u1.Y, 2));
+					if (false) {
+					}
+					else if (flag == false && il  <= (ic) && ir >= (ic)) {
+						il = il;//選択された毛髄範囲は毛髪センターを含んでいる
+					}
+					//else if (il  <= (ic+gap) && ir >= (ic-gap)) {
+					//    il = il;//選択された毛髄範囲は毛髪センター10%域を含んでいる
+					//}
+					else {
+						//...含んでいない
+						if (il > ic) {
+							// ic-ll ~ ic ~ ic+lr
+							lr = il-ic-1;
+						}
+						else {
+							ll = ic-ir-1;
+						}
+						if (ll < 0 || lr < 0) {
+							ll = ll;//選択範囲無し
+						}
+						else if (rcnt < 10) {
+							if (flag) {
+								//選択範囲は格納しない
+								flag = flag;
+							}
+							else {
+								//選択範囲を格納
+								u1_buf.Add(u1);
+								u2_buf.Add(u2);
+								Point uc = new Point((u1.X + u2.X/2), (u1.Y+u2.Y)/2);
+								ud_buf.Add(G.diff(uc, fp[ic]));
+								l1_buf.Add(l1);
+							}
+							//選択範囲を除外してリトライする
+							rcnt++;
+							goto retry;
+						}
+						l1 = 0;
+					}
+				}
+			}
+			if (l1 == 0.0) {
+				if (ud_buf.Count > 0) {
+					//中心ラインに一番近い範囲域を選択
+					int i;
+					double fmin = double.MaxValue;
+					int imin = 0;
+					if (ud_buf.Count > 4) {
+						i = 0;
+					}
+					for (i = 0; i < ud_buf.Count; i++) {
+						if (fmin > ud_buf[i]) {
+							fmin = ud_buf[i];
+							imin = i;
+						}
+					}
+					u1 = u1_buf[imin];
+					u2 = u2_buf[imin];
+				}
+				else {
+					u1 = fp[ic];
+					u2 = fp[ic];
+				}
+			}
+			l1 = Math.Sqrt(Math.Pow(u2.X - u1.X, 2) + Math.Pow(u2.Y - u1.Y, 2));
+			l1 = G.PX2UM(l1, m_log_info.pix_pitch, m_log_info.zoom);
+			//if ((++m_chk1 % 20) == 0) {
+			//    u1 = Point.Round(p2);
+			//    u2 = Point.Round(p3);
+			//}
+			if (l1 >= 25) {
+				l1 = l1;
+			}
+			if (l1 <= 0.0) {
+				l1 = l1;
+			}
+			seg.moz_zpt.Add(u1);//毛髄:上側点
+			seg.moz_zpb.Add(u2);//毛髄:下側点
+			seg.moz_zpl.Add(l1);//毛髄:長さ径
+			if (true) {
+			double avg = get_avg(bf, lr, ll-lr+1);
+			seg.moz_avg.Add(avg);
+			seg.moz_fs2.Add(avg >= G.SS.MOZ_CND_S2VL);
+			}
+			//G.mlog("上の行あとで確認すること");
+			//---
+			seg.moz_top.Add(Point.Round(p2));
+			seg.moz_btm.Add(Point.Round(p3));
+			seg_of_mouz mouz;
+			if (true) {
+				mouz.bf = bf;
+				mouz.pf = fp.ToArray();
+				mouz.pc = fp[ic];
+				mouz.ic = ic;
+				mouz.il = ll;
+				mouz.ir = lr;
+				seg.moz_inf.Add(mouz);
+			}
+		}
+#else
+		void test_ir(seg_of_hair seg, FN1D f2, PointF p2, PointF p3, int sx)
+		{
+			Point tx = Point.Truncate(p2);
+			Point t3 = Point.Truncate(p3);
+			PointF fx = p2;
+			ArrayList fp = new ArrayList();
+			ArrayList fc = new ArrayList();
+			double df = G.diff(p2, p3);
+			for (int i = 1;; i++) {
+				//毛髪下端から上端に向かって走査する
+				PointF f0 = f2.GetScanPt1Ext(p2, p3, i);
+				//Point  t0 = Point.Round(f0);
+				Point  t0 = Point.Truncate(f0);
+				
+				double	ff;
+				if ((ff = G.diff(f0, p3)) <= 0.4) {
+					f0 = f0;
+				}
+				if (t0.Equals(tx)) {
+					t0 = t0;//continue;
+				}
+				else {
+					fp.Add(t0);
+					fc.Add(TO_IR(t0));
+					if ((ff = G.diff(p2, f0)) > df /*t0.Equals(t3)*/) {
+						break;//毛髪上端に達した
 					}
 					tx = t0;
 				}
@@ -560,6 +1278,9 @@ retry:
 			}
 
 			double[] af;
+#if true//2018.10.10(毛髪径算出・改造)
+			int	ic, l5;
+#endif
 			if (true) {
 				ArrayList ar = new ArrayList();
 				for (int i = 0; i < fc.Count; i++) {
@@ -575,6 +1296,19 @@ retry:
 				af = (double[])ar.ToArray(typeof(double));
 //				double[] ao = new double[af.Length];
 				double fmax, fmin;
+#if true//2018.10.10(毛髪径算出・改造)
+				ic = af.Length/2;
+				l5 = af.Length/5;
+				if (true) {
+					l5 = (af.Length *  G.SS.MOZ_CND_HANI)/100/2;
+					if ((ic+l5) >= af.Length) {
+						l5--;
+					}
+					if ((ic-l5) < 0) {
+						l5--;
+					}
+				}
+#endif
 				if (this.MOZ_CND_SMCF > 0) {
 					T.SG_POL_SMOOTH(af, af, af.Length, this.MOZ_CND_SMCF, out fmax, out fmin);
 //					T.SG_2ND_DERI(af, ao, af.Length, 21, out fmax);
@@ -591,6 +1325,23 @@ retry:
 						}
 					}
 				}
+#if true//2018.10.10(毛髪径算出・改造)
+				if (G.SS.MOZ_CND_CTRA) {
+					if (false) {
+						//全範囲で
+						normalize_array(af, 0.0, 255.0, 0, af.Length-1, false);
+					}
+					else if (false) {
+						//判定範囲で
+						normalize_array(af, 0.0, 255.0, ic-l5, ic+l5, false);
+					}
+					else {
+						//判定範囲の上側、下側で分けて
+						normalize_array(af, 0.0, 255.0, ic-l5, ic+ 0, false);
+						normalize_array(af, 0.0, 255.0, ic+ 1, ic+l5, false);
+					}
+				}
+#else
 				if (G.SS.MOZ_CND_CTRA) {
 					//コントラスト最大化(0-255範囲にマッピング)
 					FN1D fn = new FN1D(new PointF((float)fmin, 0f), new PointF((float)fmax, 255f));
@@ -598,8 +1349,9 @@ retry:
 						af[i] = fn.GetYatX(af[i]);
 					}
 				}
+#endif
 			}
-			if (false) {
+			if (true) {
 				try {
 					StreamWriter wr;
 					string path = System.IO.Path.GetFileNameWithoutExtension(seg.name_of_ir);
@@ -607,12 +1359,21 @@ retry:
 					path = "c:\\temp\\ir_" + path;
 					wr = new StreamWriter(path, true, Encoding.Default);
 					wr.Write(string.Format("{0},", sx));
+#if true//2018.10.10(毛髪径算出・改造)
+					for (int i = ic-l5; i <= ic+l5; i++) {
+						wr.Write(string.Format("{0:F0}", af[i]));
+						if (i < (fc.Count-1)) {
+							wr.Write(",");
+						}
+					}
+#else
 					for (int i = 0; i < fc.Count; i++) {
 						wr.Write(string.Format("{0:F0}", af[i]));
 						if (i < (fc.Count-1)) {
 							wr.Write(",");
 						}
 					}
+#endif
 					wr.WriteLine("");
 					wr.Close();
 				}
@@ -623,10 +1384,13 @@ retry:
 			Point u1 = new Point(0,0), u2=new Point(0,0);
 			double l1 = 0;
 			int	i1;
+#if false//2018.10.10(毛髪径算出・改造)
 			int	ic = af.Length/2;
 			int l5 = af.Length/5;
+#endif
 			double vmin = 255;
 			int imin = 0;
+#if false//2018.10.10(毛髪径算出・改造)
 			if (true) {
 				l5 = (af.Length *  G.SS.MOZ_CND_HANI)/100/2;
 				if ((ic+l5) >= af.Length) {
@@ -639,6 +1403,7 @@ retry:
 			else {
 				l5 = af.Length/5; // G.SS.MOZ_CND_HANI=40%と同じ
 			}
+#endif
 			//最小値の位置を探索
 			//中心から＋、中心から－の二段階探索に分ける、
 			//同値の場合はセンター寄りにするため
@@ -683,6 +1448,7 @@ retry:
 			else {
 				//最小値位置から＋側と－側へ閾値外になる位置を探索
 				int i0, i2;
+#if false//2018.10.10(毛髪径算出・改造)
 				for (i2 = i1; i2 < fc.Count; i2++) {
 					if (double.IsNaN(af[i2]) || af[i2] > G.SS.MOZ_CND_ZVAL) {
 						i2--;
@@ -707,6 +1473,19 @@ retry:
 				if (i0 != il || i2 != ir) {
 					rc = rc;
 				}
+#else
+				int il, ir;
+				bool rc;
+				rc = select_zval_hani(af, (ic-l5), (ic+l5), G.SS.MOZ_CND_ZVAL, out il, out ir);
+				i0 = il;
+				i2 = ir;
+				if (!rc) {
+					u1 = (Point)fp[ic];
+					u2 = (Point)fp[ic];
+					l1 = 0;
+				}
+				else
+#endif
 				if (i0 < (ic-l5) || i2 > (ic+l5)) {
 					//判定された毛髄範囲が範囲外まで連続しているときは
 					//毛髄では無いと判定する
@@ -715,6 +1494,7 @@ retry:
 					l1 = 0;
 					if (i0 < (ic-l5) && i2 > (ic+l5)) {
 						//両側でNG
+						rc = rc;
 					}
 					else if (i0 < (ic-l5)) {
 						//－側でNG
@@ -764,11 +1544,74 @@ retry:
 				l1 = l1;
 			}
 		}
+#endif
 		//private double m_offset_of_hair;
 		private double m_back_of_x;
 		//---
+#if true//2018.10.10(毛髪径算出・改造)
+		private void test_dm(seg_of_hair[] segs, int idx, int cnt, bool bRECALCIR=false)
+#else
 		private void test_dm(seg_of_hair[] segs, int idx, int cnt)
+#endif
 		{
+#if true//2018.10.10(毛髪径算出・改造)
+			if (bRECALCIR) {
+				m_dia_top = segs[idx].dia_top;
+				m_dia_btm = segs[idx].dia_btm;
+				m_dia_cnt = segs[idx].dia_cnt;
+				//---
+				G.IR.PLY_XMIN = segs[idx].IR_PLY_XMIN;
+				G.IR.PLY_XMAX = segs[idx].IR_PLY_XMAX;
+				G.IR.WIDTH    = segs[idx].IR_WIDTH;
+				//---
+				segs[idx].moz_zpt.Clear();
+				segs[idx].moz_zpb.Clear();
+				segs[idx].moz_zpl.Clear();
+				segs[idx].moz_top.Clear();
+				segs[idx].moz_btm.Clear();
+				segs[idx].moz_inf.Clear();
+				segs[idx].moz_fs2.Clear();//S1,S2区分,S1:true, S2:false
+				segs[idx].moz_avg.Clear();//毛髄:毛髄範囲の画素平均値(生画像による)
+				segs[idx].moz_out.Clear();
+				segs[idx].moz_hpt.Clear();//毛髄:上側点:補間後
+				segs[idx].moz_hpb.Clear();//毛髄:下側点:補間後
+				segs[idx].moz_hpl.Clear();//毛髄:長さ径:補間後
+			}
+			double RT = (100-G.SS.MOZ_CND_HANI)/100.0/2.0;
+			double RB = (1-RT);
+			List<Point> at = new List<Point>();
+			List<Point> ab = new List<Point>();
+			for (int i = 0; i < m_dia_cnt; i++) {
+				Point pt = m_dia_top[i];
+				Point pb = m_dia_btm[i];
+				Point ht = new Point();
+				Point hb = new Point();
+				if (i == 0) {
+					FN1D ft = new FN1D(m_dia_top[i], m_dia_top[i+1]);
+					FN1D fb = new FN1D(m_dia_btm[i], m_dia_btm[i+1]);
+					pt.X = 0;
+					pt.Y = (int)ft.GetYatX(0.0);
+					pb.X = 0;
+					pb.Y = (int)fb.GetYatX(0.0);
+				}
+				else if (i == (m_dia_cnt-1)) {
+					FN1D ft = new FN1D(m_dia_top[i-1], m_dia_top[i]);
+					FN1D fb = new FN1D(m_dia_btm[i-1], m_dia_btm[i]);
+					pt.X = G.IR.PLY_XMAX;
+					pb.X = G.IR.PLY_XMAX;
+					pt.Y = (int)ft.GetYatX(pt.X);
+					pb.Y = (int)fb.GetYatX(pb.X);
+				}
+				ht.X = (int)(pt.X + RT * (pb.X - pt.X));
+				ht.Y = (int)(pt.Y + RT * (pb.Y - pt.Y));
+				hb.X = (int)(pt.X + RB * (pb.X - pt.X));
+				hb.Y = (int)(pt.Y + RB * (pb.Y - pt.Y));
+				at.Add(ht);
+				ab.Add(hb);
+			}
+			segs[idx].han_top = at.ToArray();
+			segs[idx].han_btm = ab.ToArray();
+#endif
 			//(1)中心のラインを求める(両端は画像端まで拡張する)
 			//(2)中心ラインに沿って左端から右端まで一定間隔で走査点を進める
 			//(3)走査点で垂直方向に上下両側に延ばした時の輪郭線との交点を求める
@@ -790,9 +1633,9 @@ retry:
 				PointF pb1 = m_dia_btm[i+1];
 				PointF pc0 = new PointF((pt0.X+pb0.X)/2f, (pt0.Y+pb0.Y)/2f);
 				PointF pc1 = new PointF((pt1.X+pb1.X)/2f, (pt1.Y+pb1.Y)/2f);
-				m_ft[i] = new FN1D(pt0, pt1);
-				m_fb[i] = new FN1D(pb0, pb1);
-				m_fc[i] = new FN1D(pc0, pc1);
+				m_ft[i] = new FN1D(pt0, pt1);//毛髪上端の分割エッジ直線
+				m_fb[i] = new FN1D(pb0, pb1);//毛髪下端の分割エッジ直線
+				m_fc[i] = new FN1D(pc0, pc1);//毛髪中心の分割エッジ直線
 			}
 			//m_ft = (FN1D[])at.ToArray(typeof(FN1D));
 			//m_fb = (FN1D[])ab.ToArray(typeof(FN1D));
@@ -884,6 +1727,9 @@ retry:
 				p8 = Point.Round(pt);
 				pt = f2.GetScanPt2Ext(pf, p3, u5);
 				p9 = Point.Round(pt);
+#if true//2018.10.10(毛髪径算出・改造)
+				if (bRECALCIR == false) {
+#endif
 				//(5)
 				//格納
 				seg.val_cen.Add(TO_CL(p5));
@@ -900,6 +1746,9 @@ retry:
 				seg.pts_mph.Add(p7);
 				seg.pts_p5u.Add(p8);
 				seg.pts_m5u.Add(p9);
+#if true//2018.10.10(毛髪径算出・改造)
+				}
+#endif
 				//(6) IR画像より毛髄径検出
 				if (m_bmp_ir1 != null) {
 					test_ir(seg, f2, p2, p3, s);
@@ -910,6 +1759,11 @@ retry:
 				//    break;
 				//}
 			}
+#if true//2018.10.10(毛髪径算出・改造)
+			detect_outliers(seg);
+			interp_outliers(seg);
+			if (bRECALCIR == false) {
+#endif
 #if true//2018.09.29(キューティクルライン検出)
 			//キューティクル断面のフィルター処理
 			apply_filter(seg.val_cen, out seg.val_cen_fil);
@@ -922,6 +1776,9 @@ retry:
 			find_cuticle_line(seg.pts_mph, seg.val_mph_fil, out seg.pts_mph_cut, out seg.flg_mph_cut, out seg.his_mph_cut);
 			find_cuticle_line(seg.pts_p5u, seg.val_p5u_fil, out seg.pts_p5u_cut, out seg.flg_p5u_cut, out seg.his_p5u_cut);
 			find_cuticle_line(seg.pts_m5u, seg.val_m5u_fil, out seg.pts_m5u_cut, out seg.flg_m5u_cut, out seg.his_m5u_cut);
+#endif
+#if true//2018.10.10(毛髪径算出・改造)
+			}
 #endif
 			//m_offset_of_hair = s;
 			m_back_of_x = pf.X;
@@ -943,6 +1800,15 @@ retry:
 			m_dia_top = (Point[])at.ToArray(typeof(Point));
 			m_dia_btm = (Point[])ab.ToArray(typeof(Point));
 			m_dia_cnt = m_dia_top.Count();
+#if true//2018.10.10(毛髪径算出・改造)
+			seg.dia_top = (Point[])m_dia_top.Clone();//輪郭・頂点(上側)
+			seg.dia_btm = (Point[])m_dia_btm.Clone();//輪郭・頂点(下側)
+			seg.dia_cnt = m_dia_cnt;//輪郭・頂点数
+			//---
+			seg.IR_PLY_XMIN = G.IR.PLY_XMIN;
+			seg.IR_PLY_XMAX = G.IR.PLY_XMAX;
+			seg.IR_WIDTH    = G.IR.WIDTH;
+#endif
 			//---
 /*			string key = seg.name_of_cl;
 			Point	pnt_of_pls;
@@ -1292,49 +2158,6 @@ retry:
 			}
 		}
 #else
-		private void load_bmp(seg_of_hair[] segs, int i, string path_dm1, string path_dm2, ref Bitmap bmp_dm0, ref Bitmap bmp_dm1, ref Bitmap bmp_dm2, ref Bitmap bmp_ir0, ref Bitmap bmp_ir1, ref Bitmap bmp_ir2)
-		{
-			string path_ir1 = to_ir_file(path_dm1);
-			string path_ir2 = to_ir_file(path_dm2);
-
-			dispose_bmp(ref bmp_dm0);
-			dispose_bmp(ref bmp_ir0);
-			//---
-			bmp_dm0 = bmp_dm1;
-			bmp_ir0 = bmp_ir1;
-			//---
-			bmp_dm1 = bmp_dm2;
-			bmp_ir1 = bmp_ir2;
-			//---
-			if (i == 0) {
-				bmp_dm1 = new Bitmap(path_dm1);
-				bmp_dm1.Tag = segs[i].pix_pos;
-				//--
-				if (path_ir1 != null) {
-					bmp_ir1 = new Bitmap(path_ir1);
-					bmp_ir1.Tag = bmp_dm1.Tag;
-				}
-				else {
-					bmp_ir1 = null;
-				}
-			}
-			if (!string.IsNullOrEmpty(path_dm2)) {
-				bmp_dm2 = new Bitmap(path_dm2);
-				bmp_dm2.Tag = segs[i+1].pix_pos;
-				//--
-				if (path_ir2 != null) {
-					bmp_ir2 = new Bitmap(path_ir2);
-					bmp_ir2.Tag = bmp_dm2.Tag;
-				}
-				else {
-					bmp_ir2 = null;
-				}
-			}
-			else {
-				bmp_dm2 = null;
-				bmp_ir2 = null;
-			}
-		}
 #endif
 		private void enable_forms(bool b)
 		{
@@ -1378,7 +2201,11 @@ retry:
 				string[] files_ir =
 					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "IR_??"+zpos+".*");
 				if (files_ct.Length <= 0 && files_cr.Length <= 0 && files_cl.Length <= 0) {
+#if true//2018.10.10(毛髪径算出・改造)
+					continue;
+#else
 					break;
+#endif
 				}
 				cnt++;
 			}
@@ -1550,6 +2377,11 @@ retry:
 						fctr = Form02.DO_PROC_FOCUS(bmp, G.SS.MOZ_FST_FCOF, G.SS.MOZ_FST_RCNT, G.SS.MOZ_FST_CCNT);
 						ar_con.Add(fctr);
 					}
+#if true//2018.10.10(毛髪径算出・改造)
+					else {
+						Form02.DO_PROC_FOCUS(bmp, 0, 0, 0);
+					}
+#endif
 				}
 				ret = true;
 			}
@@ -1569,6 +2401,9 @@ retry:
 				string pat;
 				Bitmap bmp_dep;
 				string path_dep;
+#if true//2018.10.10(毛髪径算出・改造)
+				bool bInit = false;
+#endif
 				m_fold_of_dept  = string.Format("\\{0}x{1}", G.SS.MOZ_FST_RCNT, G.SS.MOZ_FST_CCNT);
 				switch (G.SS.MOZ_FST_MODE) {
 				case   /*CL*/  0:m_fold_of_dept += "_CL"; break;
@@ -1598,11 +2433,20 @@ retry:
 					pat = string.Format("{0}C?_??_ZP00D.*", q);//カラー
 					CL_ZP00D = System.IO.Directory.GetFiles(path, pat);
 					//---
-					if (q == 0 && CL_ZP00D.Length > 0) {
+					if (
+#if true//2018.10.10(毛髪径算出・改造)
+						!bInit && CL_ZP00D.Length > 0
+#else
+						q == 0 && CL_ZP00D.Length > 0
+#endif
+						) {
 						//opencvのセットアップのため呼び出し
 						Bitmap bmp = new Bitmap(CL_ZP00D[0]);
 						G.CAM_PRC = G.CAM_STS.STS_NONE;
 						G.FORM02.load_file(bmp, false);
+#if true//2018.10.10(毛髪径算出・改造)
+						bInit = true;
+#endif
 					}
 					//---
 					//if (CL_ZP00D.Length > 0) {
@@ -1752,10 +2596,25 @@ retry:
 					if (true) {
 						string path = this.MOZ_CND_FOLD;
 						string[] zary = null;
+#if true//2018.10.10(毛髪径算出・改造)
+						string NS;
+						for (int i = 0; i < 24; i++) {
+							NS = i.ToString();
+							zary = System.IO.Directory.GetFiles(path, NS + "CR_00_*.*");
+							if (zary.Length > 0) {
+								break;
+							}
+							zary = System.IO.Directory.GetFiles(path, NS + "CT_00_*.*");
+							if (zary.Length > 0) {
+								break;
+							}
+						}
+#else
 						zary = System.IO.Directory.GetFiles(path, "0CR_00_*.*");
 						if (zary.Length <= 0) {
 						zary = System.IO.Directory.GetFiles(path, "0CT_00_*.*");
 						}
+#endif
 						for (int i = 0; i < zary.Length; i++) {
 							string tmp = System.IO.Path.GetFileNameWithoutExtension(zary[i]);
 							string sgn;
@@ -1839,7 +2698,11 @@ retry:
 				files_cr = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD+pext,  buf +  "CR_??"+zpos+".*");
 				files_ir = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD+pext,  buf +  "IR_??"+zpos+".*");
 				if (files_ct.Length <= 0 && files_cr.Length <= 0) {
+#if true//2018.10.10(毛髪径算出・改造)
+					continue;
+#else
 					break;//終了
+#endif
 				}
 				if (files_ct.Length > 0 && files_cr.Length > 0) {
 					break;//終了(反射と透過が混在！)
@@ -2290,17 +3153,10 @@ retry:
 				this.BeginInvoke(new G.DLG_VOID_VOID(this.load));
 			}
 #if true//2018.09.29(キューティクルライン検出)
-			//if (G.UIF_LEVL == 0) {
-			//    /*0:ユーザ用(暫定版)*/
-			//    this.tabControl2.TabPages.Remove(this.tabPage7);//キューティクル条件ページ
-			//}
-			if (false) {
-				TabPage tmp = this.tabPage7;
-				this.tabControl1.TabPages.Remove(this.tabPage7);
-				this.tabControl2.TabPages.Add(tmp);
-			}
 			G.SS.MOZ_CND_HCNT = (G.SS.MOZ_CND_HMAX/G.SS.MOZ_CND_HWID);
-			DDX(true);
+#endif
+#if true//2018.10.10(毛髪径算出・改造)
+			this.chart2.Series[1].Enabled = false;
 #endif
 		}
 		private void Form03_FormClosing(object sender, FormClosingEventArgs e)
@@ -2675,7 +3531,13 @@ retry:
 						for (int i = 0; i < seg.moz_zpb.Count; i+=1) {
 							Point p1 = (Point)seg.moz_zpb[i];
 							Point p2 = (Point)seg.moz_zpt[i];
-
+#if true//2018.10.10(毛髪径算出・改造)
+							if (this.checkBox15.Checked) {
+								p1 = seg.moz_hpb[i];
+								p2 = seg.moz_hpt[i];
+							}
+							try {
+#endif
 							//if (p1.X != 0 && p1.Y != 0) {
 							//    i = i;
 							//}
@@ -2693,8 +3555,31 @@ retry:
 							//gr.DrawLine(pen, p2.X, p2.Y, p2.X+1, p2.Y+2);
 								gr_ir.DrawLine(pen, p1, p2);
 							}
+#if true//2018.10.10(毛髪径算出・改造)
+							}
+							catch (Exception ex) {
+System.Diagnostics.Debug.WriteLine(ex.ToString());
+							}
+#endif
 						}
 					}
+#if true//2018.10.10(毛髪径算出・改造)
+					if (this.checkBox13.Checked/* && seg.moz_out != null*/) {//赤外・外れ判定
+						pen = new Pen(Color.Red, pw);
+						for (int i = 0; i < seg.moz_zpb.Count; i+=1) {
+							if (seg.moz_out[i]) {
+								Point p1 = (Point)seg.moz_zpb[i];
+								Point p2 = (Point)seg.moz_zpt[i];
+								gr_ir.DrawLine(pen, p1, p2);
+							}
+						}
+					}
+					if (this.checkBox14.Checked) {//赤外・判定範囲
+						pen = new Pen(Color.Purple, pw);
+						gr_ir.DrawLines(pen, seg.han_top);
+						gr_ir.DrawLines(pen, seg.han_btm);
+					}
+#endif
 					if (pen != null) {
 						pen.Dispose();
 					}
@@ -2767,6 +3652,9 @@ retry:
 			this.chart2.Series[1].Points.Clear();
 #else
 			this.chart3.Series[0].Points.Clear();
+#endif
+#if true//2018.10.10(毛髪径算出・改造)
+			this.chart2.Series[1].Points.Clear();
 #endif
 			this.chart1.ChartAreas[0].AxisX.Minimum = 0;
 			this.chart1.ChartAreas[0].AxisX.Maximum = double.NaN;
@@ -2872,11 +3760,27 @@ retry:
 					double y5 = TO_VAL(seg.moz_zpl[i]);
 					double y6 = TO_VAL(seg.mou_len[i]);
 					if (this.checkBox11.Checked) {
+#if true//2018.10.10(毛髪径算出・改造)
+						//赤外・外れ判定
+#if true//2018.10.10(毛髪径算出・改造)
+						if (this.checkBox15.Checked) {
+							y5 = seg.moz_hpl[i];
+						}
+#endif
+						if (this.checkBox13.Checked/* && seg.moz_out != null*/ && seg.moz_out[i]) {
+							this.chart2.Series[0].Points.Add(dp_marker(x0, y5, Color.Red));
+						}
+						else {
+							this.chart2.Series[0].Points.AddXY(x0, y5);
+						}
+#else
 						this.chart2.Series[0].Points.AddXY(x0, y5);
+#endif
 						if (moz_kei_max < y5) {
 							moz_kei_max = y5;
 						}
 					}
+
 					if (this.checkBox12.Checked) {
 #if false//2018.08.21
 						this.chart2.Series[1].Points.AddXY(x0, y6);
@@ -3106,6 +4010,20 @@ retry:
 				//赤外・輪郭, 中心ライン, 毛髄径
 				q |= 1;
 			}
+#if true//2018.10.10(毛髪径算出・改造)
+			if (sender == this.checkBox13) {
+				//赤外・外れ値, 判定範囲
+				q |= 1|2;//画像ファイル と グラフ
+			}
+			if (sender == this.checkBox14) {
+				//判定範囲
+				q |= 1;//画像ファイル
+			}
+			if (sender == this.checkBox15) {
+				//生データ
+				q |= 1|2;//画像ファイル と グラフ
+			}
+#endif
 			if (sender == this.checkBox3 || sender == this.checkBox4
 			 || sender == this.checkBox5 || sender == this.checkBox6 || sender == this.checkBox7) {
 				//R*0,R*+50%,,R-?um
@@ -3266,7 +4184,11 @@ retry:
 				wr.WriteLine(string.Format("走査単位[um],{0}", G.SS.MOZ_CND_DSUM));
 				wr.WriteLine(string.Format("平滑化フィルタ,{0}x{0}/{1}回", C_FILT_COFS[G.SS.MOZ_CND_FTCF], C_FILT_CNTS[G.SS.MOZ_CND_FTCT]));
 				wr.WriteLine(string.Format("スムージング係数,{0}", C_SMTH_COFS[G.SS.MOZ_CND_SMCF], C_FILT_CNTS[G.SS.MOZ_CND_FTCT]));
+#if true//2018.10.10(毛髪径算出・改造)
+				wr.WriteLine(string.Format("コントラスト補正,{0}", G.SS.MOZ_CND_CNTR));
+#else
 				wr.WriteLine(string.Format("コントラスト補正,{0}", G.SS.MOZ_CND_CTRA.ToString()));
+#endif
 				wr.WriteLine(string.Format("毛髄閾値,{0}", G.SS.MOZ_CND_ZVAL));
 				wr.WriteLine(string.Format("径方向・毛髄判定範囲[%],{0}", G.SS.MOZ_CND_HANI));
 				wr.WriteLine("");
@@ -3475,15 +4397,27 @@ retry:
 				//ret = remez.Remez(ntaps, nbands, bands, gain, weight, deviat, /*type*/0, fs);
 				if (cof != null) {
 					G.SS.MOZ_CND_FCOF = (double[])cof.Clone();
+#if true//2018.10.10(毛髪径算出・改造)
+					m_errstr = "";
+#else
 					this.textBox2.Text = "";
+#endif
 				}
 				else {
+#if true//2018.10.10(毛髪径算出・改造)
+					m_errstr = "フィルタ計算エラー！\r" + F_REMEZ_SCIPY.ERRMSG;
+#else
 					this.textBox2.Text = "フィルタ計算エラー！\r" + F_REMEZ_SCIPY.ERRMSG;
+#endif
 					return(false);
 				}
 			}
 			else {
+#if true//2018.10.10(毛髪径算出・改造)
+				m_errstr = "";
+#else
 				this.textBox2.Text = "";
+#endif
 			}
 			return(true);
 		}
@@ -3602,6 +4536,9 @@ retry:
 				this.chart4.Series[2].Points.Clear();
 				this.chart4.Series[3].Points.Clear();
 				this.chart4.Series[4].Points.Clear();
+#if true//2018.10.10(毛髪径算出・改造)
+				this.chart4.Series[5].Points.Clear();
+#endif
 				this.chart4.ChartAreas[0].AxisX.Minimum = 0;
 				this.chart4.ChartAreas[0].AxisX.Maximum = double.NaN;
 				this.chart4.ChartAreas[0].AxisX.Interval = double.NaN;
@@ -3614,6 +4551,7 @@ retry:
 				this.chart5.ChartAreas[0].AxisX.Minimum = 0;
 				this.chart5.ChartAreas[0].AxisX.Maximum = G.SS.MOZ_CND_HMAX;
 				this.chart5.ChartAreas[0].AxisX.Interval = double.NaN;
+
 				//
 				if (seg == null) {
 					return;
@@ -3873,9 +4811,16 @@ retry:
 				}
 				if (true) {
 					double	bval = (G.SS.MOZ_CND_CTYP == 0) ? G.SS.MOZ_CND_BPVL: G.SS.MOZ_CND_2DVL;
+#if true//2018.10.10(毛髪径算出・改造)
+					this.chart4.Series[5].Points.AddXY(this.chart4.ChartAreas[0].AxisX.Minimum, bval);
+					this.chart4.Series[5].Points.AddXY(this.chart4.ChartAreas[0].AxisX.Maximum, bval);
+					this.chart4.Series[5].BorderDashStyle = ChartDashStyle.DashDotDot;
+					this.chart4.Series[5].Color = Color.Black;
+#else
 					this.chart4.Series[5].Points[0].YValues[0] = bval;
 					this.chart4.Series[5].Points[1].YValues[0] = bval;
 					this.chart4.Series[5].Points[1].XValue     = this.chart4.ChartAreas[0].AxisX.Maximum;
+#endif
 				}
 			}
 			catch (Exception ex) {
@@ -3883,35 +4828,8 @@ retry:
 			}
 		}
 #if true//2018.09.29(キューティクルライン検出)
-		private bool DDX(bool bUpdate)
-        {
-            bool rc;
-
-            try {
-				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton5, this.radioButton6}, ref G.SS.MOZ_CND_CTYP);
-				DDV.DDX(bUpdate, this.numericUpDown7 , ref G.SS.MOZ_CND_BPF1);
-				DDV.DDX(bUpdate, this.numericUpDown8 , ref G.SS.MOZ_CND_BPF2);
-				DDV.DDX(bUpdate, this.comboBox4      , ref G.SS.MOZ_CND_BPSL);
-				DDV.DDX(bUpdate, this.numericUpDown1 , ref G.SS.MOZ_CND_NTAP);
-				DDV.DDX(bUpdate, this.numericUpDown9 , ref G.SS.MOZ_CND_BPVL);
-				DDV.C2V(bUpdate, this.comboBox13     , ref G.SS.MOZ_CND_2DC0);
-				DDV.C2V(bUpdate, this.comboBox14     , ref G.SS.MOZ_CND_2DC1);
-				DDV.C2V(bUpdate, this.comboBox15     , ref G.SS.MOZ_CND_2DC2);
-				DDV.DDX(bUpdate, this.numericUpDown10, ref G.SS.MOZ_CND_2DVL);
-                rc = true;
-            }
-            catch (Exception e) {
-                G.mlog(e.Message);
-                rc = false;
-            }
-            return (rc);
-		}
-
 		private void button1_Click_1(object sender, EventArgs e)
 		{//キューティクル・フィルター処理
-			if (DDX(false) == false) {
-				return;
-			}
 			if (this.listView1.Items.Count <= 0) {
 				return;
 			}
@@ -3945,12 +4863,91 @@ retry:
 			draw_image(hr);
 			draw_cuticle(hr);
 		}
-
-		private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+#endif
+#if true//2018.10.10(毛髪径算出・改造)
+		private void button2_Click(object sender, EventArgs e)
 		{
-			if ((this.numericUpDown1.Value % 2) == 0) {
-				this.numericUpDown1.Value = this.numericUpDown1.Value+1;
+			if (this.listView1.Items.Count <= 0) {
+				return;
 			}
+			if (m_i >= m_hair.Count) {
+				return;
+			}
+			hair hr = (hair)m_hair[m_i];
+			if (m_isel >= hr.seg.Count()) {
+				return;
+			}
+			for (int i = 0; i < hr.seg.Length; i++) {
+				seg_of_hair[] segs = hr.seg;
+				seg_of_hair seg = (seg_of_hair)hr.seg[i];
+				if (seg == null) {
+					continue;
+				}
+				string path_dm1 = segs[i].path_of_dm;
+				string path_dm2 = (i != (segs.Length-1)) ? (segs[i+1].path_of_dm): null;
+				string path_pd1 = segs[i].path_of_pd;
+				string name_dm1 = segs[i].name_of_dm;
+				string name_ir1 = segs[i].name_of_ir;
+				string name_pd1 = segs[i].name_of_pd;
+				string path_ir1 = segs[i].path_of_ir;
+				string path_ir2 = (i != (segs.Length-1)) ? (segs[i+1].path_of_ir): null;
+
+				load_bmp(segs, i,
+					path_dm1, path_dm2,
+					path_ir1, path_ir2,
+					ref m_bmp_dm0, ref m_bmp_dm1, ref m_bmp_dm2,
+					ref m_bmp_ir0, ref m_bmp_ir1, ref m_bmp_ir2
+				);
+				if (true) {
+					dispose_bmp(ref m_bmp_pd1);
+					if (name_pd1.Equals(name_dm1)) {
+						m_bmp_pd1 = (Bitmap)m_bmp_dm1.Clone();
+					}
+					else {
+						m_bmp_pd1 = new Bitmap(path_pd1);
+					}
+				}
+				if (true) {
+					if (m_bmp_ir1 != null && G.SS.MOZ_CND_FTCF > 0) {
+						Form02.DO_SMOOTH(m_bmp_ir1, this.MOZ_CND_FTCF, this.MOZ_CND_FTCT);
+						//m_bmp_ir1.Save("c:\\temp\\"+name_ir1);
+						m_bmp_ir1.Save("c:\\temp\\IMG_IR.PNG");
+					}
+					if (segs[i].dia_cnt > 1) {
+//Bitmap bmp_msk = (Bitmap)m_bmp_ir1.Clone();
+//Form02.DO_SET_FBD_REGION(m_bmp_ir1, bmp_msk, segs[i].dia_top, segs[i].dia_btm);
+						test_dm(segs, i, segs.Length, true);
+					}
+				}
+			}
+			dispose_bmp(ref m_bmp_dm0);
+			dispose_bmp(ref m_bmp_dm1);
+			dispose_bmp(ref m_bmp_dm2);
+			dispose_bmp(ref m_bmp_ir0);
+			dispose_bmp(ref m_bmp_ir1);
+			dispose_bmp(ref m_bmp_ir2);
+
+			draw_graph(hr);
+			draw_image(hr);
+		}
+
+		private void button4_Click(object sender, EventArgs e)
+		{
+			if (G.FORM24 == null) {
+				Form24 frm = new Form24();
+				frm.Show(this);
+			}
+			else {
+				G.FORM24.Close();
+			}
+		}
+		public void UPDATE_CUTICLE()
+		{
+			button1_Click_1(null, null);
+		}
+		public void UPDATE_MOUZUI()
+		{
+			button2_Click(null, null);
 		}
 #endif
 	}
