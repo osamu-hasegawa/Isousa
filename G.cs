@@ -343,7 +343,11 @@ namespace uSCOPE
 			public int MOZ_CND_OTW2 = 31;		//外れ値判定:幅  (毛髄中心)
 			public double MOZ_CND_OTV2 = 1.2;	//外れ値判定:閾値(毛髄中心)
 			public int MOZ_CND_OTMD = 1;		//外れ値判定:補間,1:直線補間
-
+			public int MOZ_CND_SLVL = 128;		//毛髄面積:D/L区分閾値
+			public double MOZ_CND_SMVL = 5;		//除外判定:面積値
+			public bool MOZ_CND_CHK1 = true;	//有,無効:除外判定:毛髄面積
+			public bool MOZ_CND_CHK2 = true;	//有,無効:外れ値判定:毛髄長さ
+			public bool MOZ_CND_CHK3 = true;	//有,無効:外れ値判定:毛髄中心
 			//0:無し
 			//1:毛髪上下端全範囲
 			//2:毛髄判定範囲
@@ -400,11 +404,6 @@ namespace uSCOPE
 			public int MOZ_CND_HCNT = (70/10);
 			[XmlIgnoreAttribute]
 			public double[] MOZ_CND_FCOF = null;
-#endif
-#if true//2018.10.10(毛髪径算出・改造)
-			public double MOZ_CND_S2VL;//S1,S2閾値
-			public int MOZ_CND_BKVL;//上下端黒除外・閾値
-
 #endif
 #if true//2018.08.21
 			public bool MOZ_IRC_CK00 = false;

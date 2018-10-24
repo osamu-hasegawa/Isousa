@@ -84,6 +84,7 @@
       <DependentUpon>DlgProgress.cs</DependentUpon>
     </Compile>
     <Compile Include="FN1D.cs" />
+    <Compile Include="FNLAGRAN.cs" />
     <Compile Include="Form01.cs">
       <SubType>Form</SubType>
     </Compile>

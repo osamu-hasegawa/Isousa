@@ -389,11 +389,16 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown12, ref G.SS.MOZ_CND_HWID);
 #endif
 #if true//2018.10.10(毛髪径算出・改造)
+				DDV.DDX(bUpdate, this.numericUpDown18, ref G.SS.MOZ_CND_SLVL);//面積Sl,Sd判定閾値
 				DDV.DDX(bUpdate, this.numericUpDown14, ref G.SS.MOZ_CND_OTW1);//外れ値判定:幅  (毛髄長さ)
 				DDV.DDX(bUpdate, this.numericUpDown15, ref G.SS.MOZ_CND_OTV1);//外れ値判定:閾値(毛髄長さ)
 				DDV.DDX(bUpdate, this.numericUpDown16, ref G.SS.MOZ_CND_OTW2);//外れ値判定:幅  (毛髄中心)
 				DDV.DDX(bUpdate, this.numericUpDown17, ref G.SS.MOZ_CND_OTV2);//外れ値判定:閾値(毛髄中心)
 				DDV.DDX(bUpdate, this.comboBox11     , ref G.SS.MOZ_CND_OTMD);//外れ値判定:補間,1:直線補間
+				DDV.DDX(bUpdate, this.numericUpDown19, ref G.SS.MOZ_CND_SMVL);//除外判定:面積値
+				DDV.DDX(bUpdate, this.checkBox4      , ref G.SS.MOZ_CND_CHK1);//有,無効:除外判定:毛髄面積
+				DDV.DDX(bUpdate, this.checkBox5      , ref G.SS.MOZ_CND_CHK2);//有,無効:外れ値判定:毛髄長さ
+				DDV.DDX(bUpdate, this.checkBox6      , ref G.SS.MOZ_CND_CHK3);//有,無効:外れ値判定:毛髄中心
 #endif
 				//---
 				if (bUpdate == false) {

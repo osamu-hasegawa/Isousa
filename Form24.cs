@@ -29,6 +29,7 @@ namespace uSCOPE
 				this.Location = m_last_loc;
 			}
 			G.FORM24 = this;
+			checkBox1_CheckedChanged(null, null);
 		}
 
 		private void Form24_FormClosing(object sender, FormClosingEventArgs e)
@@ -63,12 +64,17 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.MOZ_CND_CNTR);//コントラスト補正
 				DDV.DDX(bUpdate, this.numericUpDown3 , ref G.SS.MOZ_CND_ZVAL);//毛髄判定画素閾値
 				DDV.DDX(bUpdate, this.numericUpDown4 , ref G.SS.MOZ_CND_HANI);//径方向・毛髄判定範囲
+				DDV.DDX(bUpdate, this.numericUpDown19, ref G.SS.MOZ_CND_SLVL);//面積Sl,Sd判定閾値
 				DDV.DDX(bUpdate, this.numericUpDown11, ref G.SS.MOZ_CND_OTW1);//外れ値判定:幅  (毛髄長さ)
 				DDV.DDX(bUpdate, this.numericUpDown12, ref G.SS.MOZ_CND_OTV1);//外れ値判定:閾値(毛髄長さ)
 				DDV.DDX(bUpdate, this.numericUpDown13, ref G.SS.MOZ_CND_OTW2);//外れ値判定:幅  (毛髄中心)
 				DDV.DDX(bUpdate, this.numericUpDown14, ref G.SS.MOZ_CND_OTV2);//外れ値判定:閾値(毛髄中心)
 				DDV.DDX(bUpdate, this.comboBox8      , ref G.SS.MOZ_CND_OTMD);//外れ値判定:補間,1:直線補間
-                rc = true;
+				DDV.DDX(bUpdate, this.numericUpDown15 , ref G.SS.MOZ_CND_SMVL);//除外判定:面積値
+				DDV.DDX(bUpdate, this.checkBox4      , ref G.SS.MOZ_CND_CHK1);//有,無効:除外判定:毛髄面積	
+				DDV.DDX(bUpdate, this.checkBox5      , ref G.SS.MOZ_CND_CHK2);//有,無効:外れ値判定:毛髄長さ
+				DDV.DDX(bUpdate, this.checkBox6      , ref G.SS.MOZ_CND_CHK2);//有,無効:外れ値判定:毛髄中心
+				rc = true;
             }
             catch (Exception e) {
                 G.mlog(e.Message);
@@ -105,6 +111,17 @@ namespace uSCOPE
 			G.FORM03.UPDATE_MOUZUI();
 			//
 			Cursor.Current = Cursors.Default;
+		}
+
+		private void checkBox1_CheckedChanged(object sender, EventArgs e)
+		{
+			this.numericUpDown11.Enabled = (this.checkBox5.Checked == true);
+			this.numericUpDown12.Enabled = (this.checkBox5.Checked == true);
+			//
+			this.numericUpDown13.Enabled = (this.checkBox6.Checked == true);
+			this.numericUpDown14.Enabled = (this.checkBox6.Checked == true);
+			//
+			this.numericUpDown15.Enabled = (this.checkBox4.Checked == true);
 		}
 	}
 }
