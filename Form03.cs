@@ -5338,7 +5338,9 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					if (m_bmp_ir1 != null && G.SS.MOZ_CND_FTCF > 0) {
 						Form02.DO_SMOOTH(m_bmp_ir1, this.MOZ_CND_FTCF, this.MOZ_CND_FTCT);
 						//m_bmp_ir1.Save("c:\\temp\\"+name_ir1);
+#if false//2018.10.24(毛髪径算出・改造)
 						m_bmp_ir1.Save("c:\\temp\\IMG_IR.PNG");
+#endif
 					}
 					if (segs[i].dia_cnt > 1) {
 //Bitmap bmp_msk = (Bitmap)m_bmp_ir1.Clone();

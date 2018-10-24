@@ -654,8 +654,8 @@
 			// 
 			this.numericUpDown19.BackColor = System.Drawing.SystemColors.Window;
 			this.numericUpDown19.Location = new System.Drawing.Point(171, 147);
-			this.numericUpDown19.Minimum = new decimal(new int[] {
-            10,
+			this.numericUpDown19.Maximum = new decimal(new int[] {
+            255,
             0,
             0,
             0});
