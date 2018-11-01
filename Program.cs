@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GhostFlareChecker
+namespace uSCOPE
 {
     static class Program
     {
@@ -16,22 +15,7 @@ namespace GhostFlareChecker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            CheckerManager.form1 = new Form1();
-            Application.Run(CheckerManager.form1);
+            Application.Run(new Form01());
         }
-
-		//ThreadExceptionイベントハンドラ
-		private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
-		{
-		    try
-		    {
-		    }
-		    finally
-		    {
-		        //アプリケーションを終了する
-		        Application.Exit();
-		    }
-		}
-
     }
 }

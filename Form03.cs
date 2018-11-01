@@ -368,6 +368,59 @@ retry:
 			}
 		}
 #endif
+#if true//2018.10.30(キューティクル長)
+		public class seg_of_cuti {
+			//毛髄径方向データ(一列分)
+			public List<Point>		pbf;//座標バッファ(毛髪左端から右端まで)
+			public List<double>		ibf;//画素バッファ(毛髪左端から右端まで)
+			public List<double>		iaf;//画素バッファ(毛髪下端から上端まで):フィルター処理後
+			public List<Point>		phc;//毛髪中心(バッファの中心)
+			public List<int>		ihc;//バッファの中心インデックス
+			//public int			iml;//バッファの毛髄上端のインデックス
+			//public int			imr;//バッファの毛髄下端のインデックス
+			//public int			imc;//バッファの毛髄中心のインデックス
+			//public Point		pml;//バッファの毛髄上端の座標
+			//public Point		pmr;//バッファの毛髄下端の座標
+			//public PointF		pmc;//バッファの毛髄中心の座標
+			//public double		ddf;//毛髪中心から毛髄中心までの距離
+			//---
+			//public bool			fs2;//S1,S2区分,S1:true, S2:false
+			//public double		avg;//毛髄:毛髄範囲の画素平均値(生画像による)
+			public List<Point>		pct;
+			public List<bool>		flg;//キューティクル・ライン該当・フラグ
+			public List<int>		his;//キューティクル間隔・ヒストグラム
+			public List<int>		lbl;//キューティクル・ライン該当・ラベル
+			//---
+			public seg_of_cuti() {
+				this.pbf = new List<Point> ();
+				this.ibf = new List<double>();
+				this.iaf = new List<double>();
+				this.phc = new List<Point> ();
+				this.ihc = new List<int>   ();
+				this.flg = new List<bool>  ();
+				this.his = new List<int>   ();
+				this.lbl = new List<int>   ();
+			}
+			//---
+			public void clear() {
+				if (pbf != null) {
+					pbf = null;
+				}
+				if (ibf != null) {
+					ibf = null;
+				}
+				if (iaf != null) {
+					iaf = null;
+				}
+				if (phc != null) {
+					phc = null;
+				}
+				if (ihc != null) {
+					ihc = null;
+				}
+			}
+		}
+#endif
 		//
 		//
 		//
@@ -426,6 +479,14 @@ retry:
 			public ArrayList	 pts_cen;
 			public ArrayList	 pts_mph;
 			public ArrayList	 pts_m5u;
+#if true//2018.10.30(キューティクル長)
+			public List<seg_of_cuti>
+								cut_inf;
+			public List<List<Point>>
+								cut_lsp;
+			public List<double>	cut_len;
+			public double		cut_ttl;
+#endif
 			//---
 			public ArrayList	mou_len;//毛髪・径
 			//---
@@ -486,6 +547,11 @@ retry:
 				this.pts_cen =  new ArrayList();
 				this.pts_mph =  new ArrayList();
 				this.pts_m5u =  new ArrayList();
+#if true//2018.10.30(キューティクル長)
+				this.cut_inf = new List<seg_of_cuti>();
+				this.cut_lsp = new List<List<Point>>();
+				this.cut_len = new List<double>();
+#endif
 				//---
 				this.mou_len = new ArrayList();
 				//---
@@ -1848,6 +1914,299 @@ retry:
 		//private double m_offset_of_hair;
 		private double m_back_of_x;
 		//---
+#if true//2018.10.30(キューティクル長)
+		private void test_dm(seg_of_hair[] segs, int idx, int cnt, bool bRECALCIR=false)
+		{
+#if true//2018.10.10(毛髪径算出・改造)
+			if (bRECALCIR) {
+				m_dia_top = segs[idx].dia_top;
+				m_dia_btm = segs[idx].dia_btm;
+				m_dia_cnt = segs[idx].dia_cnt;
+				//---
+				G.IR.PLY_XMIN = segs[idx].IR_PLY_XMIN;
+				G.IR.PLY_XMAX = segs[idx].IR_PLY_XMAX;
+				G.IR.WIDTH    = segs[idx].IR_WIDTH;
+				//---
+				segs[idx].moz_zpt.Clear();
+				segs[idx].moz_zpb.Clear();
+				segs[idx].moz_zpl.Clear();
+				segs[idx].moz_top.Clear();
+				segs[idx].moz_btm.Clear();
+				segs[idx].moz_inf.Clear();
+				//segs[idx].moz_fs2.Clear();//S1,S2区分,S1:true, S2:false
+				//segs[idx].moz_avg.Clear();//毛髄:毛髄範囲の画素平均値(生画像による)
+				segs[idx].moz_out.Clear();
+				segs[idx].moz_hpt.Clear();//毛髄:上側点:補間後
+				segs[idx].moz_hpb.Clear();//毛髄:下側点:補間後
+				segs[idx].moz_hpl.Clear();//毛髄:長さ径:補間後
+			}
+			double RT = (100-G.SS.MOZ_CND_HANI)/100.0/2.0;
+			double RB = (1-RT);
+			List<Point> at = new List<Point>();
+			List<Point> ab = new List<Point>();
+			for (int i = 0; i < m_dia_cnt; i++) {
+				Point pt = m_dia_top[i];
+				Point pb = m_dia_btm[i];
+				Point ht = new Point();
+				Point hb = new Point();
+				if (i == 0) {
+					FN1D ft = new FN1D(m_dia_top[i], m_dia_top[i+1]);
+					FN1D fb = new FN1D(m_dia_btm[i], m_dia_btm[i+1]);
+					pt.X = 0;
+					pt.Y = (int)ft.GetYatX(0.0);
+					pb.X = 0;
+					pb.Y = (int)fb.GetYatX(0.0);
+				}
+				else if (i == (m_dia_cnt-1)) {
+					FN1D ft = new FN1D(m_dia_top[i-1], m_dia_top[i]);
+					FN1D fb = new FN1D(m_dia_btm[i-1], m_dia_btm[i]);
+					pt.X = G.IR.PLY_XMAX;
+					pb.X = G.IR.PLY_XMAX;
+					pt.Y = (int)ft.GetYatX(pt.X);
+					pb.Y = (int)fb.GetYatX(pb.X);
+				}
+				ht.X = (int)(pt.X + RT * (pb.X - pt.X));
+				ht.Y = (int)(pt.Y + RT * (pb.Y - pt.Y));
+				hb.X = (int)(pt.X + RB * (pb.X - pt.X));
+				hb.Y = (int)(pt.Y + RB * (pb.Y - pt.Y));
+				at.Add(ht);
+				ab.Add(hb);
+			}
+			segs[idx].han_top = at.ToArray();
+			segs[idx].han_btm = ab.ToArray();
+#endif
+			//(1)中心のラインを求める(両端は画像端まで拡張する)
+			//(2)中心ラインに沿って左端から右端まで一定間隔で走査点を進める
+			//(3)走査点で垂直方向に上下両側に延ばした時の輪郭線との交点を求める
+			//(4)輪郭線との交点と走査点から断面点を求める
+			//(5)断面点の画素値を格納する
+			//Form02.TO_RR(0.5,  G.IR.DIA_TOP[i],  G.IR.DIA_BTM[i], out top[i], out btm[i]);
+			//---(1)
+			seg_of_hair seg = segs[idx];
+			int	cntm1 = (m_dia_cnt-1);
+			FN1D[]	m_ft = new FN1D[cntm1];
+			FN1D[]	m_fb = new FN1D[cntm1];
+			FN1D[]	m_fc = new FN1D[cntm1];
+			//ArrayList ac, at = new ArrayList(), ab = new ArrayList();
+			//ac = test_p1(idx, cnt);
+			for (int i = 0; i < cntm1; i++) {
+				PointF pt0 = m_dia_top[i+0];
+				PointF pt1 = m_dia_top[i+1];
+				PointF pb0 = m_dia_btm[i+0];
+				PointF pb1 = m_dia_btm[i+1];
+				PointF pc0 = new PointF((pt0.X+pb0.X)/2f, (pt0.Y+pb0.Y)/2f);
+				PointF pc1 = new PointF((pt1.X+pb1.X)/2f, (pt1.Y+pb1.Y)/2f);
+				m_ft[i] = new FN1D(pt0, pt1);//毛髪上端の分割エッジ直線
+				m_fb[i] = new FN1D(pb0, pb1);//毛髪下端の分割エッジ直線
+				m_fc[i] = new FN1D(pc0, pc1);//毛髪中心の分割エッジ直線
+			}
+			//---(2)
+			double	px0 = (idx <= 0) ? 0: segs[idx-1].pix_pos.X;
+			double	px1 = seg.pix_pos.X;
+			double	dif = (px1-px0);
+			int		i0 = 0;
+			//double ds = 5;//5dot = 1.375um
+			double	ds = G.UM2PX(G.SS.MOZ_CND_DSUM, m_log_info.pix_pitch, m_log_info.zoom);//横方向走査単位[pix]
+			double	u5 = G.UM2PX(G.SS.MOZ_CND_CUTE, m_log_info.pix_pitch, m_log_info.zoom);//径方向走査単位[pix]
+			PointF	pf;// = (PointF)ac[0];
+			//double xend = ((PointF)ac[ac.Count-1]).X;
+			double	xmin = (G.IR.PLY_XMIN < C.GAP_OF_IMG_EDGE) ? 0 :G.IR.PLY_XMIN;
+			double	xmax = ((G.IR.WIDTH - G.IR.PLY_XMAX) < C.GAP_OF_IMG_EDGE) ? (G.IR.WIDTH-1) : G.IR.PLY_XMAX;
+			PointF	sta_of_pf = new PointF();
+			int		ii = 0, ss = 0, s = 0;
+			int	LMAX = 30;
+			if (true) {
+				double r = seg.dia_avg/2;/*半径[um]*/
+				LMAX = (int)(r * G.SS.MOZ_CND_CHAN/100.0);
+				seg.cut_inf.Clear();
+			}
+			if (idx <= 0) {
+				idx = 0;
+			}
+			if (m_back_of_x <= 0 || dif == 0) {
+				sta_of_pf.X = (float)xmin;
+				sta_of_pf.Y = (float)m_fc[0].GetYatX(sta_of_pf.X);
+				ss = 0;
+			}
+			else {
+				sta_of_pf.X = (float)(m_back_of_x-dif);
+				sta_of_pf.Y = (float)m_fc[0].GetYatX(sta_of_pf.X);
+				if (sta_of_pf.X < 0 || sta_of_pf.X > xmax) {
+					//画像が抜けてるか、ステージ座標が不正か...
+					sta_of_pf.X = (float)xmin;
+					sta_of_pf.Y = (float)m_fc[0].GetYatX(sta_of_pf.X);
+					ss = 0;
+				}
+				else {
+					for (;;ss--, sta_of_pf = pf) {
+						pf = scan_pt(m_fc, ref ii, sta_of_pf, -ds);
+						if (pf.X < 0) {
+							break;
+						}
+					}
+				}
+			}
+			pf =sta_of_pf;
+			//m_back_of_x = pf.X;
+			//を
+			//現在の画像のＸ値に変換
+			//seg.total_idx = m_offset_of_hair;
+			//
+			for (s = ss; pf.X <= xmax; s++) {
+				//double y0, y1,y2, y3;
+				//y0 = m_fc[0].GetYatX(776);
+				//y1 = m_fc[0].GetYatX(791.068359);
+				//y2 = m_fc[0].GetYatX(861.5);
+				//y3 = m_fc[0].GetYatX(1042);
+				//pf = scan_pt(ac, ref i0, pf, ds);
+				//if (s > 0) {sta_of_pf = pf;}
+				//if (pf.X > xend/*G.IR.WIDTH*/) {
+				//    break;
+				//}
+				//(3) p2:上端, p3:下端
+				FN1D f1 = m_fc[ii];			//現在X位置に対応する中心ラインの直線
+				FN1D f2 = f1.GetNormFn(pf);	//F1に直交する直線(→径方向)
+				PointF p2 = new PointF(), p3 = new PointF(), pt;
+				Point p5, p6, p7, p8, p9;
+				//Color cl;
+
+				//径方向直線と上端ラインの直線の交点を求める
+				for (int i = 0; i < m_ft.Length; i++) {
+					p2 = f2.GetCrossPt(m_ft[i]);
+					if (p2.X < m_dia_top[i+1].X) {
+						break;
+					}
+				}
+				//径方向直線と下端ラインの直線の交点を求める
+				for (int i = 0; i < m_fb.Length; i++) {
+					p3 = f2.GetCrossPt(m_fb[i]);
+					if (p3.X < m_dia_btm[i+1].X) {
+						break;
+					}
+				}
+				//(4)
+				//p5:中心, p6:R50%, p7:R-50%, p8:R+3um, p9:R-3um
+				p5 = Point.Round(pf);
+				//---
+				p5 = Point.Round(pf);
+				pt = new PointF((pf.X + p2.X)/2,  (pf.Y + p2.Y)/2);
+				p6 = Point.Round(pt);
+				pt = new PointF((pf.X + p3.X)/2,  (pf.Y + p3.Y)/2);
+				p7 = Point.Round(pt);
+				pt = f2.GetScanPt2Ext(pf, p2, u5);
+				p8 = Point.Round(pt);
+				pt = f2.GetScanPt2Ext(pf, p3, u5);
+				p9 = Point.Round(pt);
+
+				if (bRECALCIR == false) {
+					//(5)
+					//格納
+					seg.val_cen.Add(TO_CL(p5));
+					seg.val_phf.Add(TO_CL(p6));
+					seg.val_mph.Add(TO_CL(p7));
+					seg.val_p5u.Add(TO_CL(p8));
+					seg.val_m5u.Add(TO_CL(p9));
+					seg.val_xum.Add(Math.Round(G.PX2UM(s*ds, m_log_info.pix_pitch, m_log_info.zoom), 2));
+					//---
+					seg.mou_len.Add(Math.Round(G.PX2UM(G.diff(p2,  p3), m_log_info.pix_pitch, m_log_info.zoom), 1));
+					//---
+					seg.pts_cen.Add(p5);
+					seg.pts_phf.Add(p6);
+					seg.pts_mph.Add(p7);
+					seg.pts_p5u.Add(p8);
+					seg.pts_m5u.Add(p9);
+				}
+
+				if (true) {
+					PointF p0 = pf;//径方向:中心
+					PointF pl;
+
+					double dl = 5;
+					//int		ic;
+					List<double> ibf = new List<double>();
+					List<Point>  ptf = new List<Point>();
+
+					pl = p0;
+					//センター含めて上半分
+					for (int i = 0; i <= LMAX; i++) {
+						Point tmp = Point.Round(pl);
+						ibf.Add(TO_VAL(tmp));
+						ptf.Add(tmp);
+						pl = f2.GetScanPt3Ext(p0, p2, pl, dl);
+					}
+					ibf.Reverse();
+					ptf.Reverse();
+					//ic = ibf.Count-1;
+					pl = f2.GetScanPt3Ext(p0, p3, p0, dl);
+					//センター含めず下半分
+					for (int i = 0; i < LMAX; i++) {
+						Point tmp = Point.Round(pl);
+						ibf.Add(TO_VAL(tmp));
+						ptf.Add(tmp);
+						pl = f2.GetScanPt3Ext(p0, p3, pl, dl);
+					}
+					//
+					if (seg.cut_inf.Count <= 0) {
+						for (int i = 0; i < (LMAX*2+1); i++) {
+							seg_of_cuti cut = new seg_of_cuti();
+							seg.cut_inf.Add(cut);
+						}
+					}
+					for (int i = 0; i < (LMAX*2+1); i++) {
+						seg.cut_inf[i].pbf.Add(ptf[i]);
+						seg.cut_inf[i].ibf.Add(ibf[i]);
+					}
+				}
+				//(6) IR画像より毛髄径検出
+				if (m_bmp_ir1 != null) {
+					test_ir(seg, f2, p2, p3, s);
+					seg.cnt_of_moz = 1;
+				}
+				// pf(中心ラインの直線式上)をdsだけ進める
+				pf = scan_pt(m_fc, ref ii, pf, ds);
+			}
+			if (true) {
+				int ic = seg.cut_inf.Count/2;
+				for (int i = 0; i < seg.val_cen.Count; i++) {
+					double ff = TO_VAL(seg.val_cen[i]);
+					Point pp = (Point)seg.pts_cen[i];
+					if (seg.cut_inf[ic].ibf[i] != ff) {
+						ff = ff;
+					}
+					if (seg.cut_inf[ic].pbf[i] != pp) {
+						ff = ff;
+					}
+				}
+			}
+			detect_area(seg);
+			detect_outliers(seg);
+			interp_outliers(seg);
+			sum_avg(seg);
+			if (bRECALCIR == false) {
+				//キューティクル断面のフィルター処理
+				apply_filter(seg.val_cen, out seg.val_cen_fil);
+				apply_filter(seg.val_phf, out seg.val_phf_fil);
+				apply_filter(seg.val_mph, out seg.val_mph_fil);
+				apply_filter(seg.val_p5u, out seg.val_p5u_fil);
+				apply_filter(seg.val_m5u, out seg.val_m5u_fil);
+				find_cuticle_line(seg.pts_cen, seg.val_cen_fil, out seg.pts_cen_cut, out seg.flg_cen_cut, out seg.his_cen_cut);
+				find_cuticle_line(seg.pts_phf, seg.val_phf_fil, out seg.pts_phf_cut, out seg.flg_phf_cut, out seg.his_phf_cut);
+				find_cuticle_line(seg.pts_mph, seg.val_mph_fil, out seg.pts_mph_cut, out seg.flg_mph_cut, out seg.his_mph_cut);
+				find_cuticle_line(seg.pts_p5u, seg.val_p5u_fil, out seg.pts_p5u_cut, out seg.flg_p5u_cut, out seg.his_p5u_cut);
+				find_cuticle_line(seg.pts_m5u, seg.val_m5u_fil, out seg.pts_m5u_cut, out seg.flg_m5u_cut, out seg.his_m5u_cut);
+			}
+			for (int i = 0; i < (LMAX*2+1); i++) {
+				apply_filter     (seg.cut_inf[i].ibf, out seg.cut_inf[i].iaf);
+				find_cuticle_line(seg.cut_inf[i].pbf, seg.cut_inf[i].iaf, out seg.cut_inf[i].pct, out seg.cut_inf[i].flg, out seg.cut_inf[i].his);
+				//フラグに対して接続を探索
+				//    接続をライン化け？
+			}
+			label_cuticle_line(seg, 0,0);
+
+			m_back_of_x = pf.X;
+		}
+
+#else
 #if true//2018.10.10(毛髪径算出・改造)
 		private void test_dm(seg_of_hair[] segs, int idx, int cnt, bool bRECALCIR=false)
 #else
@@ -2085,6 +2444,7 @@ retry:
 			//m_offset_of_hair = s;
 			m_back_of_x = pf.X;
 		}
+#endif
 		private void test_pr1(seg_of_hair seg)
 		{
 			ArrayList at = new ArrayList();
@@ -3324,6 +3684,9 @@ retry:
 			}
 			}
 			catch (Exception ex) {
+#if true//2018.09.29(キューティクルライン検出)
+				G.mlog("例外発生時の復帰ができるように修正するコト！！！");
+#endif
 				G.mlog(ex.ToString());
 				string buf = ex.ToString();
 			}
@@ -3518,6 +3881,23 @@ retry:
 				return(b);
 			}
 		}
+#if true//2018.10.30(キューティクル長)
+		private double TO_VAL(Point pt)
+		{
+			object obj = TO_CL(pt);
+			if (obj == null) {
+				return(double.NaN);
+			}
+			if (obj is double) {
+				return((double)obj);
+			}
+			else {
+				Color c = (Color)obj;
+				byte b = (byte)((4899 * c.R + 9617 * c.G + 1868 * c.B+8192) >> 14);
+				return(b);
+			}
+		}
+#endif
 		private void listView2_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.radioButton8.Checked) {
@@ -3770,6 +4150,9 @@ retry:
 			double gi_moz_rsd = 0;
 			int	gi_cnt = 0;
 #endif
+#if true//2018.10.30(キューティクル長)
+			double gi_cut_len = 0;
+#endif
 			//if (string.Compare(this.comboBox8.Text, "深度合成") == 0) {
 			//    zpos = "ZDEPT";
 			//    pext = m_fold_of_dept;
@@ -3850,13 +4233,65 @@ retry:
 					bmp_ir = to_img_from_file(buf_ir);
 				}
 
-				if (this.checkBox1.Checked && seg.val_xum.Count > 0) {//断面・ライン
+				if (
+#if true//2018.10.30(キューティクル長)
+#else
+					this.checkBox1.Checked &&
+#endif
+					seg.val_xum.Count > 0) {//断面・ライン
 					Graphics gr = Graphics.FromImage(bmp_dm);
 					Pen pen = new Pen(Color.Green, 4);
 					if (this.radioButton3.Checked) {
 						//全体表示
 						gr.ScaleTransform(1f/Z, 1f/Z);
 					}
+#if true//2018.10.30(キューティクル長)
+					if (true/*this.checkBox10.Checked*/) {//新方式?
+						int YS, YE;
+						if (this.checkBox10.Checked) {//マーカー
+							YS = 0;
+						}
+						if (this.checkBox17.Checked) {
+							//全ライン描画
+							YS = 0;
+							YE = seg.cut_inf.Count-1;
+						}
+						else {
+							//選択ライン描画
+							int C = seg.cut_inf.Count/2;
+							YS = C + (int)this.numericUpDown1.Value;
+							if (YS < 0) {
+								YS = 0;
+							}
+							else if (YS >= seg.cut_inf.Count) {
+								YS = seg.cut_inf.Count-1;
+							}
+							YE = YS;
+						}
+						for (int Y = YS; Y <= YE; Y++) {
+							if (this.checkBox1.Checked) {
+								pen = new Pen(this.chart1.Series[0].Color, pw);
+								gr.DrawLines(pen, seg.cut_inf[Y].pbf.ToArray());
+							}
+							if (this.checkBox10.Checked) {
+							if (seg.cut_inf[Y].iaf != null) {
+								for (int i = 0; i < seg.cut_inf[Y].pbf.Count; i++) {
+									if (seg.cut_inf[Y].flg[i]) {
+										draw_marker(gr, Brushes.Yellow, (Point)seg.cut_inf[Y].pbf[i], CUT_LEN);
+									}
+								}
+							}
+							}
+						}
+						if (this.checkBox18.Checked) {//連結キューティクル
+							for (int i = 0; i < seg.cut_lsp.Count; i++) {
+								pen = new Pen(Color.Red, pw);
+								gr.DrawLines(pen, seg.cut_lsp[i].ToArray());
+							}
+						}
+					}
+					else {
+#endif
 					if (this.checkBox3.Checked) {//R*0
 						pen = new Pen(this.chart1.Series[0].Color, pw);
 						Point[] ap = (Point[])seg.pts_cen.ToArray(typeof(Point));
@@ -3927,10 +4362,12 @@ retry:
 						}
 #endif
 					}
+#if true//2018.10.30(キューティクル長)
+					}
+#endif
 					pen.Dispose();
 					gr.Dispose();
 				}
-
 				if (bmp_ir != null && seg.val_xum.Count > 0) {//赤外あり？
 					object obj = seg.moz_zpb[0];
 					//System.Diagnostics.Debug.WriteLine(obj);
@@ -4060,6 +4497,9 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					gr_pd.Dispose();
 					gr_ir.Dispose();
 				}
+#if true//2018.10.30(キューティクル長)
+				gi_cut_len += seg.cut_ttl;
+#endif
 #if true//2018.10.27(画面テキスト)
 				gi_cut_cnt += seg.pts_cen_cut.Count;
 				gi_mou_dia += seg.dia_avg;
@@ -4106,7 +4546,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			if (this.radioButton3.Checked) {
 #if true//2018.10.27(画面テキスト)
 				if (true) {
+#if true//2018.10.30(キューティクル長)
+					draw_text(bmp_all_dm, string.Format("キューティクル枚数={0:F0}\r\nキューティクル長={1:F0}um", gi_cut_cnt, gi_cut_len), 24);
+#else
 					draw_text(bmp_all_dm, string.Format("キューティクル枚数={0:F0}", gi_cut_cnt), 24);
+#endif
 					draw_text(bmp_all_pd, string.Format("直径={0:F1}um", gi_mou_dia), 24);
 				}
 #endif
@@ -4124,7 +4568,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			else {
 				if (true) {
 #if true//2018.10.27(画面テキスト)
-					draw_text(bmp_dm, string.Format("キューティクル枚数={0:F0}", gi_cut_cnt));
+#if true//2018.10.30(キューティクル長)
+					draw_text(bmp_dm, string.Format("キューティクル枚数={0:F0}\r\nキューティクル長={1:F0}um", gi_cut_cnt, gi_cut_len));
+#else
+					draw_text(bmp_dm, string.Format("キューティクル枚数={0:F0}\r\ntest", gi_cut_cnt));
+#endif
 					draw_text(bmp_pd, string.Format("直径={0:F1}um", gi_mou_dia));
 #endif
 					this.pictureBox1.Image = bmp_dm;
@@ -4644,6 +5092,14 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			if (sender == this.checkBox11 || sender == this.checkBox12) {
 				q |= 2;
 			}
+#if true//2018.10.30(キューティクル長)
+			if (sender == this.checkBox10 || sender == this.numericUpDown1 || sender == this.checkBox17) {
+				q |= 1|2;//画像ファイル と グラフ
+			}
+			if (sender == this.checkBox18) {//連結キューティクル
+				q |= 1;//画像ファイル
+			}
+#endif
 			//this.button1.Visible = !this.button1.Visible;
 			if ((q & 1) != 0) {
 				draw_image(hr);
@@ -5030,6 +5486,24 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			}
 			return(true);
 		}
+#if true//2018.10.30(キューティクル長)
+		private void apply_filter(List<double> asrc, out List<double> adst)
+		{
+			ArrayList als = new ArrayList(asrc);
+			ArrayList ald = null;
+			apply_filter(als, out ald);
+			adst = new List<double>((double[])ald.ToArray(typeof(double)));
+		}
+		private void find_cuticle_line(List<Point> apts, List<double> afil, out List<Point> acut, out List<bool> aflg, out List<int> ahis)
+		{
+			ArrayList alp = new ArrayList(apts);
+			ArrayList ald = new ArrayList(afil);
+			ArrayList alc = null;
+			find_cuticle_line(alp, ald, out alc, out aflg, out ahis);
+
+			acut = new List<Point>((Point[])alc.ToArray(typeof(Point)));
+		}
+#endif
 		private void apply_filter(ArrayList asrc, out ArrayList adst)
 		{
 			//bool ret;
@@ -5128,6 +5602,111 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #endif
 			ahis = new List<int>(his);
 		}
+#if true//2018.10.30(キューティクル長)
+		//const
+		//double MAX_WID_OF_CUT_PNT = 2;
+
+		private void check_neighborhood(seg_of_hair seg, int ix, int iy, List<Point> lcpt, ref double clen, int LBLNO)
+		{
+			int XMAX = seg.cut_inf[0].flg.Count;
+			int YMAX = seg.cut_inf.Count;
+			Point p0 = seg.cut_inf[iy].pbf[ix];
+			Point p1;
+			int x, y;
+			//double um;
+			int[] ope_x = { 0, 1, 1, 1, 0};
+			int[] ope_y = {-1,-1, 0, 1, 1};
+			
+			if (seg.cut_inf[iy].lbl[ix] != 0) {
+				G.mlog("Internal Error");
+			}
+			if (true) {
+				seg.cut_inf[iy].lbl[ix] = LBLNO;
+			}
+			for (int i = 0; i < ope_x.Length; i++) {
+				x = ix+ope_x[i];
+				y = iy+ope_y[i];
+				if (x < 0 || x >= XMAX) {
+					continue;//範囲外
+				}
+				if (y < 0 || y >= YMAX) {
+					continue;//範囲外
+				}
+				if (!seg.cut_inf[y].flg[x]) {
+					continue;//キューティクル無し
+				}
+				if (seg.cut_inf[y].lbl[x] == LBLNO) {
+					continue;//ラベル済
+				}
+				//---
+				p1 = seg.cut_inf[y].pbf[x];
+				lcpt.Add(p1);				//連結相手
+				if (ope_x[i] == 0 || ope_y[i] == 0) {
+					clen += 1.0;			//連結:縦横
+				}
+				else {
+					clen += Math.Sqrt(2);	//連結:斜め
+				}
+				if (seg.cut_inf[y].lbl[x] != 0) {
+					i = i;//ラベル済
+				}
+				else {
+					//ラベル未→再帰呼び出しにてキューティクルを連結させていく
+					check_neighborhood(seg, x, y, lcpt, ref clen, LBLNO);
+				}
+				//
+				//um = px2um(p1, p0);
+				//if (um <= MAX_WID_OF_CUT_PNT) {
+				//    //登録
+				//}
+				break;//終了→元に戻る
+			}
+		}
+		private void label_cuticle_line(seg_of_hair seg, int ix, int iy)
+		{
+			int XLEN = seg.cut_inf[0].flg.Count;
+			int YLEN = seg.cut_inf.Count;
+			int LBLNO = 1;
+			double
+				LTTL = 0;
+
+			seg.cut_lsp.Clear();
+			seg.cut_len.Clear();
+
+			for (int i = 0; i < YLEN; i++) {
+				seg.cut_inf[i].lbl = Enumerable.Repeat<int>(0, XLEN).ToList();
+			}
+			for (int x = 0; x < XLEN; x++) {
+				for (int y = 0; y < YLEN; y++) {
+					if (!seg.cut_inf[y].flg[x]) {
+						continue;//キューティクル無し
+					}
+					if (seg.cut_inf[y].lbl[x] != 0) {
+						continue;//ラベル済
+					}
+					Point p0 = seg.cut_inf[y].pbf[x];
+					List<Point> lcpt = new List<Point>();
+					double clen = 0;
+					lcpt.Add(p0);
+					check_neighborhood(seg, x, y, lcpt, ref clen, LBLNO);
+					if (lcpt.Count <= 1) {
+						y = y;//孤立したキューティクルポイント
+					}
+					else if (clen <= G.SS.MOZ_CND_CMIN) {
+						y = y;//最短以下のため無視
+					}
+					else {
+						//登録
+						seg.cut_lsp.Add(lcpt);
+						seg.cut_len.Add(clen);
+						LTTL += clen;
+					}
+					LBLNO++;
+				}
+			}
+			seg.cut_ttl = LTTL;
+		}
+#endif
 		private void set_max_min(double f, ref double fmin, ref double fmax)
 		{
 			if (fmax < f) {
@@ -5471,6 +6050,9 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			if (!calc_filter_coeff()) {
 				return;
 			}
+#if true//2018.10.30(キューティクル長)
+			button2_Click(null, null);
+#else
 			for (int i = 0; i < hr.seg.Length; i++) {
 				seg_of_hair seg = (seg_of_hair)hr.seg[i];
 				if (seg != null) {
@@ -5488,6 +6070,7 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 
 				}
 			}
+#endif
 			draw_image(hr);
 			draw_cuticle(hr);
 		}

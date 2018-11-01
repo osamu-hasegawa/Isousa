@@ -74,6 +74,10 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox4      , ref G.SS.MOZ_CND_CHK1);//有,無効:除外判定:毛髄面積	
 				DDV.DDX(bUpdate, this.checkBox5      , ref G.SS.MOZ_CND_CHK2);//有,無効:外れ値判定:毛髄長さ
 				DDV.DDX(bUpdate, this.checkBox6      , ref G.SS.MOZ_CND_CHK2);//有,無効:外れ値判定:毛髄中心
+#if true//2018.10.30(キューティクル長)
+				DDV.DDX(bUpdate, this.numericUpDown2 , ref G.SS.MOZ_CND_CHAN);//
+				DDV.DDX(bUpdate, this.numericUpDown5 , ref G.SS.MOZ_CND_CMIN);//
+#endif
 				rc = true;
             }
             catch (Exception e) {

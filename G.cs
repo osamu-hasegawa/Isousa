@@ -405,6 +405,10 @@ namespace uSCOPE
 			[XmlIgnoreAttribute]
 			public double[] MOZ_CND_FCOF = null;
 #endif
+#if true//2018.10.30(キューティクル長)
+			public int MOZ_CND_CHAN = 65;
+			public int MOZ_CND_CMIN = 2;
+#endif
 #if true//2018.08.21
 			public bool MOZ_IRC_CK00 = false;
 			public bool MOZ_IRC_CK01 = false;
