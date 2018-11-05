@@ -530,6 +530,21 @@ retry:
 			public ArrayList dia_btm;//輪郭・頂点(下側)
 #endif
 			public int		dia_cnt;//輪郭・頂点数
+#if true//2018.11.02(HSVグラフ)
+			public Point[]	his_top;//ヒストグラム算出範囲・頂点(上側)
+			public Point[]	his_btm;//ヒストグラム算出範囲・頂点(下側)
+			//---
+			public double[] HIST_H_DM = new double[256];
+			public double[] HIST_S_DM = new double[256];
+			public double[] HIST_V_DM = new double[256];
+			public double[] HIST_H_PD = new double[256];
+			public double[] HIST_S_PD = new double[256];
+			public double[] HIST_V_PD = new double[256];
+			public double[] HIST_H_IR = new double[256];
+			public double[] HIST_S_IR = new double[256];
+			public double[] HIST_V_IR = new double[256];
+			//public double[] HISTVALD = new double[256];
+#endif
 			//---
 			public seg_of_hair() {
 				this.cnt_of_val = 0;
@@ -3602,6 +3617,11 @@ retry:
 							test_dm(segs, i, segs.Length);
 						}
 					}
+#if true//2018.11.02(HSVグラフ)
+					if (true) {
+						calc_hist(segs[i]);
+					}
+#endif
 				}
 				dispose_bmp(ref m_bmp_dm1);
 				dispose_bmp(ref m_bmp_dm2);
@@ -3831,6 +3851,10 @@ retry:
 #if true//2018.10.10(毛髪径算出・改造)
 			this.chart2.Series[1].Enabled = false;
 #endif
+#if true//2018.11.02(HSVグラフ)
+			this.tabControl2.TabPages.RemoveAt(2);//[退避]
+			set_hismod();
+#endif
 		}
 		private void Form03_FormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -3941,6 +3965,10 @@ retry:
 				draw_cuticle(hr);
 			}
 #endif
+#if true//2018.11.02(HSVグラフ)
+			draw_hsv(hr);
+#endif
+
 		}
 #if false//2018.08.21
 #else
@@ -4365,6 +4393,13 @@ retry:
 #if true//2018.10.30(キューティクル長)
 					}
 #endif
+#if true//2018.11.02(HSVグラフ)
+					if (this.checkBox19.Checked) {
+						pen = new Pen(Color.White, pw);
+						gr.DrawLines(pen, seg.his_top);
+						gr.DrawLines(pen, seg.his_btm);
+					}
+#endif
 					pen.Dispose();
 					gr.Dispose();
 				}
@@ -4489,6 +4524,15 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						pen = new Pen(Color.Purple, pw);
 						gr_ir.DrawLines(pen, seg.han_top);
 						gr_ir.DrawLines(pen, seg.han_btm);
+					}
+#endif
+#if true//2018.11.02(HSVグラフ)
+					if (this.checkBox19.Checked) {
+						pen = new Pen(Color.White, pw);
+						gr_pd.DrawLines(pen, seg.his_top);
+						gr_pd.DrawLines(pen, seg.his_btm);
+						gr_ir.DrawLines(pen, seg.his_top);
+						gr_ir.DrawLines(pen, seg.his_btm);
 					}
 #endif
 					if (pen != null) {
@@ -5100,6 +5144,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				q |= 1;//画像ファイル
 			}
 #endif
+#if true//2018.11.02(HSVグラフ)
+			if (sender == this.checkBox19) {
+				q |= 1;
+			}
+#endif
 			//this.button1.Visible = !this.button1.Visible;
 			if ((q & 1) != 0) {
 				draw_image(hr);
@@ -5110,6 +5159,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #if true//2018.09.29(キューティクルライン検出)
 			if ((q & 2) != 0) {
 				draw_cuticle(hr);
+			}
+#endif
+#if true//2018.11.02(HSVグラフ)
+			if ((q & 2) != 0) {
+				draw_hsv(hr);
 			}
 #endif
 		}
@@ -5614,16 +5668,27 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			Point p1;
 			int x, y;
 			//double um;
+#if true//2018.11.02(HSVグラフ)
+			int l_ope;
+			int[] ope_x = {/*8近傍*/ 0, 1, 1, 1, 0,/*24近傍*/ 0, 1, 2, 2, 2,2,2,1,0/*48近傍*/, 0, 1, 2, 3, 3, 3, 3, 3, 3, 3, 2, 1, 0};
+			int[] ope_y = {/*8近傍*/-1,-1, 0, 1, 1,/*24近傍*/-2,-2,-2,-1, 0,1,2,2,2/*48近傍*/,-3,-3,-3,-3,-2,-1, 0, 1, 2, 3, 3, 3, 3};
+#else
 			int[] ope_x = { 0, 1, 1, 1, 0};
 			int[] ope_y = {-1,-1, 0, 1, 1};
-			
+#endif		
 			if (seg.cut_inf[iy].lbl[ix] != 0) {
 				G.mlog("Internal Error");
 			}
 			if (true) {
 				seg.cut_inf[iy].lbl[ix] = LBLNO;
 			}
-			for (int i = 0; i < ope_x.Length; i++) {
+			switch (G.SS.MOZ_CND_CNEI) {
+				case  0:l_ope = 5; break;
+				case  1:l_ope =14; break;
+				default:l_ope =27; break;
+			}
+
+			for (int i = 0; i < l_ope; i++) {
 				x = ix+ope_x[i];
 				y = iy+ope_y[i];
 				if (x < 0 || x >= XMAX) {
@@ -5641,6 +5706,12 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				//---
 				p1 = seg.cut_inf[y].pbf[x];
 				lcpt.Add(p1);				//連結相手
+#if true//2018.11.02(HSVグラフ)
+				if (true) {
+					clen += px2um(p1, p0);
+				}
+				else
+#endif
 				if (ope_x[i] == 0 || ope_y[i] == 0) {
 					clen += 1.0;			//連結:縦横
 				}
@@ -6035,7 +6106,7 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			}
 		}
 #if true//2018.09.29(キューティクルライン検出)
-		private void button1_Click_1(object sender, EventArgs e)
+		public void UPDATE_CUTICLE()
 		{//キューティクル・フィルター処理
 			if (this.listView1.Items.Count <= 0) {
 				return;
@@ -6051,7 +6122,7 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				return;
 			}
 #if true//2018.10.30(キューティクル長)
-			button2_Click(null, null);
+			UPDATE_BY_FILES(0);
 #else
 			for (int i = 0; i < hr.seg.Length; i++) {
 				seg_of_hair seg = (seg_of_hair)hr.seg[i];
@@ -6076,7 +6147,7 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 		}
 #endif
 #if true//2018.10.10(毛髪径算出・改造)
-		private void button2_Click(object sender, EventArgs e)
+		private void UPDATE_BY_FILES(int mode)
 		{
 			if (this.listView1.Items.Count <= 0) {
 				return;
@@ -6126,6 +6197,12 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						m_bmp_ir1.Save("c:\\temp\\IMG_IR.PNG");
 #endif
 					}
+#if true//2018.11.02(HSVグラフ)
+					if (mode == 1) {
+						calc_hist(segs[i]);
+					}
+					else
+#endif
 					if (segs[i].dia_cnt > 1) {
 //Bitmap bmp_msk = (Bitmap)m_bmp_ir1.Clone();
 //Form02.DO_SET_FBD_REGION(m_bmp_ir1, bmp_msk, segs[i].dia_top, segs[i].dia_btm);
@@ -6142,6 +6219,10 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 
 			draw_graph(hr);
 			draw_image(hr);
+#if true//2018.11.02(HSVグラフ)
+			draw_hsv(hr);
+#endif
+
 		}
 
 		private void button4_Click(object sender, EventArgs e)
@@ -6154,22 +6235,27 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				G.FORM24.Close();
 			}
 		}
-		public void UPDATE_CUTICLE()
-		{
-			button1_Click_1(null, null);
-		}
 		public void UPDATE_MOUZUI()
 		{
 			this.MOZ_CND_FTCF = C_FILT_COFS[G.SS.MOZ_CND_FTCF];
 			this.MOZ_CND_FTCT = C_FILT_CNTS[G.SS.MOZ_CND_FTCT];
 			this.MOZ_CND_SMCF = C_SMTH_COFS[G.SS.MOZ_CND_SMCF];
 			//---
-			button2_Click(null, null);
+			UPDATE_BY_FILES(0);
 		}
-
+#if true//2018.11.02(HSVグラフ)
+		public void UPDATE_HSV()
+		{
+			//---
+			UPDATE_BY_FILES(1);
+		}
+#endif
 		private void pictureBox2_MouseDown(object sender, MouseEventArgs e)
 		{
-
+#if true//2018.11.02(HSVグラフ)
+			set_hismod();
+			this.propertyGrid1.Visible = true;
+#endif
 		}
 
 		private void Form03_KeyDown(object sender, KeyEventArgs e)
@@ -6198,6 +6284,228 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			}
 			m_imou = imou;
 			draw_moudan(hr);
+		}
+#endif
+
+
+
+
+#if true//2018.11.02(HSVグラフ)
+		private
+		const int ETC_HIS_MODE = 1;
+		private
+		Chart[] m_cht_his = null;
+		private
+		Color[] m_col_of_hue = new Color[180];
+
+		private void set_hismod()
+		{
+			if (true) {
+				m_cht_his = new Chart[] {
+					this.chart10, this.chart11, this.chart12,
+					this.chart13, this.chart14, this.chart15,
+					this.chart16, this.chart17, this.chart18
+				};
+				for (int i = 0; i < m_col_of_hue.Length; i++) {
+					//m_col_of_hue[i] = G.FORM02.m_col_of_hue[i];
+					Form02.HSV hsv;
+					hsv.h = (byte)i;
+					hsv.s = hsv.v = 255;
+					m_col_of_hue[i] = Form02.hsv2rgb(hsv);
+				}
+				//Random rnd = new Random();
+				//for (int i = 0; i < 256; i++) {
+				//    G.IR.HISTVALH[i] = rnd.Next();
+				//    G.IR.HISTVALS[i] = rnd.Next();
+				//    G.IR.HISTVALV[i] = rnd.Next();
+				//}
+			}
+			//this.chart8.Series[0].LabelToolTip = "TEST:#VALX{N0},#VALY";
+			//this.chart8.Series[0].ToolTip = "(#INDEX, #VAL)";
+			//if (ETC_HIS_MODE != 0) {
+			//    this.tabPage9.Text = "ヒストグラム(H/S/V/GRAY)";
+			//}
+			//else {
+			//    this.tabPage9.Text = "ヒストグラム(R/G/B/GRAY)";
+			//}
+			//foreach (int i in new int[] {0,3,6}) {
+			//    if (ETC_HIS_MODE != 0) {
+			//        //m_cht_his[i].ChartAreas[0].AxisX.Maximum = 360;// fmax;
+			//        string buf = this.chart10.Series[0].GetCustomProperty("PointWidth");
+			//        //m_cht_his[i].Series[0].SetCustomProperty("PointWidth", "2");
+			//    }
+			//    else {
+			//        //m_cht_his[i].ChartAreas[0].AxisX.Maximum = 255;// fmax;
+			//    }
+			//}
+			//if (G.SS.ETC_HIS_MODE != 0) {
+			//    //this.chart10.ChartAreas[0].AxisX.Minimum = 0;
+			//    //this.chart10.ChartAreas[0].AxisX.Maximum = 360;// fmax;
+			//    string buf = this.chart10.Series[0].GetCustomProperty("PointWidth");
+			//    //this.chart10.Series[0].SetCustomProperty("PointWidth", "2");
+			//}
+			//else {
+			//    //this.chart10.ChartAreas[0].AxisX.Minimum = 0;
+			//    //this.chart10.ChartAreas[0].AxisX.Maximum = 255;// fmax;
+			//    //this.chart10.Series[0].SetCustomProperty("PointWidth", "0.8");
+			//}
+			for (int i = 0; i < m_cht_his.Length; i++) {
+				m_cht_his[i].Series[0].ToolTip = "(#INDEX, #VAL)";
+				if (ETC_HIS_MODE != 0) {
+					m_cht_his[i].ChartAreas[0].AxisX.Minimum = 0;
+					m_cht_his[i].ChartAreas[0].AxisX.Maximum = ((i%3)==0) ? 360:256;
+					m_cht_his[i].ChartAreas[0].AxisX.IntervalOffset = 0;
+					m_cht_his[i].ChartAreas[0].AxisX.Interval =((i%3)==0) ? 60 : 64;
+					m_cht_his[i].Series[0].SetCustomProperty("PointWidth", "1.0");
+				}
+				else {
+					m_cht_his[i].ChartAreas[0].AxisX.Minimum = 0;
+					m_cht_his[i].ChartAreas[0].AxisX.Maximum = 256;
+					m_cht_his[i].ChartAreas[0].AxisX.IntervalOffset = 0;
+					m_cht_his[i].ChartAreas[0].AxisX.Interval = 64;
+					//this.chart10.Series[0].SetCustomProperty("PointWidth", "0.8");
+				}
+			}
+		}
+		private void draw_hsv(hair hr)
+		{
+			try {
+				int idx = m_isel;
+				//seg_of_hair seg = (seg_of_hair)hr.seg[idx];
+				double []HIST_H_DM = new double[256];
+				double []HIST_S_DM = new double[256];
+				double []HIST_V_DM = new double[256];
+				double []HIST_H_PD = new double[256];
+				double []HIST_S_PD = new double[256];
+				double []HIST_V_PD = new double[256];
+				double []HIST_H_IR = new double[256];
+				double []HIST_S_IR = new double[256];
+				double []HIST_V_IR = new double[256];
+
+				for (int i = 0; i < m_cht_his.Length; i++) {
+					m_cht_his[i].Series[0].Points.Clear();
+				}
+
+				if (ETC_HIS_MODE == 0) {
+					return;
+				}
+				int i_s, i_e;
+				if (this.radioButton1.Checked) {//グラフ・全体
+					i_s = 0;
+					i_e = hr.seg.Length-1;
+				}
+				else {
+					i_s = m_isel;
+					i_e = m_isel;
+				}
+				for (int q = i_s; q <= i_e; q++) {
+					seg_of_hair seg = (seg_of_hair)hr.seg[q];
+					for (int i = 0; i < 256; i++) {
+						HIST_H_DM[i] += seg.HIST_H_DM[i];
+						HIST_S_DM[i] += seg.HIST_S_DM[i];
+						HIST_V_DM[i] += seg.HIST_V_DM[i];
+						HIST_H_PD[i] += seg.HIST_H_PD[i];
+						HIST_S_PD[i] += seg.HIST_S_PD[i];
+						HIST_V_PD[i] += seg.HIST_V_PD[i];
+						HIST_H_IR[i] += seg.HIST_H_IR[i];
+						HIST_S_IR[i] += seg.HIST_S_IR[i];
+						HIST_V_IR[i] += seg.HIST_V_IR[i];
+					}
+				}
+				for (int i = 0; i < 180; i++) {
+					DataPoint dp = new DataPoint();
+					dp = new DataPoint();
+					dp.Color = m_col_of_hue[i];
+					//---
+					dp.SetValueXY(i << 1, HIST_H_DM[i]);
+					this.chart10.Series[0].Points.Add(dp);
+					//---
+					dp = new DataPoint();
+					dp.Color = m_col_of_hue[i];
+					dp.SetValueXY(i << 1, HIST_H_PD[i]);
+					this.chart13.Series[0].Points.Add(dp);
+					//---
+					dp = new DataPoint();
+					dp.Color = m_col_of_hue[i];
+					dp.SetValueXY(i << 1, HIST_H_IR[i]);
+					this.chart16.Series[0].Points.Add(dp);
+				}
+				for (int i = 0; i < 256; i++) {
+					this.chart11.Series[0].Points.AddXY(i, HIST_S_DM[i]);
+					this.chart12.Series[0].Points.AddXY(i, HIST_V_DM[i]);
+					this.chart14.Series[0].Points.AddXY(i, HIST_S_PD[i]);
+					this.chart15.Series[0].Points.AddXY(i, HIST_V_PD[i]);
+					this.chart17.Series[0].Points.AddXY(i, HIST_S_IR[i]);
+					this.chart18.Series[0].Points.AddXY(i, HIST_V_IR[i]);
+				}
+				//---
+				for (int i = 0; i < m_cht_his.Length; i++) {
+					m_cht_his[i].ChartAreas[0].AxisY.Maximum = double.NaN;
+				}
+				//---
+				//if (G.IR.HIST_ALL) {
+				//    this.label5.Text = "画像全体";
+				//}
+				//else if (!G.IR.HIST_RECT) {
+				//    this.label5.Text = "マスク範囲";
+				//}
+				//else {
+				//    Point p1 = new Point(G.SS.CAM_HIS_RT_X, G.SS.CAM_HIS_RT_Y);
+				//    Point p2 = new Point(p1.X + G.SS.CAM_HIS_RT_W, p1.Y + G.SS.CAM_HIS_RT_H);
+				//    this.label5.Text = string.Format(" ({0},{1})\r-({2},{3})", p1.X, p1.Y, p2.X, p2.Y);
+				//}
+			}
+			catch (Exception ex) {
+				G.mlog(ex.ToString());
+			}
+		}
+		private void calc_hist(seg_of_hair seg)
+		{
+			Point[]	pts_dia_top = (Point[])seg.dia_top.Clone();
+			Point[]	pts_dia_btm = (Point[])seg.dia_btm.Clone();
+			int l = pts_dia_top.Length;
+			int width = m_bmp_dm1.Width;
+			Point[]	pts_msk_top = (Point[])seg.dia_top.Clone();
+			Point[]	pts_msk_btm = (Point[])seg.dia_btm.Clone();
+//			const
+//			double RT = 0.20;
+			double RT = (1.0 - G.SS.MOZ_CND_HIST/100.0)/2.0; 
+//			const
+			double RB = (1-RT);
+
+			if (true) {
+				pts_dia_top[0].X = 0;
+				pts_dia_btm[0].X = 0;
+				pts_dia_top[l-1].X = width-1;
+				pts_dia_btm[l-1].X = width-1;
+			}
+			for (int i = 0; i < l; i++) {
+				pts_msk_top[i].X = (int)(pts_dia_top[i].X + RT * (pts_dia_btm[i].X - pts_dia_top[i].X));
+				pts_msk_top[i].Y = (int)(pts_dia_top[i].Y + RT * (pts_dia_btm[i].Y - pts_dia_top[i].Y));
+				pts_msk_btm[i].X = (int)(pts_dia_top[i].X + RB * (pts_dia_btm[i].X - pts_dia_top[i].X));
+				pts_msk_btm[i].Y = (int)(pts_dia_top[i].Y + RB * (pts_dia_btm[i].Y - pts_dia_top[i].Y));
+			}
+			seg.his_top = pts_msk_top;
+			seg.his_btm = pts_msk_btm;
+			//---
+			Form02.DO_SET_FBD_REGION(m_bmp_dm1, pts_msk_top, pts_msk_btm);
+			for (int j = 0; j < 256; j++) {
+				seg.HIST_H_DM[j] = G.IR.HISTVALH[j];
+				seg.HIST_S_DM[j] = G.IR.HISTVALS[j];
+				seg.HIST_V_DM[j] = G.IR.HISTVALV[j];
+			}
+			Form02.DO_SET_FBD_REGION(m_bmp_pd1, pts_msk_top, pts_msk_btm);
+			for (int j = 0; j < 256; j++) {
+				seg.HIST_H_PD[j] = G.IR.HISTVALH[j];
+				seg.HIST_S_PD[j] = G.IR.HISTVALS[j];
+				seg.HIST_V_PD[j] = G.IR.HISTVALV[j];
+			}
+			Form02.DO_SET_FBD_REGION(m_bmp_ir1, pts_msk_top, pts_msk_btm);
+			for (int j = 0; j < 256; j++) {
+				seg.HIST_H_IR[j] = G.IR.HISTVALH[j];
+				seg.HIST_S_IR[j] = G.IR.HISTVALS[j];
+				seg.HIST_V_IR[j] = G.IR.HISTVALV[j];
+			}
 		}
 #endif
 	}

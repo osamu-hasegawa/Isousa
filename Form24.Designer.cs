@@ -30,6 +30,15 @@
 		{
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.label28 = new System.Windows.Forms.Label();
+			this.label12 = new System.Windows.Forms.Label();
+			this.label31 = new System.Windows.Forms.Label();
+			this.label18 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
+			this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+			this.label11 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
 			this.panel6 = new System.Windows.Forms.Panel();
 			this.panel5 = new System.Windows.Forms.Panel();
@@ -103,17 +112,20 @@
 			this.comboBox2 = new System.Windows.Forms.ComboBox();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.label9 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
-			this.label12 = new System.Windows.Forms.Label();
-			this.label17 = new System.Windows.Forms.Label();
-			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-			this.label18 = new System.Windows.Forms.Label();
-			this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
-			this.label28 = new System.Windows.Forms.Label();
-			this.label31 = new System.Windows.Forms.Label();
+			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.label38 = new System.Windows.Forms.Label();
+			this.numericUpDown16 = new System.Windows.Forms.NumericUpDown();
+			this.button3 = new System.Windows.Forms.Button();
+			this.panel7 = new System.Windows.Forms.Panel();
+			this.label36 = new System.Windows.Forms.Label();
+			this.label37 = new System.Windows.Forms.Label();
+			this.label39 = new System.Windows.Forms.Label();
+			this.comboBox9 = new System.Windows.Forms.ComboBox();
+			this.label40 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
@@ -128,14 +140,15 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
+			this.tabPage3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl1
 			// 
 			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage2);
+			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -145,6 +158,8 @@
 			// 
 			// tabPage1
 			// 
+			this.tabPage1.Controls.Add(this.label39);
+			this.tabPage1.Controls.Add(this.label40);
 			this.tabPage1.Controls.Add(this.label28);
 			this.tabPage1.Controls.Add(this.label12);
 			this.tabPage1.Controls.Add(this.label31);
@@ -177,6 +192,7 @@
 			this.tabPage1.Controls.Add(this.comboBox14);
 			this.tabPage1.Controls.Add(this.comboBox4);
 			this.tabPage1.Controls.Add(this.label14);
+			this.tabPage1.Controls.Add(this.comboBox9);
 			this.tabPage1.Controls.Add(this.comboBox15);
 			this.tabPage1.Controls.Add(this.label22);
 			this.tabPage1.Controls.Add(this.label21);
@@ -187,6 +203,104 @@
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "キューティクル";
 			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// label28
+			// 
+			this.label28.AutoSize = true;
+			this.label28.Location = new System.Drawing.Point(219, 275);
+			this.label28.Name = "label28";
+			this.label28.Size = new System.Drawing.Size(20, 12);
+			this.label28.TabIndex = 105;
+			this.label28.Text = "um";
+			// 
+			// label12
+			// 
+			this.label12.AutoSize = true;
+			this.label12.Location = new System.Drawing.Point(216, 251);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(11, 12);
+			this.label12.TabIndex = 105;
+			this.label12.Text = "%";
+			// 
+			// label31
+			// 
+			this.label31.Location = new System.Drawing.Point(157, 294);
+			this.label31.Name = "label31";
+			this.label31.Size = new System.Drawing.Size(145, 26);
+			this.label31.TabIndex = 106;
+			this.label31.Text = "最短以下のキューティクルは除外されます";
+			// 
+			// label18
+			// 
+			this.label18.AutoSize = true;
+			this.label18.Location = new System.Drawing.Point(30, 277);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(109, 12);
+			this.label18.TabIndex = 106;
+			this.label18.Text = "最短・キューティクル長";
+			// 
+			// label17
+			// 
+			this.label17.AutoSize = true;
+			this.label17.Location = new System.Drawing.Point(30, 251);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(95, 12);
+			this.label17.TabIndex = 106;
+			this.label17.Text = "径方向・検出範囲";
+			// 
+			// numericUpDown5
+			// 
+			this.numericUpDown5.Location = new System.Drawing.Point(159, 272);
+			this.numericUpDown5.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+			this.numericUpDown5.Name = "numericUpDown5";
+			this.numericUpDown5.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown5.TabIndex = 107;
+			this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown5.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			// 
+			// numericUpDown2
+			// 
+			this.numericUpDown2.Location = new System.Drawing.Point(159, 247);
+			this.numericUpDown2.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.numericUpDown2.Name = "numericUpDown2";
+			this.numericUpDown2.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown2.TabIndex = 107;
+			this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown2.Value = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+			// 
+			// label11
+			// 
+			this.label11.AutoSize = true;
+			this.label11.Location = new System.Drawing.Point(13, 221);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(103, 12);
+			this.label11.TabIndex = 96;
+			this.label11.Text = "キューティクル長算出";
+			// 
+			// label10
+			// 
+			this.label10.AutoSize = true;
+			this.label10.Location = new System.Drawing.Point(15, 7);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(53, 12);
+			this.label10.TabIndex = 96;
+			this.label10.Text = "基本条件";
 			// 
 			// button1
 			// 
@@ -218,7 +332,7 @@
 			// panel4
 			// 
 			this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel4.Location = new System.Drawing.Point(14, 25);
+			this.panel4.Location = new System.Drawing.Point(14, 21);
 			this.panel4.Name = "panel4";
 			this.panel4.Size = new System.Drawing.Size(290, 2);
 			this.panel4.TabIndex = 92;
@@ -1223,103 +1337,116 @@
 			this.label9.Text = "未対応";
 			this.label9.Visible = false;
 			// 
-			// label10
+			// tabPage3
 			// 
-			this.label10.AutoSize = true;
-			this.label10.Location = new System.Drawing.Point(13, 10);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(53, 12);
-			this.label10.TabIndex = 96;
-			this.label10.Text = "基本条件";
+			this.tabPage3.Controls.Add(this.label38);
+			this.tabPage3.Controls.Add(this.numericUpDown16);
+			this.tabPage3.Controls.Add(this.button3);
+			this.tabPage3.Controls.Add(this.panel7);
+			this.tabPage3.Controls.Add(this.label36);
+			this.tabPage3.Controls.Add(this.label37);
+			this.tabPage3.Location = new System.Drawing.Point(4, 22);
+			this.tabPage3.Name = "tabPage3";
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage3.Size = new System.Drawing.Size(313, 447);
+			this.tabPage3.TabIndex = 2;
+			this.tabPage3.Text = "HSV";
+			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
-			// label11
+			// label38
 			// 
-			this.label11.AutoSize = true;
-			this.label11.Location = new System.Drawing.Point(13, 221);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(103, 12);
-			this.label11.TabIndex = 96;
-			this.label11.Text = "キューティクル長算出";
+			this.label38.AutoSize = true;
+			this.label38.Location = new System.Drawing.Point(230, 43);
+			this.label38.Name = "label38";
+			this.label38.Size = new System.Drawing.Size(11, 12);
+			this.label38.TabIndex = 115;
+			this.label38.Text = "%";
 			// 
-			// label12
+			// numericUpDown16
 			// 
-			this.label12.AutoSize = true;
-			this.label12.Location = new System.Drawing.Point(216, 251);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(11, 12);
-			this.label12.TabIndex = 105;
-			this.label12.Text = "%";
-			// 
-			// label17
-			// 
-			this.label17.AutoSize = true;
-			this.label17.Location = new System.Drawing.Point(30, 251);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(95, 12);
-			this.label17.TabIndex = 106;
-			this.label17.Text = "径方向・検出範囲";
-			// 
-			// numericUpDown2
-			// 
-			this.numericUpDown2.Location = new System.Drawing.Point(159, 247);
-			this.numericUpDown2.Minimum = new decimal(new int[] {
+			this.numericUpDown16.Location = new System.Drawing.Point(170, 40);
+			this.numericUpDown16.Minimum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-			this.numericUpDown2.Name = "numericUpDown2";
-			this.numericUpDown2.Size = new System.Drawing.Size(54, 19);
-			this.numericUpDown2.TabIndex = 107;
-			this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown2.Value = new decimal(new int[] {
+			this.numericUpDown16.Name = "numericUpDown16";
+			this.numericUpDown16.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown16.TabIndex = 117;
+			this.numericUpDown16.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown16.Value = new decimal(new int[] {
             40,
             0,
             0,
             0});
 			// 
-			// label18
+			// button3
 			// 
-			this.label18.AutoSize = true;
-			this.label18.Location = new System.Drawing.Point(30, 277);
-			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(109, 12);
-			this.label18.TabIndex = 106;
-			this.label18.Text = "最短・キューティクル長";
+			this.button3.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.button3.Location = new System.Drawing.Point(15, 411);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(286, 30);
+			this.button3.TabIndex = 114;
+			this.button3.Text = "更新";
+			this.button3.UseVisualStyleBackColor = true;
+			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
-			// numericUpDown5
+			// panel7
 			// 
-			this.numericUpDown5.Location = new System.Drawing.Point(159, 272);
-			this.numericUpDown5.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-			this.numericUpDown5.Name = "numericUpDown5";
-			this.numericUpDown5.Size = new System.Drawing.Size(54, 19);
-			this.numericUpDown5.TabIndex = 107;
-			this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown5.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
+			this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel7.Location = new System.Drawing.Point(14, 21);
+			this.panel7.Name = "panel7";
+			this.panel7.Size = new System.Drawing.Size(290, 2);
+			this.panel7.TabIndex = 112;
 			// 
-			// label28
+			// label36
 			// 
-			this.label28.AutoSize = true;
-			this.label28.Location = new System.Drawing.Point(219, 275);
-			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(20, 12);
-			this.label28.TabIndex = 105;
-			this.label28.Text = "um";
+			this.label36.BackColor = System.Drawing.SystemColors.Control;
+			this.label36.Location = new System.Drawing.Point(32, 39);
+			this.label36.Name = "label36";
+			this.label36.Size = new System.Drawing.Size(117, 26);
+			this.label36.TabIndex = 111;
+			this.label36.Text = "径方向・ヒストグラム算出範囲";
 			// 
-			// label31
+			// label37
 			// 
-			this.label31.Location = new System.Drawing.Point(157, 294);
-			this.label31.Name = "label31";
-			this.label31.Size = new System.Drawing.Size(145, 26);
-			this.label31.TabIndex = 106;
-			this.label31.Text = "最短以下のキューティクルは除外されます";
+			this.label37.AutoSize = true;
+			this.label37.Location = new System.Drawing.Point(15, 7);
+			this.label37.Name = "label37";
+			this.label37.Size = new System.Drawing.Size(53, 12);
+			this.label37.TabIndex = 109;
+			this.label37.Text = "基本条件";
+			// 
+			// label39
+			// 
+			this.label39.AutoSize = true;
+			this.label39.Location = new System.Drawing.Point(29, 329);
+			this.label39.Name = "label39";
+			this.label39.Size = new System.Drawing.Size(115, 12);
+			this.label39.TabIndex = 108;
+			this.label39.Text = "キューティクル連結範囲";
+			// 
+			// comboBox9
+			// 
+			this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox9.FormattingEnabled = true;
+			this.comboBox9.Items.AddRange(new object[] {
+            "8",
+            "24",
+            "48"});
+			this.comboBox9.Location = new System.Drawing.Point(159, 323);
+			this.comboBox9.Name = "comboBox9";
+			this.comboBox9.Size = new System.Drawing.Size(54, 20);
+			this.comboBox9.TabIndex = 73;
+			// 
+			// label40
+			// 
+			this.label40.AutoSize = true;
+			this.label40.Location = new System.Drawing.Point(216, 329);
+			this.label40.Name = "label40";
+			this.label40.Size = new System.Drawing.Size(29, 12);
+			this.label40.TabIndex = 105;
+			this.label40.Text = "近傍";
 			// 
 			// Form24
 			// 
@@ -1338,6 +1465,8 @@
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
@@ -1353,8 +1482,9 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
+			this.tabPage3.ResumeLayout(false);
+			this.tabPage3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -1445,5 +1575,15 @@
 		private System.Windows.Forms.Label label18;
 		private System.Windows.Forms.NumericUpDown numericUpDown5;
 		private System.Windows.Forms.Label label31;
+		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Panel panel7;
+		private System.Windows.Forms.Label label36;
+		private System.Windows.Forms.Label label37;
+		private System.Windows.Forms.Label label38;
+		private System.Windows.Forms.NumericUpDown numericUpDown16;
+		private System.Windows.Forms.Label label39;
+		private System.Windows.Forms.ComboBox comboBox9;
+		private System.Windows.Forms.Label label40;
 	}
 }

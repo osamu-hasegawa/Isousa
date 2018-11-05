@@ -408,6 +408,10 @@ namespace uSCOPE
 #if true//2018.10.30(キューティクル長)
 			public int MOZ_CND_CHAN = 65;
 			public int MOZ_CND_CMIN = 2;
+			public int MOZ_CND_CNEI = 1;
+#endif
+#if true//2018.11.02(HSVグラフ)
+			public int MOZ_CND_HIST = 65;
 #endif
 #if true//2018.08.21
 			public bool MOZ_IRC_CK00 = false;

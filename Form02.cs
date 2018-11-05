@@ -133,6 +133,9 @@ namespace uSCOPE
 		//---
 		Chart[] m_cht_dan = null;
 		Chart[] m_cht_his = null;
+#if true//2018.11.02(HSVグラフ)
+		public
+#endif
 		Color[] m_col_of_hue = new Color[180];
 		//---
 		private int m_size_mode;
@@ -1089,13 +1092,26 @@ namespace uSCOPE
 			}
 			m_valDan = new double[m_arDan.Count];
 		}
+#if true//2018.11.02(HSVグラフ)
+		public
 		struct HSV
 		{
 			public byte h;
 			public byte s;
 			public byte v;
 		};
-		private Color hsv2rgb(HSV hsv)
+		static
+		public
+#else
+		struct HSV
+		{
+			public byte h;
+			public byte s;
+			public byte v;
+		};
+		private
+#endif
+		Color hsv2rgb(HSV hsv)
 		{
 			float hh = hsv.h*2f;
 			float v = hsv.v/255f;
@@ -4463,7 +4479,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			ret = OCV_GET_IMG(bmpData.Scan0, bmpData.Width, bmpData.Height, bmpData.Stride, PF2BPP(bmpData.PixelFormat));
 			bmp.UnlockBits(bmpData);
 		}
-#if true//2018.10.10(毛髪径算出・改造)
+#if true//2018.11.02(HSVグラフ)
 		static private void OCV_DRAW_POLY(int IMG, POINT[]pts, int c, int thick)
 		{
 			int n = pts.Length;
@@ -4479,7 +4495,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 		//{
 		//    OCV_DRAW_LINE(IMG, ref p1, ref p2, 0xFF00FF, 4);
 		//}
-		static public void DO_SET_FBD_REGION(Bitmap bmp, Bitmap msk, Point[] pts_dia_top, Point[] pts_dia_btm)
+		static public void DO_SET_FBD_REGION(Bitmap bmp/*, Bitmap msk*/, Point[] pts_dia_top, Point[] pts_dia_btm)
 		{
 			int ret;
 			BitmapData bmpData;
@@ -4487,18 +4503,22 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			ret = OCV_SET_IMG(bmpData.Scan0, bmpData.Width, bmpData.Height, bmpData.Stride, PF2BPP(bmpData.PixelFormat));
 			bmp.UnlockBits(bmpData);
 			//---
-			if (true) {//グレースケール画像
-				OCV_SPLIT((int)IMG.IMG_A, (int)IMG.IMG_G, (int)IMG.IMG_HSV_S, (int)IMG.IMG_HSV_V);
+			if (true) {
+				OCV_TO_HSV((int)IMG.IMG_A, (int)IMG.IMG_H);
+				OCV_SPLIT((int)IMG.IMG_H, (int)IMG.IMG_HSV_H, (int)IMG.IMG_HSV_S, (int)IMG.IMG_HSV_V);
 			}
-			else {
-				OCV_TO_GRAY((Int32)IMG.IMG_A, (Int32)IMG.IMG_G);
-			}
+			//if (true) {//グレースケール画像
+			//    OCV_SPLIT((int)IMG.IMG_A, (int)IMG.IMG_G, (int)IMG.IMG_HSV_S, (int)IMG.IMG_HSV_V);
+			//}
+			//else {
+			//    OCV_TO_GRAY((Int32)IMG.IMG_A, (Int32)IMG.IMG_G);
+			//}
 			//---
-			if (true) {//二値化
-				int th_val = 45;//G.SS.IMP_BIN_BVAL[3];//135-5-5;
-				OCV_THRESH_BIN((int)IMG.IMG_G, (int)IMG.IMG_B, th_val, /*INV=*/1);	//白背景に黒丸の時は反転しておく
-//				OCV_THRESH_BIN((int)IMG.IMG_G, (int)IMG.IMG_B, th_val, /*INV=*/0);
-			}
+//            if (true) {//二値化
+//                int th_val = 45;//G.SS.IMP_BIN_BVAL[3];//135-5-5;
+//                OCV_THRESH_BIN((int)IMG.IMG_G, (int)IMG.IMG_B, th_val, /*INV=*/1);	//白背景に黒丸の時は反転しておく
+////				OCV_THRESH_BIN((int)IMG.IMG_G, (int)IMG.IMG_B, th_val, /*INV=*/0);
+//            }
 			if (true) {
 				int l = pts_dia_top.Length;
 				pts_dia_top = (Point[])pts_dia_top.Clone();
@@ -4510,7 +4530,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			}
 			if (true) {
 				OCV_ZERO((int)IMG.IMG_M);
-				//上端側のマスクを作成
+				//マスクを作成
 				const
 				double RT = 0.20;
 				const
@@ -4519,113 +4539,42 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				POINT[]	pts = new POINT[l*2];
 				for (int i = 0; i < l; i++) {
 					int h = l*2-i-1;
-					pts[i].x = pts_dia_top[i].X;
-					pts[i].y = pts_dia_top[i].Y;
-					pts[h].x = (int)(pts_dia_top[i].X + RT * (pts_dia_btm[i].X - pts_dia_top[i].X));
-					pts[h].y = (int)(pts_dia_top[i].Y + RT * (pts_dia_btm[i].Y - pts_dia_top[i].Y));
+					pts[i].x = (int)(pts_dia_top[i].X /*+ RT * (pts_dia_btm[i].X - pts_dia_top[i].X)*/);
+					pts[i].y = (int)(pts_dia_top[i].Y /*+ RT * (pts_dia_btm[i].Y - pts_dia_top[i].Y)*/);
+					pts[h].x = (int)(/*pts_dia_top[i].X + RB * (*/pts_dia_btm[i].X/* - pts_dia_top[i].X)*/);
+					pts[h].y = (int)(/*pts_dia_top[i].Y + RB * (*/pts_dia_btm[i].Y/* - pts_dia_top[i].Y)*/);
 				}
 OCV_DRAW_POLY((int)IMG.IMG_A, pts, 0xFFFF00, 2);
 				OCV_FILL_POLY((int)IMG.IMG_M, ref pts[0], l*2, 0xFFFFFF);
 				//下端側のマスクを作成
-				for (int i = 0; i < l; i++) {
-					int h = l*2-i-1;
-					pts[i].x = pts_dia_btm[i].X;
-					pts[i].y = pts_dia_btm[i].Y;
-					pts[h].x = (int)(pts_dia_top[i].X + RB * (pts_dia_btm[i].X - pts_dia_top[i].X));
-					pts[h].y = (int)(pts_dia_top[i].Y + RB * (pts_dia_btm[i].Y - pts_dia_top[i].Y));
+				if (true) {
+					OCV_SAVE((int)IMG.IMG_HSV_H, "c:\\temp\\IMG_H.PNG");
+					OCV_SAVE((int)IMG.IMG_HSV_S, "c:\\temp\\IMG_S.PNG");
+					OCV_SAVE((int)IMG.IMG_HSV_V, "c:\\temp\\IMG_V.PNG");
+					OCV_SAVE((int)IMG.IMG_M    , "c:\\temp\\IMG_M.PNG");
 				}
-OCV_DRAW_POLY((int)IMG.IMG_A, pts, 0xFFFF00, 2);
-				OCV_FILL_POLY((int)IMG.IMG_M, ref pts[0], l*2, 0xFFFFFF);
-				//
-OCV_SAVE((int)IMG.IMG_B, "c:\\temp\\IMG_B.PNG");
-OCV_SAVE((int)IMG.IMG_M, "c:\\temp\\IMG_M.PNG");
-				OCV_AND((int)IMG.IMG_B, (int)IMG.IMG_M, (int)IMG.IMG_B);
-OCV_SAVE((int)IMG.IMG_B, "c:\\temp\\IMG_AND.PNG");
-				OCV_ZERO((int)IMG.IMG_M);
+//                OCV_AND((int)IMG.IMG_B, (int)IMG.IMG_M, (int)IMG.IMG_B);
+//OCV_SAVE((int)IMG.IMG_B, "c:\\temp\\IMG_AND.PNG");
+//                OCV_ZERO((int)IMG.IMG_M);
 			}
 			if (true) {
 				//OCV_MERGE((int)IMG.IMG_B, (int)IMG.IMG_B, (int)IMG.IMG_B, (int)IMG.IMG_A);
 			}
 			if (true) {
-				OCV_FIND_FIRST((Int32)IMG.IMG_B, /*0:CV_RETR_EXTERNAL*/0);
-
-				IntPtr pos = (IntPtr)0;//, bak = (IntPtr)(-1);
-				double s, l, c, e, k=0;
-
-				for (;;) {
-					pos = OCV_FIND_NEXT(pos,
-							/*総面積*/10000000,1000,
-							/*周囲長*/10000000,   0,
-							/*円形度*/       1,   0,
-							out s, out l, out c);
-					if (pos == (IntPtr)0) {
-						break;
-					}
-					int bSIGNE = (s < 0) ? 1 : 0;
-					//円形度＝4π×（面積）÷（周囲長）^2(1:真円,正方形:0.785,正三角形:0.604)
-					//double p = double.NaN;
-					RECT	rc;
-
-					s = Math.Abs(s);
-					//CHK1:輪郭, CHK2:多曲線, CHK3:特徴値, CHK4:毛髪径
-					//輪郭の描画
-					//if (G.SS.MOZ_IRC_CK00) {
-					    OCV_DRAW_CONTOURS((Int32)IMG.IMG_A, pos, 0x0000FF, 0xFF0000);
-					//}
-					//多曲線と毛髪径
-					int n;
-					n = OCV_APPROX_PTS(pos, bSIGNE, 20/*G.SS.CAM_DIR_PREC*/);
-					if (n < 4) {
-						continue;
-					}
-					//多曲線の描画
-					POINT[]	pts = new POINT[n];
-					for (int i = 0; i < n; i++) {
-						OCV_GET_PTS(i, out pts[i]);
-					}
-					//多曲線の接続点の描画
-					if (true) {
-						OCV_DRAW_POLY((Int32)IMG.IMG_A, pts, 0xFF00FF, 4);
-						//for (int i = 0; i < n; i++) {
-						//    int h = (i == (n - 1)) ? 0 : i + 1;
-						//    POINT p1, p2;
-						//    p1 = pts[i];
-						//    p2 = pts[h];
-						//    OCV_DRAW_LINE((Int32)IMG.IMG_A, ref p1, ref p2, 0xFF00FF, 4);
-						//}
-					}
-					else {
-						OCV_FILL_POLY((int)IMG.IMG_A, ref pts[0], n, 0xFF00FF);
-					}
-					//
-					for (int i = 0; i < n; i++) {
-						int h = (i == (n - 1)) ? 0 : i + 1;
-						POINT p1, p2;
-						/*
-						OCV_GET_PTS(i, out p1);
-						OCV_GET_PTS(h, out p2);*/
-						p1 = pts[i];
-						p2 = pts[h];
-//						OCV_DRAW_LINE((Int32)IMG.IMG_M, ref p1, ref p2, 0x008000, 4);
-						RECT rt;
-						rt.Left   = pts[i].x - 4;
-						rt.Top    = pts[i].y - 4;
-						rt.Right  = pts[i].x + 4;
-						rt.Bottom = pts[i].y + 4;
-						OCV_DRAW_RECT((Int32)IMG.IMG_A, ref rt, 0x00FFFF, -1);
-					}
-				}
-				OCV_FIND_TERM();
+				double tmp;
+				OCV_CAL_HIST((int)IMG.IMG_HSV_H, /*bMASK=*/1, ref G.IR.HISTVALH[0], out tmp, out tmp, out tmp);
+				OCV_CAL_HIST((int)IMG.IMG_HSV_S, /*bMASK=*/1, ref G.IR.HISTVALS[0], out tmp, out tmp, out tmp);
+				OCV_CAL_HIST((int)IMG.IMG_HSV_V, /*bMASK=*/1, ref G.IR.HISTVALV[0], out tmp, out tmp, out tmp);
 			}
-OCV_SAVE((int)IMG.IMG_A, "c:\\temp\\IMG_A_POLY.PNG");
-			if (true) {
-				OCV_MERGE((int)IMG.IMG_M, (int)IMG.IMG_M, (int)IMG.IMG_M, (int)IMG.IMG_A);
-			}
+//OCV_SAVE((int)IMG.IMG_A, "c:\\temp\\IMG_A_POLY.PNG");
+//            if (true) {
+//                OCV_MERGE((int)IMG.IMG_M, (int)IMG.IMG_M, (int)IMG.IMG_M, (int)IMG.IMG_A);
+//            }
 			//---
-			msk = (Bitmap)bmp.Clone();
-			bmpData = msk.LockBits(new Rectangle(0, 0, msk.Width, msk.Height), ImageLockMode.ReadWrite, msk.PixelFormat);
-			ret = OCV_GET_IMG(bmpData.Scan0, bmpData.Width, bmpData.Height, bmpData.Stride, PF2BPP(bmpData.PixelFormat));
-			msk.UnlockBits(bmpData);
+			//msk = (Bitmap)bmp.Clone();
+			//bmpData = msk.LockBits(new Rectangle(0, 0, msk.Width, msk.Height), ImageLockMode.ReadWrite, msk.PixelFormat);
+			//ret = OCV_GET_IMG(bmpData.Scan0, bmpData.Width, bmpData.Height, bmpData.Stride, PF2BPP(bmpData.PixelFormat));
+			//msk.UnlockBits(bmpData);
 		}
 #endif
 		private static double GET_KYOKURITSU(POINT p1, POINT p2, POINT p3)

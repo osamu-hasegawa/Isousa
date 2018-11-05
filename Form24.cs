@@ -78,6 +78,10 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown2 , ref G.SS.MOZ_CND_CHAN);//
 				DDV.DDX(bUpdate, this.numericUpDown5 , ref G.SS.MOZ_CND_CMIN);//
 #endif
+#if true//2018.11.02(HSVグラフ)
+				DDV.DDX(bUpdate, this.comboBox9      , ref G.SS.MOZ_CND_CNEI);//
+				DDV.DDX(bUpdate, this.numericUpDown16, ref G.SS.MOZ_CND_HIST);//
+#endif
 				rc = true;
             }
             catch (Exception e) {
@@ -126,6 +130,18 @@ namespace uSCOPE
 			this.numericUpDown14.Enabled = (this.checkBox6.Checked == true);
 			//
 			this.numericUpDown15.Enabled = (this.checkBox4.Checked == true);
+		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{//HSV更新
+			if (!DDX(false)) {
+				return;
+			}
+			Cursor.Current = Cursors.WaitCursor;
+			//
+			G.FORM03.UPDATE_HSV();
+			//
+			Cursor.Current = Cursors.Default;
 		}
 	}
 }
