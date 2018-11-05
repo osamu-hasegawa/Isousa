@@ -4547,7 +4547,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 OCV_DRAW_POLY((int)IMG.IMG_A, pts, 0xFFFF00, 2);
 				OCV_FILL_POLY((int)IMG.IMG_M, ref pts[0], l*2, 0xFFFFFF);
 				//下端側のマスクを作成
-				if (true) {
+				if (false) {
 					OCV_SAVE((int)IMG.IMG_HSV_H, "c:\\temp\\IMG_H.PNG");
 					OCV_SAVE((int)IMG.IMG_HSV_S, "c:\\temp\\IMG_S.PNG");
 					OCV_SAVE((int)IMG.IMG_HSV_V, "c:\\temp\\IMG_V.PNG");
