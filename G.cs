@@ -322,6 +322,12 @@ namespace uSCOPE
 			}
 			public int ETC_CRS_LENGTH = 50;
 #endif
+#if true//2018.11.10(保存機能)
+			public int MOZ_SAV_DMOD = 0;
+			public string MOZ_SAV_FOLD = "";
+			public int MOZ_SAV_FMOD = 0;
+			public string MOZ_SAV_NAME = "";
+#endif
 			//---
 			public int MOZ_CND_FMOD = 0;
 			[XmlIgnoreAttribute]
