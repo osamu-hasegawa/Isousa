@@ -2723,6 +2723,11 @@ retry:
 				//G.mlog("pathをひとつ上に戻す必要が…");
 				buf = name.Replace("_ZDEPT", "_" + zpos);
 			}
+#if true//2018.11.13(毛髪中心AF)
+			else if (name.Contains("_K")) {
+				buf = Regex.Replace(name, "_K.[0-9][0-9].", "_" + zpos);
+			}
+#endif
 			else {
 				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
 			}
@@ -2760,8 +2765,13 @@ retry:
 				//G.mlog("pathをひとつ上に戻す必要が…");
 				buf = name.Replace("_ZDEPT", "_"+zpos);
 			}
+#if true//2018.11.13(毛髪中心AF)
+			else if (name.Contains("_K")) {
+				buf = Regex.Replace(name, "_K.[0-9][0-9].", "_" + zpos);
+			}
+#endif
 			else {
-				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_"+zpos);
+				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
 			}
 			//
 			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
@@ -2974,9 +2984,29 @@ retry:
 		{
 			for (int q = 0; q < m_zpos_val.Count; q++) {
 			for (int i = 0; i < m_zpos_val.Count-1; i++) {
+#if true//2018.11.13(毛髪中心AF)
+				int v0, v1;
+				string t0 = (string)m_zpos_val[i+0];
+				string t1 = (string)m_zpos_val[i+1];
+				string h0, h1;
+				h0 = t0.Substring(0, 1).ToUpper();
+				h1 = t1.Substring(0, 1).ToUpper();
+				v0 = int.Parse(t0.Substring(1));
+				v1 = int.Parse(t1.Substring(1));
+#else
 				int v0 = int.Parse((string)m_zpos_val[i+0]);
 				int v1 = int.Parse((string)m_zpos_val[i+1]);
-				if (v1 < v0) {
+#endif
+#if true//2018.11.13(毛髪中心AF)
+				if (h1 == "K" && h0 == "Z") {
+					//そのまま
+				}else
+#endif
+				if (v1 < v0
+#if true//2018.11.13(毛髪中心AF)
+					|| (h1 == "Z" && h0 == "K")
+#endif
+					) {
 					string tmp;
 					tmp = (string)m_zpos_val[i+0];
 					m_zpos_val[i+0] = m_zpos_val[i+1];
@@ -3315,8 +3345,14 @@ retry:
 						for (int i = 0; i < zary.Length; i++) {
 							string tmp = System.IO.Path.GetFileNameWithoutExtension(zary[i]);
 							string sgn;
+#if true//2018.11.13(毛髪中心AF)
+							string k_z;
+#endif
 							tmp = tmp.Substring(7);
 							m_zpos_org.Add(tmp);
+#if true//2018.11.13(毛髪中心AF)
+							k_z = tmp.Substring(0, 1);
+#endif
 							if (tmp.Substring(1, 1) == "P") {
 								sgn = "+";
 							}
@@ -3324,7 +3360,11 @@ retry:
 								sgn = "-";
 							}
 							tmp = tmp.Substring(2, 2);
+#if true//2018.11.13(毛髪中心AF)
+							m_zpos_val.Add(k_z+sgn+tmp);
+#else
 							m_zpos_val.Add(sgn+tmp);
+#endif
 						}
 						sort_zpos();
 						this.comboBox8.Items.AddRange(m_zpos_val.ToArray());
@@ -3633,6 +3673,11 @@ retry:
 						}
 					}
 #if true//2018.11.02(HSVグラフ)
+#if true//2018.11.13(毛髪中心AF)
+					if (G.IR.CIR_CNT <= 0) {
+						m_dia_cnt = m_dia_cnt;
+					}else
+#endif
 					if (true) {
 						calc_hist(segs[i]);
 					}
@@ -4623,7 +4668,13 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				gi_cut_len += seg.cut_ttl;
 #endif
 #if true//2018.10.27(画面テキスト)
+#if true//2018.11.13(毛髪中心AF)
+				if (seg.pts_cen_cut != null) {
 				gi_cut_cnt += seg.pts_cen_cut.Count;
+				}
+#else
+				gi_cut_cnt += seg.pts_cen_cut.Count;
+#endif
 				gi_mou_dia += seg.dia_avg;
 				if (this.checkBox15.Checked) {//補間データ
 				gi_moz_rsl += seg.moz_hsl;

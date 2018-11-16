@@ -440,6 +440,9 @@ namespace uSCOPE
 			public int MOZ_FST_CCNT = 3;
 			public int MOZ_FST_MODE = 0;
 			public int MOZ_FST_FCOF = 0;
+#if true//2018.11.13(毛髪中心AF)
+			public int MOZ_FST_IMTP = 0;
+#endif
 			//---
 			public int TST_PAR_GAUS = 0;
 			public bool TST_PAR_CHK1 = true;

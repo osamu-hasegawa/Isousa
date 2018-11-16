@@ -15,7 +15,10 @@ namespace uSCOPE
 	{
 		private
 		int GAP = 20;
-
+#if true//2018.11.13(毛髪中心AF)
+		List<string> m_zpos = new List<string>();
+		List<string> m_kpos = new List<string>();
+#endif
 		public Form23()
 		{
 			InitializeComponent();
@@ -48,6 +51,10 @@ namespace uSCOPE
 		{
 			string[] files_10;
 			string[] zpos = null;
+#if true//2018.11.13(毛髪中心AF)
+			m_zpos.Clear();
+			m_kpos.Clear();
+#endif
 			//
 #if true//2018.08.13
 			files_10 = new string[] {};
@@ -108,6 +115,42 @@ namespace uSCOPE
 				this.comboBox10.Enabled = true;
 				this.comboBox12.Enabled = true;
 #endif
+#if true//2018.11.13(毛髪中心AF)
+				for (int i = 0; i < zpos.Length; i++) {
+					switch (zpos[i][0]) {
+						case 'Z':
+						case 'z':
+							m_zpos.Add(zpos[i]);
+							break;
+						case 'K':
+						case 'k':
+							m_kpos.Add(zpos[i]);
+							break;
+					}
+				}
+				for (int i = 0; i < m_zpos.Count; i++) {
+					//if (this.comboBox18.SelectedIndex == 0 || this.comboBox18.SelectedIndex == 2) {
+						this.comboBox10.Items.Add(m_zpos[i]);
+					//}
+					//if (this.comboBox19.SelectedIndex == 0 || this.comboBox19.SelectedIndex == 2) {
+						this.comboBox8.Items.Add(m_zpos[i]);
+					//}
+					//if (this.comboBox20.SelectedIndex == 0 || this.comboBox20.SelectedIndex == 2) {
+						this.comboBox12.Items.Add(m_zpos[i]);
+					//}
+				}
+				for (int i = 0; i < m_kpos.Count; i++) {
+					//if (this.comboBox18.SelectedIndex == 1 || this.comboBox18.SelectedIndex == 2) {
+						this.comboBox10.Items.Add(m_kpos[i]);
+					//}
+					//if (this.comboBox19.SelectedIndex == 1 || this.comboBox19.SelectedIndex == 2) {
+						this.comboBox8.Items.Add(m_kpos[i]);
+					//}
+					//if (this.comboBox20.SelectedIndex == 1 || this.comboBox20.SelectedIndex == 2) {
+						this.comboBox12.Items.Add(m_kpos[i]);
+					//}
+				}
+#else
 				if (true) {
 					for (int i = 0; i < zpos.Length; i++) {
 						this.comboBox8.Items.Add(zpos[i]);
@@ -117,7 +160,7 @@ namespace uSCOPE
 #endif
 					}
 				}
-
+#endif
 				if (G.SS.MOZ_FST_CK00) {
 					this.comboBox8.Items.Insert(0, "深度合成");
 #if true //2018.08.21

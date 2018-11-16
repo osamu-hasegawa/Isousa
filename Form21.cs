@@ -15,7 +15,10 @@ namespace uSCOPE
 	{
 		private
 		int GAP = 20;
-
+#if true//2018.11.13(毛髪中心AF)
+		List<string> m_zpos = new List<string>();
+		List<string> m_kpos = new List<string>();
+#endif
 		public Form21()
 		{
 			InitializeComponent();
@@ -112,6 +115,10 @@ namespace uSCOPE
 		{
 			string[] files_10;
 			string[] zpos = null;
+#if true//2018.11.13(毛髪中心AF)
+			m_zpos.Clear();
+			m_kpos.Clear();
+#endif
 			//
 #if true//2018.08.13
 			files_10 = new string[] {};
@@ -187,6 +194,42 @@ namespace uSCOPE
 				this.comboBox10.Enabled = true;
 				this.comboBox12.Enabled = true;
 #endif
+#if true//2018.11.13(毛髪中心AF)
+				for (int i = 0; i < zpos.Length; i++) {
+					switch (zpos[i][0]) {
+						case 'Z':
+						case 'z':
+							m_zpos.Add(zpos[i]);
+							break;
+						case 'K':
+						case 'k':
+							m_kpos.Add(zpos[i]);
+							break;
+					}
+				}
+				for (int i = 0; i < m_zpos.Count; i++) {
+					//if (this.comboBox18.SelectedIndex == 0 || this.comboBox18.SelectedIndex == 2) {
+						this.comboBox10.Items.Add(m_zpos[i]);
+					//}
+					//if (this.comboBox19.SelectedIndex == 0 || this.comboBox19.SelectedIndex == 2) {
+						this.comboBox8.Items.Add(m_zpos[i]);
+					//}
+					//if (this.comboBox20.SelectedIndex == 0 || this.comboBox20.SelectedIndex == 2) {
+						this.comboBox12.Items.Add(m_zpos[i]);
+					//}
+				}
+				for (int i = 0; i < m_kpos.Count; i++) {
+					//if (this.comboBox18.SelectedIndex == 1 || this.comboBox18.SelectedIndex == 2) {
+						this.comboBox10.Items.Add(m_kpos[i]);
+					//}
+					//if (this.comboBox19.SelectedIndex == 1 || this.comboBox19.SelectedIndex == 2) {
+						this.comboBox8.Items.Add(m_kpos[i]);
+					//}
+					//if (this.comboBox20.SelectedIndex == 1 || this.comboBox20.SelectedIndex == 2) {
+						this.comboBox12.Items.Add(m_kpos[i]);
+					//}
+				}
+#else
 				if (true) {
 					for (int i = 0; i < zpos.Length; i++) {
 						this.comboBox8.Items.Add(zpos[i]);
@@ -196,6 +239,7 @@ namespace uSCOPE
 #endif
 					}
 				}
+#endif
 				if (G.SS.MOZ_FST_CK00) {
 					this.comboBox8.Items.Insert(0, "深度合成");
 #if true //2018.08.21
@@ -289,7 +333,11 @@ namespace uSCOPE
 				}
 				//画像表示のみの場合
 				if (G.SS.MOZ_CND_NOMZ) {
+#if true//2018.11.13(毛髪中心AF)
+					break;
+#else
 					return;
+#endif
 				}
 				//赤外画像
 				if (G.SS.MOZ_CND_PDFL == 1) {
@@ -302,6 +350,18 @@ namespace uSCOPE
 #else
 #endif
 #if true//2018.08.21
+			}
+#endif
+#if true//2018.11.13(毛髪中心AF)
+			if (G.SS.MOZ_FST_CK00) {//深度合成
+				if (G.SS.MOZ_FST_IMTP == 0 && m_zpos.Count <= 0) {
+					G.mlog("指定されたフォルダには表面画像ファイル('_ZP00D')がありません.\r\r" + path);
+					e.Cancel = true;
+					return;
+				}
+				if (G.SS.MOZ_FST_IMTP == 1 && m_kpos.Count <= 0) {
+					G.mlog("指定されたフォルダには中心画像ファイル('_KP00D')がありません.\r\r" + path);
+				}
 			}
 #endif
 		}
@@ -373,6 +433,9 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown6 , ref G.SS.MOZ_FST_CCNT);
 				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.MOZ_FST_MODE);
 				DDV.DDX(bUpdate, this.comboBox9      , ref G.SS.MOZ_FST_FCOF);
+#if true//2018.11.13(毛髪中心AF)
+				DDV.DDX(bUpdate, this.comboBox21     , ref G.SS.MOZ_FST_IMTP);
+#endif
 #if true//2018.09.29(キューティクルライン検出)
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton3, this.radioButton4}, ref G.SS.MOZ_CND_CTYP);
 				DDV.DDX(bUpdate, this.numericUpDown7 , ref G.SS.MOZ_CND_BPF1);
@@ -541,6 +604,7 @@ namespace uSCOPE
 				this.numericUpDown13.Value = this.numericUpDown13.Value+1;
 			}
 		}
+
 #endif
 	}
 }

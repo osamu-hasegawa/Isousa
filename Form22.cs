@@ -54,6 +54,10 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox2      , ref m_ss.PLM_AUT_HPOS);
 				DDV.DDX(bUpdate, this.checkBox6      , ref m_ss.PLM_AUT_ZDCK);//Ｚ測定:深度合成用
 				DDV.DDX(bUpdate, this.textBox3       , ref m_ss.PLM_AUT_ZDEP, 50, -99, +99);
+#if true//2018.11.13(毛髪中心AF)
+				DDV.DDX(bUpdate, this.checkBox7      , ref m_ss.PLM_AUT_ZKCK);//Ｚ測定:毛髪径判定用
+				DDV.DDX(bUpdate, this.textBox4       , ref m_ss.PLM_AUT_ZKEI, 50, -99, +99);
+#endif
 #if true//2018.07.30(終了位置指定)
 				DDV.DDX(bUpdate, this.numericUpDown14 , ref m_ss.PLM_AUT_ED_Y, G.SS.PLM_MLIM[1], G.SS.PLM_PLIM[1]);
                 if (bUpdate == false) {
@@ -92,6 +96,27 @@ namespace uSCOPE
 							return(false);
 						}
 					}
+#if true//2018.11.13(毛髪中心AF)
+					if (m_ss.PLM_AUT_ZKEI != null) {
+						for (int i = 0; i < m_ss.PLM_AUT_ZKEI.Length; i++) {
+							int val = m_ss.PLM_AUT_ZKEI[i];
+							int idxf, idxl;
+							idxf = Array.IndexOf(m_ss.PLM_AUT_ZKEI, val);
+							idxl = Array.LastIndexOf(m_ss.PLM_AUT_ZKEI, val);
+							if (idxf != idxl) {
+								G.mlog(string.Format("同じ値({0})が指定されています.", val));
+								this.textBox4.Focus();
+								return(false);
+							}
+							if (val == 0) {
+								G.mlog("0が指定されています.");
+								this.textBox4.Focus();
+								return(false);
+							}
+						}
+					}
+
+#endif
 				}
 #endif
                 rc = true;

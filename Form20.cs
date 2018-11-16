@@ -171,7 +171,11 @@ namespace uSCOPE
 #if true//2018.09.29(キューティクルライン検出)
 							if (val == 0) {
 								G.mlog("0が指定されています.");
+#if true//2018.11.13(毛髪中心AF)
+								this.textBox4.Focus();
+#else
 								this.textBox3.Focus();
+#endif
 								return(false);
 							}
 #endif
@@ -180,6 +184,7 @@ namespace uSCOPE
 					if (!m_ss.PLM_AUT_ZDCK || !m_ss.PLM_AUT_ZKCK) {
 					}
 					else if (m_ss.PLM_AUT_ZDEP != null && m_ss.PLM_AUT_ZKEI != null) {
+#if false//2018.11.13(毛髪中心AF)
 						for (int i = 0; i < m_ss.PLM_AUT_ZDEP.Length; i++) {
 							int val = m_ss.PLM_AUT_ZDEP[i];
 							int idxf;
@@ -190,6 +195,7 @@ namespace uSCOPE
 								return(false);
 							}
 						}
+#endif
 					}
 					//---
 					//if (m_ss.PLM_AUT_ZMUL) {

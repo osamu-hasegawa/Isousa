@@ -81,6 +81,10 @@ namespace uSCOPE
 				this.label31.Text = "赤外LED画像時";
 				this.comboBox9.Enabled = false;
 				this.comboBox10.Enabled = false;
+#if true//2018.11.13(毛髪中心AF)
+				this.comboBox11.Enabled = false;//透過(中心)
+				this.comboBox12.Enabled = false;//反射(中心)
+#endif
 				this.label4.Visible = true;
 			}
 		}
@@ -147,8 +151,12 @@ namespace uSCOPE
 					}
 				}
 				if (Q == 0) {
-				DDV.DDX(bUpdate, this.comboBox9, ref m_ss.IMP_AUT_AFMD[0]);
-				DDV.DDX(bUpdate, this.comboBox10, ref m_ss.IMP_AUT_AFMD[1]);
+				DDV.DDX(bUpdate, this.comboBox9, ref m_ss.IMP_AUT_AFMD[0]);//透過(表面)
+				DDV.DDX(bUpdate, this.comboBox10, ref m_ss.IMP_AUT_AFMD[1]);//反射(表面)
+#if true//2018.11.13(毛髪中心AF)
+				DDV.DDX(bUpdate, this.comboBox11, ref m_ss.IMP_AUT_AFMD[2]);//透過(中心)
+				DDV.DDX(bUpdate, this.comboBox12, ref m_ss.IMP_AUT_AFMD[3]);//反射(中心)
+#endif
 				}
 #if true//2018.08.21
 				//DDV.DDX(bUpdate, this.checkBox3, ref G.SS.MOZ_IRC_CK00);

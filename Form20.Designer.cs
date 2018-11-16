@@ -1169,7 +1169,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(515, 759);
+			this.ClientSize = new System.Drawing.Size(573, 759);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.label23);
