@@ -1353,10 +1353,17 @@ retry:
 			List<int   > uil_buf = new List<int>();
 			List<int   > uir_buf = new List<int>();
 			List<double> udf_buf = new List<double>();
-
+#if true//2018.11.22(数値化エラー対応)
+			if (string.Compare(seg.name_of_dm, "2CR_03_ZDEPT.PNG") == 0) {
+			if (sx == 32) {
+				sx = sx;//for bp
+			}
+			}
+#else
 			if (sx == 92) {
 				sx = sx;//for bp
 			}
+#endif
 			for (int i = 1;; i++) {
 				//毛髪下端から上端に向かって走査する
 				PointF f0 = f2.GetScanPt1Ext(p2, p3, i);
@@ -1404,7 +1411,11 @@ retry:
 				double WID_OF_BALANCE = 0.98;//エッジ部分を含めないようにするため...
 				int wg = (int)(af.Length * (1.0-WID_OF_BALANCE));
 				int wl = wg/2;
+#if true//2018.11.22(数値化エラー対応)
+				int wr = af.Length-1-wg/2;
+#else
 				int wr = af.Length-wg/2;
+#endif
 				//---
 				switch (G.SS.MOZ_CND_CNTR) {
 					case 1://上下端全範囲=A
@@ -3486,6 +3497,12 @@ retry:
 					q = q;
 				}
 #endif
+#if true//2018.11.22(数値化エラー対応)
+				bool bFileExist = true;
+				if (q == 5) {
+					q = q;
+				}
+#endif
 				for (int i = 0; i < cnt_of_seg; i++) {
 #if true//2018.08.21
 					string path_dm1 = to_xx_file(0, files_dm[i]);
@@ -3499,7 +3516,14 @@ retry:
 					string name_dm1 = get_name_of_path(path_dm1);
 					string name_ir1 = get_name_of_path(path_ir1);
 					string name_pd1 = get_name_of_path(path_pd1);
-
+#if true//2018.11.22(数値化エラー対応)
+					if (string.IsNullOrEmpty(path_dm1) || string.IsNullOrEmpty(path_ir1) || string.IsNullOrEmpty(path_pd1)) {
+						bFileExist = false; break;
+					}
+					if (string.IsNullOrEmpty(name_dm1) || string.IsNullOrEmpty(name_ir1) || string.IsNullOrEmpty(name_pd1)) {
+						bFileExist = false; break;
+					}
+#endif
 					seg_of_hair seg = new seg_of_hair();
 					seg.path_of_dm = path_dm1;
 					seg.path_of_ir = path_ir1;
@@ -3512,6 +3536,12 @@ retry:
 					test_pr0(seg, /*b1st=*/(i==0));
 					ar_seg.Add(seg);
 				}
+#if true//2018.11.22(数値化エラー対応)
+				if (!bFileExist) {
+					G.mlog(string.Format("毛髪画像が不完全のため{0}本目の毛髪画像の読み込みをスキップします。", m_hair.Count+1));
+					continue;
+				}
+#endif
 				segs = (seg_of_hair[])ar_seg.ToArray(typeof(seg_of_hair));
 				System.Diagnostics.Debug.WriteLine("image-listのsizeをどこかで調整しないと…");
 				//---
@@ -3764,17 +3794,29 @@ retry:
 			}
 			}
 			catch (Exception ex) {
+#if false//2018.11.22(数値化エラー対応)
 #if true//2018.09.29(キューティクルライン検出)
 				G.mlog("例外発生時の復帰ができるように修正するコト！！！");
+#endif
 #endif
 				G.mlog(ex.ToString());
 				string buf = ex.ToString();
 			}
 			if (dlg != null) {
+#if true//2018.11.22(数値化エラー対応)
+				dlg.Hide();
+#endif
 			    dlg.Dispose();
 			    dlg = null;
 			}
 			this.comboBox8.Tag = null;
+#if true//2018.11.22(数値化エラー対応)
+			if (G.FORM02 != null) {
+				G.FORM02.Close();
+				G.FORM02 = null;
+			}
+			this.Enabled = true;
+#endif
 		}
 		private void init()
 		{
