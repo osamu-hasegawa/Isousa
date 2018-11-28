@@ -13,8 +13,11 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.DataVisualization.Charting;
+#if true//2018.11.28(メモリリーク)
+using LIST_U8 = System.Collections.Generic.List<byte>;
+#else
 using VectorD = System.Collections.Generic.List<double>;
-
+#endif
 namespace uSCOPE
 {
 	public partial class Form03 : Form
@@ -391,7 +394,11 @@ retry:
 			//public bool			fs2;//S1,S2区分,S1:true, S2:false
 			//public double		avg;//毛髄:毛髄範囲の画素平均値(生画像による)
 			public List<Point>		pct;
+#if true//2018.11.28(メモリリーク)
+			public LIST_U8			flg;//キューティクル・ライン該当・フラグ
+#else
 			public List<bool>		flg;//キューティクル・ライン該当・フラグ
+#endif
 			public List<int>		his;//キューティクル間隔・ヒストグラム
 			public List<int>		lbl;//キューティクル・ライン該当・ラベル
 			//---
@@ -401,7 +408,11 @@ retry:
 				this.iaf = new List<double>();
 				this.phc = new List<Point> ();
 				this.ihc = new List<int>   ();
+#if true//2018.11.28(メモリリーク)
+				this.flg = new LIST_U8     ();
+#else
 				this.flg = new List<bool>  ();
+#endif
 				this.his = new List<int>   ();
 				this.lbl = new List<int>   ();
 			}
@@ -462,13 +473,19 @@ retry:
 			public ArrayList pts_mph_cut;
 			public ArrayList pts_p5u_cut;
 			public ArrayList pts_m5u_cut;
-
+#if true//2018.11.28(メモリリーク)
+			public LIST_U8 flg_cen_cut;//中心ライン上のキューティクル・ライン該当・フラグ
+			public LIST_U8 flg_phf_cut;
+			public LIST_U8 flg_mph_cut;
+			public LIST_U8 flg_p5u_cut;
+			public LIST_U8 flg_m5u_cut;
+#else
 			public List<bool>flg_cen_cut;//中心ライン上のキューティクル・ライン該当・フラグ
 			public List<bool>flg_phf_cut;
 			public List<bool>flg_mph_cut;
 			public List<bool>flg_p5u_cut;
 			public List<bool>flg_m5u_cut;
-
+#endif
 			public List<int> his_cen_cut;
 			public List<int> his_phf_cut;
 			public List<int> his_mph_cut;
@@ -1617,7 +1634,11 @@ retry:
 			seg_of_mouz mouz;
 			if (true) {
 				mouz.ibf = bf;
+#if true//2018.11.28(メモリリーク)
+				mouz.iaf = null;
+#else
 				mouz.iaf = af;
+#endif
 				mouz.pbf = fp.ToArray();
 				mouz.phc = fp[ic];
 				mouz.ihc = ic;
@@ -2093,6 +2114,11 @@ retry:
 			//現在の画像のＸ値に変換
 			//seg.total_idx = m_offset_of_hair;
 			//
+#if true//2018.11.28(メモリリーク)
+			if (true) {
+				//GC.Collect();
+			}
+#endif
 			for (s = ss; pf.X <= xmax; s++) {
 				//double y0, y1,y2, y3;
 				//y0 = m_fc[0].GetYatX(776);
@@ -2143,21 +2169,29 @@ retry:
 					//(5)
 					//格納
 					seg.val_cen.Add(TO_CL(p5));
+#if false//2018.11.28(メモリリーク)
 					seg.val_phf.Add(TO_CL(p6));
 					seg.val_mph.Add(TO_CL(p7));
 					seg.val_p5u.Add(TO_CL(p8));
 					seg.val_m5u.Add(TO_CL(p9));
+#endif
 					seg.val_xum.Add(Math.Round(G.PX2UM(s*ds, m_log_info.pix_pitch, m_log_info.zoom), 2));
 					//---
 					seg.mou_len.Add(Math.Round(G.PX2UM(G.diff(p2,  p3), m_log_info.pix_pitch, m_log_info.zoom), 1));
 					//---
 					seg.pts_cen.Add(p5);
+#if false//2018.11.28(メモリリーク)
 					seg.pts_phf.Add(p6);
 					seg.pts_mph.Add(p7);
 					seg.pts_p5u.Add(p8);
 					seg.pts_m5u.Add(p9);
+#endif
 				}
-
+#if true//2018.11.28(メモリリーク)
+				//GC.Collect();
+				if (false) {
+				} else
+#endif
 				if (true) {
 					PointF p0 = pf;//径方向:中心
 					PointF pl;
@@ -2192,17 +2226,26 @@ retry:
 							seg_of_cuti cut = new seg_of_cuti();
 							seg.cut_inf.Add(cut);
 						}
+#if true//2018.11.28(メモリリーク)
+						//seg.cut_inf.TrimExcess();
+#endif
 					}
 					for (int i = 0; i < (LMAX*2+1); i++) {
 						seg.cut_inf[i].pbf.Add(ptf[i]);
 						seg.cut_inf[i].ibf.Add(ibf[i]);
 					}
 				}
+#if true//2018.11.28(メモリリーク)
+				//GC.Collect();
+#endif
 				//(6) IR画像より毛髄径検出
 				if (m_bmp_ir1 != null) {
 					test_ir(seg, f2, p2, p3, s);
 					seg.cnt_of_moz = 1;
 				}
+#if true//2018.11.28(メモリリーク)
+				//GC.Collect();
+#endif
 				// pf(中心ラインの直線式上)をdsだけ進める
 				pf = scan_pt(m_fc, ref ii, pf, ds);
 			}
@@ -2219,6 +2262,9 @@ retry:
 					}
 				}
 			}
+#if true//2018.11.28(メモリリーク)
+			//GC.Collect();
+#endif
 			detect_area(seg);
 			detect_outliers(seg);
 			interp_outliers(seg);
@@ -2226,24 +2272,60 @@ retry:
 			if (bRECALCIR == false) {
 				//キューティクル断面のフィルター処理
 				apply_filter(seg.val_cen, out seg.val_cen_fil);
+#if false//2018.11.28(メモリリーク)
 				apply_filter(seg.val_phf, out seg.val_phf_fil);
 				apply_filter(seg.val_mph, out seg.val_mph_fil);
 				apply_filter(seg.val_p5u, out seg.val_p5u_fil);
 				apply_filter(seg.val_m5u, out seg.val_m5u_fil);
+#endif
 				find_cuticle_line(seg.pts_cen, seg.val_cen_fil, out seg.pts_cen_cut, out seg.flg_cen_cut, out seg.his_cen_cut);
+#if false//2018.11.28(メモリリーク)
 				find_cuticle_line(seg.pts_phf, seg.val_phf_fil, out seg.pts_phf_cut, out seg.flg_phf_cut, out seg.his_phf_cut);
 				find_cuticle_line(seg.pts_mph, seg.val_mph_fil, out seg.pts_mph_cut, out seg.flg_mph_cut, out seg.his_mph_cut);
 				find_cuticle_line(seg.pts_p5u, seg.val_p5u_fil, out seg.pts_p5u_cut, out seg.flg_p5u_cut, out seg.his_p5u_cut);
 				find_cuticle_line(seg.pts_m5u, seg.val_m5u_fil, out seg.pts_m5u_cut, out seg.flg_m5u_cut, out seg.his_m5u_cut);
+#endif
 			}
+#if true//2018.11.28(メモリリーク)
+			//GC.Collect();
+#endif
 			for (int i = 0; i < (LMAX*2+1); i++) {
+#if true//2018.11.28(メモリリーク)
+				seg.cut_inf[i].ibf.TrimExcess();
+#endif
 				apply_filter     (seg.cut_inf[i].ibf, out seg.cut_inf[i].iaf);
+#if true//2018.11.28(メモリリーク)
+				seg.cut_inf[i].iaf.TrimExcess();
+#endif
 				find_cuticle_line(seg.cut_inf[i].pbf, seg.cut_inf[i].iaf, out seg.cut_inf[i].pct, out seg.cut_inf[i].flg, out seg.cut_inf[i].his);
 				//フラグに対して接続を探索
 				//    接続をライン化け？
+#if true//2018.11.28(メモリリーク)
+				seg.cut_inf[i].pbf.TrimExcess();
+				//seg.cut_inf[i].pct.TrimExcess();
+				seg.cut_inf[i].flg.TrimExcess();
+				seg.cut_inf[i].his.TrimExcess();
+#endif
 			}
 			label_cuticle_line(seg, 0,0);
-
+#if true//2018.11.28(メモリリーク)
+			//GC.Collect();
+			for (int i = 0; i < seg.cut_inf.Count; i++) {
+				seg.cut_inf[i].lbl = null;//これ以後使用しないため解放
+				seg.cut_inf[i].pct = null;
+			}
+			for (int i = 0; i < seg.moz_inf.Count; i++) {
+				seg_of_mouz mouz = seg.moz_inf[i];
+				mouz.ibf = null;
+				seg.moz_inf[i] = mouz;
+				//---
+				mouz = seg.moz_hnf[i];
+				mouz.iaf = null;
+				mouz.ibf = null;
+				seg.moz_hnf[i] = mouz;
+			}
+			//GC.Collect();
+#endif
 			m_back_of_x = pf.X;
 		}
 
@@ -3550,6 +3632,13 @@ retry:
 					this.listView2.LargeImageList = hr.il_ir;
 				}
 				for (int i = 0; i < segs.Length; i++) {
+#if true//2018.11.28(メモリリーク)
+					//GC.Collect();
+					if (i == 10) {
+						//G.bCANCEL = true;
+						//break;
+					}
+#endif
 					dlg.SetStatus(string.Format("計算中 {0}/{1}\r{2}/{3}本", i+1, segs.Length, m_hair.Count+1, cnt_of_hair));
 					Application.DoEvents();
 					if (G.bCANCEL) {
@@ -3697,6 +3786,9 @@ retry:
 						if (m_bmp_ir1 != null && G.SS.MOZ_CND_FTCF > 0) {
 							Form02.DO_SMOOTH(m_bmp_ir1, this.MOZ_CND_FTCF, this.MOZ_CND_FTCT);
 						}
+#if true//2018.11.28(メモリリーク)
+						//GC.Collect();
+#endif
 						test_pr1(segs[i]);
 						if (m_dia_cnt > 1) {
 							test_dm(segs, i, segs.Length);
@@ -3709,7 +3801,9 @@ retry:
 					}else
 #endif
 					if (true) {
+#if true//2018.11.28(メモリリーク)
 						calc_hist(segs[i]);
+#endif
 					}
 #endif
 				}
@@ -3717,6 +3811,10 @@ retry:
 				dispose_bmp(ref m_bmp_dm2);
 				dispose_bmp(ref m_bmp_ir1);
 				dispose_bmp(ref m_bmp_ir2);
+#if true//2018.11.28(メモリリーク)
+				dispose_bmp(ref m_bmp_pd1);
+				//GC.Collect();
+#endif
 				if (G.bCANCEL) {
 					break;
 				}
@@ -4469,7 +4567,11 @@ retry:
 							if (this.checkBox10.Checked) {
 							if (seg.cut_inf[Y].iaf != null) {
 								for (int i = 0; i < seg.cut_inf[Y].pbf.Count; i++) {
-									if (seg.cut_inf[Y].flg[i]) {
+									if (seg.cut_inf[Y].flg[i]
+#if true//2018.11.28(メモリリーク)
+									!= 0
+#endif
+										) {
 										draw_marker(gr, Brushes.Yellow, (Point)seg.cut_inf[Y].pbf[i], CUT_LEN);
 									}
 								}
@@ -4492,13 +4594,18 @@ retry:
 #if true//2018.09.29(キューティクルライン検出)
 						if (seg.val_cen_fil != null && seg.val_cen_fil.Count >= seg.pts_cen.Count) {
 							for (int i = 0; i < seg.pts_cen.Count; i++) {
-								if (seg.flg_cen_cut[i]) {
+								if (seg.flg_cen_cut[i]
+#if true//2018.11.28(メモリリーク)
+									!= 0
+#endif
+									) {
 									draw_marker(gr, Brushes.Yellow, (Point)seg.pts_cen[i], CUT_LEN);
 								}
 							}
 						}
 #endif
 					}
+#if false//2018.11.28(メモリリーク)
 					if (this.checkBox4.Checked) {//R*+50%
 						pen = new Pen(this.chart1.Series[1].Color, pw);
 						Point[] ap = (Point[])seg.pts_phf.ToArray(typeof(Point));
@@ -4555,6 +4662,7 @@ retry:
 						}
 #endif
 					}
+#endif
 #if true//2018.10.30(キューティクル長)
 					}
 #endif
@@ -4930,11 +5038,21 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				}
 				for (int i = i0; i < seg.val_xum.Count; i++) {
 					double x0 = TO_VAL(seg.val_xum[i]) + offs;
+#if true//2018.11.28(メモリリーク)
+					double y0 = double.NaN;
+					double y1 = double.NaN;
+#else
 					double y0 = TO_VAL(seg.val_p5u[i]);
 					double y1 = TO_VAL(seg.val_phf[i]);
+#endif
 					double y2 = TO_VAL(seg.val_cen[i]);
+#if true//2018.11.28(メモリリーク)
+					double y3 = double.NaN;
+					double y4 = double.NaN;
+#else
 					double y3 = TO_VAL(seg.val_mph[i]);
 					double y4 = TO_VAL(seg.val_m5u[i]);
+#endif
 					//double y5 = TO_VAL(seg.moz_zpl[i]);
 					if (this.checkBox3.Checked) {//R*0
 						this.chart1.Series[0].Points.AddXY(x0, y2);
@@ -5889,7 +6007,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			apply_filter(als, out ald);
 			adst = new List<double>((double[])ald.ToArray(typeof(double)));
 		}
+#if true//2018.11.28(メモリリーク)
+		private void find_cuticle_line(List<Point> apts, List<double> afil, out List<Point> acut, out LIST_U8 aflg, out List<int> ahis)
+#else
 		private void find_cuticle_line(List<Point> apts, List<double> afil, out List<Point> acut, out List<bool> aflg, out List<int> ahis)
+#endif
 		{
 			ArrayList alp = new ArrayList(apts);
 			ArrayList ald = new ArrayList(afil);
@@ -5929,18 +6051,30 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			}
 			adst = new ArrayList(dst);
 		}
+#if true//2018.11.28(メモリリーク)
+		private void find_cuticle_line(ArrayList apts, ArrayList afil, out ArrayList acut, out LIST_U8 aflg, out List<int> ahis)
+#else
 		private void find_cuticle_line(ArrayList apts, ArrayList afil, out ArrayList acut, out List<bool> aflg, out List<int> ahis)
+#endif
 		{
 			//bool ret;
 			double[] src = new double[apts.Count];
 			double[] dst = new double[apts.Count];
+#if true//2018.11.28(メモリリーク)
+			byte [] flg = new byte[apts.Count];
+#else
 			bool[] flg = new bool[apts.Count];
+#endif
 			double	bval = (G.SS.MOZ_CND_CTYP == 0) ? G.SS.MOZ_CND_BPVL: G.SS.MOZ_CND_2DVL;
 			acut = new ArrayList();
 			//---
 			for (int i = 0; i < src.Length; i++) {
 				src[i] = TO_VAL(afil[i]);
+#if true//2018.11.28(メモリリーク)
+				flg[i] = 0;
+#else
 				flg[i] = false;
+#endif
 			}
 			for (int i = 0; i < src.Length;) {
 				if (src[i] < bval) {
@@ -5958,12 +6092,20 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						imax = h;
 					}
 				}
+#if true//2018.11.28(メモリリーク)
+				flg[imax] = 1;
+#else
 				flg[imax] = true;
+#endif
 				acut.Add(apts[imax]);
 				i = h+1;
 			}
 			//---
+#if true//2018.11.28(メモリリーク)
+			aflg = new LIST_U8(flg);
+#else
 			aflg = new List<bool>(flg);
+#endif
 			//---
 			int[] his = new int[G.SS.MOZ_CND_HCNT];
 #if DEBUG//2018.10.27(画面テキスト)
@@ -6038,7 +6180,13 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				if (y < 0 || y >= YMAX) {
 					continue;//範囲外
 				}
-				if (!seg.cut_inf[y].flg[x]) {
+				if (
+#if true//2018.11.28(メモリリーク)
+					seg.cut_inf[y].flg[x] == 0
+#else
+					!seg.cut_inf[y].flg[x]
+#endif
+					) {
 					continue;//キューティクル無し
 				}
 				if (seg.cut_inf[y].lbl[x] == LBLNO) {
@@ -6090,7 +6238,13 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			}
 			for (int x = 0; x < XLEN; x++) {
 				for (int y = 0; y < YLEN; y++) {
-					if (!seg.cut_inf[y].flg[x]) {
+					if (
+#if true//2018.11.28(メモリリーク)
+					seg.cut_inf[y].flg[x] == 0
+#else
+					!seg.cut_inf[y].flg[x]
+#endif
+					) {
 						continue;//キューティクル無し
 					}
 					if (seg.cut_inf[y].lbl[x] != 0) {
@@ -6108,6 +6262,9 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						y = y;//最短以下のため無視
 					}
 					else {
+#if true//2018.11.28(メモリリーク)
+						lcpt.TrimExcess();
+#endif
 						//登録
 						seg.cut_lsp.Add(lcpt);
 						seg.cut_len.Add(clen);
@@ -6117,6 +6274,10 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				}
 			}
 			seg.cut_ttl = LTTL;
+#if true//2018.11.28(メモリリーク)
+			seg.cut_len.Clear();//使用されてないため
+			seg.cut_lsp.TrimExcess();
+#endif
 		}
 #endif
 		private void set_max_min(double f, ref double fmin, ref double fmax)
@@ -6229,13 +6390,27 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 
 					for (int i = i0; i < seg.val_xum.Count; i++) {
 						double x0 = TO_VAL(seg.val_xum[i]) + offs;
+#if true//2018.11.28(メモリリーク)
+						double y0 = double.NaN;
+						double y1 = double.NaN;
+#else
 						double y0 = TO_VAL(seg.val_p5u_fil[i]);
 						double y1 = TO_VAL(seg.val_phf_fil[i]);
+#endif
 						double y2 = TO_VAL(seg.val_cen_fil[i]);
+#if true//2018.11.28(メモリリーク)
+						double y3 = double.NaN;
+						double y4 = double.NaN;
+#else
 						double y3 = TO_VAL(seg.val_mph_fil[i]);
 						double y4 = TO_VAL(seg.val_m5u_fil[i]);
+#endif
 						if (this.checkBox3.Checked) {//R*0
-							if (seg.flg_cen_cut[i]) {
+							if (seg.flg_cen_cut[i]
+#if true//2018.11.28(メモリリーク)
+								!= 0
+#endif
+								) {
 								//キューティクル位置はマーカー表示
 								/*DataPoint dp = new DataPoint();
 								dp.SetValueXY(x0, y2);
@@ -6255,6 +6430,7 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 							//    cut_min = y2;
 							//}
 						}
+#if false//2018.11.28(メモリリーク)
 						if (this.checkBox4.Checked) {//R*+50%
 							if (seg.flg_phf_cut[i]) {//キューティクル位置はマーカー表示
 								this.chart4.Series[1].Points.Add(dp_marker(x0, y1, Color.DarkBlue));
@@ -6291,6 +6467,7 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 							}
 							set_max_min(y4, ref cut_min, ref cut_max);
 						}
+#endif
 					}
 					if (seg.his_cen_cut.Count != G.SS.MOZ_CND_HCNT) {
 						G.mlog("Internal Error");
@@ -6298,10 +6475,12 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					if (this.radioButton1.Checked) {//グラフ・毛髪全体
 						for (int i = 0; i < G.SS.MOZ_CND_HCNT; i++) {
 							his_cen[i] += seg.his_cen_cut[i];//集計する
+#if false//2018.11.28(メモリリーク)
 							his_phf[i] += seg.his_phf_cut[i];//集計する
 							his_mph[i] += seg.his_mph_cut[i];//集計する
 							his_p5u[i] += seg.his_p5u_cut[i];//集計する
 							his_m5u[i] += seg.his_m5u_cut[i];//集計する
+#endif
 						}
 					}
 					else {
@@ -6309,10 +6488,12 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						for (int i = 0; i < G.SS.MOZ_CND_HCNT; i++) {
 							double x = (G.SS.MOZ_CND_HWID/2.0) + i * G.SS.MOZ_CND_HWID;
 							this.chart5.Series[0].Points.AddXY(x, seg.his_cen_cut[i]);
+#if false//2018.11.28(メモリリーク)
 							this.chart5.Series[1].Points.AddXY(x, seg.his_phf_cut[i]);
 							this.chart5.Series[2].Points.AddXY(x, seg.his_mph_cut[i]);
 							this.chart5.Series[3].Points.AddXY(x, seg.his_p5u_cut[i]);
 							this.chart5.Series[4].Points.AddXY(x, seg.his_m5u_cut[i]);
+#endif
 						}
 					}
 
