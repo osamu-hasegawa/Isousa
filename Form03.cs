@@ -3800,10 +3800,13 @@ retry:
 						m_dia_cnt = m_dia_cnt;
 					}else
 #endif
-					if (true) {
-#if true//2018.11.28(メモリリーク)
-						calc_hist(segs[i]);
+#if true//2018.11.30(ヒストグラム算出エラー)
+					if (m_dia_cnt <= 1) {
+						m_dia_cnt = m_dia_cnt;
+					}else
 #endif
+					if (true) {
+						calc_hist(segs[i]);
 					}
 #endif
 				}
