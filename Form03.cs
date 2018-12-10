@@ -401,6 +401,9 @@ retry:
 #endif
 			public List<int>		his;//キューティクル間隔・ヒストグラム
 			public List<int>		lbl;//キューティクル・ライン該当・ラベル
+#if false//2018.12.10(64ビット化)
+			public List<byte>		tst;
+#endif
 			//---
 			public seg_of_cuti() {
 				this.pbf = new List<Point> ();
@@ -415,6 +418,9 @@ retry:
 #endif
 				this.his = new List<int>   ();
 				this.lbl = new List<int>   ();
+#if false//2018.12.10(64ビット化)
+				this.tst = new List<byte>(1024*128*5);
+#endif
 			}
 			//---
 			public void clear() {
@@ -433,6 +439,11 @@ retry:
 				if (ihc != null) {
 					ihc = null;
 				}
+#if false//2018.12.10(64ビット化)
+				if (tst != null) {
+					tst = null;
+				}
+#endif
 			}
 		}
 #endif
@@ -2224,6 +2235,11 @@ retry:
 					if (seg.cut_inf.Count <= 0) {
 						for (int i = 0; i < (LMAX*2+1); i++) {
 							seg_of_cuti cut = new seg_of_cuti();
+#if false//2018.12.10(64ビット化)
+							for (int u = 0; u < cut.tst.Capacity; u++) {
+								cut.tst.Add((byte)u);
+							}
+#endif
 							seg.cut_inf.Add(cut);
 						}
 #if true//2018.11.28(メモリリーク)

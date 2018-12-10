@@ -9,20 +9,23 @@ namespace uSCOPE
     class D
     {
 #if true
-		[DllImport("USBHIDHELPER32.DLL", EntryPoint = "HID_ENUM")]
-		static extern int _HID_ENUM(uint vid, uint pid, IntPtr pcnt);
+		[DllImport("USBHIDHELPER64.DLL")]
+		static extern Int32 TEST00(UInt32 vid, UInt32 pid, IntPtr pcnt);
 
-		[DllImport("USBHIDHELPER32.DLL")]
-		static extern int HID_OPEN(uint vid, uint pid, uint did);
+		[DllImport("USBHIDHELPER64.DLL", EntryPoint = "HID_ENUM")]
+		static extern Int32 _HID_ENUM(UInt32 vid, UInt32 pid, IntPtr pcnt);
+
+		[DllImport("USBHIDHELPER64.DLL")]
+		static extern Int32 HID_OPEN(UInt32 vid, UInt32 pid, UInt32 did);
     
-		[DllImport("USBHIDHELPER32.DLL")]
-		static extern int HID_CLOSE();
+		[DllImport("USBHIDHELPER64.DLL")]
+		static extern Int32 HID_CLOSE();
     
-		[DllImport("USBHIDHELPER32.DLL")]
-		static extern int WRITE_HID(byte[] pbuf, int size);
+		[DllImport("USBHIDHELPER64.DLL")]
+		static extern Int32 WRITE_HID(byte[] pbuf, int size);
     
-		[DllImport("USBHIDHELPER32.DLL")]
-		static extern int READ_HID(byte[] pbuf, int size);
+		[DllImport("USBHIDHELPER64.DLL")]
+		static extern Int32 READ_HID(byte[] pbuf, int size);
 		/*
 		BOOL APIENTRY HID_ENUM(DWORD vid, DWORD pid, LPDWORD pcnt);
 		BOOL APIENTRY HID_OPEN(DWORD vid, DWORD pid, DWORD did);
@@ -178,11 +181,12 @@ namespace uSCOPE
 				return(1);
 			}
 #endif
+			//TEST00(0,0,(IntPtr)0);
 			int		ret;
 			IntPtr	buf = new IntPtr();
 
 			buf = Marshal.AllocHGlobal(4);
-			ret = _HID_ENUM(vid, pid, buf); ;
+			ret = _HID_ENUM(vid, pid, buf);
 			pcnt = Marshal.ReadInt32(buf);
 			Marshal.FreeHGlobal(buf);
 
