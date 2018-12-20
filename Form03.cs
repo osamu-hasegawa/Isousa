@@ -461,6 +461,14 @@ retry:
 			public int	width;		//当該画像のサイズ
 			public int	height;		//当該画像のサイズ
 			public int total_idx;
+#if true //2018.12.17(オーバーラップ範囲)
+			public int ow_l_wid;
+			public int ow_r_wid;
+			public int ow_l_pos;//    0+ow_l_wid
+			public int ow_r_pos;//width-ow_r_wid
+			public double ow_l_xum;//    0+ow_l_wid
+			public double ow_r_xum;//width-ow_r_wid
+#endif
 			//public int 
 			//public float start_pix_of_seg;
 			//カラー画像と
@@ -617,6 +625,14 @@ retry:
 				this.moz_hpt = new List<Point>();//毛髄:上側点:補間後
 				this.moz_hpb = new List<Point>();//毛髄:下側点:補間後
 				this.moz_hpl = new List<double>();//毛髄:長さ径:補間後
+#endif
+#if true //2018.12.17(オーバーラップ範囲)
+				this.ow_l_wid = -1;
+				this.ow_r_wid = -1;
+				this.ow_l_pos = -1;
+				this.ow_r_pos = -1;
+				this.ow_l_xum = -1;
+				this.ow_r_xum = -1;
 #endif
 			}
 		};
@@ -2119,6 +2135,35 @@ retry:
 					}
 				}
 			}
+#if true //2018.12.17(オーバーラップ範囲)
+			if (true) {
+				//seg.ow_l_wid = seg.ow_r_wid = 0;
+			}
+			if (idx < (segs.Length-1)) {
+				//右重なり有り
+				int q1 = idx+0;
+				int	q2 = idx+1;
+				double right_of_curr_img = segs[q1].pix_pos.X + segs[q1].width-1;
+				double left_of_next_img  = segs[q2].pix_pos.X;
+				double	wid = right_of_curr_img - left_of_next_img;
+				segs[q1].ow_r_wid = (int)wid;
+				segs[q1].ow_r_pos =-(int)wid+segs[q1].width;
+				segs[q2].ow_l_wid = (int)wid;
+				segs[q2].ow_l_pos = (int)wid;
+			}
+			if (idx > 0) {
+				//左重なり無し
+				int q0 = idx-1;
+				int q1 = idx-0;
+				double right_of_prev_img = segs[q0].pix_pos.X + segs[q0].width-1;
+				double left_of_curr_img  = segs[q1].pix_pos.X;
+				double	wid = right_of_prev_img - left_of_curr_img;
+				segs[q0].ow_r_wid = (int)wid;
+				segs[q0].ow_r_pos =-(int)wid+segs[q0].width;
+				segs[q1].ow_l_wid = (int)wid;
+				segs[q1].ow_l_pos = (int)wid;
+			}
+#endif
 			pf =sta_of_pf;
 			//m_back_of_x = pf.X;
 			//を
@@ -2278,6 +2323,28 @@ retry:
 					}
 				}
 			}
+#if true //2018.12.17(オーバーラップ範囲)
+			if (seg.ow_l_pos >= 0) {
+				for (int i = 0; i < (seg.pts_cen.Count-1); i++) {
+					Point p0 = (Point)seg.pts_cen[i];
+					Point p1 = (Point)seg.pts_cen[i+1];
+					if (seg.ow_l_pos >= p0.X && seg.ow_l_pos < p1.X) {
+						seg.ow_l_xum = (double)seg.val_xum[i];
+						break;
+					}
+				}
+			}
+			if (seg.ow_r_pos >= 0) {
+				for (int i = seg.pts_cen.Count-1; i > 0; i--) {
+					Point p0 = (Point)seg.pts_cen[i-1];
+					Point p1 = (Point)seg.pts_cen[i];
+					if (seg.ow_r_pos >= p0.X && seg.ow_r_pos < p1.X) {
+						seg.ow_r_xum = (double)seg.val_xum[i];
+						break;
+					}
+				}
+			}
+#endif
 #if true//2018.11.28(メモリリーク)
 			//GC.Collect();
 #endif
@@ -4438,6 +4505,22 @@ retry:
 			}
 		}
 #endif
+#if true //2018.12.17(オーバーラップ範囲)
+		private void draw_ow_vert_line(seg_of_hair seg, Graphics gr, float pw)
+		{
+			Pen pen;
+			pen = new Pen(Color.LightGray, pw);
+			pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+			if (seg.ow_l_pos >= 0) {
+				gr.DrawLine(pen, seg.ow_l_pos, 0, seg.ow_l_pos, seg.height);
+			}
+			if (seg.ow_r_pos >= 0) {
+				gr.DrawLine(pen, seg.ow_r_pos, 0, seg.ow_r_pos, seg.height);
+			}
+			pen.Dispose();
+		}
+#endif
+
 		private void draw_image(hair hr)
 		{
 			string buf_dm, buf_ir, buf_pd;
@@ -4692,6 +4775,11 @@ retry:
 						gr.DrawLines(pen, seg.his_btm);
 					}
 #endif
+#if true //2018.12.17(オーバーラップ範囲)
+					if (this.checkBox20.Checked) {
+						draw_ow_vert_line(seg, gr, pw);
+					}
+#endif
 					pen.Dispose();
 					gr.Dispose();
 				}
@@ -4827,6 +4915,23 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						gr_ir.DrawLines(pen, seg.his_btm);
 					}
 #endif
+#if true //2018.12.17(オーバーラップ範囲)
+					if (this.checkBox20.Checked) {
+						draw_ow_vert_line(seg, gr_ir, pw);
+						draw_ow_vert_line(seg, gr_pd, pw);
+						/*
+						pen = new Pen(Color.LightGray, pw);
+						pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+						if (seg.ow_l_pos >= 0) {
+							gr_ir.DrawLine(pen, seg.ow_l_pos, 0, seg.ow_l_pos, seg.height);
+							gr_pd.DrawLine(pen, seg.ow_l_pos, 0, seg.ow_l_pos, seg.height);
+						}
+						if (seg.ow_r_pos >= 0) {
+							gr_ir.DrawLine(pen, seg.ow_r_pos, 0, seg.ow_r_pos, seg.height);
+							gr_pd.DrawLine(pen, seg.ow_r_pos, 0, seg.ow_r_pos, seg.height);
+						}*/
+					}
+#endif
 					if (pen != null) {
 						pen.Dispose();
 					}
@@ -4948,6 +5053,36 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #endif
 					this.pictureBox2.Image = bmp_ir;
 				}
+			}
+		}
+#endif
+#if true //2018.12.17(オーバーラップ範囲)
+		private void draw_graph_ow_line(Chart cht, int idx, double offs, seg_of_hair seg)
+		{
+			int	q0 = idx;
+			int q1 = idx+1;
+			if (this.checkBox20.Checked == false || this.radioButton1.Checked) {
+				cht.Series[q0].Enabled = false;
+				cht.Series[q1].Enabled = false;
+				return;
+			}
+			if (seg.ow_l_pos < 0) {
+				cht.Series[q0].Enabled = false;
+			}
+			else {
+				cht.Series[q0].Enabled = true;
+				cht.Series[q0].Points.Clear();
+				cht.Series[q0].Points.AddXY(offs+seg.ow_l_xum,-200);
+				cht.Series[q0].Points.AddXY(offs+seg.ow_l_xum,+200);
+			}
+			if (seg.ow_r_pos < 0) {
+				cht.Series[q1].Enabled = false;
+			}
+			else {
+				cht.Series[q1].Enabled = true;
+				cht.Series[q1].Points.Clear();
+				cht.Series[q1].Points.AddXY(offs+seg.ow_r_xum,-200);
+				cht.Series[q1].Points.AddXY(offs+seg.ow_r_xum,+200);
 			}
 		}
 #endif
@@ -5183,6 +5318,15 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			if (this.radioButton1.Checked) {
 				seg = seg_bak;
 			}
+#if true //2018.12.17(オーバーラップ範囲)
+			if (true) {
+				draw_graph_ow_line(this.chart1, 5, offs, seg);//キューティクル断面
+				draw_graph_ow_line(this.chart4, 6, offs, seg);//キューティクルライン
+				draw_graph_ow_line(this.chart3, 1, offs, seg);//毛髪径
+				draw_graph_ow_line(this.chart2, 2, offs, seg);//毛髄径
+				draw_graph_ow_line(this.chart6, 1, offs, seg);//毛髄中心
+			}
+#endif
 			if (true) {
 				this.chart1.Series[0].Color = Color.Cyan;		//R*0
 				this.chart1.Series[1].Color = Color.Green;		//R*+50%
@@ -5457,6 +5601,15 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				q |= 1;
 			}
 #endif
+#if true //2018.12.17(オーバーラップ範囲)
+			if (sender == this.checkBox20) {
+				q |= 1|2;//画像ファイル と グラフ
+			}
+#endif
+
+
+
+
 			//this.button1.Visible = !this.button1.Visible;
 			if ((q & 1) != 0) {
 				draw_image(hr);
