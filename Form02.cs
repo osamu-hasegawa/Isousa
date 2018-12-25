@@ -3206,6 +3206,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 		 * img_hsv:          Y(CND_H=1)   Y(CND_H=1) Y(COD_H=1)    Y(COD_H=1)
 		 *                   Y(HISMD=1)
 		 */
+#if _X64//2018.12.22(測定抜け対応)
 		[DllImport("IMGSUB64.DLL")]
 		private static extern void OCV_TERM();
 
@@ -3356,6 +3357,104 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 
 		[DllImport("IMGSUB64.DLL")]
 		private static extern void OCV_SAVE(Int32 I, string file);
+#endif
+#else
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_TERM();
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_RESET_MASK(Int32 x, Int32 y, Int32 w, Int32 h);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_RESET(Int32 wid, Int32 hei);//, Int32 mx, Int32 my, Int32 mw, Int32 mh);
+		[DllImport("IMGSUB.DLL")]
+		private static extern Int32 OCV_SET_IMG(IntPtr ptr, Int32 wid, Int32 hei, Int32 str, Int32 bpp);
+		[DllImport("IMGSUB.DLL")]
+		private static extern Int32 OCV_GET_IMG(IntPtr ptr, Int32 wid, Int32 hei, Int32 str, Int32 bpp);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_TO_GRAY(Int32 I, Int32 H);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_TO_HSV(Int32 I, Int32 H);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_MERGE(Int32 H1, Int32 H2, Int32 H3, Int32 I);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_SPLIT(Int32 I, Int32 H1, Int32 H2, Int32 H3);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_SMOOTH(Int32 I, Int32 cof);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_THRESH_BIN(Int32 I, Int32 H, Int32 thval, Int32 inv);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_THRESH_HSV(Int32 I1, Int32 I2, Int32 I3, Int32 H, Int32 minh, Int32 maxh, Int32 mins, Int32 maxs, Int32 minv, Int32 maxv);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_CAL_HIST(Int32 I, Int32 bMASK, ref double pval, out double pmin, out double pmax, out double pavg);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_PUTTEXT(Int32 I, string buf, Int32 x, Int32 y, Int32 c);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_FIND_FIRST(Int32 I, Int32 mode);
+		[DllImport("IMGSUB.DLL")]
+		private static extern IntPtr OCV_FIND_NEXT(IntPtr pos, Int32 smax, Int32 smin, Int32 lmax, Int32 lmin, double cmax, double cmin, out double ps, out double pl, out double pc);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_FIND_TERM();
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_DRAW_CONTOURS(Int32 I, IntPtr pos, Int32 c1, Int32 c2);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_DRAW_CONTOURS2(Int32 I, IntPtr pos, Int32 c1, Int32 c2, Int32 thickness);
+		[DllImport("IMGSUB.DLL")]
+		private static extern Int32	OCV_CONTOURS_CNT(IntPtr pos);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_CONTOURS_PTS(IntPtr pos, Int32 idx, out POINT p);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_FIT_LINE(IntPtr pos, out float f);
+		[DllImport("IMGSUB.DLL")]
+		private static extern Int32 OCV_APPROX_PTS(IntPtr pos, Int32 bSIGNE, Int32 PREC);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_GET_PTS(Int32 idx, out POINT p);
+		private struct RECT { public Int32 Left; public Int32 Top; public Int32 Right; public Int32 Bottom; }
+		private struct POINT { public Int32 x; public Int32 y;}
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_DRAW_LINE(Int32 I, ref POINT p1, ref POINT p2, Int32 c, Int32 thick);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_DRAW_RECT(Int32 I, ref RECT pr, Int32 c, Int32 thickness);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_BOUNDING_RECT(IntPtr pos, out RECT pr);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_DRAW_TEXT(Int32 I, Int32 x, Int32 y, string buf, Int32 c);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_MIN_AREA_RECT2(IntPtr pos, out POINT p1, out POINT p2, out POINT p3, out POINT p4);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_FILL_POLY(Int32 I, ref POINT p, Int32 n, Int32 c);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_ZERO(Int32 I);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_SOBEL(Int32 I, Int32 H, Int32 xorder, Int32 yorder, Int32 apert_size);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void OCV_LAPLACE(Int32 I, Int32 H, Int32 apert_size);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_CANNY(Int32 I, Int32 H, double th1, double th2, Int32 apert_size);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_MINMAX(Int32 I, ref double pmin, ref double pmax);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_SCALE(Int32 I, Int32 H, double scale, double shift);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_SMOOTH2(Int32 I, Int32 cof, double sig1, double sig2);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_DIFF(Int32 I, Int32 H, Int32 J);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_TO_01(Int32 I, Int32 ZERO_VAL, Int32 NONZERO_VAL);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_THINNING(Int32 I, Int32 H, Int32 cnt);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_COPY(Int32 I, Int32 H);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_NOT(Int32 I, Int32 H);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_ERODE(Int32 I, Int32 H, Int32 kernel_size, Int32 cnt);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_DILATE(Int32 I, Int32 H, Int32 kernel_size, Int32 cnt);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_MINMAX_ROI(Int32 I, Int32 x, Int32 y, Int32 w, Int32 h, ref Int32 pmin, ref Int32 pmax);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_AND(Int32 I, Int32 H, Int32 J);
+		[DllImport("IMGSUB.DLL")]
+		private static extern void	OCV_SAVE(Int32 I, string file);
 #endif
 		private static int PF2BPP(PixelFormat pf)
 		{

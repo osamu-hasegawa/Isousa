@@ -2146,6 +2146,9 @@ retry:
 				double right_of_curr_img = segs[q1].pix_pos.X + segs[q1].width-1;
 				double left_of_next_img  = segs[q2].pix_pos.X;
 				double	wid = right_of_curr_img - left_of_next_img;
+#if true//2018.12.22(測定抜け対応)
+				wid/=2;
+#endif
 				segs[q1].ow_r_wid = (int)wid;
 				segs[q1].ow_r_pos =-(int)wid+segs[q1].width;
 				segs[q2].ow_l_wid = (int)wid;
@@ -2158,6 +2161,9 @@ retry:
 				double right_of_prev_img = segs[q0].pix_pos.X + segs[q0].width-1;
 				double left_of_curr_img  = segs[q1].pix_pos.X;
 				double	wid = right_of_prev_img - left_of_curr_img;
+#if true//2018.12.22(測定抜け対応)
+				wid/=2;
+#endif
 				segs[q0].ow_r_wid = (int)wid;
 				segs[q0].ow_r_pos =-(int)wid+segs[q0].width;
 				segs[q1].ow_l_wid = (int)wid;

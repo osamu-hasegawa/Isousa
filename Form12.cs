@@ -1293,7 +1293,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			DlgProgress
 					prg = new DlgProgress();
 			int bak_of_mode = G.SS.PLM_AUT_MODE;
-
+#if true//2018.12.22(測定抜け対応)
+			m_adat = new ADATA();
+#endif
 			m_adat.trace = false;
 			m_adat.retry = false;
 
@@ -1345,9 +1347,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					//    buf += "\r\r";
 					//    bWAIT = true;
 					//}
-					if ((m_adat.h_idx + 1) == 2) {
-						buf = buf;
-					}
+					//if ((m_adat.h_idx + 1) == 2) {
+					//    buf = buf;
+					//}
 					if (false) {
 					}
 					else if (this.AUT_STS >= 5 && this.AUT_STS <= 6) {
@@ -1531,6 +1533,16 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			//---
 			public bool retry;
 			public ArrayList y_1st_pos;
+#if true//2018.12.22(測定抜け対応)
+			public int n_idx;		//抜け測定でのトータルでのインデックス
+			public bool nuke;
+			public int	nuke_id;
+			public int	nuke_cnt;
+			public List<int> nuke_st;
+			public List<int> nuke_ed;
+			public List<int> nuke_pos;
+			public int cam_hei_pls;
+#endif
 			//---
 			public int ir_nxst;
 			public bool ir_done;
@@ -1587,12 +1599,30 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				k_pos = new List<int>();
 #endif
 				y_1st_pos = new ArrayList();
+#if true//2018.12.22(測定抜け対応)
+				n_idx = 0;
+				nuke = false;
+				nuke_id = 0;
+				nuke_cnt = 0;
+				nuke_st = new List<int>();
+				nuke_ed = new List<int>();
+				nuke_pos = new List<int>();
+				double tmp;
+				tmp = G.CAM_HEI;				//px
+				tmp = G.PX2UM(tmp);				//um
+				tmp = tmp / G.SS.PLM_UMPP[1];	//pls
+				cam_hei_pls = (int)tmp;
+#endif
 				ir_nxst = 0;
 				ir_done = false;
 				ir_lsbk = 0;
 			}
 		};
+#if true//2018.12.22(測定抜け対応)
+		private ADATA m_adat = null;
+#else
 		private ADATA m_adat = new ADATA();
+#endif
 		private string FLTP2STR(int n)
 		{
 			string buf;
@@ -1783,7 +1813,17 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			string path = m_adat.fold;
 			path += "\\";
 			path = "";
+#if true//2018.12.22(測定抜け対応)
+			if (m_adat.nuke) {
+				char seq = (char)('A' + m_adat.n_idx);
+				path += seq;
+			}
+			else {
+#endif
 			path += string.Format("{0}", m_adat.h_idx);
+#if true//2018.12.22(測定抜け対応)
+			}
+#endif
 			path +=  m_adat.pref;
 			if (f_idx >= 0) {
 			path += string.Format("_{0:00}", m_adat.f_idx);
@@ -1972,8 +2012,124 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 
 			return(false);
 		}
-#if true//2018.11.13(毛髪中心AF)
-		//private void set_z_k_
+#if true//2018.12.22(測定抜け対応)
+		private bool check_nuke()
+		{
+			m_adat.n_idx = 0;
+			m_adat.nuke_id = 0;
+			m_adat.nuke_cnt = 0;
+			m_adat.nuke_st.Clear();
+			m_adat.nuke_ed.Clear();
+
+			if (m_adat.y_1st_pos.Count < 3) {
+				return(false);
+			}
+			int[] ytmp = (int[])m_adat.y_1st_pos.ToArray(typeof(int));
+			List<int> ypos = new List<int>(ytmp);
+			double fmin = double.MaxValue;
+			int	imin = 0;
+
+			for (int i = 0; i < (ypos.Count-1); i++) {
+				double fdif = ypos[i+1] - ypos[i];
+				if (fmin > fdif) {
+					fmin = fdif;
+					imin = i;
+				}
+			}
+			for (int i = 0; i < (ypos.Count-1); i++) {
+				double fdif = ypos[i+1] - ypos[i];
+				if (fdif >= (fmin*2)) {
+					//最小毛髪間隔の二倍以上の範囲を検索抜け対象とする
+					m_adat.nuke_st.Add(ypos[i]);
+					m_adat.nuke_ed.Add(ypos[i+1]);
+				}
+			}
+			if (G.SS.PLM_AUT_ED_Y >= (ypos[ypos.Count-1] + fmin)) {
+				m_adat.nuke_st.Add(ypos[ypos.Count-1]);
+				m_adat.nuke_ed.Add(G.SS.PLM_AUT_ED_Y+m_adat.cam_hei_pls);
+			}
+			if (m_adat.nuke_st.Count <= 0) {
+				return(false);
+			}
+			DialogResult ret;
+			timer2.Enabled = false;
+			ret = G.mlog("#q測定済みの毛髪間隔が一定ではありません。測定抜けのチェックを行いますか？");
+			timer2.Enabled = true;
+			if (ret != System.Windows.Forms.DialogResult.Yes) {
+				return(false);
+			}
+			m_adat.nuke_cnt = m_adat.nuke_st.Count;
+			return(true);
+		}
+		/*
+		  y_1st_pos: -849,-555,  33, 274, 568, 862
+		              0CR, 1CR, 2CR, 3CR, 4CR, 5CR
+		  nuke__pos:          -255
+		                       ACR
+		 
+
+		 
+		 */
+		private void rename_nuke_files()
+		{
+			List<int>	old_im_posi = new List<int>();
+			List<string>old_cl_name = new List<string>();
+			List<string>old_ir_name = new List<string>();
+			//List<int>	upd_posi = new List<int>();
+			List<string>upd_cl_name = new List<string>();
+			List<string>upd_ir_name = new List<string>();
+
+			for (int i = 0; i < m_adat.y_1st_pos.Count; i++) {
+				old_im_posi.Add((int)m_adat.y_1st_pos[i]);
+				old_cl_name.Add(i.ToString() + m_adat.pref);
+				old_ir_name.Add(i.ToString() + "IR");
+			}
+			//G.mlog("IRについても処理を追加する");
+			//@@
+			for (int h = 0; h < m_adat.nuke_pos.Count; h++) {
+				int i;
+				for (i = 0; i < old_im_posi.Count; i++) {
+					if (m_adat.nuke_pos[h] < old_im_posi[i]) {
+						break;
+					}
+				}
+				old_im_posi.Insert(i, m_adat.nuke_pos[h]);
+				char seq = (char)('A'+h);
+				old_cl_name.Insert(i, seq + m_adat.pref);
+				old_ir_name.Insert(i, seq + "IR");
+			}
+			for (int i = 0; i < old_cl_name.Count; i++) {
+				upd_cl_name.Add(i.ToString() + m_adat.pref);
+				upd_ir_name.Add(i.ToString() + "IR");
+			}
+			//---
+			for (int i = old_cl_name.Count-1; i >= 0; i--) {
+				string[] files;
+				files = System.IO.Directory.GetFiles(m_adat.fold, old_cl_name[i]+"*");
+				for (int h = 0; h < files.Length; h++) {
+					string old_path = files[h];
+					string upd_path = old_path.Replace(old_cl_name[i], upd_cl_name[i]);
+					System.IO.File.Move(old_path, upd_path);
+				}
+			}
+			//---
+			for (int i = old_ir_name.Count-1; i >= 0; i--) {
+				string[] files;
+				files = System.IO.Directory.GetFiles(m_adat.fold, old_ir_name[i]+"*");
+				for (int h = 0; h < files.Length; h++) {
+					string old_path = files[h];
+					string upd_path = old_path.Replace(old_ir_name[i], upd_ir_name[i]);
+					System.IO.File.Move(old_path, upd_path);
+				}
+			}
+			//---
+			string buf = System.IO.File.ReadAllText(m_adat.log, Encoding.Default);
+			for (int i = old_cl_name.Count-1; i >= 0; i--) {
+				buf = buf.Replace(old_cl_name[i], upd_cl_name[i]);
+				buf = buf.Replace(old_ir_name[i], upd_ir_name[i]);
+			}
+			System.IO.File.WriteAllText(m_adat.log, buf, Encoding.Default);
+		}
 #endif
 		private int m_retry_cnt_of_hpos;
 		// 自動測定
@@ -2036,6 +2192,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 						G.CNT_MOD = (G.SS.IMP_AUT_AFMD[1]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[1];
 					}
 #endif
+#if true//2018.12.22(測定抜け対応)
+					if (m_adat.nuke) {
+					}
+					else
+#endif
 					if (m_adat.retry == false) {
 						DateTime dt = DateTime.Now;
 						string buf = "";
@@ -2062,6 +2223,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					else {
 						m_adat.pref = "CR";//白色(反射)
 					}
+#if true//2018.12.22(測定抜け対応)
+					if (m_adat.nuke) {
+					}
+					else
+#endif
 					if (m_adat.retry == false) {
 						try {
 							System.IO.Directory.CreateDirectory(m_adat.fold);
@@ -2077,8 +2243,17 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 						}
 					}
 				}
+#if true//2018.12.22(測定抜け対応)
+				if (m_adat.nuke) {
+				MOVE_ABS_XY(G.SS.PLM_AUT_HP_X, m_adat.nuke_st[0] + m_adat.cam_hei_pls);
+				}
+				else {
+#endif
 #if true//2018.06.04 赤外同時測定
 				MOVE_ABS_XY(G.SS.PLM_AUT_HP_X, G.SS.PLM_AUT_HP_Y);
+#endif
+#if true//2018.12.22(測定抜け対応)
+				}
 #endif
 				//中上
 				if (G.SS.PLM_AUT_HPOS) {
@@ -2113,7 +2288,13 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				else
 #endif
 #if true//2018.07.02
-				if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/) {
+				if (
+#if true//2018.12.22(測定抜け対応)
+					true
+#else
+					G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/
+#endif
+					) {
 					if (NXT_STS < 0) {
 						m_pre_set[2] = true;
 						m_pre_pos[2] = G.SS.PLM_AUT_HP_Z;
@@ -2141,6 +2322,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				}
 				break;
 			case 2:
+#if true//2018.12.22(測定抜け対応)
+				if (m_adat.nuke) {
+				}
+				else
+#endif
 				if (m_adat.retry == false) {
 					m_adat.h_idx = 0;//毛髪１本目
 					m_adat.h_cnt = 0;
@@ -2223,8 +2409,25 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				NXT_STS = 12;
 				break;
 			case 5:
+#if true//2018.12.22(測定抜け対応)
+				if (m_adat.nuke && G.PLM_POS[1] >= (m_adat.nuke_ed[m_adat.nuke_id]-m_adat.cam_hei_pls)) {
+					m_adat.nuke_id++;
+					if (m_adat.nuke_id >= m_adat.nuke_cnt) {
+						NXT_STS = 999;//->終了
+					}
+					else {
+						int nxt_ypos = m_adat.nuke_st[m_adat.nuke_id] + m_adat.cam_hei_pls;
+						MOVE_REL_XY(0,nxt_ypos-G.PLM_POS[1]);
+					}
+				}
+				else
+#endif
 #if true//2018.07.30(終了位置指定)
-				if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ && G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
+				if (
+#if false//2018.12.22(測定抜け対応)
+					G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ &&
+#endif
+					G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
 					NXT_STS = 999;
 				}
 				else
@@ -2282,9 +2485,22 @@ a_write("毛髪判定(AF位置探索):OK");
 				}
 			break;
 			case 10:
+#if true//2018.12.22(測定抜け対応)
+				if (m_adat.nuke) {
+					//画面サイズ分↓へ
+					MOVE_PIX_XY(0, (int)(G.CAM_HEI * (1 - G.SS.PLM_AUT_OVLP / 100.0)));
+					NXT_STS = -(5 - 1);//->5
+					m_adat.h_cnt = m_adat.h_idx;
+					break;
+				}
+#endif
 				//a_write("毛髪探索中:LIMIT.CHECK");
 #if true//2018.07.30(終了位置指定)
-				if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ && G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
+				if (
+#if false//2018.12.22(測定抜け対応)
+					G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ &&
+#endif
+					G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
 					//NXT_STS = 999;
 					NXT_STS = 40;
 				}
@@ -2354,7 +2570,11 @@ a_write("移動:下へ");
 			case 132:
 			case 152:
 #if true//2018.07.30(終了位置指定)
-				if (this.AUT_STS == 12 && G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ && G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
+				if (this.AUT_STS == 12 &&
+#if false//2018.12.22(測定抜け対応)
+					G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/ &&
+#endif
+					G.PLM_POS[1] >= G.SS.PLM_AUT_ED_Y) {
 					NXT_STS = 10;
 					break;
 				}
@@ -2382,6 +2602,18 @@ a_write("毛髪判定(中心):NG");
 a_write("毛髪判定(中心):OK");
 					NXT_STS = NXT_STS;
 				}
+#if DEBUG//2018.12.22(測定抜け対応)
+				// -849,-555,-263, +31,+274,+568,+862,(7本OFFLINE画像,XYリミットを共に±1000に設定)
+				if (NXT_STS == 15 && !m_adat.nuke) {
+					if (false
+					 ||Math.Abs(G.PLM_POS[1]-(-261)) < 20
+					 ||Math.Abs(G.PLM_POS[1]-(+ 33)) < 20 
+					 ||Math.Abs(G.PLM_POS[1]-(+862)) < 20 
+					) {
+						NXT_STS = 10;//抜けデバッグのため毛髪をスキップさせる
+					}
+				}
+#endif
 				break;
 			case 15:
 			case 25:
@@ -2534,6 +2766,12 @@ a_write("AF:終了");
 						}
 						m_adat.f_idx = 50;
 						//---
+#if true//2018.12.22(測定抜け対応)
+						if (m_adat.nuke) {
+							m_adat.nuke_pos.Add(G.PLM_POS[1]);
+						}
+						else
+#endif
 						if (m_adat.retry == false) {
 							//反射での毛髪Ｙ位置を保存して、
 							//透過のときはこのＹ座標をスキップするようにする
@@ -2758,6 +2996,11 @@ a_write("AF:終了");
 				rename_aut_files();
 				//---
 				m_adat.h_idx++;
+#if true//2018.12.22(測定抜け対応)
+				if (m_adat.nuke) {
+				m_adat.n_idx++;
+				}
+#endif
 #if true//2018.08.16(Z軸再原点)
 				if (G.SS.PLM_AUT_ZORG) {
 					m_pre_set[2] = false;
@@ -3268,6 +3511,24 @@ a_write("AF:開始(中心)");
 				break;
 #endif
 			case 999:
+#if true//2018.12.22(測定抜け対応)
+				if (m_adat.nuke) {
+					//抜けチェック測定後
+					rename_nuke_files();
+					m_adat.nuke = false;
+					for (int i = 0; i < m_adat.nuke_pos.Count; i++) {
+						//透過リトライ用にコピーしておく
+						m_adat.y_1st_pos.Add(m_adat.nuke_pos[i]);
+					}
+				}
+				else if (G.SS.PLM_AUT_NUKE && G.SS.PLM_AUT_HPOS) {
+					if (check_nuke()) {
+						m_adat.nuke = true;
+						NXT_STS = 1;
+						break;
+					}
+				}
+#endif
 				if (m_adat.h_cnt == 0 && G.SS.PLM_AUT_RTRY) {
 					if (G.SS.PLM_AUT_MODE == 5 || G.SS.PLM_AUT_MODE == 8) {
 						//5:反射

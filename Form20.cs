@@ -92,9 +92,21 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton4, this.radioButton5}, ref G.SS.PLM_AUT_HMOD);
 				DDV.DDX(bUpdate, this.numericUpDown10 , ref m_ss.PLM_AUT_HP_X, G.SS.PLM_MLIM[0], G.SS.PLM_PLIM[0]);
 				DDV.DDX(bUpdate, this.numericUpDown11 , ref m_ss.PLM_AUT_HP_Y, G.SS.PLM_MLIM[1], G.SS.PLM_PLIM[1]);
-				DDV.DDX(bUpdate, this.numericUpDown12, ref m_ss.PLM_AUT_HPRT);
-				DDV.DDX(bUpdate, this.numericUpDown13, ref m_ss.PLM_AUT_HPMN);
-				DDV.DDX(bUpdate, this.numericUpDown14, ref m_ss.PLM_AUT_HPMX);
+#if true//2018.12.22(測定抜け対応)
+				DDV.DDX(bUpdate, this.numericUpDown12 , ref m_ss.PLM_AUT_HP_Z, G.SS.PLM_MLIM[2], G.SS.PLM_PLIM[2]);
+				DDV.DDX(bUpdate, this.numericUpDown14 , ref m_ss.PLM_AUT_ED_Y, G.SS.PLM_MLIM[1], G.SS.PLM_PLIM[1]);
+                if (bUpdate == false) {
+					if (m_ss.PLM_AUT_ED_Y <= m_ss.PLM_AUT_HP_Y) {
+						G.mlog("終了ステージ位置:yは開始位置:yより大きい値を指定してください.");
+						this.numericUpDown14.Focus();
+						return(false);
+					}
+                }
+				DDV.DDX(bUpdate, this.checkBox10     , ref m_ss.PLM_AUT_NUKE);
+#endif
+				DDV.DDX(bUpdate, this.numericUpDown17, ref m_ss.PLM_AUT_HPRT);
+				DDV.DDX(bUpdate, this.numericUpDown18, ref m_ss.PLM_AUT_HPMN);
+				DDV.DDX(bUpdate, this.numericUpDown19, ref m_ss.PLM_AUT_HPMX);
 				DDV.DDX(bUpdate, this.numericUpDown15, ref m_ss.PLM_AUT_HPSL);
 				DDV.DDX(bUpdate, this.numericUpDown16, ref m_ss.PLM_AUT_HPSS);
 				//---
@@ -295,11 +307,15 @@ namespace uSCOPE
 
 			//this.numericUpDown10.Enabled = bl;
 			//this.numericUpDown11.Enabled = bl;
-			this.numericUpDown12.Enabled = bl;
-			this.numericUpDown13.Enabled = bl;
-			this.numericUpDown14.Enabled = bl;
+			this.numericUpDown17.Enabled = bl;
+			this.numericUpDown18.Enabled = bl;
+			this.numericUpDown19.Enabled = bl;
 			this.numericUpDown15.Enabled = bl;
 			this.numericUpDown16.Enabled = bl;
+#if true//2018.12.22(測定抜け対応)
+			this.checkBox10.Enabled = bl;
+			this.numericUpDown12.Enabled = !bl;
+#endif
 		}
 
 		private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -334,5 +350,11 @@ namespace uSCOPE
 			textBox3.Enabled = (this.checkBox6.Checked == true);
 			textBox4.Enabled = (this.checkBox7.Checked == true);
 		}
+#if true//2018.12.22(測定抜け対応)
+		private void numericUpDown10_ValueChanged(object sender, EventArgs e)
+		{
+			 this.numericUpDown13.Value = this.numericUpDown10.Value;
+		}
+#endif
 	}
 }

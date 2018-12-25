@@ -275,6 +275,9 @@ namespace uSCOPE
 			//---
 			public bool PLM_AUT_CNST = false;
 			public bool PLM_AUT_RTRY = false;
+#if true//2018.12.22(測定抜け対応)
+			public bool PLM_AUT_NUKE = true;
+#endif
 			//---
 			//public bool PLM_AUT_ZMUL = false;
 			//public int PLM_AUT_ZHAN = 200;

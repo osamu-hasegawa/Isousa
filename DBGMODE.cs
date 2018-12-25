@@ -437,13 +437,22 @@ namespace uSCOPE
 				Graphics g = Graphics.FromImage(m_bmp_cam);
 				Rectangle d_rt = new Rectangle(0,0,CAM_WID,CAM_HEI);
 //				Rectangle s_rt = new Rectangle(ox-wid/2, oy-hei/2, wid, hei);
+#if false//2018.12.22(測定抜け対応)
 				if ((G.PLM_POS[0]/G.SS.PLM_MLIM[0]) >= 0.95) {
 				//-リミットでの繰り返し発生実験
 				ox = (int)(wid_i - wid_i * 0.5);
 				}
+#endif
 				Rectangle s_rt = new Rectangle(ox-wid/2, oy-hei/2, wid, hei);
 				g.Clear(Color.Black/*.Aquamarine*/);
 				g.DrawImage(m_bmp_org, d_rt, s_rt, GraphicsUnit.Pixel);
+#if true//2018.12.22(測定抜け対応)
+				if (true) {
+					Font fnt = new Font("Arial", 35);
+					string str = string.Format("(X,Y,Z)=({0},{1},{2})", PLM_CNT[0], PLM_CNT[1], PLM_CNT[2]);
+					g.DrawString(str, fnt, Brushes.LimeGreen, /*d_rt, sf*/2000,25);
+				}
+#endif
 				g.Dispose();
 				Thread.Sleep(0);
 				//画像取得
