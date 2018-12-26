@@ -4032,12 +4032,14 @@ retry:
 			this.listView1.Dock = DockStyle.Fill;
 			this.listView2.Visible = false;
 			this.listView2.Dock = DockStyle.Fill;
+#if false//2018.12.25(オーバーラップ範囲改)
 			//---
 			this.checkBox6.Text = string.Format("R+{0}um", G.SS.MOZ_CND_CUTE);//R+3um
 			this.checkBox7.Text = string.Format("R-{0}um", G.SS.MOZ_CND_CUTE);//R-3um
 			//---
 			this.chart1.Series[3].LegendText = this.checkBox6.Text;//R+3um
 			this.chart1.Series[4].LegendText = this.checkBox7.Text;//R-3um
+#endif
 			//---
 //			this.radioButton1.Enabled = !this.radioButton1.Enabled;
 //			this.radioButton1.Enabled = false;
@@ -4925,17 +4927,6 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					if (this.checkBox20.Checked) {
 						draw_ow_vert_line(seg, gr_ir, pw);
 						draw_ow_vert_line(seg, gr_pd, pw);
-						/*
-						pen = new Pen(Color.LightGray, pw);
-						pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-						if (seg.ow_l_pos >= 0) {
-							gr_ir.DrawLine(pen, seg.ow_l_pos, 0, seg.ow_l_pos, seg.height);
-							gr_pd.DrawLine(pen, seg.ow_l_pos, 0, seg.ow_l_pos, seg.height);
-						}
-						if (seg.ow_r_pos >= 0) {
-							gr_ir.DrawLine(pen, seg.ow_r_pos, 0, seg.ow_r_pos, seg.height);
-							gr_pd.DrawLine(pen, seg.ow_r_pos, 0, seg.ow_r_pos, seg.height);
-						}*/
 					}
 #endif
 					if (pen != null) {
@@ -5078,8 +5069,8 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			else {
 				cht.Series[q0].Enabled = true;
 				cht.Series[q0].Points.Clear();
-				cht.Series[q0].Points.AddXY(offs+seg.ow_l_xum,-200);
-				cht.Series[q0].Points.AddXY(offs+seg.ow_l_xum,+200);
+				cht.Series[q0].Points.AddXY(offs+seg.ow_l_xum,-999);
+				cht.Series[q0].Points.AddXY(offs+seg.ow_l_xum,+999);
 			}
 			if (seg.ow_r_pos < 0) {
 				cht.Series[q1].Enabled = false;
@@ -5087,8 +5078,8 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			else {
 				cht.Series[q1].Enabled = true;
 				cht.Series[q1].Points.Clear();
-				cht.Series[q1].Points.AddXY(offs+seg.ow_r_xum,-200);
-				cht.Series[q1].Points.AddXY(offs+seg.ow_r_xum,+200);
+				cht.Series[q1].Points.AddXY(offs+seg.ow_r_xum,-999);
+				cht.Series[q1].Points.AddXY(offs+seg.ow_r_xum,+999);
 			}
 		}
 #endif
@@ -5107,10 +5098,12 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #endif
 			//---
 			this.chart1.Series[0].Points.Clear();
+#if false//2018.12.25(オーバーラップ範囲改)
 			this.chart1.Series[1].Points.Clear();
 			this.chart1.Series[2].Points.Clear();
 			this.chart1.Series[3].Points.Clear();
 			this.chart1.Series[4].Points.Clear();
+#endif
 			this.chart2.Series[0].Points.Clear();
 #if false//2018.08.21
 			this.chart2.Series[1].Points.Clear();
@@ -5173,10 +5166,12 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						double um = G.PX2UM(seg.width, m_log_info.pix_pitch, m_log_info.zoom);
 						double x0 = um+ offs;
 						this.chart1.Series[0].Points.AddXY(x0, double.NaN);
+#if false//2018.12.25(オーバーラップ範囲改)
 						this.chart1.Series[1].Points.AddXY(x0, double.NaN);
 						this.chart1.Series[2].Points.AddXY(x0, double.NaN);
 						this.chart1.Series[3].Points.AddXY(x0, double.NaN);
 						this.chart1.Series[4].Points.AddXY(x0, double.NaN);
+#endif
 						this.chart2.Series[0].Points.AddXY(x0, double.NaN);
 #if false//2018.08.21
 						this.chart2.Series[1].Points.AddXY(x0, double.NaN);
@@ -5213,10 +5208,16 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					double y3 = TO_VAL(seg.val_mph[i]);
 					double y4 = TO_VAL(seg.val_m5u[i]);
 #endif
+#if true//2018.12.25(オーバーラップ範囲改)
+					if ((double)seg.val_xum[i] < seg.ow_l_xum || (double)seg.val_xum[i] > seg.ow_r_xum) {
+						continue;
+					}
+#endif
 					//double y5 = TO_VAL(seg.moz_zpl[i]);
 					if (this.checkBox3.Checked) {//R*0
 						this.chart1.Series[0].Points.AddXY(x0, y2);
 					}
+#if false//2018.12.25(オーバーラップ範囲改)
 					if (this.checkBox4.Checked) {//R*+50%
 						this.chart1.Series[1].Points.AddXY(x0, y1);
 					}
@@ -5229,11 +5230,18 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					if (this.checkBox7.Checked) {//R-5u
 						this.chart1.Series[4].Points.AddXY(x0, y4);
 					}
+#endif
 				}
 				for (int i = i0; i < seg.moz_zpl.Count; i++) {
 					double x0 = TO_VAL(seg.val_xum[i]) + offs;
 					double y5 = TO_VAL(seg.moz_zpl[i]);
 					double y6 = TO_VAL(seg.mou_len[i]);
+#if true//2018.12.25(オーバーラップ範囲改)
+					if ((double)seg.val_xum[i] < seg.ow_l_xum || (double)seg.val_xum[i] > seg.ow_r_xum) {
+						continue;
+					}
+#endif
+
 					if (this.checkBox11.Checked) {
 #if true//2018.10.10(毛髪径算出・改造)
 						//赤外・外れ判定
@@ -5335,17 +5343,21 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #endif
 			if (true) {
 				this.chart1.Series[0].Color = Color.Cyan;		//R*0
+#if false//2018.12.25(オーバーラップ範囲改)
 				this.chart1.Series[1].Color = Color.Green;		//R*+50%
 				this.chart1.Series[2].Color = Color.Magenta;	//R*-50%
 				this.chart1.Series[3].Color = Color.Blue;//R+3um
 				this.chart1.Series[4].Color = Color.Red;	//R-3um
+#endif
 				this.chart2.Series[0].Color = Color.Green;	//毛髄径
 				//---
 				this.chart1.Series[0].Enabled = this.checkBox3.Checked;
+#if false//2018.12.25(オーバーラップ範囲改)
 				this.chart1.Series[1].Enabled = this.checkBox4.Checked;
 				this.chart1.Series[2].Enabled = this.checkBox5.Checked;
 				this.chart1.Series[3].Enabled = this.checkBox6.Checked;
 				this.chart1.Series[4].Enabled = this.checkBox7.Checked;
+#endif
 				this.chart2.Series[0].Enabled = this.checkBox11.Checked;
 #if false//2018.08.21
 				this.chart2.Series[1].Enabled = this.checkBox12.Checked;
@@ -5484,6 +5496,14 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					this.chart6.ChartAreas[0].AxisY.Interval = 25;
 				}
 #endif
+#if true//2018.12.25(オーバーラップ範囲改)
+				fmax = TO_VAL(seg.val_xum[seg.val_xum.Count-1])+offs;
+				this.chart1.ChartAreas[0].AxisX.Maximum = fmax;//キューティクル断面
+				this.chart2.ChartAreas[0].AxisX.Maximum = fmax;//毛髄径
+				this.chart3.ChartAreas[0].AxisX.Maximum = fmax;//毛髪径
+				this.chart6.ChartAreas[0].AxisX.Maximum = fmax;//毛髄中心
+#endif
+
 				//if (this.radioButton1.Checked) {
 				////this.chart1.ChartAreas[0].AxisX.Crossing = this.chart1.ChartAreas[0].AxisX.Maximum/10;
 				//}
@@ -6583,6 +6603,12 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						double y3 = TO_VAL(seg.val_mph_fil[i]);
 						double y4 = TO_VAL(seg.val_m5u_fil[i]);
 #endif
+#if true//2018.12.25(オーバーラップ範囲改)
+						if ((double)seg.val_xum[i] < seg.ow_l_xum || (double)seg.val_xum[i] > seg.ow_r_xum) {
+							continue;
+						}
+#endif
+
 						if (this.checkBox3.Checked) {//R*0
 							if (seg.flg_cen_cut[i]
 #if true//2018.11.28(メモリリーク)
@@ -6786,6 +6812,10 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						interval = 1000;
 					}
 					this.chart4.ChartAreas[0].AxisX.Interval = interval;
+#if true//2018.12.25(オーバーラップ範囲改)
+					fmax = TO_VAL(seg.val_xum[seg.val_xum.Count-1])+offs;
+					this.chart4.ChartAreas[0].AxisX.Maximum = fmax;//キューティクルライン
+#endif
 				}
 				if (true) {
 					double	bval = (G.SS.MOZ_CND_CTYP == 0) ? G.SS.MOZ_CND_BPVL: G.SS.MOZ_CND_2DVL;

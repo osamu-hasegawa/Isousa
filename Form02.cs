@@ -1730,7 +1730,12 @@ namespace uSCOPE
 			p4.Y = (int)((p2.Y-yo)*rr) + yo;
 		}
 		// n=0:毛髪範囲10%, 1:毛髪範囲25%, 2:毛髪範囲50%, 3:毛髪範囲75%, 4:毛髪範囲100%
+#if true//2018.12.25(オーバーラップ範囲改)
+		//	 5:毛髪範囲110%, 6:毛髪範囲120%, 7:毛髪範囲130%
+		//   8:毛髪範囲10% (横1/3), 9:毛髪範囲10% (横1/4), 10:毛髪範囲10% (横1/5)
+#else
 		//   5:毛髪範囲10% (横1/3), 6:毛髪範囲10% (横1/4), 6:毛髪範囲10% (横1/5)
+#endif
 		public void reset_mask_poly(int n)
 		{
 			try {
@@ -1753,7 +1758,11 @@ namespace uSCOPE
 					G.IR.MSK_PLY_CNT = 4;
 				}
 				else {
+#if true//2018.12.25(オーバーラップ範囲改)
+					double []rate = {0.10, 0.25, 0.50, 0.75, 1.00, 1.10, 1.20, 1.30, 0.10, 0.10, 0.10};
+#else
 					double []rate = {0.10, 0.25, 0.50, 0.75, 1.00, 0.10, 0.10, 0.10};
+#endif
 					Point[] top = new Point[G.IR.DIA_CNT];
 					Point[] btm = new Point[G.IR.DIA_CNT];
 					int xmin = 99999, ymin = 99999;
@@ -1792,7 +1801,13 @@ namespace uSCOPE
 						}
 					}
 					try {
-					if (n >= 5) {
+					if (n >=
+#if true//2018.12.25(オーバーラップ範囲改)
+						8
+#else
+						5
+#endif
+						) {
 						PointF cen = new Point((xmin+xmax)/2, (ymin+ymax)/2);
 						xwid = (xmax-xmin)+1;
 						ywid = (xmax-xmin)+1;
@@ -3497,6 +3512,12 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 		//毛髪範囲50%
 		//毛髪範囲75%
 		//毛髪範囲100%
+#if true//2018.12.25(オーバーラップ範囲改)
+		//毛髪範囲110%
+		//毛髪範囲120%
+		//毛髪範囲130%
+#endif
+
 		//---------------------
 		//AF:最大化・変数
 		//Contrast(全体)

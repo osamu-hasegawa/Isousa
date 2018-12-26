@@ -546,6 +546,9 @@
             "毛髪範囲50%",
             "毛髪範囲75%",
             "毛髪範囲100%",
+            "毛髪範囲110%",
+            "毛髪範囲120%",
+            "毛髪範囲130%",
             "毛髪範囲10% (横1/3)",
             "毛髪範囲10% (横1/4)",
             "毛髪範囲10% (横1/5)"});
@@ -759,6 +762,7 @@
 			this.checkBox10.TabIndex = 50;
 			this.checkBox10.Text = "毛髪測定抜けチェックを行う";
 			this.checkBox10.UseVisualStyleBackColor = false;
+			this.checkBox10.Click += new System.EventHandler(this.checkBox10_Click);
 			// 
 			// checkBox9
 			// 

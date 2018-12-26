@@ -192,10 +192,8 @@
 			this.comboBox8 = new System.Windows.Forms.ComboBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-			this.label17 = new System.Windows.Forms.Label();
-			this.panel16 = new System.Windows.Forms.Panel();
-			this.label16 = new System.Windows.Forms.Label();
+			this.panel17 = new System.Windows.Forms.Panel();
+			this.checkBox20 = new System.Windows.Forms.CheckBox();
 			this.checkBox19 = new System.Windows.Forms.CheckBox();
 			this.checkBox12 = new System.Windows.Forms.CheckBox();
 			this.checkBox11 = new System.Windows.Forms.CheckBox();
@@ -204,12 +202,17 @@
 			this.radioButton2 = new System.Windows.Forms.RadioButton();
 			this.panel15 = new System.Windows.Forms.Panel();
 			this.panel9 = new System.Windows.Forms.Panel();
+			this.label18 = new System.Windows.Forms.Label();
 			this.panel6 = new System.Windows.Forms.Panel();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.radioButton1 = new System.Windows.Forms.RadioButton();
+			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+			this.label17 = new System.Windows.Forms.Label();
+			this.panel16 = new System.Windows.Forms.Panel();
+			this.label16 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkBox7 = new System.Windows.Forms.CheckBox();
@@ -238,9 +241,6 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			this.panel17 = new System.Windows.Forms.Panel();
-			this.label18 = new System.Windows.Forms.Label();
-			this.checkBox20 = new System.Windows.Forms.CheckBox();
 			this.tabControl3.SuspendLayout();
 			this.tabPage6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -1601,45 +1601,24 @@
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "グラフ";
 			// 
-			// numericUpDown2
+			// panel17
 			// 
-			this.numericUpDown2.Location = new System.Drawing.Point(187, 177);
-			this.numericUpDown2.Maximum = new decimal(new int[] {
-            550,
-            0,
-            0,
-            0});
-			this.numericUpDown2.Name = "numericUpDown2";
-			this.numericUpDown2.Size = new System.Drawing.Size(53, 19);
-			this.numericUpDown2.TabIndex = 20;
-			this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown2.ValueChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			this.panel17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel17.Location = new System.Drawing.Point(14, 272);
+			this.panel17.Name = "panel17";
+			this.panel17.Size = new System.Drawing.Size(130, 2);
+			this.panel17.TabIndex = 12;
 			// 
-			// label17
+			// checkBox20
 			// 
-			this.label17.AutoSize = true;
-			this.label17.Location = new System.Drawing.Point(144, 181);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(37, 12);
-			this.label17.TabIndex = 0;
-			this.label17.Text = "R選択";
-			// 
-			// panel16
-			// 
-			this.panel16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel16.Location = new System.Drawing.Point(131, 153);
-			this.panel16.Name = "panel16";
-			this.panel16.Size = new System.Drawing.Size(130, 2);
-			this.panel16.TabIndex = 14;
-			// 
-			// label16
-			// 
-			this.label16.AutoSize = true;
-			this.label16.Location = new System.Drawing.Point(144, 162);
-			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(96, 12);
-			this.label16.TabIndex = 13;
-			this.label16.Text = "毛髄径断面・グラフ";
+			this.checkBox20.AutoSize = true;
+			this.checkBox20.Location = new System.Drawing.Point(17, 248);
+			this.checkBox20.Name = "checkBox20";
+			this.checkBox20.Size = new System.Drawing.Size(111, 16);
+			this.checkBox20.TabIndex = 11;
+			this.checkBox20.Text = "オーバーラップ範囲";
+			this.checkBox20.UseVisualStyleBackColor = true;
+			this.checkBox20.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
 			// checkBox19
 			// 
@@ -1731,6 +1710,15 @@
 			this.panel9.Size = new System.Drawing.Size(130, 2);
 			this.panel9.TabIndex = 10;
 			// 
+			// label18
+			// 
+			this.label18.AutoSize = true;
+			this.label18.Location = new System.Drawing.Point(15, 230);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(60, 12);
+			this.label18.TabIndex = 0;
+			this.label18.Text = "グラフ・画像";
+			// 
 			// panel6
 			// 
 			this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1785,6 +1773,46 @@
 			this.radioButton1.UseVisualStyleBackColor = true;
 			this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
+			// numericUpDown2
+			// 
+			this.numericUpDown2.Location = new System.Drawing.Point(187, 177);
+			this.numericUpDown2.Maximum = new decimal(new int[] {
+            550,
+            0,
+            0,
+            0});
+			this.numericUpDown2.Name = "numericUpDown2";
+			this.numericUpDown2.Size = new System.Drawing.Size(53, 19);
+			this.numericUpDown2.TabIndex = 20;
+			this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown2.ValueChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			// 
+			// label17
+			// 
+			this.label17.AutoSize = true;
+			this.label17.Location = new System.Drawing.Point(144, 181);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(37, 12);
+			this.label17.TabIndex = 0;
+			this.label17.Text = "R選択";
+			// 
+			// panel16
+			// 
+			this.panel16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel16.Location = new System.Drawing.Point(131, 153);
+			this.panel16.Name = "panel16";
+			this.panel16.Size = new System.Drawing.Size(130, 2);
+			this.panel16.TabIndex = 14;
+			// 
+			// label16
+			// 
+			this.label16.AutoSize = true;
+			this.label16.Location = new System.Drawing.Point(144, 162);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(96, 12);
+			this.label16.TabIndex = 13;
+			this.label16.Text = "毛髄径断面・グラフ";
+			// 
 			// groupBox1
 			// 
 			this.groupBox1.ForeColor = System.Drawing.Color.White;
@@ -1810,7 +1838,7 @@
 			// checkBox7
 			// 
 			this.checkBox7.AutoSize = true;
-			this.checkBox7.Location = new System.Drawing.Point(142, 12);
+			this.checkBox7.Location = new System.Drawing.Point(202, 12);
 			this.checkBox7.Name = "checkBox7";
 			this.checkBox7.Size = new System.Drawing.Size(59, 16);
 			this.checkBox7.TabIndex = 11;
@@ -1822,7 +1850,7 @@
 			// checkBox6
 			// 
 			this.checkBox6.AutoSize = true;
-			this.checkBox6.Location = new System.Drawing.Point(202, 12);
+			this.checkBox6.Location = new System.Drawing.Point(137, 12);
 			this.checkBox6.Name = "checkBox6";
 			this.checkBox6.Size = new System.Drawing.Size(59, 16);
 			this.checkBox6.TabIndex = 11;
@@ -1834,7 +1862,7 @@
 			// checkBox4
 			// 
 			this.checkBox4.AutoSize = true;
-			this.checkBox4.Location = new System.Drawing.Point(74, 12);
+			this.checkBox4.Location = new System.Drawing.Point(0, 12);
 			this.checkBox4.Name = "checkBox4";
 			this.checkBox4.Size = new System.Drawing.Size(62, 16);
 			this.checkBox4.TabIndex = 11;
@@ -1846,7 +1874,7 @@
 			// checkBox5
 			// 
 			this.checkBox5.AutoSize = true;
-			this.checkBox5.Location = new System.Drawing.Point(6, 12);
+			this.checkBox5.Location = new System.Drawing.Point(68, 12);
 			this.checkBox5.Name = "checkBox5";
 			this.checkBox5.Size = new System.Drawing.Size(62, 16);
 			this.checkBox5.TabIndex = 11;
@@ -2197,34 +2225,6 @@
 			this.label5.Size = new System.Drawing.Size(53, 12);
 			this.label5.TabIndex = 0;
 			this.label5.Text = "光学倍率";
-			// 
-			// panel17
-			// 
-			this.panel17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel17.Location = new System.Drawing.Point(14, 272);
-			this.panel17.Name = "panel17";
-			this.panel17.Size = new System.Drawing.Size(130, 2);
-			this.panel17.TabIndex = 12;
-			// 
-			// label18
-			// 
-			this.label18.AutoSize = true;
-			this.label18.Location = new System.Drawing.Point(15, 230);
-			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(60, 12);
-			this.label18.TabIndex = 0;
-			this.label18.Text = "グラフ・画像";
-			// 
-			// checkBox20
-			// 
-			this.checkBox20.AutoSize = true;
-			this.checkBox20.Location = new System.Drawing.Point(17, 248);
-			this.checkBox20.Name = "checkBox20";
-			this.checkBox20.Size = new System.Drawing.Size(111, 16);
-			this.checkBox20.TabIndex = 11;
-			this.checkBox20.Text = "オーバーラップ範囲";
-			this.checkBox20.UseVisualStyleBackColor = true;
-			this.checkBox20.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
 			// Form03
 			// 

@@ -304,7 +304,11 @@ namespace uSCOPE
 		private void checkBox2_Click(object sender, EventArgs e)
 		{
 			bool bl = (this.checkBox2.Checked == true);
-
+#if true//2018.12.22(測定抜け対応)
+			if (this.checkBox10.Checked) {
+				bl = true;
+			}
+#endif
 			//this.numericUpDown10.Enabled = bl;
 			//this.numericUpDown11.Enabled = bl;
 			this.numericUpDown17.Enabled = bl;
@@ -313,8 +317,8 @@ namespace uSCOPE
 			this.numericUpDown15.Enabled = bl;
 			this.numericUpDown16.Enabled = bl;
 #if true//2018.12.22(測定抜け対応)
-			this.checkBox10.Enabled = bl;
-			this.numericUpDown12.Enabled = !bl;
+			//this.checkBox10.Enabled = bl;
+			this.numericUpDown12.Enabled = (this.checkBox2.Checked == false);
 #endif
 		}
 
@@ -354,6 +358,11 @@ namespace uSCOPE
 		private void numericUpDown10_ValueChanged(object sender, EventArgs e)
 		{
 			 this.numericUpDown13.Value = this.numericUpDown10.Value;
+		}
+
+		private void checkBox10_Click(object sender, EventArgs e)
+		{
+			checkBox2_Click(null, null);
 		}
 #endif
 	}

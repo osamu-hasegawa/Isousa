@@ -307,7 +307,7 @@
 			this.tabPage1.Controls.Add(this.groupBox1);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage1.Size = new System.Drawing.Size(277, 155);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "メイン";
@@ -600,7 +600,7 @@
 			this.tabPage7.Controls.Add(this.trackBar4);
 			this.tabPage7.Location = new System.Drawing.Point(4, 22);
 			this.tabPage7.Name = "tabPage7";
-			this.tabPage7.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage7.Size = new System.Drawing.Size(277, 155);
 			this.tabPage7.TabIndex = 4;
 			this.tabPage7.Text = "パラメータ";
@@ -858,7 +858,7 @@
 			this.tabPage4.Controls.Add(this.label38);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage4.Size = new System.Drawing.Size(277, 155);
 			this.tabPage4.TabIndex = 1;
 			this.tabPage4.Text = "ヒストグラム";
@@ -946,6 +946,9 @@
             "毛髪範囲50%",
             "毛髪範囲75%",
             "毛髪範囲100%",
+            "毛髪範囲110%",
+            "毛髪範囲120%",
+            "毛髪範囲130%",
             "毛髪範囲10% (横1/3)",
             "毛髪範囲10% (横1/4)",
             "毛髪範囲10% (横1/5)"});
@@ -1075,7 +1078,7 @@
 			this.tabPage5.Controls.Add(this.numericUpDown27);
 			this.tabPage5.Location = new System.Drawing.Point(4, 22);
 			this.tabPage5.Name = "tabPage5";
-			this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage5.Size = new System.Drawing.Size(277, 155);
 			this.tabPage5.TabIndex = 2;
 			this.tabPage5.Text = "毛髪";
@@ -1524,7 +1527,7 @@
 			this.tabPage6.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.tabPage6.Location = new System.Drawing.Point(4, 22);
 			this.tabPage6.Name = "tabPage6";
-			this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage6.Size = new System.Drawing.Size(277, 155);
 			this.tabPage6.TabIndex = 3;
 			this.tabPage6.Text = "AF";
@@ -1869,7 +1872,7 @@
 			this.tabPage2.Controls.Add(this.numericUpDown24);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage2.Size = new System.Drawing.Size(277, 155);
 			this.tabPage2.TabIndex = 5;
 			this.tabPage2.Text = "2値化";
@@ -2204,7 +2207,7 @@
 			this.tabPage8.Controls.Add(this.radioButton10);
 			this.tabPage8.Location = new System.Drawing.Point(4, 22);
 			this.tabPage8.Name = "tabPage8";
-			this.tabPage8.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage8.Size = new System.Drawing.Size(277, 155);
 			this.tabPage8.TabIndex = 7;
 			this.tabPage8.Text = "CUTI.1";
@@ -2581,7 +2584,7 @@
 			this.tabPage3.Controls.Add(this.numericUpDown34);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage3.Size = new System.Drawing.Size(277, 155);
 			this.tabPage3.TabIndex = 6;
 			this.tabPage3.Text = "CUTI.2";

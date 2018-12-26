@@ -2053,7 +2053,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			}
 			DialogResult ret;
 			timer2.Enabled = false;
-			ret = G.mlog("#q測定済みの毛髪間隔が一定ではありません。測定抜けのチェックを行いますか？");
+			ret = G.mlog(string.Format("#q測定済み({0}本)の毛髪間隔が一定ではありません。測定抜けのチェックを行いますか？", m_adat.h_cnt));
 			timer2.Enabled = true;
 			if (ret != System.Windows.Forms.DialogResult.Yes) {
 				return(false);
@@ -2418,6 +2418,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					else {
 						int nxt_ypos = m_adat.nuke_st[m_adat.nuke_id] + m_adat.cam_hei_pls;
 						MOVE_REL_XY(0,nxt_ypos-G.PLM_POS[1]);
+						NXT_STS = -(5 - 1);//->5
 					}
 				}
 				else
@@ -2606,7 +2607,7 @@ a_write("毛髪判定(中心):OK");
 				// -849,-555,-263, +31,+274,+568,+862,(7本OFFLINE画像,XYリミットを共に±1000に設定)
 				if (NXT_STS == 15 && !m_adat.nuke) {
 					if (false
-					 ||Math.Abs(G.PLM_POS[1]-(-261)) < 20
+					 ||Math.Abs(G.PLM_POS[1]-(-272)) < 20
 					 ||Math.Abs(G.PLM_POS[1]-(+ 33)) < 20 
 					 ||Math.Abs(G.PLM_POS[1]-(+862)) < 20 
 					) {
@@ -3521,7 +3522,7 @@ a_write("AF:開始(中心)");
 						m_adat.y_1st_pos.Add(m_adat.nuke_pos[i]);
 					}
 				}
-				else if (G.SS.PLM_AUT_NUKE && G.SS.PLM_AUT_HPOS) {
+				else if (G.SS.PLM_AUT_NUKE/* && G.SS.PLM_AUT_HPOS*/) {
 					if (check_nuke()) {
 						m_adat.nuke = true;
 						NXT_STS = 1;

@@ -28,6 +28,8 @@
 		private void InitializeComponent()
 		{
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.comboBox12 = new System.Windows.Forms.ComboBox();
+			this.comboBox11 = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.panel18 = new System.Windows.Forms.Panel();
@@ -106,6 +108,8 @@
 			this.numericUpDown46 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown27 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
+			this.label17 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label57 = new System.Windows.Forms.Label();
 			this.numericUpDown44 = new System.Windows.Forms.NumericUpDown();
@@ -138,10 +142,6 @@
 			this.label50 = new System.Windows.Forms.Label();
 			this.label49 = new System.Windows.Forms.Label();
 			this.label26 = new System.Windows.Forms.Label();
-			this.comboBox11 = new System.Windows.Forms.ComboBox();
-			this.comboBox12 = new System.Windows.Forms.ComboBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label17 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown32)).BeginInit();
@@ -312,6 +312,60 @@
 			this.groupBox2.TabIndex = 0;
 			this.groupBox2.TabStop = false;
 			// 
+			// comboBox12
+			// 
+			this.comboBox12.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox12.FormattingEnabled = true;
+			this.comboBox12.Items.AddRange(new object[] {
+            "画像全体",
+            "毛髪矩形+0%",
+            "毛髪矩形+25%",
+            "毛髪矩形+50%",
+            "毛髪矩形+100%",
+            "毛髪範囲10%",
+            "毛髪範囲25%",
+            "毛髪範囲50%",
+            "毛髪範囲75%",
+            "毛髪範囲100%",
+            "毛髪範囲110%",
+            "毛髪範囲120%",
+            "毛髪範囲130%",
+            "毛髪範囲10% (横1/3)",
+            "毛髪範囲10% (横1/4)",
+            "毛髪範囲10% (横1/5)"});
+			this.comboBox12.Location = new System.Drawing.Point(237, 519);
+			this.comboBox12.Name = "comboBox12";
+			this.comboBox12.Size = new System.Drawing.Size(135, 20);
+			this.comboBox12.TabIndex = 65;
+			this.comboBox12.Tag = "0";
+			// 
+			// comboBox11
+			// 
+			this.comboBox11.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox11.FormattingEnabled = true;
+			this.comboBox11.Items.AddRange(new object[] {
+            "画像全体",
+            "毛髪矩形+0%",
+            "毛髪矩形+25%",
+            "毛髪矩形+50%",
+            "毛髪矩形+100%",
+            "毛髪範囲10%",
+            "毛髪範囲25%",
+            "毛髪範囲50%",
+            "毛髪範囲75%",
+            "毛髪範囲100%",
+            "毛髪範囲110%",
+            "毛髪範囲120%",
+            "毛髪範囲130%",
+            "毛髪範囲10% (横1/3)",
+            "毛髪範囲10% (横1/4)",
+            "毛髪範囲10% (横1/5)"});
+			this.comboBox11.Location = new System.Drawing.Point(65, 519);
+			this.comboBox11.Name = "comboBox11";
+			this.comboBox11.Size = new System.Drawing.Size(135, 20);
+			this.comboBox11.TabIndex = 65;
+			this.comboBox11.Tag = "0";
+			// 
 			// label4
 			// 
 			this.label4.BackColor = System.Drawing.SystemColors.Control;
@@ -364,6 +418,9 @@
             "毛髪範囲50%",
             "毛髪範囲75%",
             "毛髪範囲100%",
+            "毛髪範囲110%",
+            "毛髪範囲120%",
+            "毛髪範囲130%",
             "毛髪範囲10% (横1/3)",
             "毛髪範囲10% (横1/4)",
             "毛髪範囲10% (横1/5)"});
@@ -1074,6 +1131,9 @@
             "毛髪範囲50%",
             "毛髪範囲75%",
             "毛髪範囲100%",
+            "毛髪範囲110%",
+            "毛髪範囲120%",
+            "毛髪範囲130%",
             "毛髪範囲10% (横1/3)",
             "毛髪範囲10% (横1/4)",
             "毛髪範囲10% (横1/5)"});
@@ -1493,6 +1553,24 @@
             0,
             0,
             0});
+			// 
+			// label17
+			// 
+			this.label17.AutoSize = true;
+			this.label17.Location = new System.Drawing.Point(17, 523);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(44, 12);
+			this.label17.TabIndex = 17;
+			this.label17.Text = "中心AF";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(17, 500);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(44, 12);
+			this.label5.TabIndex = 17;
+			this.label5.Text = "表面AF";
 			// 
 			// label6
 			// 
@@ -1961,72 +2039,6 @@
 			this.label26.Size = new System.Drawing.Size(41, 12);
 			this.label26.TabIndex = 1;
 			this.label26.Text = "平滑化";
-			// 
-			// comboBox11
-			// 
-			this.comboBox11.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox11.FormattingEnabled = true;
-			this.comboBox11.Items.AddRange(new object[] {
-            "画像全体",
-            "毛髪矩形+0%",
-            "毛髪矩形+25%",
-            "毛髪矩形+50%",
-            "毛髪矩形+100%",
-            "毛髪範囲10%",
-            "毛髪範囲25%",
-            "毛髪範囲50%",
-            "毛髪範囲75%",
-            "毛髪範囲100%",
-            "毛髪範囲10% (横1/3)",
-            "毛髪範囲10% (横1/4)",
-            "毛髪範囲10% (横1/5)"});
-			this.comboBox11.Location = new System.Drawing.Point(65, 519);
-			this.comboBox11.Name = "comboBox11";
-			this.comboBox11.Size = new System.Drawing.Size(135, 20);
-			this.comboBox11.TabIndex = 65;
-			this.comboBox11.Tag = "0";
-			// 
-			// comboBox12
-			// 
-			this.comboBox12.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox12.FormattingEnabled = true;
-			this.comboBox12.Items.AddRange(new object[] {
-            "画像全体",
-            "毛髪矩形+0%",
-            "毛髪矩形+25%",
-            "毛髪矩形+50%",
-            "毛髪矩形+100%",
-            "毛髪範囲10%",
-            "毛髪範囲25%",
-            "毛髪範囲50%",
-            "毛髪範囲75%",
-            "毛髪範囲100%",
-            "毛髪範囲10% (横1/3)",
-            "毛髪範囲10% (横1/4)",
-            "毛髪範囲10% (横1/5)"});
-			this.comboBox12.Location = new System.Drawing.Point(237, 519);
-			this.comboBox12.Name = "comboBox12";
-			this.comboBox12.Size = new System.Drawing.Size(135, 20);
-			this.comboBox12.TabIndex = 65;
-			this.comboBox12.Tag = "0";
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(17, 500);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(44, 12);
-			this.label5.TabIndex = 17;
-			this.label5.Text = "表面AF";
-			// 
-			// label17
-			// 
-			this.label17.AutoSize = true;
-			this.label17.Location = new System.Drawing.Point(17, 523);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(44, 12);
-			this.label17.TabIndex = 17;
-			this.label17.Text = "中心AF";
 			// 
 			// Form34
 			// 
