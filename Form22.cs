@@ -21,6 +21,15 @@ namespace uSCOPE
 		private void Form22_Load(object sender, EventArgs e)
 		{
 			m_ss = G.SS;
+#if true//2019.01.05(キューティクル検出欠損修正)
+			if (string.IsNullOrEmpty(m_ss.PLM_AUT_FOLD)) {
+				string path;
+				path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+				path += @"\KOP";
+				path += @"\" + Application.ProductName;
+				m_ss.PLM_AUT_FOLD = path;
+			}
+#endif
 			DDX(true);
 
 #if true//2018.07.10
@@ -37,6 +46,12 @@ namespace uSCOPE
 			if (DDX(false) == false) {
 				e.Cancel = true;
 			}
+#if true//2019.01.05(キューティクル検出欠損修正)
+			else if (!System.IO.Directory.Exists(m_ss.PLM_AUT_FOLD)) {
+				G.mlog("指定されたフォルダは存在しません.\r\r" + m_ss.PLM_AUT_FOLD);
+				e.Cancel = true;
+			}
+#endif
 			else {
 				G.SS = (G.SYSSET)m_ss.Clone();
 			}
@@ -45,6 +60,11 @@ namespace uSCOPE
         {
             bool rc;
 			try {
+#if true//2019.01.05(キューティクル検出欠損修正)
+				DDV.DDX(bUpdate, this.comboBox2       , ref m_ss.PLM_AUT_FLTP);
+				DDV.DDX(bUpdate, this.textBox2        , ref m_ss.PLM_AUT_FOLD);
+				DDV.DDX(bUpdate, this.numericUpDown2  , ref m_ss.PLM_AUT_OVLP);
+#endif
 				DDV.DDX(bUpdate, this.numericUpDown10 , ref m_ss.PLM_AUT_HP_X, G.SS.PLM_MLIM[0], G.SS.PLM_PLIM[0]);
 				DDV.DDX(bUpdate, this.numericUpDown11 , ref m_ss.PLM_AUT_HP_Y, G.SS.PLM_MLIM[1], G.SS.PLM_PLIM[1]);
 #if true//2018.07.02
@@ -69,6 +89,13 @@ namespace uSCOPE
                 }
 #endif
 				if (bUpdate == false) {
+#if true//2019.01.05(キューティクル検出欠損修正)
+					if (this.textBox2.Text == "") {
+						G.mlog("フォルダを指定してください.");
+						this.textBox2.Focus();
+						return(false);
+					}
+#endif
 					if (m_ss.PLM_AUT_ZDEP != null) {
 						for (int i = 0; i < m_ss.PLM_AUT_ZDEP.Length; i++) {
 							int val = m_ss.PLM_AUT_ZDEP[i];
@@ -144,6 +171,33 @@ namespace uSCOPE
         {
             this.numericUpDown13.Value = this.numericUpDown10.Value;
         }
+#endif
+#if true//2019.01.05(キューティクル検出欠損修正)
+		private void button3_Click(object sender, EventArgs e)
+		{
+			if (sender == this.button3) {
+				//FolderBrowserDialogクラスのインスタンスを作成
+				FolderBrowserDialog fbd = new FolderBrowserDialog();
+
+				//上部に表示する説明テキストを指定する
+				fbd.Description = "フォルダを指定してください。";
+				//ルートフォルダを指定する
+				//デフォルトでDesktop
+				fbd.RootFolder = Environment.SpecialFolder.Desktop;
+				//最初に選択するフォルダを指定する
+				//RootFolder以下にあるフォルダである必要がある
+				fbd.SelectedPath = this.textBox2.Text;
+				//ユーザーが新しいフォルダを作成できるようにする
+				//デフォルトでTrue
+				fbd.ShowNewFolderButton = true;
+
+				//ダイアログを表示する
+				if (fbd.ShowDialog(this) == DialogResult.OK)
+				{
+					this.textBox2.Text = fbd.SelectedPath;
+				}
+			}
+		}
 #endif
     }
 }

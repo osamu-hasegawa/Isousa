@@ -231,11 +231,13 @@ this.SPE_COD = 0;
 			}
 			else if (sender == this.button11/*黒*/|| sender == this.button26/*白*/ || sender == this.button27/*全*/) {
 				if (G.UIF_LEVL == 0) {
+#if false//2019.01.05(キューティクル検出欠損修正)
 					string path;
 					path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 					path += @"\KOP";
 					path += @"\" + Application.ProductName;
 					G.SS.PLM_AUT_FOLD = path;
+#endif
 					//G.SS.PLM_AUT_ZDCK = this.checkBox11.Checked;
 					//3:透過→赤外, 8:反射→赤外
 #if true//2018.06.04 赤外同時測定

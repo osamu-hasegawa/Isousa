@@ -5096,6 +5096,15 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #if true//2018.10.10(毛髪径算出・改造)
 			double mou_cen_max = -1;
 #endif
+#if true//2019.01.05(キューティクル検出欠損修正)
+			int YC = seg.cut_inf.Count/2 + (int)this.numericUpDown1.Value;
+			if (YC < 0) {
+				YC = 0;
+			}
+			else if (YC >= seg.cut_inf.Count) {
+				YC = seg.cut_inf.Count-1;
+			}
+#endif
 			//---
 			this.chart1.Series[0].Points.Clear();
 #if false//2018.12.25(オーバーラップ範囲改)
@@ -5200,7 +5209,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					double y0 = TO_VAL(seg.val_p5u[i]);
 					double y1 = TO_VAL(seg.val_phf[i]);
 #endif
+#if true//2019.01.05(キューティクル検出欠損修正)
+					double y2;
+#else
 					double y2 = TO_VAL(seg.val_cen[i]);
+#endif
 #if true//2018.11.28(メモリリーク)
 					double y3 = double.NaN;
 					double y4 = double.NaN;
@@ -5215,6 +5228,14 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #endif
 					//double y5 = TO_VAL(seg.moz_zpl[i]);
 					if (this.checkBox3.Checked) {//R*0
+#if true//2019.01.05(キューティクル検出欠損修正)
+						y2 = seg.cut_inf[YC].ibf[i];
+#if DEBUG
+						if (this.numericUpDown1.Value == 0 && y2 != TO_VAL(seg.val_cen_fil[i])) {
+							throw new Exception("Internal Error");
+						}
+#endif
+#endif
 						this.chart1.Series[0].Points.AddXY(x0, y2);
 					}
 #if false//2018.12.25(オーバーラップ範囲改)
@@ -6228,6 +6249,33 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			for (int i = 0; i < src.Length; i++) {
 				src[i] = TO_VAL(asrc[i]);
 			}
+#if true//2019.01.05(キューティクル検出欠損修正)
+			if (double.IsNaN(src[0])) {
+				//左側Nanを非Nan値で置き換える
+				for (int i = 1; i < src.Length; i++) {
+					if (double.IsNaN(src[i])) {
+						continue;
+					}
+					for (int h = 0; h < i; h++) {
+						src[h] = src[i];
+					}
+					break;
+				}
+			}
+			if (double.IsNaN(src[src.Length-1])) {
+				//右側Nanを非Nan値で置き換える
+				for (int i = src.Length-1; i >= 0; i--) {
+					if (double.IsNaN(src[i])) {
+						continue;
+					}
+					for (int h = src.Length-1; h > i; h--) {
+						src[h] = src[i];
+					}
+					break;
+				}
+			}
+#endif
+
 			//---
 			if (G.SS.MOZ_CND_CTYP == 0) {
 				do_fir(G.SS.MOZ_CND_FCOF, src, dst);
@@ -6508,6 +6556,15 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				int[] his_cen = new int[G.SS.MOZ_CND_HCNT];
 				int[] his_mph = new int[G.SS.MOZ_CND_HCNT];
 				int[] his_m5u = new int[G.SS.MOZ_CND_HCNT];
+#if true//2019.01.05(キューティクル検出欠損修正)
+				int YC = seg.cut_inf.Count/2 + (int)this.numericUpDown1.Value;
+				if (YC < 0) {
+					YC = 0;
+				}
+				else if (YC >= seg.cut_inf.Count) {
+					YC = seg.cut_inf.Count-1;
+				}
+#endif
 				//---
 				this.chart4.Series[0].Points.Clear();
 				this.chart4.Series[1].Points.Clear();
@@ -6595,7 +6652,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						double y0 = TO_VAL(seg.val_p5u_fil[i]);
 						double y1 = TO_VAL(seg.val_phf_fil[i]);
 #endif
+#if true//2019.01.05(キューティクル検出欠損修正)
+						double y2;
+#else
 						double y2 = TO_VAL(seg.val_cen_fil[i]);
+#endif
 #if true//2018.11.28(メモリリーク)
 						double y3 = double.NaN;
 						double y4 = double.NaN;
@@ -6610,6 +6671,14 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #endif
 
 						if (this.checkBox3.Checked) {//R*0
+#if true//2019.01.05(キューティクル検出欠損修正)
+							y2 = seg.cut_inf[YC].iaf[i];
+#if DEBUG
+							if (this.numericUpDown1.Value == 0 && y2 != TO_VAL(seg.val_cen_fil[i])) {
+								throw new Exception("Internal Error");
+							}
+#endif
+#endif
 							if (seg.flg_cen_cut[i]
 #if true//2018.11.28(メモリリーク)
 								!= 0
