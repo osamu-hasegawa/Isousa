@@ -70,6 +70,27 @@ namespace uSCOPE
 			else {
 				i_s = i_e = i_sel;
 			}
+#if true//2019.01.09(保存機能修正)
+			if (true) {
+				string path;
+
+				path = fold;
+				path += name;
+				path += "_";
+				path += this.h_no;
+				if (G.SS.MOZ_SAV_FMOD != 0) {
+				path += "_";
+				path += i_no[i_sel];
+				}
+				path += ".csv";
+				if (System.IO.File.Exists(path)) {
+					if (G.mlog(string.Format("#q{0}は既に存在します。\r上書きしますか?", path)) != System.Windows.Forms.DialogResult.Yes) {
+						e.Cancel = true;
+						return;
+					}
+				}
+			}
+#else
 			for (int i = i_s; i <= i_e; i++) {
 				string path;
 
@@ -88,6 +109,7 @@ namespace uSCOPE
 					break;
 				}
 			}
+#endif
 		}
 		private bool DDX(bool bUpdate)
         {

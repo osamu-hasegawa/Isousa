@@ -74,6 +74,21 @@ namespace uSCOPE
 					if (zpos.Length <= 0) {
 					zpos = System.IO.Directory.GetFiles(path, "0CT_00_*.*");
 					}
+#if true//2018.10.10(毛髪径算出・改造)
+					if (zpos.Length <= 0) {
+						for (int i = 1; i <= 23; i++) {
+							string NS = i.ToString();
+							zpos = System.IO.Directory.GetFiles(path, NS + "CR_00_*.*");
+							if (zpos.Length > 0) {
+								break;
+							}
+							zpos = System.IO.Directory.GetFiles(path, NS + "CT_00_*.*");
+							if (zpos.Length > 0) {
+								break;
+							}
+						}
+					}
+#endif
 					if (zpos.Length <= 0) {
 						//古い形式のファイルもしくはフォルダが空
 #if false//2018.08.21
@@ -180,7 +195,7 @@ namespace uSCOPE
 				}
 #else
 				Form21.select_default(this.comboBox10, G.SS.MOZ_CND_ZPCT);
-				Form21.select_default(this.comboBox8, G.SS.MOZ_CND_ZPHL);
+				Form21.select_default(this.comboBox8 , G.SS.MOZ_CND_ZPHL);
 				Form21.select_default(this.comboBox12, G.SS.MOZ_CND_ZPML);
 #endif
 			}
