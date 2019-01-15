@@ -15,7 +15,11 @@ namespace uSCOPE
 		private int m_last_idx = 0;
 		static
 		private Point m_last_loc;
-
+#if true//2019.01.11(混在対応)
+		static
+		public int m_i;
+		private bool m_dlg_mode = false;
+#endif
 		public Form24()
 		{
 			InitializeComponent();
@@ -23,19 +27,58 @@ namespace uSCOPE
 
 		private void Form24_Load(object sender, EventArgs e)
 		{
+#if true//2019.01.11(混在対応)
+			switch (m_i) {
+				case 0:
+					this.radioButton11.Checked = true;//透過/CT/白髪
+				break;
+				case 1:
+					this.radioButton10.Checked = true;//反射/CR/黒髪
+				break;
+				case -1:
+					m_i = 1;
+					m_dlg_mode = true;
+					this.Size = new Size(this.Size.Width, 460);
+					this.button1.Enabled = false;
+					this.button2.Enabled = false;
+					this.button3.Enabled = false;
+					this.radioButton10.Checked = true;
+				break;
+				default:
+					throw new Exception("Internal Error");
+			}
+#endif
 			DDX(true);
 			this.tabControl1.SelectedIndex = m_last_idx;
+#if true//2019.01.11(混在対応)
+			if (m_dlg_mode == false) {
+#endif
 			if (m_last_loc.X != 0 || m_last_loc.Y != 0) {
 				this.Location = m_last_loc;
 			}
+#if true//2019.01.11(混在対応)
+			}
+#endif
 			G.FORM24 = this;
 			checkBox1_CheckedChanged(null, null);
 		}
 
 		private void Form24_FormClosing(object sender, FormClosingEventArgs e)
 		{
+#if true//2019.01.11(混在対応)
+			if (!DDX(false)) {
+				e.Cancel = true;
+				return;
+			}
+#endif
 			m_last_idx = this.tabControl1.SelectedIndex;
+#if true//2019.01.11(混在対応)
+			if (m_dlg_mode == false) {
+#endif
 			m_last_loc = this.Location;
+#if true//2019.01.11(混在対応)
+			}
+#endif
 			G.FORM24 = null;
 		}
 		private bool DDX(bool bUpdate)
@@ -43,6 +86,42 @@ namespace uSCOPE
             bool rc;
 
             try {
+#if true//2019.01.11(混在対応) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				//キューティクルライン
+				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton5, this.radioButton6}, ref G.SS.ANL_CND_CTYP[m_i]);
+				DDV.DDX(bUpdate, this.numericUpDown7 , ref G.SS.ANL_CND_BPF1[m_i]);
+				DDV.DDX(bUpdate, this.numericUpDown8 , ref G.SS.ANL_CND_BPF2[m_i]);
+				DDV.DDX(bUpdate, this.comboBox4      , ref G.SS.ANL_CND_BPSL[m_i]);
+				DDV.DDX(bUpdate, this.numericUpDown1 , ref G.SS.ANL_CND_NTAP[m_i]);
+				DDV.DDX(bUpdate, this.numericUpDown9 , ref G.SS.ANL_CND_BPVL[m_i]);
+				DDV.C2V(bUpdate, this.comboBox13     , ref G.SS.ANL_CND_2DC0[m_i]);
+				DDV.C2V(bUpdate, this.comboBox14     , ref G.SS.ANL_CND_2DC1[m_i]);
+				DDV.C2V(bUpdate, this.comboBox15     , ref G.SS.ANL_CND_2DC2[m_i]);
+				DDV.DDX(bUpdate, this.numericUpDown10, ref G.SS.ANL_CND_2DVL[m_i]);
+				//毛髪径算出
+				DDV.DDX(bUpdate, this.comboBox3      , ref G.SS.ANL_CND_FTCF[m_i]);//画像・平滑化フィルタ
+				DDV.DDX(bUpdate, this.comboBox5      , ref G.SS.ANL_CND_FTCT[m_i]);//回数
+				DDV.DDX(bUpdate, this.comboBox6      , ref G.SS.ANL_CND_SMCF[m_i]);//スムージング・重み係数
+				DDV.DDX(bUpdate, this.comboBox7      , ref G.SS.ANL_CND_CNTR[m_i]);//コントラスト補正
+				DDV.DDX(bUpdate, this.numericUpDown3 , ref G.SS.ANL_CND_ZVAL[m_i]);//毛髄判定画素閾値
+				DDV.DDX(bUpdate, this.numericUpDown4 , ref G.SS.ANL_CND_HANI[m_i]);//径方向・毛髄判定範囲
+				DDV.DDX(bUpdate, this.numericUpDown19, ref G.SS.ANL_CND_SLVL[m_i]);//面積Sl,Sd判定閾値
+				DDV.DDX(bUpdate, this.numericUpDown11, ref G.SS.ANL_CND_OTW1[m_i]);//外れ値判定:幅  (毛髄長さ)
+				DDV.DDX(bUpdate, this.numericUpDown12, ref G.SS.ANL_CND_OTV1[m_i]);//外れ値判定:閾値(毛髄長さ)
+				DDV.DDX(bUpdate, this.numericUpDown13, ref G.SS.ANL_CND_OTW2[m_i]);//外れ値判定:幅  (毛髄中心)
+				DDV.DDX(bUpdate, this.numericUpDown14, ref G.SS.ANL_CND_OTV2[m_i]);//外れ値判定:閾値(毛髄中心)
+				DDV.DDX(bUpdate, this.comboBox8      , ref G.SS.ANL_CND_OTMD[m_i]);//外れ値判定:補間,1:直線補間
+				DDV.DDX(bUpdate, this.numericUpDown15, ref G.SS.ANL_CND_SMVL[m_i]);//除外判定:面積値
+				DDV.DDX(bUpdate, this.checkBox4      , ref G.SS.ANL_CND_CHK1[m_i]);//有,無効:除外判定:毛髄面積	
+				DDV.DDX(bUpdate, this.checkBox5      , ref G.SS.ANL_CND_CHK2[m_i]);//有,無効:外れ値判定:毛髄長さ
+				DDV.DDX(bUpdate, this.checkBox6      , ref G.SS.ANL_CND_CHK2[m_i]);//有,無効:外れ値判定:毛髄中心
+				//キューティクル長
+				DDV.DDX(bUpdate, this.numericUpDown2 , ref G.SS.ANL_CND_CHAN[m_i]);//
+				DDV.DDX(bUpdate, this.numericUpDown5 , ref G.SS.ANL_CND_CMIN[m_i]);//
+				//HSVグラフ
+				DDV.DDX(bUpdate, this.comboBox9      , ref G.SS.ANL_CND_CNEI[m_i]);//
+				DDV.DDX(bUpdate, this.numericUpDown16, ref G.SS.ANL_CND_HIST[m_i]);//
+#else
 				//キューティクルライン
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton5, this.radioButton6}, ref G.SS.MOZ_CND_CTYP);
 				DDV.DDX(bUpdate, this.numericUpDown7 , ref G.SS.MOZ_CND_BPF1);
@@ -81,6 +160,7 @@ namespace uSCOPE
 #if true//2018.11.02(HSVグラフ)
 				DDV.DDX(bUpdate, this.comboBox9      , ref G.SS.MOZ_CND_CNEI);//
 				DDV.DDX(bUpdate, this.numericUpDown16, ref G.SS.MOZ_CND_HIST);//
+#endif
 #endif
 				rc = true;
             }
@@ -143,5 +223,24 @@ namespace uSCOPE
 			//
 			Cursor.Current = Cursors.Default;
 		}
+#if true//2019.01.11(混在対応)
+		private void radioButton10_Click(object sender, EventArgs e)
+		{
+			if (m_i == 0 && this.radioButton10.Checked) {
+				if (!DDX(false)) {
+					return;
+				}
+				m_i = 1;
+				DDX(true);
+			}
+			if (m_i == 1 && this.radioButton11.Checked) {
+				if (!DDX(false)) {
+					return;
+				}
+				m_i = 0;
+				DDX(true);
+			}
+		}
+#endif
 	}
 }

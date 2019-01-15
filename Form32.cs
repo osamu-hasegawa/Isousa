@@ -40,7 +40,28 @@ namespace uSCOPE
 
 		private void Form32_Load(object sender, EventArgs e)
 		{
-
+#if true//2019.01.11(混在対応)
+			numGAMMA = new NumericUpDown[] { this.numericUpDown1 , this.numericUpDown10, this.numericUpDown19, this.numericUpDown34 };
+			numCONTR = new NumericUpDown[] { this.numericUpDown2 , this.numericUpDown11, this.numericUpDown20, this.numericUpDown35 };
+			numBRIGT = new NumericUpDown[] { this.numericUpDown3 , this.numericUpDown12, this.numericUpDown21, this.numericUpDown36 };
+			numSHARP = new NumericUpDown[] { this.numericUpDown4 , this.numericUpDown13, this.numericUpDown22, this.numericUpDown37 };
+			//
+			cmbGMODE = new ComboBox[] { this.comboBox1,  this.comboBox4,  this.comboBox7,  this.comboBox10};
+			cmbEMODE = new ComboBox[] { this.comboBox2,  this.comboBox5,  this.comboBox8,  this.comboBox11};
+			cmbWMODE = new ComboBox[] { this.comboBox3,  this.comboBox6,  this.comboBox9,  this.comboBox12};
+			//
+			numGAIDB = new NumericUpDown[] { this.numericUpDown5 , this.numericUpDown14, this.numericUpDown23, this.numericUpDown38 };
+			numGAIOF = new NumericUpDown[] { this.numericUpDown28, this.numericUpDown29, this.numericUpDown30, this.numericUpDown39 };
+			//
+			numEXPTM = new NumericUpDown[] { this.numericUpDown6 , this.numericUpDown15, this.numericUpDown24, this.numericUpDown40 };
+			numEXPOF = new NumericUpDown[] { this.numericUpDown31, this.numericUpDown32, this.numericUpDown33, this.numericUpDown41 };
+			//
+			numRAT_R = new NumericUpDown[] { this.numericUpDown7 , this.numericUpDown16, this.numericUpDown25, this.numericUpDown42 };
+			numRAT_G = new NumericUpDown[] { this.numericUpDown8 , this.numericUpDown17, this.numericUpDown26, this.numericUpDown43 };
+			numRAT_B = new NumericUpDown[] { this.numericUpDown9 , this.numericUpDown18, this.numericUpDown27, this.numericUpDown44 };
+			//
+			btnCURVL = new Button[] { this.button1, this.button2, this.button3, this.button4 };
+#else
 			numGAMMA = new NumericUpDown[] { this.numericUpDown1 , this.numericUpDown10, this.numericUpDown19 };
 			numCONTR = new NumericUpDown[] { this.numericUpDown2 , this.numericUpDown11, this.numericUpDown20 };
 			numBRIGT = new NumericUpDown[] { this.numericUpDown3 , this.numericUpDown12, this.numericUpDown21 };
@@ -61,11 +82,18 @@ namespace uSCOPE
 			numRAT_B = new NumericUpDown[] { this.numericUpDown9 , this.numericUpDown18, this.numericUpDown27 };
 			//
 			btnCURVL = new Button[] { this.button1, this.button2, this.button3 };
+#endif
 			//
 			//this.comboBox8.Enabled = false;
 			//
 			DDX(true);
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i <
+#if true//2019.01.11(混在対応)
+				4;
+#else
+				3;
+#endif
+				i++) {
 				comboBox1_SelectedIndexChanged(cmbGMODE[i], null);
 				comboBox2_SelectedIndexChanged(cmbEMODE[i], null);
 				comboBox3_SelectedIndexChanged(cmbWMODE[i], null);
@@ -77,7 +105,13 @@ namespace uSCOPE
             bool rc=false;
 			//
 			try {
-				for (int i = 0; i < 3; i++) {
+				for (int i = 0; i <
+#if true//2019.01.11(混在対応)
+					4;
+#else
+					3;
+#endif
+					i++) {
 					//---
 					DDV.DDX(bUpdate, numGAMMA[i], ref m_ss.CAM_PAR_GAMMA[i]);
 					DDV.DDX(bUpdate, numCONTR[i], ref m_ss.CAM_PAR_CONTR[i]);
@@ -121,7 +155,13 @@ namespace uSCOPE
 		{
 			ComboBox cb = (ComboBox)sender;
 			int i;
-			for (i = 0; i < 3; i++) {
+			for (i = 0; i <
+#if true//2019.01.11(混在対応)
+				4;
+#else
+				3;
+#endif
+				i++) {
 				if (object.Equals(cb, this.cmbGMODE[i])) {
 					break;
 				}
@@ -136,7 +176,13 @@ namespace uSCOPE
 		{
 			ComboBox cb = (ComboBox)sender;
 			int i;
-			for (i = 0; i < 3; i++) {
+			for (i = 0; i <
+#if true//2019.01.11(混在対応)
+				4;
+#else
+				3;
+#endif
+				i++) {
 				if (object.Equals(cb, this.cmbEMODE[i])) {
 					break;
 				}
@@ -148,7 +194,13 @@ namespace uSCOPE
 		{
 			ComboBox cb = (ComboBox)sender;
 			int i;
-			for (i = 0; i < 3; i++) {
+			for (i = 0; i <
+#if true//2019.01.11(混在対応)
+				4;
+#else
+				3;
+#endif
+				i++) {
 				if (object.Equals(cb, this.cmbWMODE[i])) {
 					break;
 				}
@@ -162,7 +214,13 @@ namespace uSCOPE
 		{
 			//Bu cb = (ComboBox)sender;
 			int i;
-			for (i = 0; i < 3; i++) {
+			for (i = 0; i <
+#if true//2019.01.11(混在対応)
+				4;
+#else
+				3;
+#endif
+				i++) {
 				if (object.Equals(sender, this.btnCURVL[i])) {
 					break;
 				}

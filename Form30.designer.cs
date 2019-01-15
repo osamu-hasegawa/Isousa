@@ -156,11 +156,17 @@
 			this.label22 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textBox67 = new System.Windows.Forms.TextBox();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.checkBox11 = new System.Windows.Forms.CheckBox();
+			this.textBox53 = new System.Windows.Forms.TextBox();
+			this.textBox52 = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
+			this.groupBox6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textBox1
@@ -1220,7 +1226,7 @@
 			this.groupBox1.Controls.Add(this.label15);
 			this.groupBox1.Location = new System.Drawing.Point(371, 138);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(353, 179);
+			this.groupBox1.Size = new System.Drawing.Size(353, 149);
 			this.groupBox1.TabIndex = 4;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "光学倍率";
@@ -1256,7 +1262,7 @@
 			// label41
 			// 
 			this.label41.AutoSize = true;
-			this.label41.Location = new System.Drawing.Point(15, 129);
+			this.label41.Location = new System.Drawing.Point(15, 119);
 			this.label41.Name = "label41";
 			this.label41.Size = new System.Drawing.Size(77, 12);
 			this.label41.TabIndex = 1;
@@ -1264,7 +1270,7 @@
 			// 
 			// textBox76
 			// 
-			this.textBox76.Location = new System.Drawing.Point(105, 126);
+			this.textBox76.Location = new System.Drawing.Point(105, 116);
 			this.textBox76.Name = "textBox76";
 			this.textBox76.Size = new System.Drawing.Size(48, 19);
 			this.textBox76.TabIndex = 8;
@@ -1389,9 +1395,9 @@
 			this.groupBox3.Controls.Add(this.label22);
 			this.groupBox3.Controls.Add(this.label18);
 			this.groupBox3.Controls.Add(this.textBox67);
-			this.groupBox3.Location = new System.Drawing.Point(371, 323);
+			this.groupBox3.Location = new System.Drawing.Point(371, 368);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(353, 234);
+			this.groupBox3.Size = new System.Drawing.Size(353, 187);
 			this.groupBox3.TabIndex = 5;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "その他";
@@ -1482,11 +1488,63 @@
 			this.textBox67.Text = "0";
 			this.textBox67.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// groupBox6
+			// 
+			this.groupBox6.Controls.Add(this.checkBox11);
+			this.groupBox6.Controls.Add(this.textBox53);
+			this.groupBox6.Controls.Add(this.textBox52);
+			this.groupBox6.Controls.Add(this.label3);
+			this.groupBox6.Enabled = false;
+			this.groupBox6.Location = new System.Drawing.Point(371, 294);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(353, 68);
+			this.groupBox6.TabIndex = 6;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "起動時パスワード";
+			// 
+			// checkBox11
+			// 
+			this.checkBox11.AutoSize = true;
+			this.checkBox11.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox11.Location = new System.Drawing.Point(17, 18);
+			this.checkBox11.Name = "checkBox11";
+			this.checkBox11.Size = new System.Drawing.Size(159, 16);
+			this.checkBox11.TabIndex = 2;
+			this.checkBox11.Text = "起動時パスワードを使用する";
+			this.checkBox11.UseVisualStyleBackColor = false;
+			// 
+			// textBox53
+			// 
+			this.textBox53.Location = new System.Drawing.Point(199, 40);
+			this.textBox53.Name = "textBox53";
+			this.textBox53.PasswordChar = '*';
+			this.textBox53.Size = new System.Drawing.Size(138, 19);
+			this.textBox53.TabIndex = 0;
+			// 
+			// textBox52
+			// 
+			this.textBox52.Location = new System.Drawing.Point(199, 15);
+			this.textBox52.Name = "textBox52";
+			this.textBox52.PasswordChar = '*';
+			this.textBox52.Size = new System.Drawing.Size(138, 19);
+			this.textBox52.TabIndex = 0;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.BackColor = System.Drawing.SystemColors.Control;
+			this.label3.Location = new System.Drawing.Point(36, 43);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(133, 12);
+			this.label3.TabIndex = 1;
+			this.label3.Text = "確認として同じ内容を入力";
+			// 
 			// Form30
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(736, 568);
+			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupBox4);
@@ -1513,6 +1571,8 @@
 			this.groupBox1.PerformLayout();
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
+			this.groupBox6.ResumeLayout(false);
+			this.groupBox6.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1648,6 +1708,11 @@
 		private System.Windows.Forms.CheckBox checkBox9;
 		private System.Windows.Forms.CheckBox checkBox8;
 		private System.Windows.Forms.CheckBox checkBox7;
+		private System.Windows.Forms.GroupBox groupBox6;
+		private System.Windows.Forms.CheckBox checkBox11;
+		private System.Windows.Forms.TextBox textBox52;
+		private System.Windows.Forms.TextBox textBox53;
+		private System.Windows.Forms.Label label3;
 
 	}
 }

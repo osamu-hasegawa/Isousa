@@ -223,6 +223,13 @@ namespace uSCOPE
 				CMDOUT(CMD_SET_PWM_STS, idx == 0 ? idx: (3-idx), on_off, null);//1chと2chの入れ替え
 				if (on_off != 0) {
 					G.LED_PWR_STS |= (0x01 << idx);
+#if true//2019.01.11(混在対応)
+					switch (idx) {
+					case 0:G.LED_PWR_BAK = 0; break;//直近の白色が透過(:0)
+					case 1:G.LED_PWR_BAK = 1; break;//直近の白色が反射(:1)
+					default:break;
+					}
+#endif
 				}
 				else {
 					G.LED_PWR_STS &=~(0x01 << idx);

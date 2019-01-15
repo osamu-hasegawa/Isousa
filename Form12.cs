@@ -615,10 +615,20 @@ this.SPE_COD = 0;
 		}
 		public void set_param_auto(int ch)
 		{
+#if true//2019.01.11(混在対応)
+			int ch_bak = ch;
+			if (ch == 2 && G.LED_PWR_BAK == 1/*反射*/) {
+				ch++;
+			}
+#endif
 			//ch=0:白色LED用(透過), ch=1:白色LED用(反射), ch=2:赤外LED用
 			set_param(G.SS.CAM_PAR_GAMMA[ch], G.SS.CAM_PAR_CONTR[ch], G.SS.CAM_PAR_BRIGH[ch], G.SS.CAM_PAR_SHARP[ch]);
 			//
+#if true//2019.01.11(混在対応)
+			set_param_gew(ch_bak);
+#else
 			set_param_gew(ch);
+#endif
 		}
 		//Gamma					0.25- 2.0
 		//Sharpness Enhancement	0.0 - 1.0
@@ -665,6 +675,16 @@ this.SPE_COD = 0;
 			if (G.FORM02 == null || G.FORM02.isCONNECTED() == false) {
 				return;
 			}
+#if true//2019.01.11(混在対応)
+			if (ch == 2/*赤外*/) {
+				if (G.LED_PWR_BAK == 1/*反射*/) {
+					ch++;
+				}
+				else {
+					ch = ch;
+				}
+			}
+#endif
 			if (G.SS.CAM_PAR_GAMOD[ch] == 1) {
 				//自動
 				G.FORM02.set_auto(Form02.CAM_PARAM.GAIN, 1);
@@ -1300,7 +1320,6 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 #endif
 			m_adat.trace = false;
 			m_adat.retry = false;
-
 			try {
 				if (G.FORM02.get_size_mode() > 1) {
 					G.FORM02.set_size_mode(1, -1, -1);
@@ -1437,6 +1456,16 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			else {
 				ch = 2;		//赤外
 			}
+#if true//2019.01.11(混在対応)
+			if (ch == 2/*赤外*/) {
+				if (G.LED_PWR_BAK == 1/*反射*/) {
+					ch++;
+				}
+				else {
+					ch = ch;
+				}
+			}
+#endif
 			if (G.CAM_GAI_STS == 1) {
 				G.FORM02.set_auto(Form02.CAM_PARAM.GAIN, /*固定*/0);
 				if (G.SS.CAM_PAR_GA_OF[ch] != 0) {
@@ -1545,6 +1574,10 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			public List<int> nuke_pos;
 			public int cam_hei_pls;
 #endif
+#if true//2019.01.11(混在対応)
+			public List<string> y_1st_pref;
+			public List<string> nuke_pref;
+#endif
 			//---
 			public int ir_nxst;
 			public bool ir_done;
@@ -1613,7 +1646,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				tmp = G.CAM_HEI;				//px
 				tmp = G.PX2UM(tmp);				//um
 				tmp = tmp / G.SS.PLM_UMPP[1];	//pls
-				cam_hei_pls = (int)tmp;
+				cam_hei_pls = (int)tmp;			//155pls
+#endif
+#if true//2019.01.11(混在対応)
+				y_1st_pref = new List<string>();
+				nuke_pref = new List<string>();
 #endif
 				ir_nxst = 0;
 				ir_done = false;
@@ -1976,6 +2013,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 		private int retry_check(int sts)
 		{
 			if (G.SS.PLM_AUT_RTRY) {
+#if false//2019.01.11(混在対応)
 				if (G.SS.PLM_AUT_MODE == 5 || G.SS.PLM_AUT_MODE == 8) {
 					//5:反射
 					//8:反射→赤外
@@ -1986,6 +2024,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					sts = 1;
 					m_adat.retry = true;
 				}
+#endif
 			}
 			return(sts);
 		}
@@ -2014,6 +2053,65 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 
 			return(false);
 		}
+#if true//2019.01.11(混在対応)
+		private int get_ypos_min(List<int> ypos)
+		{
+			double fmin = double.MaxValue;
+			for (int i = 0; i < (ypos.Count-1); i++) {
+				double fdif = ypos[i+1] - ypos[i];
+				if (fmin > fdif) {
+					fmin = fdif;
+				}
+			}
+			return((int)fmin);
+		}
+		private bool check_touka_retry()
+		{
+			int[] ytmp = (int[])m_adat.y_1st_pos.ToArray(typeof(int));
+			List<int> ypos = new List<int>(ytmp);
+			double fmin;
+
+			m_adat.n_idx = 0;
+			m_adat.nuke_id = 0;
+			m_adat.nuke_cnt = 0;
+			m_adat.nuke_st.Clear();
+			m_adat.nuke_ed.Clear();
+			m_adat.nuke_pos.Clear();
+			m_adat.nuke_pref.Clear();
+			if (m_adat.y_1st_pos.Count < 3) {
+				return(false);
+			}
+			if (ypos.Count <= 0) {
+				//全て白髪だったとき
+				m_adat.nuke_st.Add(G.SS.PLM_AUT_HP_Y-m_adat.cam_hei_pls);
+				m_adat.nuke_ed.Add(G.SS.PLM_AUT_ED_Y+m_adat.cam_hei_pls);
+				return(true);
+			}
+			fmin = get_ypos_min(ypos);
+			////以降、黒髪1本以上のとき
+			if (G.SS.PLM_AUT_HP_Y <= (ypos[0] - fmin)) {
+				m_adat.nuke_st.Add(G.SS.PLM_AUT_HP_Y-m_adat.cam_hei_pls);
+				m_adat.nuke_ed.Add(ypos[0]);
+			}
+			for (int i = 0; i < (ypos.Count-1); i++) {
+				double fdif = ypos[i+1] - ypos[i];
+				if (fdif >= (fmin*2)) {
+					//最小毛髪間隔の範囲を透過測定対象とする
+					m_adat.nuke_st.Add(ypos[i]);
+					m_adat.nuke_ed.Add(ypos[i+1]);
+				}
+			}
+			if (G.SS.PLM_AUT_ED_Y >= (ypos[ypos.Count-1] + fmin)) {
+				m_adat.nuke_st.Add(ypos[ypos.Count-1]);
+				m_adat.nuke_ed.Add(G.SS.PLM_AUT_ED_Y+m_adat.cam_hei_pls);
+			}
+			if (m_adat.nuke_st.Count <= 0) {
+				return(false);
+			}
+			m_adat.nuke_cnt = m_adat.nuke_st.Count;
+			return(true);
+		}
+#endif
 #if true//2018.12.22(測定抜け対応)
 		private bool check_nuke()
 		{
@@ -2022,12 +2120,18 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			m_adat.nuke_cnt = 0;
 			m_adat.nuke_st.Clear();
 			m_adat.nuke_ed.Clear();
-
+#if true//2019.01.11(混在対応)
+			m_adat.nuke_pos.Clear();
+			m_adat.nuke_pref.Clear();
+#endif
 			if (m_adat.y_1st_pos.Count < 3) {
 				return(false);
 			}
 			int[] ytmp = (int[])m_adat.y_1st_pos.ToArray(typeof(int));
 			List<int> ypos = new List<int>(ytmp);
+#if true//2019.01.11(混在対応)
+			double fmin = get_ypos_min(ypos);
+#else
 			double fmin = double.MaxValue;
 			int	imin = 0;
 
@@ -2038,6 +2142,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					imin = i;
 				}
 			}
+#endif
 			for (int i = 0; i < (ypos.Count-1); i++) {
 				double fdif = ypos[i+1] - ypos[i];
 				if (fdif >= (fmin*2)) {
@@ -2083,7 +2188,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 
 			for (int i = 0; i < m_adat.y_1st_pos.Count; i++) {
 				old_im_posi.Add((int)m_adat.y_1st_pos[i]);
+#if true//2019.01.11(混在対応)
+				old_cl_name.Add(i.ToString() + m_adat.y_1st_pref[i]);
+#else
 				old_cl_name.Add(i.ToString() + m_adat.pref);
+#endif
 				old_ir_name.Add(i.ToString() + "IR");
 			}
 			//G.mlog("IRについても処理を追加する");
@@ -2097,11 +2206,19 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				}
 				old_im_posi.Insert(i, m_adat.nuke_pos[h]);
 				char seq = (char)('A'+h);
+#if true//2019.01.11(混在対応)
+				old_cl_name.Insert(i, seq + m_adat.nuke_pref[h]);
+#else
 				old_cl_name.Insert(i, seq + m_adat.pref);
+#endif
 				old_ir_name.Insert(i, seq + "IR");
 			}
 			for (int i = 0; i < old_cl_name.Count; i++) {
+#if true//2019.01.11(混在対応)
+				upd_cl_name.Add(i.ToString() + old_cl_name[i].Substring(old_cl_name[i].Length-2, 2));
+#else
 				upd_cl_name.Add(i.ToString() + m_adat.pref);
+#endif
 				upd_ir_name.Add(i.ToString() + "IR");
 			}
 			//---
@@ -2131,6 +2248,16 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				buf = buf.Replace(old_ir_name[i], upd_ir_name[i]);
 			}
 			System.IO.File.WriteAllText(m_adat.log, buf, Encoding.Default);
+#if true//2019.01.11(混在対応)
+			m_adat.y_1st_pos.Clear();
+			m_adat.y_1st_pref.Clear();
+			for (int i = 0; i < old_cl_name.Count; i++) {
+				int		pos = old_im_posi[i];
+				string	tmp = old_cl_name[i];
+				m_adat.y_1st_pos.Add(pos);
+				m_adat.y_1st_pref.Add(tmp.Substring(tmp.Length-2, 2));
+			}
+#endif
 		}
 #endif
 		private int m_retry_cnt_of_hpos;
@@ -2349,6 +2476,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					m_adat.z_pos.Clear();
 #if true//2018.06.04 赤外同時測定
 					m_adat.y_1st_pos.Clear();
+#endif
+#if true//2019.01.11(混在対応)
+//					m_adat.y_1st_pref.Clear();
 #endif
 					//---
 					if (true) {
@@ -2613,7 +2743,13 @@ a_write("毛髪判定(中心):OK");
 					 ||Math.Abs(G.PLM_POS[1]-(+ 33)) < 20 
 					 ||Math.Abs(G.PLM_POS[1]-(+862)) < 20 
 					) {
+						DialogResult ret;
+						this.timer2.Enabled = false;
+						ret = G.mlog("#q[デバッグ用]\r毛髪抜けデバッグのため当該毛髪をスキップさせますか?");
+						if (ret == DialogResult.Yes) {
 						NXT_STS = 10;//抜けデバッグのため毛髪をスキップさせる
+						}
+						this.timer2.Enabled = true;
 					}
 				}
 #endif
@@ -2772,6 +2908,9 @@ a_write("AF:終了");
 #if true//2018.12.22(測定抜け対応)
 						if (m_adat.nuke) {
 							m_adat.nuke_pos.Add(G.PLM_POS[1]);
+#if true//2019.01.11(混在対応)
+							m_adat.nuke_pref.Add(m_adat.pref);
+#endif
 						}
 						else
 #endif
@@ -2779,6 +2918,9 @@ a_write("AF:終了");
 							//反射での毛髪Ｙ位置を保存して、
 							//透過のときはこのＹ座標をスキップするようにする
 							m_adat.y_1st_pos.Add(G.PLM_POS[1]);
+#if true//2019.01.11(混在対応)
+							m_adat.y_1st_pref.Add(m_adat.pref);
+#endif
 						}
 						//--- ONCE
 						if (G.SS.PLM_AUT_CNST) {
@@ -3519,10 +3661,12 @@ a_write("AF:開始(中心)");
 					//抜けチェック測定後
 					rename_nuke_files();
 					m_adat.nuke = false;
+#if false//2019.01.11(混在対応) -> rename内でソートしてコピーするように変更
 					for (int i = 0; i < m_adat.nuke_pos.Count; i++) {
 						//透過リトライ用にコピーしておく
 						m_adat.y_1st_pos.Add(m_adat.nuke_pos[i]);
 					}
+#endif
 				}
 				else if (G.SS.PLM_AUT_NUKE/* && G.SS.PLM_AUT_HPOS*/) {
 					if (check_nuke()) {
@@ -3532,6 +3676,21 @@ a_write("AF:開始(中心)");
 					}
 				}
 #endif
+#if true//2019.01.11(混在対応)
+				if (G.SS.PLM_AUT_RTRY && (G.SS.PLM_AUT_MODE == 5 || G.SS.PLM_AUT_MODE == 8)) {
+					if (check_touka_retry()) {
+						m_adat.nuke = true;
+						//5:反射
+						//8:反射→赤外
+						//反射で毛髪検出できないときは透過にてリトライする
+						G.SS.PLM_AUT_MODE -= 5;
+						//0:透過
+						//3:透過→赤外
+						NXT_STS = 1;
+						break;
+					}
+				}
+#else
 				if (m_adat.h_cnt == 0 && G.SS.PLM_AUT_RTRY) {
 					if (G.SS.PLM_AUT_MODE == 5 || G.SS.PLM_AUT_MODE == 8) {
 						//5:反射
@@ -3544,6 +3703,7 @@ a_write("AF:開始(中心)");
 						break;
 					}
 				}
+#endif
 //■■■■■■■set_expo_mode(/*auto*/1);
 				a_write(string.Format("終了:毛髪{0}本", m_adat.h_cnt));
 				G.CAM_PRC = G.CAM_STS.STS_NONE;
@@ -3723,6 +3883,15 @@ a_write("AF:開始(中心)");
 					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 2);
 					G.FORM02.get_param(Form02.CAM_PARAM.BALANCE, out fval, out fmax, out fmin);
 					G.SS.CAM_PAR_WB_BV[m_icam] = fval;
+#if true//2019.01.11(混在対応)
+					if (m_icam == 2) {
+					G.SS.CAM_PAR_GA_VL[3] = G.SS.CAM_PAR_GA_VL[2];
+					G.SS.CAM_PAR_EX_VL[3] = G.SS.CAM_PAR_EX_VL[2];
+					G.SS.CAM_PAR_WB_RV[3] = G.SS.CAM_PAR_WB_RV[2];
+					G.SS.CAM_PAR_WB_GV[3] = G.SS.CAM_PAR_WB_GV[2];
+					G.SS.CAM_PAR_WB_BV[3] = G.SS.CAM_PAR_WB_BV[2];
+					}
+#endif
 				}
 			break;
 			case 14:

@@ -30,6 +30,8 @@
 		{
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.label39 = new System.Windows.Forms.Label();
+			this.label40 = new System.Windows.Forms.Label();
 			this.label28 = new System.Windows.Forms.Label();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label31 = new System.Windows.Forms.Label();
@@ -62,6 +64,7 @@
 			this.comboBox14 = new System.Windows.Forms.ComboBox();
 			this.comboBox4 = new System.Windows.Forms.ComboBox();
 			this.label14 = new System.Windows.Forms.Label();
+			this.comboBox9 = new System.Windows.Forms.ComboBox();
 			this.comboBox15 = new System.Windows.Forms.ComboBox();
 			this.label22 = new System.Windows.Forms.Label();
 			this.label21 = new System.Windows.Forms.Label();
@@ -119,9 +122,12 @@
 			this.panel7 = new System.Windows.Forms.Panel();
 			this.label36 = new System.Windows.Forms.Label();
 			this.label37 = new System.Windows.Forms.Label();
-			this.label39 = new System.Windows.Forms.Label();
-			this.comboBox9 = new System.Windows.Forms.ComboBox();
-			this.label40 = new System.Windows.Forms.Label();
+			this.panel8 = new System.Windows.Forms.Panel();
+			this.panel9 = new System.Windows.Forms.Panel();
+			this.radioButton10 = new System.Windows.Forms.RadioButton();
+			this.radioButton11 = new System.Windows.Forms.RadioButton();
+			this.label41 = new System.Windows.Forms.Label();
+			this.button_cancel = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
@@ -142,6 +148,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
 			this.tabPage3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
+			this.panel8.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -150,10 +157,10 @@
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabControl1.Location = new System.Drawing.Point(0, 0);
+			this.tabControl1.Location = new System.Drawing.Point(0, 32);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(321, 473);
+			this.tabControl1.Size = new System.Drawing.Size(321, 475);
 			this.tabControl1.TabIndex = 0;
 			// 
 			// tabPage1
@@ -199,10 +206,28 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(313, 447);
+			this.tabPage1.Size = new System.Drawing.Size(313, 449);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "キューティクル";
 			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// label39
+			// 
+			this.label39.AutoSize = true;
+			this.label39.Location = new System.Drawing.Point(29, 329);
+			this.label39.Name = "label39";
+			this.label39.Size = new System.Drawing.Size(115, 12);
+			this.label39.TabIndex = 108;
+			this.label39.Text = "キューティクル連結範囲";
+			// 
+			// label40
+			// 
+			this.label40.AutoSize = true;
+			this.label40.Location = new System.Drawing.Point(216, 329);
+			this.label40.Name = "label40";
+			this.label40.Size = new System.Drawing.Size(29, 12);
+			this.label40.TabIndex = 105;
+			this.label40.Text = "近傍";
 			// 
 			// label28
 			// 
@@ -342,16 +367,17 @@
 			this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBox2.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold);
 			this.textBox2.ForeColor = System.Drawing.Color.Red;
-			this.textBox2.Location = new System.Drawing.Point(15, 364);
+			this.textBox2.Location = new System.Drawing.Point(15, 374);
 			this.textBox2.Multiline = true;
 			this.textBox2.Name = "textBox2";
 			this.textBox2.ReadOnly = true;
-			this.textBox2.Size = new System.Drawing.Size(287, 39);
+			this.textBox2.Size = new System.Drawing.Size(287, 29);
 			this.textBox2.TabIndex = 91;
 			// 
 			// radioButton5
 			// 
 			this.radioButton5.AutoSize = true;
+			this.radioButton5.Checked = true;
 			this.radioButton5.Location = new System.Drawing.Point(15, 39);
 			this.radioButton5.Name = "radioButton5";
 			this.radioButton5.Size = new System.Drawing.Size(221, 16);
@@ -457,7 +483,6 @@
 			this.radioButton6.Name = "radioButton6";
 			this.radioButton6.Size = new System.Drawing.Size(71, 16);
 			this.radioButton6.TabIndex = 83;
-			this.radioButton6.TabStop = true;
 			this.radioButton6.Text = "二次微分";
 			this.radioButton6.UseVisualStyleBackColor = true;
 			// 
@@ -641,6 +666,19 @@
 			this.label14.TabIndex = 79;
 			this.label14.Text = "タップ数";
 			// 
+			// comboBox9
+			// 
+			this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox9.FormattingEnabled = true;
+			this.comboBox9.Items.AddRange(new object[] {
+            "8",
+            "24",
+            "48"});
+			this.comboBox9.Location = new System.Drawing.Point(159, 323);
+			this.comboBox9.Name = "comboBox9";
+			this.comboBox9.Size = new System.Drawing.Size(54, 20);
+			this.comboBox9.TabIndex = 73;
+			// 
 			// comboBox15
 			// 
 			this.comboBox15.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -732,7 +770,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(313, 447);
+			this.tabPage2.Size = new System.Drawing.Size(313, 449);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "毛髄";
 			this.tabPage2.UseVisualStyleBackColor = true;
@@ -1348,7 +1386,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(313, 447);
+			this.tabPage3.Size = new System.Drawing.Size(313, 449);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "HSV";
 			this.tabPage3.UseVisualStyleBackColor = true;
@@ -1417,47 +1455,83 @@
 			this.label37.TabIndex = 109;
 			this.label37.Text = "基本条件";
 			// 
-			// label39
+			// panel8
 			// 
-			this.label39.AutoSize = true;
-			this.label39.Location = new System.Drawing.Point(29, 329);
-			this.label39.Name = "label39";
-			this.label39.Size = new System.Drawing.Size(115, 12);
-			this.label39.TabIndex = 108;
-			this.label39.Text = "キューティクル連結範囲";
+			this.panel8.Controls.Add(this.button_cancel);
+			this.panel8.Controls.Add(this.panel9);
+			this.panel8.Controls.Add(this.radioButton10);
+			this.panel8.Controls.Add(this.radioButton11);
+			this.panel8.Controls.Add(this.label41);
+			this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel8.Location = new System.Drawing.Point(0, 0);
+			this.panel8.Name = "panel8";
+			this.panel8.Size = new System.Drawing.Size(321, 32);
+			this.panel8.TabIndex = 1;
 			// 
-			// comboBox9
+			// panel9
 			// 
-			this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox9.FormattingEnabled = true;
-			this.comboBox9.Items.AddRange(new object[] {
-            "8",
-            "24",
-            "48"});
-			this.comboBox9.Location = new System.Drawing.Point(159, 323);
-			this.comboBox9.Name = "comboBox9";
-			this.comboBox9.Size = new System.Drawing.Size(54, 20);
-			this.comboBox9.TabIndex = 73;
+			this.panel9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel9.Location = new System.Drawing.Point(1, 29);
+			this.panel9.Name = "panel9";
+			this.panel9.Size = new System.Drawing.Size(330, 2);
+			this.panel9.TabIndex = 93;
 			// 
-			// label40
+			// radioButton10
 			// 
-			this.label40.AutoSize = true;
-			this.label40.Location = new System.Drawing.Point(216, 329);
-			this.label40.Name = "label40";
-			this.label40.Size = new System.Drawing.Size(29, 12);
-			this.label40.TabIndex = 105;
-			this.label40.Text = "近傍";
+			this.radioButton10.AutoSize = true;
+			this.radioButton10.Location = new System.Drawing.Point(80, 8);
+			this.radioButton10.Name = "radioButton10";
+			this.radioButton10.Size = new System.Drawing.Size(83, 16);
+			this.radioButton10.TabIndex = 0;
+			this.radioButton10.TabStop = true;
+			this.radioButton10.Text = "反射用(CR)";
+			this.radioButton10.UseVisualStyleBackColor = true;
+			this.radioButton10.Click += new System.EventHandler(this.radioButton10_Click);
+			// 
+			// radioButton11
+			// 
+			this.radioButton11.AutoSize = true;
+			this.radioButton11.Location = new System.Drawing.Point(178, 8);
+			this.radioButton11.Name = "radioButton11";
+			this.radioButton11.Size = new System.Drawing.Size(82, 16);
+			this.radioButton11.TabIndex = 0;
+			this.radioButton11.TabStop = true;
+			this.radioButton11.Text = "透過用(CT)";
+			this.radioButton11.UseVisualStyleBackColor = true;
+			this.radioButton11.Click += new System.EventHandler(this.radioButton10_Click);
+			// 
+			// label41
+			// 
+			this.label41.AutoSize = true;
+			this.label41.Location = new System.Drawing.Point(12, 12);
+			this.label41.Name = "label41";
+			this.label41.Size = new System.Drawing.Size(32, 12);
+			this.label41.TabIndex = 77;
+			this.label41.Text = "カラー";
+			// 
+			// button_cancel
+			// 
+			this.button_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.button_cancel.Location = new System.Drawing.Point(336, 5);
+			this.button_cancel.Name = "button_cancel";
+			this.button_cancel.Size = new System.Drawing.Size(41, 22);
+			this.button_cancel.TabIndex = 118;
+			this.button_cancel.Text = "cancel";
+			this.button_cancel.UseVisualStyleBackColor = true;
 			// 
 			// Form24
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(321, 473);
+			this.CancelButton = this.button_cancel;
+			this.ClientSize = new System.Drawing.Size(321, 507);
 			this.Controls.Add(this.tabControl1);
+			this.Controls.Add(this.panel8);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "Form24";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "検出条件";
 			this.TopMost = true;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form24_FormClosing);
@@ -1485,6 +1559,8 @@
 			this.tabPage3.ResumeLayout(false);
 			this.tabPage3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
+			this.panel8.ResumeLayout(false);
+			this.panel8.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1585,5 +1661,11 @@
 		private System.Windows.Forms.Label label39;
 		private System.Windows.Forms.ComboBox comboBox9;
 		private System.Windows.Forms.Label label40;
+		private System.Windows.Forms.Panel panel8;
+		private System.Windows.Forms.RadioButton radioButton10;
+		private System.Windows.Forms.RadioButton radioButton11;
+		private System.Windows.Forms.Label label41;
+		private System.Windows.Forms.Panel panel9;
+		private System.Windows.Forms.Button button_cancel;
 	}
 }

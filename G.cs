@@ -114,6 +114,24 @@ namespace uSCOPE
 			//[XmlIgnoreAttribute]
 			//public int		CAM_PRC_MODE;
 			public bool		CAM_PAR_AUTO = true;
+#if true//2019.01.11(混在対応)
+			public double[] CAM_PAR_GAMMA = { 1.0, 2.0, 1.0, 1.0 };
+			public double[] CAM_PAR_CONTR = { 0.0, 0.0, 0.0, 0.0 };
+			public double[] CAM_PAR_BRIGH = { 0.3, 0.3, 0.3, 0.3 };
+			public double[] CAM_PAR_SHARP = { 0.0, 0.0, 0.0, 0.0 };
+			//public int      CAM_PAR_EXMOD = 0;
+			//public int      CAM_PAR_WBMOD = 0;
+			public int[]	CAM_PAR_GAMOD = {1, 1, 1, 1};//自動
+			public int[]	CAM_PAR_EXMOD = {1, 1, 1, 1};//自動
+			public int[]	CAM_PAR_WBMOD = {1, 1, 1, 1};//自動
+			public double[]	CAM_PAR_GA_VL = {1.0, 1.0, 1.0, 1.0};
+			public double[]	CAM_PAR_GA_OF = {0, 0, 0, 0};
+			public double[]	CAM_PAR_EX_VL = {1000.0, 1000.0, 1000.0, 1000.0};
+			public double[]	CAM_PAR_EX_OF = {0, 0, 0, 0};
+			public double[]	CAM_PAR_WB_RV = {1.0, 1.0, 1.0, 1.0};
+			public double[]	CAM_PAR_WB_GV = {1.0, 1.0, 1.0, 1.0};
+			public double[]	CAM_PAR_WB_BV = {1.0, 1.0, 1.0, 1.0};
+#else
 			public double[] CAM_PAR_GAMMA = { 1.0, 2.0, 1.0 };
 			public double[] CAM_PAR_CONTR = { 0.0, 0.0, 0.0 };
 			public double[] CAM_PAR_BRIGH = { 0.3, 0.3, 0.3 };
@@ -130,6 +148,7 @@ namespace uSCOPE
 			public double[]	CAM_PAR_WB_RV = {1.0, 1.0, 1.0};
 			public double[]	CAM_PAR_WB_GV = {1.0, 1.0, 1.0};
 			public double[]	CAM_PAR_WB_BV = {1.0, 1.0, 1.0};
+#endif
 			//---
 			public int		CAM_HIS_BVAL = 110;
 			public int CAM_HIS_PAR1 = 0;
@@ -277,6 +296,9 @@ namespace uSCOPE
 			public bool PLM_AUT_RTRY = false;
 #if true//2018.12.22(測定抜け対応)
 			public bool PLM_AUT_NUKE = true;
+#endif
+#if true//2019.01.11(混在対応)
+			public int	PLM_AUT_NMIN = (155*2);//155pls/1gamen...最低でも2画面縦サイズ分
 #endif
 			//---
 			//public bool PLM_AUT_ZMUL = false;
@@ -446,6 +468,38 @@ namespace uSCOPE
 #if true//2018.11.13(毛髪中心AF)
 			public int MOZ_FST_IMTP = 0;
 #endif
+#if true//2019.01.11(混在対応) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+			public int[]    ANL_CND_CTYP = {0,0};//キューティクル(0:BPF,1:2d)
+			public double[] ANL_CND_BPF1 = {0.047,0.047};
+			public double[] ANL_CND_BPF2 = {0.300,0.300};
+			public int[]    ANL_CND_BPSL = {1,1};//1:スロープ=普通
+			public int[]    ANL_CND_NTAP = {11,11};//フィルタタップ数
+			public double[] ANL_CND_BPVL = {25,25};
+			public int[]    ANL_CND_2DC0 = {7,7};
+			public int[]    ANL_CND_2DC1 = {0,0};
+			public int[]    ANL_CND_2DC2 = {0,0};
+			public double[] ANL_CND_2DVL = {4.0,4.0};
+			public int[]    ANL_CND_FTCF = {5,5};//11x11
+			public int[]    ANL_CND_FTCT = {0,0};//1回
+			public int[]    ANL_CND_SMCF = {9,9};//重み係数=21
+			public int[]    ANL_CND_CNTR = {1,1};//コントラスト補正
+			public int[]    ANL_CND_ZVAL = {50,50};
+			public int[]    ANL_CND_HANI = {75,75};//毛髄判定範囲[%]
+			public int[]    ANL_CND_SLVL = {128,128};		//毛髄面積:D/L区分閾値
+			public int[]    ANL_CND_OTW1 = {21,21};		//外れ値判定:幅  (毛髄長さ)
+			public double[] ANL_CND_OTV1 = {1.6,1.6};	//外れ値判定:閾値(毛髄長さ)
+			public int[]    ANL_CND_OTW2 = {31,31};		//外れ値判定:幅  (毛髄中心)
+			public double[] ANL_CND_OTV2 = {1.2,1.2};	//外れ値判定:閾値(毛髄中心)
+			public int[]    ANL_CND_OTMD = {1,1};		//外れ値判定:補間,1:直線補間
+			public double[] ANL_CND_SMVL = {5,5};		//除外判定:面積値
+			public bool[]   ANL_CND_CHK1 = {true,true};	//有,無効:除外判定:毛髄面積
+			public bool[]   ANL_CND_CHK2 = {true,true};	//有,無効:外れ値判定:毛髄長さ
+			public bool[]   ANL_CND_CHK3 = {true,true};	//有,無効:外れ値判定:毛髄中心
+			public int[]    ANL_CND_CHAN = {65,65};
+			public int[]    ANL_CND_CMIN = {2,2};
+			public int[]    ANL_CND_CNEI = {1,1};
+			public int[]    ANL_CND_HIST = {65,65};
+#endif//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 			//---
 			public int TST_PAR_GAUS = 0;
 			public bool TST_PAR_CHK1 = true;
@@ -548,6 +602,18 @@ namespace uSCOPE
 				cln.CAM_PAR_CONTR = (double[])this.CAM_PAR_CONTR.Clone();
 				cln.CAM_PAR_BRIGH = (double[])this.CAM_PAR_BRIGH.Clone();
 				cln.CAM_PAR_SHARP = (double[])this.CAM_PAR_SHARP.Clone();
+#if true//2019.01.11(混在対応)
+				cln.CAM_PAR_GAMOD= (int[]   )this.CAM_PAR_GAMOD.Clone();
+				cln.CAM_PAR_EXMOD= (int[]   )this.CAM_PAR_EXMOD.Clone();
+				cln.CAM_PAR_WBMOD= (int[]   )this.CAM_PAR_WBMOD.Clone();
+				cln.CAM_PAR_GA_VL= (double[])this.CAM_PAR_GA_VL.Clone();
+				cln.CAM_PAR_GA_OF= (double[])this.CAM_PAR_GA_OF.Clone();
+				cln.CAM_PAR_EX_VL= (double[])this.CAM_PAR_EX_VL.Clone();
+				cln.CAM_PAR_EX_OF= (double[])this.CAM_PAR_EX_OF.Clone();
+				cln.CAM_PAR_WB_RV= (double[])this.CAM_PAR_WB_RV.Clone();
+				cln.CAM_PAR_WB_GV= (double[])this.CAM_PAR_WB_GV.Clone();
+				cln.CAM_PAR_WB_BV= (double[])this.CAM_PAR_WB_BV.Clone();
+#endif
 #if true
 				//設定ファイルにて新規のサイズ4がサイズ3に上書きされてしまうため...
 				RESIZE_ARRAY(ref cln.PLM_POSX, ref G.SS.PLM_POSX);
@@ -629,6 +695,16 @@ namespace uSCOPE
 						}
 					}
 				}
+#endif
+#if true//2019.01.11(混在対応)
+				RESIZE_ARRAY(ref cln.CAM_PAR_GAMOD, ref G.SS.CAM_PAR_GAMOD);
+				RESIZE_ARRAY(ref cln.CAM_PAR_GA_VL, ref G.SS.CAM_PAR_GA_VL);
+				RESIZE_ARRAY(ref cln.CAM_PAR_GA_OF, ref G.SS.CAM_PAR_GA_OF);
+				RESIZE_ARRAY(ref cln.CAM_PAR_EX_VL, ref G.SS.CAM_PAR_EX_VL);
+				RESIZE_ARRAY(ref cln.CAM_PAR_EX_OF, ref G.SS.CAM_PAR_EX_OF);
+				RESIZE_ARRAY(ref cln.CAM_PAR_WB_RV, ref G.SS.CAM_PAR_WB_RV);
+				RESIZE_ARRAY(ref cln.CAM_PAR_WB_GV, ref G.SS.CAM_PAR_WB_GV);
+				RESIZE_ARRAY(ref cln.CAM_PAR_WB_BV, ref G.SS.CAM_PAR_WB_BV);
 #endif
 #if true//2018.09.27(20本対応と解析用パラメータ追加)
 				//設定ファイルにて新規のサイズ6が旧サイズ4に上書きされてしまうため...
@@ -859,6 +935,9 @@ namespace uSCOPE
 		static public int CAM_WID;
 		static public int CAM_HEI;
 		static public int LED_PWR_STS;
+#if true//2019.01.11(混在対応)
+		static public int LED_PWR_BAK;//直近の白色が透過(:0)か反射(:1)か
+#endif
 		static public int STG_TRQ_STS = 0;//ビットON:TRQ-HI, OFF:TRQ-LO
 		static public int CAM_GAI_STS=2;//0:固定, 1:自動, 2:不定
 		static public int CAM_EXP_STS=2;//0:固定, 1:自動, 2:不定

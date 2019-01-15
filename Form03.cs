@@ -650,6 +650,9 @@ retry:
 #if true//2018.08.21
 			public ImageList il_pd;
 #endif
+#if true//2019.01.11(混在対応)
+			public int mode_of_cl;//0:透過, 1:反射
+#endif
 			public string[] name_of_cl;
 			public string[] name_of_ir;
 			public double width_of_hair;
@@ -2101,7 +2104,9 @@ retry:
 			int		i0 = 0;
 			//double ds = 5;//5dot = 1.375um
 			double	ds = G.UM2PX(G.SS.MOZ_CND_DSUM, m_log_info.pix_pitch, m_log_info.zoom);//横方向走査単位[pix]
+#if false//2019.01.11(混在対応)
 			double	u5 = G.UM2PX(G.SS.MOZ_CND_CUTE, m_log_info.pix_pitch, m_log_info.zoom);//径方向走査単位[pix]
+#endif
 			PointF	pf;// = (PointF)ac[0];
 			//double xend = ((PointF)ac[ac.Count-1]).X;
 			double	xmin = (G.IR.PLY_XMIN < C.GAP_OF_IMG_EDGE) ? 0 :G.IR.PLY_XMIN;
@@ -2201,7 +2206,12 @@ retry:
 				FN1D f1 = m_fc[ii];			//現在X位置に対応する中心ラインの直線
 				FN1D f2 = f1.GetNormFn(pf);	//F1に直交する直線(→径方向)
 				PointF p2 = new PointF(), p3 = new PointF(), pt;
-				Point p5, p6, p7, p8, p9;
+				Point p5
+#if false//2019.01.11(混在対応)
+				, p6, p7, p8, p9;
+#else
+				;
+#endif
 				//Color cl;
 
 				//径方向直線と上端ラインの直線の交点を求める
@@ -2223,6 +2233,7 @@ retry:
 				p5 = Point.Round(pf);
 				//---
 				p5 = Point.Round(pf);
+#if false//2019.01.11(混在対応)
 				pt = new PointF((pf.X + p2.X)/2,  (pf.Y + p2.Y)/2);
 				p6 = Point.Round(pt);
 				pt = new PointF((pf.X + p3.X)/2,  (pf.Y + p3.Y)/2);
@@ -2231,7 +2242,7 @@ retry:
 				p8 = Point.Round(pt);
 				pt = f2.GetScanPt2Ext(pf, p3, u5);
 				p9 = Point.Round(pt);
-
+#endif
 				if (bRECALCIR == false) {
 					//(5)
 					//格納
@@ -3453,6 +3464,10 @@ retry:
 			var dlg = new DlgProgress();
 			try {
 			int cnt_of_hair = 0;
+#if true//2019.01.11(混在対応)
+			int mode_of_cl;//0:透過, 1:反射
+#endif
+
 #if true//2018.08.21
 			string zpos = "ZP00D";
 #else
@@ -3638,6 +3653,9 @@ retry:
 #else
 					G.set_imp_param(/*透過*/0, -1);
 #endif
+#if true//2019.01.11(混在対応)
+					SWAP_ANL_CND(mode_of_cl = 0);//0:透過, 1:反射
+#endif
 				}
 				else {
 					files_cl = files_cr;//反射
@@ -3645,6 +3663,9 @@ retry:
 					G.set_imp_param(/*反射*/4, -1);
 #else
 					G.set_imp_param(/*反射*/1, -1);
+#endif
+#if true//2019.01.11(混在対応)
+					SWAP_ANL_CND(mode_of_cl = 1);//0:透過, 1:反射
 #endif
 				}
 				cnt_of_seg = files_cl.Length;
@@ -3915,6 +3936,9 @@ retry:
 				if (G.bCANCEL) {
 					break;
 				}
+#if true//2019.01.11(混在対応)
+				hr.mode_of_cl = mode_of_cl;//0:透過, 1:反射
+#endif
 				//---
 				hr.seg = segs;//(seg_of_hair[])ar_seg.ToArray(typeof(seg_of_hair));
 				if (true) {
@@ -7270,6 +7294,45 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				G.mlog(ex.ToString());
 			}
 		}
+#if true//2019.01.11(混在対応)
+		private void SWAP_ANL_CND(int mode)
+		{
+			int i = (mode == 0) ? 0/*透過/CT/白髪*/: 1/*反射/CR/黒髪*/;
+			G.SS.MOZ_CND_CTYP = G.SS.ANL_CND_CTYP[i];
+			G.SS.MOZ_CND_BPF1 = G.SS.ANL_CND_BPF1[i];
+			G.SS.MOZ_CND_BPF2 = G.SS.ANL_CND_BPF2[i];
+			G.SS.MOZ_CND_BPSL = G.SS.ANL_CND_BPSL[i];
+			G.SS.MOZ_CND_NTAP = G.SS.ANL_CND_NTAP[i];
+			G.SS.MOZ_CND_BPVL = G.SS.ANL_CND_BPVL[i];
+			G.SS.MOZ_CND_2DC0 = G.SS.ANL_CND_2DC0[i];
+			G.SS.MOZ_CND_2DC1 = G.SS.ANL_CND_2DC1[i];
+			G.SS.MOZ_CND_2DC2 = G.SS.ANL_CND_2DC2[i];
+			G.SS.MOZ_CND_2DVL = G.SS.ANL_CND_2DVL[i];
+
+			G.SS.MOZ_CND_FTCF = G.SS.ANL_CND_FTCF[i];
+			G.SS.MOZ_CND_FTCT = G.SS.ANL_CND_FTCT[i];
+			G.SS.MOZ_CND_SMCF = G.SS.ANL_CND_SMCF[i];
+			G.SS.MOZ_CND_CNTR = G.SS.ANL_CND_CNTR[i];
+			G.SS.MOZ_CND_ZVAL = G.SS.ANL_CND_ZVAL[i];
+			G.SS.MOZ_CND_HANI = G.SS.ANL_CND_HANI[i];
+			G.SS.MOZ_CND_SLVL = G.SS.ANL_CND_SLVL[i];
+			G.SS.MOZ_CND_OTW1 = G.SS.ANL_CND_OTW1[i];
+			G.SS.MOZ_CND_OTV1 = G.SS.ANL_CND_OTV1[i];
+			G.SS.MOZ_CND_OTW2 = G.SS.ANL_CND_OTW2[i];
+			G.SS.MOZ_CND_OTV2 = G.SS.ANL_CND_OTV2[i];
+			G.SS.MOZ_CND_OTMD = G.SS.ANL_CND_OTMD[i];
+			G.SS.MOZ_CND_SMVL = G.SS.ANL_CND_SMVL[i];
+			G.SS.MOZ_CND_CHK1 = G.SS.ANL_CND_CHK1[i];
+			G.SS.MOZ_CND_CHK2 = G.SS.ANL_CND_CHK2[i];
+			G.SS.MOZ_CND_CHK2 = G.SS.ANL_CND_CHK2[i];
+
+			G.SS.MOZ_CND_CHAN = G.SS.ANL_CND_CHAN[i];
+			G.SS.MOZ_CND_CMIN = G.SS.ANL_CND_CMIN[i];
+
+			G.SS.MOZ_CND_CNEI = G.SS.ANL_CND_CNEI[i];
+			G.SS.MOZ_CND_HIST = G.SS.ANL_CND_HIST[i];
+		}
+#endif
 #if true//2018.09.29(キューティクルライン検出)
 		public void UPDATE_CUTICLE()
 		{//キューティクル・フィルター処理
@@ -7283,6 +7346,9 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			if (m_isel >= hr.seg.Count()) {
 				return;
 			}
+#if true//2019.01.11(混在対応)
+			SWAP_ANL_CND(hr.mode_of_cl);//0:透過, 1:反射
+#endif
 			if (!calc_filter_coeff()) {
 				return;
 			}
@@ -7324,6 +7390,9 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 			if (m_isel >= hr.seg.Count()) {
 				return;
 			}
+#if true//2019.01.11(混在対応)
+			SWAP_ANL_CND(hr.mode_of_cl);//0:透過, 1:反射
+#endif
 			for (int i = 0; i < hr.seg.Length; i++) {
 				seg_of_hair[] segs = hr.seg;
 				seg_of_hair seg = (seg_of_hair)hr.seg[i];
@@ -7387,13 +7456,19 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #if true//2018.11.02(HSVグラフ)
 			draw_hsv(hr);
 #endif
-
 		}
 
 		private void button4_Click(object sender, EventArgs e)
 		{
 			if (G.FORM24 == null) {
 				Form24 frm = new Form24();
+#if true//2019.01.11(混在対応)
+				if (m_i >= m_hair.Count) {
+					return;
+				}
+				hair hr = (hair)m_hair[m_i];
+				Form24.m_i = hr.mode_of_cl;//0:透過, 1:反射
+#endif
 				frm.Show(this);
 			}
 			else {
@@ -7402,6 +7477,13 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 		}
 		public void UPDATE_MOUZUI()
 		{
+#if true//2019.01.11(混在対応)
+			if (m_i >= m_hair.Count) {
+				return;
+			}
+			hair hr = (hair)m_hair[m_i];
+			SWAP_ANL_CND(hr.mode_of_cl);//0:透過, 1:反射
+#endif
 			this.MOZ_CND_FTCF = C_FILT_COFS[G.SS.MOZ_CND_FTCF];
 			this.MOZ_CND_FTCT = C_FILT_CNTS[G.SS.MOZ_CND_FTCT];
 			this.MOZ_CND_SMCF = C_SMTH_COFS[G.SS.MOZ_CND_SMCF];
@@ -7411,6 +7493,13 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #if true//2018.11.02(HSVグラフ)
 		public void UPDATE_HSV()
 		{
+#if true//2019.01.11(混在対応)
+			if (m_i >= m_hair.Count) {
+				return;
+			}
+			hair hr = (hair)m_hair[m_i];
+			SWAP_ANL_CND(hr.mode_of_cl);//0:透過, 1:反射
+#endif
 			//---
 			UPDATE_BY_FILES(1);
 		}
