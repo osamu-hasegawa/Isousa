@@ -180,7 +180,22 @@ namespace uSCOPE
 			if (G.UIF_LEVL == 2/*開発者用(一度)*/) {
 				G.SS.ETC_UIF_LEVL = G.SS.ETC_UIF_BACK;
 			}
+#if true//2019.01.15(パスワード画面)
+			if (G.SS.ETC_CPH_CHK1) {
+				BeginInvoke(new G.DLG_VOID_VOID(this.PASSWORD_INPUT));
+			}
+#endif
 		}
+#if true//2019.01.15(パスワード画面)
+		private void PASSWORD_INPUT()
+		{
+			frmPassword frm = new frmPassword();
+			if (frm.ShowDialog() != System.Windows.Forms.DialogResult.OK) {
+				this.Close();
+				return;
+			}
+		}
+#endif
 		private void UIF_LEVL1_INIT()
 		{
 			//---

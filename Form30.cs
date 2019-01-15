@@ -155,6 +155,9 @@ namespace uSCOPE
 					DDV.DDX(bUpdate, this.checkBox4, ref m_ss.ETC_UIF_CUTI);
 					DDV.DDX(bUpdate, this.checkBox5, ref m_ss.PLM_AUT_FINI);
 					DDV.DDX(bUpdate, this.checkBox6, ref m_ss.PLM_AUT_ZINI);
+#if true//2019.01.15(パスワード画面)
+					DDV.DDX(bUpdate, this.checkBox11,ref m_ss.ETC_CPH_CHK1);
+#endif
 				}
 
 				//-----
@@ -229,5 +232,14 @@ namespace uSCOPE
 				}
 			}
 		}
+#if true//2019.01.15(パスワード画面)
+		private void button1_Click(object sender, EventArgs e)
+		{
+			frmPassSet frm = new frmPassSet();
+			if (frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				m_ss.ETC_CPH_HASH = G.comp_hash(frm.m_pass_str);
+			}
+		}
+#endif
 	}
 }

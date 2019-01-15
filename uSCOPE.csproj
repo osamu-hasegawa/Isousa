@@ -240,6 +240,18 @@
     <Compile Include="Form21BAK.Designer.cs">
       <DependentUpon>Form21BAK.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPassword.designer.cs">
+      <DependentUpon>frmPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPassSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPassSet.designer.cs">
+      <DependentUpon>frmPassSet.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="DlgProgress.resx">
       <DependentUpon>DlgProgress.cs</DependentUpon>
     </EmbeddedResource>
@@ -315,6 +327,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form21BAK.resx">
       <DependentUpon>Form21BAK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPassword.resx">
+      <DependentUpon>frmPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPassSet.resx">
+      <DependentUpon>frmPassSet.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest" />

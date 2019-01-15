@@ -6,7 +6,9 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Drawing;
-
+#if true//2019.01.15(パスワード画面)
+using System.Security.Cryptography;
+#endif
 namespace uSCOPE
 {
 	public class G
@@ -347,6 +349,10 @@ namespace uSCOPE
 			}
 			public int ETC_CRS_LENGTH = 50;
 #endif
+#if true//2019.01.15(パスワード画面)
+			public bool ETC_CPH_CHK1 = true;
+			public byte[] ETC_CPH_HASH = null;
+#endif
 #if true//2018.11.10(保存機能)
 			public int MOZ_SAV_DMOD = 0;
 			public string MOZ_SAV_FOLD = "";
@@ -613,6 +619,37 @@ namespace uSCOPE
 				cln.CAM_PAR_WB_RV= (double[])this.CAM_PAR_WB_RV.Clone();
 				cln.CAM_PAR_WB_GV= (double[])this.CAM_PAR_WB_GV.Clone();
 				cln.CAM_PAR_WB_BV= (double[])this.CAM_PAR_WB_BV.Clone();
+				//---
+				cln.ANL_CND_CTYP = (int[]   )this.ANL_CND_CTYP.Clone();
+				cln.ANL_CND_BPF1 = (double[])this.ANL_CND_BPF1.Clone();
+				cln.ANL_CND_BPF2 = (double[])this.ANL_CND_BPF2.Clone();
+				cln.ANL_CND_BPSL = (int[]   )this.ANL_CND_BPSL.Clone();
+				cln.ANL_CND_NTAP = (int[]   )this.ANL_CND_NTAP.Clone();
+				cln.ANL_CND_BPVL = (double[])this.ANL_CND_BPVL.Clone();
+				cln.ANL_CND_2DC0 = (int[]   )this.ANL_CND_2DC0.Clone();
+				cln.ANL_CND_2DC1 = (int[]   )this.ANL_CND_2DC1.Clone();
+				cln.ANL_CND_2DC2 = (int[]   )this.ANL_CND_2DC2.Clone();
+				cln.ANL_CND_2DVL = (double[])this.ANL_CND_2DVL.Clone();
+				cln.ANL_CND_FTCF = (int[]   )this.ANL_CND_FTCF.Clone();
+				cln.ANL_CND_FTCT = (int[]   )this.ANL_CND_FTCT.Clone();
+				cln.ANL_CND_SMCF = (int[]   )this.ANL_CND_SMCF.Clone();
+				cln.ANL_CND_CNTR = (int[]   )this.ANL_CND_CNTR.Clone();
+				cln.ANL_CND_ZVAL = (int[]   )this.ANL_CND_ZVAL.Clone();
+				cln.ANL_CND_HANI = (int[]   )this.ANL_CND_HANI.Clone();
+				cln.ANL_CND_SLVL = (int[]   )this.ANL_CND_SLVL.Clone();
+				cln.ANL_CND_OTW1 = (int[]   )this.ANL_CND_OTW1.Clone();
+				cln.ANL_CND_OTV1 = (double[])this.ANL_CND_OTV1.Clone();
+				cln.ANL_CND_OTW2 = (int[]   )this.ANL_CND_OTW2.Clone();
+				cln.ANL_CND_OTV2 = (double[])this.ANL_CND_OTV2.Clone();
+				cln.ANL_CND_OTMD = (int[]   )this.ANL_CND_OTMD.Clone();
+				cln.ANL_CND_SMVL = (double[])this.ANL_CND_SMVL.Clone();
+				cln.ANL_CND_CHK1 = (bool[]  )this.ANL_CND_CHK1.Clone();
+				cln.ANL_CND_CHK2 = (bool[]  )this.ANL_CND_CHK2.Clone();
+				cln.ANL_CND_CHK3 = (bool[]  )this.ANL_CND_CHK3.Clone();
+				cln.ANL_CND_CHAN = (int[]   )this.ANL_CND_CHAN.Clone();
+				cln.ANL_CND_CMIN = (int[]   )this.ANL_CND_CMIN.Clone();
+				cln.ANL_CND_CNEI = (int[]   )this.ANL_CND_CNEI.Clone();
+				cln.ANL_CND_HIST = (int[]   )this.ANL_CND_HIST.Clone();
 #endif
 #if true
 				//設定ファイルにて新規のサイズ4がサイズ3に上書きされてしまうため...
@@ -1232,5 +1269,58 @@ namespace uSCOPE
 			G.SS.CAM_DIR_PREC = G.SS.IMP_POL_PREC[i];//, 5, 100);
 			}
 		}
+#if true//2019.01.15(パスワード画面)
+		/*static string ByteArrayToString(byte[] arrInput)
+		{
+			int i;
+			StringBuilder sOutput = new StringBuilder(arrInput.Length);
+			for (i=0;i < arrInput.Length -1; i++) {
+				sOutput.Append(arrInput[i].ToString("X2"));
+			}
+			return sOutput.ToString();
+		}*/
+		static public byte[] comp_hash(string src)
+		{
+			string sSourceData = src;
+			byte[] tmpSource;
+			byte[] tmpHash;
+			//sSourceData = "MySourceData";
+			//Create a byte array from source data
+			tmpSource = ASCIIEncoding.ASCII.GetBytes(sSourceData);
+
+			//Compute hash based on source data
+			tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
+			return(tmpHash);
+#if false
+			Console.WriteLine(ByteArrayToString(tmpHash));
+
+			sSourceData = "NotMySourceData";
+			tmpSource = ASCIIEncoding.ASCII.GetBytes(sSourceData);
+
+			byte[] tmpNewHash;
+
+			tmpNewHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
+
+			bool bEqual = false;
+			if (tmpNewHash.Length == tmpHash.Length) {
+				int i=0;
+				while ((i < tmpNewHash.Length) && (tmpNewHash[i] == tmpHash[i])) {
+					i += 1;
+				}
+				if (i == tmpNewHash.Length) {
+					bEqual = true;
+				}
+			}
+
+			if (bEqual)
+				Console.WriteLine("The two hash values are the same");
+			else
+				Console.WriteLine("The two hash values are not the same");
+			Console.ReadLine();
+			return(null);
+#endif
+		}
+#endif
+
 	}
 }

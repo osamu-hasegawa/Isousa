@@ -158,9 +158,7 @@
 			this.textBox67 = new System.Windows.Forms.TextBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkBox11 = new System.Windows.Forms.CheckBox();
-			this.textBox53 = new System.Windows.Forms.TextBox();
-			this.textBox52 = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
+			this.button1 = new System.Windows.Forms.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1395,9 +1393,9 @@
 			this.groupBox3.Controls.Add(this.label22);
 			this.groupBox3.Controls.Add(this.label18);
 			this.groupBox3.Controls.Add(this.textBox67);
-			this.groupBox3.Location = new System.Drawing.Point(371, 368);
+			this.groupBox3.Location = new System.Drawing.Point(371, 348);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(353, 187);
+			this.groupBox3.Size = new System.Drawing.Size(353, 207);
 			this.groupBox3.TabIndex = 5;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "その他";
@@ -1491,13 +1489,10 @@
 			// groupBox6
 			// 
 			this.groupBox6.Controls.Add(this.checkBox11);
-			this.groupBox6.Controls.Add(this.textBox53);
-			this.groupBox6.Controls.Add(this.textBox52);
-			this.groupBox6.Controls.Add(this.label3);
-			this.groupBox6.Enabled = false;
+			this.groupBox6.Controls.Add(this.button1);
 			this.groupBox6.Location = new System.Drawing.Point(371, 294);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(353, 68);
+			this.groupBox6.Size = new System.Drawing.Size(353, 48);
 			this.groupBox6.TabIndex = 6;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "起動時パスワード";
@@ -1506,38 +1501,22 @@
 			// 
 			this.checkBox11.AutoSize = true;
 			this.checkBox11.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox11.Location = new System.Drawing.Point(17, 18);
+			this.checkBox11.Location = new System.Drawing.Point(17, 21);
 			this.checkBox11.Name = "checkBox11";
 			this.checkBox11.Size = new System.Drawing.Size(159, 16);
 			this.checkBox11.TabIndex = 2;
 			this.checkBox11.Text = "起動時パスワードを使用する";
 			this.checkBox11.UseVisualStyleBackColor = false;
 			// 
-			// textBox53
+			// button1
 			// 
-			this.textBox53.Location = new System.Drawing.Point(199, 40);
-			this.textBox53.Name = "textBox53";
-			this.textBox53.PasswordChar = '*';
-			this.textBox53.Size = new System.Drawing.Size(138, 19);
-			this.textBox53.TabIndex = 0;
-			// 
-			// textBox52
-			// 
-			this.textBox52.Location = new System.Drawing.Point(199, 15);
-			this.textBox52.Name = "textBox52";
-			this.textBox52.PasswordChar = '*';
-			this.textBox52.Size = new System.Drawing.Size(138, 19);
-			this.textBox52.TabIndex = 0;
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.BackColor = System.Drawing.SystemColors.Control;
-			this.label3.Location = new System.Drawing.Point(36, 43);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(133, 12);
-			this.label3.TabIndex = 1;
-			this.label3.Text = "確認として同じ内容を入力";
+			this.button1.Location = new System.Drawing.Point(215, 16);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(89, 23);
+			this.button1.TabIndex = 5;
+			this.button1.Text = "パスワード設定";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// Form30
 			// 
@@ -1710,9 +1689,7 @@
 		private System.Windows.Forms.CheckBox checkBox7;
 		private System.Windows.Forms.GroupBox groupBox6;
 		private System.Windows.Forms.CheckBox checkBox11;
-		private System.Windows.Forms.TextBox textBox52;
-		private System.Windows.Forms.TextBox textBox53;
-		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Button button1;
 
 	}
 }

@@ -2028,6 +2028,7 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			}
 			return(sts);
 		}
+#if false//2019.01.11(混在対応)
 		private bool retry_ypos_check(int ycur, out int ynxt)
 		{
 			ynxt = ycur;
@@ -2050,9 +2051,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			//int ret;
 			////ret = G.CAM_HEI * G.SS.CAM_SPE_UMPPX
 			//MOVE_PIX_XY(0, (int)(G.CAM_HEI * (1 - G.SS.PLM_AUT_OVLP / 100.0)));
-
 			return(false);
 		}
+#endif
 #if true//2019.01.11(混在対応)
 		private int get_ypos_min(List<int> ypos)
 		{
@@ -2574,10 +2575,12 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 #endif
 					NXT_STS = 999;
 				}
+#if false//2019.01.11(混在対応)
 				else if (retry_ypos_check(G.PLM_POS[1], out ypos)) {
 					MOVE_REL_XY(0, ypos-G.PLM_POS[1]);
 					NXT_STS = -(5 - 1);//->5
 				}
+#endif
 				else {
 a_write("AF:開始");
 					start_af(3);
@@ -2644,10 +2647,12 @@ a_write("毛髪判定(AF位置探索):OK");
 					//SOFT.LIMIT(+)
 					NXT_STS = 40;
 				}
+#if false//2019.01.11(混在対応)
 				else if (retry_ypos_check(G.PLM_POS[1], out ypos)) {
 					MOVE_REL_XY(0, ypos-G.PLM_POS[1]);
 					NXT_STS = -(10 - 1);//->10
 				}
+#endif
 				else if ((G.PLM_POS[1]+(G.FORM02.PX2UM(G.CAM_HEI)/ G.SS.PLM_UMPP[1])) >=  G.SS.PLM_PLIM[1]) {
 					if (m_adat.sts_bak == 14) {
 						MOVE_REL_XY(0, (G.SS.PLM_PLIM[1] - G.PLM_POS[1]+10));
