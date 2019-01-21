@@ -159,6 +159,7 @@
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkBox11 = new System.Windows.Forms.CheckBox();
 			this.button1 = new System.Windows.Forms.Button();
+			this.checkBox12 = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1386,6 +1387,7 @@
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.comboBox1);
+			this.groupBox3.Controls.Add(this.checkBox12);
 			this.groupBox3.Controls.Add(this.checkBox6);
 			this.groupBox3.Controls.Add(this.checkBox5);
 			this.groupBox3.Controls.Add(this.checkBox4);
@@ -1517,6 +1519,17 @@
 			this.button1.Text = "パスワード設定";
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// checkBox12
+			// 
+			this.checkBox12.AutoSize = true;
+			this.checkBox12.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox12.Location = new System.Drawing.Point(17, 182);
+			this.checkBox12.Name = "checkBox12";
+			this.checkBox12.Size = new System.Drawing.Size(157, 16);
+			this.checkBox12.TabIndex = 2;
+			this.checkBox12.Text = "GAIN調整ページを表示する";
+			this.checkBox12.UseVisualStyleBackColor = false;
 			// 
 			// Form30
 			// 
@@ -1690,6 +1703,7 @@
 		private System.Windows.Forms.GroupBox groupBox6;
 		private System.Windows.Forms.CheckBox checkBox11;
 		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.CheckBox checkBox12;
 
 	}
 }

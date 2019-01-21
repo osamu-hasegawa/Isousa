@@ -204,6 +204,16 @@ namespace uSCOPE
 			public int CAM_FCS_FAVG = 1;
 			public bool CAM_FCS_USSD = false;
 			//---
+#if true//2019.01.19(GAIN調整)
+			//---
+			public int CAM_GAI_LEDT = 0;//光源
+			public int CAM_GAI_PAR1 = 1;//計算範囲
+			public int CAM_GAI_VMIN = 10;
+			public int CAM_GAI_VMAX = 245;
+			public int CAM_GAI_VSET = 64;
+			public int CAM_GAI_SKIP = 1;
+			//---
+#endif
 #if true//2018.09.27(20本対応と解析用パラメータ追加)
 			public int[] IMP_FLT_COEF = {5,5,5,5,5,5};
 			public int[] IMP_BIN_MODE = {1,1,0,1,1,0};
@@ -324,6 +334,9 @@ namespace uSCOPE
 			public int ETC_UIF_BACK =  0;
 			public bool ETC_UIF_CUTI = false;
 			public bool ETC_LED_IRGR = true;
+#if true//2019.01.19(GAIN調整)
+			public bool ETC_UIF_GAIN = true;
+#endif
 #if false//2018.06.07
 			public int ETC_CLF_CTCR = 1;
 #endif
@@ -846,6 +859,9 @@ namespace uSCOPE
 			public double	HIST_MAX;
 			public double	HIST_AVG;
 			public double	CONTRAST;
+#if true//2019.01.19(GAIN調整)
+			public double	HIST_VPK;	//V(of HSV)'s peak pos
+#endif
 			//---
 			public double[] HISTVALR = new double[256];
 			public double[] HISTVALG = new double[256];
@@ -901,6 +917,9 @@ namespace uSCOPE
 				this.HIST_MAX = double.NaN;
 				this.HIST_AVG = double.NaN;
 				this.CONTRAST = double.NaN;
+#if true//2019.01.19(GAIN調整)
+				this.HIST_VPK = double.NaN;	//V(of HSV)'s peak pos
+#endif
 				//---
 				this.CIR_CNT = 0;
 				this.CIR_S = double.NaN;
@@ -966,7 +985,9 @@ namespace uSCOPE
 		static public int[] PLM_BSL = {0,0,0,0};
 		//static public int CAM_STS;
 		static public CAM_STS CAM_PRC = CAM_STS.STS_NONE;
-
+#if true//2019.01.19(GAIN調整)
+		static public int CHK_VPK = 0;
+#endif
 		//static public int AUT_STS;
 		//static public int MOK_STS;
 		static public int CAM_WID;

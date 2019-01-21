@@ -4015,6 +4015,12 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 
 				if (G.CAM_PRC == G.CAM_STS.STS_HIST || this.groupBox2.Visible) {
 					double tmp;
+#if true//2019.01.19(GAIN調整)
+					if (G.CHK_VPK != 0 && G.SS.ETC_HIS_MODE == 0) {
+						G.SS.ETC_HIS_MODE = 1;
+						this.radioButton4.Checked = true;
+					}
+#endif
 					if (G.SS.ETC_HIS_MODE == 0) {
 						//calc_hist(m_img_rgb[0], mask, G.IR.HISTVALR);
 						//calc_hist(m_img_rgb[1], mask, G.IR.HISTVALG);
@@ -4030,6 +4036,19 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 						OCV_CAL_HIST((int)IMG.IMG_HSV_H, bMASK, ref G.IR.HISTVALH[0], out tmp, out tmp, out tmp);
 						OCV_CAL_HIST((int)IMG.IMG_HSV_S, bMASK, ref G.IR.HISTVALS[0], out tmp, out tmp, out tmp);
 						OCV_CAL_HIST((int)IMG.IMG_HSV_V, bMASK, ref G.IR.HISTVALV[0], out tmp, out tmp, out tmp);
+#if true//2019.01.19(GAIN調整)
+						if (G.CHK_VPK != 0) {
+							int imax = -1;
+							double fmax = double.MinValue;
+							for (int i = G.SS.CAM_GAI_VMIN; i <= G.SS.CAM_GAI_VMAX; i++) {
+								if (fmax < G.IR.HISTVALV[i]) {
+									fmax = G.IR.HISTVALV[i];
+									imax = i;
+								}
+							}
+							G.IR.HIST_VPK = imax;	//V(of HSV)'s peak pos
+						}
+#endif
 					}
 				}
 				if (false) {

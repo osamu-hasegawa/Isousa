@@ -158,6 +158,9 @@ namespace uSCOPE
 #if true//2019.01.15(パスワード画面)
 					DDV.DDX(bUpdate, this.checkBox11,ref m_ss.ETC_CPH_CHK1);
 #endif
+#if true//2019.01.19(GAIN調整)
+					DDV.DDX(bUpdate, this.checkBox12,ref m_ss.ETC_UIF_GAIN);
+#endif
 				}
 
 				//-----
