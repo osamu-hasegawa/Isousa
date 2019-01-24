@@ -104,6 +104,9 @@ namespace uSCOPE
                 }
 				DDV.DDX(bUpdate, this.checkBox10     , ref m_ss.PLM_AUT_NUKE);
 #endif
+#if true//2019.01.23(GAIN調整&自動測定)
+				DDV.DDX(bUpdate, this.checkBox11     , ref m_ss.PLM_AUT_V_PK);
+#endif
 				DDV.DDX(bUpdate, this.numericUpDown17, ref m_ss.PLM_AUT_HPRT);
 				DDV.DDX(bUpdate, this.numericUpDown18, ref m_ss.PLM_AUT_HPMN);
 				DDV.DDX(bUpdate, this.numericUpDown19, ref m_ss.PLM_AUT_HPMX);

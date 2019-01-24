@@ -151,6 +151,9 @@ namespace uSCOPE
 			public double[]	CAM_PAR_WB_GV = {1.0, 1.0, 1.0};
 			public double[]	CAM_PAR_WB_BV = {1.0, 1.0, 1.0};
 #endif
+#if true//2019.01.23(GAIN調整&自動測定)
+			public int[]	CAM_PAR_TARVP = {128, 128, 128, 128};//Vピーク(ターゲット)
+#endif
 			//---
 			public int		CAM_HIS_BVAL = 110;
 			public int CAM_HIS_PAR1 = 0;
@@ -308,6 +311,9 @@ namespace uSCOPE
 			public bool PLM_AUT_RTRY = false;
 #if true//2018.12.22(測定抜け対応)
 			public bool PLM_AUT_NUKE = true;
+#endif
+#if true//2019.01.23(GAIN調整&自動測定)
+			public bool PLM_AUT_V_PK = true;
 #endif
 #if true//2019.01.11(混在対応)
 			public int	PLM_AUT_NMIN = (155*2);//155pls/1gamen...最低でも2画面縦サイズ分

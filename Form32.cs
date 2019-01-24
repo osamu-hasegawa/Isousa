@@ -33,6 +33,9 @@ namespace uSCOPE
 		//
 		private Button[]		btnCURVL;
 		//
+#if true//2019.01.23(GAIN調整&自動測定)
+		private NumericUpDown[]	numTAR_G;
+#endif
 		public Form32()
 		{
 			InitializeComponent();
@@ -83,6 +86,9 @@ namespace uSCOPE
 			//
 			btnCURVL = new Button[] { this.button1, this.button2, this.button3 };
 #endif
+#if true//2019.01.23(GAIN調整&自動測定)
+			numTAR_G = new NumericUpDown[] { this.numericUpDown45, this.numericUpDown46, this.numericUpDown47, this.numericUpDown48 };
+#endif
 			//
 			//this.comboBox8.Enabled = false;
 			//
@@ -130,6 +136,9 @@ namespace uSCOPE
 					DDV.DDX(bUpdate, numRAT_G[i], ref m_ss.CAM_PAR_WB_GV[i]);
 					DDV.DDX(bUpdate, numRAT_B[i], ref m_ss.CAM_PAR_WB_BV[i]);
 					//---
+#if true//2019.01.23(GAIN調整&自動測定)
+					DDV.DDX(bUpdate, numTAR_G[i], ref m_ss.CAM_PAR_TARVP[i]);
+#endif
 					//---
 					//---
 				}

@@ -195,8 +195,8 @@ namespace uSCOPE
 				this.tabControl4.TabPages[i].BackColor = G.SS.ETC_BAK_COLOR;
 			}
 #if true//2019.01.19(GAIN調整)
-			this.comboBox13.SelectedIndex = 1;//計算範囲(矩形)で固定
-			this.comboBox13.Enabled = false;
+			//this.comboBox13.SelectedIndex = 1;//計算範囲(矩形)で固定
+			//this.comboBox13.Enabled = false;
 #endif
 		}
 		private void OnClicks(object sender, EventArgs e)
@@ -348,6 +348,7 @@ this.SPE_COD = 0;
 				this.timer4.Enabled = true;
 			}
 			else if (sender == this.button29) {
+				//GAIN調整・再調整
 				if (this.GAI_STS >= 40 && this.GAI_STS <= 43) {
 					m_gdat.gain_dx = 1.0;
 					this.GAI_STS = 30;
@@ -398,6 +399,11 @@ this.SPE_COD = 0;
 			if (this.FCS_STS != 0 && G.CAM_PRC != G.CAM_STS.STS_FCUS) {
 				this.FCS_STS = 0;
 			}
+#if true//2019.01.23(GAIN調整&自動測定)
+			if (this.GAI_STS != 0 && G.CAM_PRC != G.CAM_STS.STS_HIST) {
+				this.GAI_STS = 0;
+			}
+#endif
 			if (G.CAM_PRC != PRC_BAK) {
 				if (G.FORM02 != null) {
 					G.FORM02.set_layout();
@@ -797,6 +803,27 @@ this.SPE_COD = 0;
 				this.radioButton6.Checked = true;//固定
 			}
 		}
+#if true//2019.01.23(GAIN調整&自動測定)
+		List<double> m_gain_ofs = new List<double>();
+		private void push_gain_ofs()
+		{
+			for (int i = 0; i < G.SS.CAM_PAR_GA_OF.Length; i++) {
+				m_gain_ofs.Add(G.SS.CAM_PAR_GA_OF[i]);
+			}
+		}
+		private void pop_gain_ofs(bool bRemove=true)
+		{
+			for (int i = 0; i < G.SS.CAM_PAR_GA_OF.Length; i++) {
+				if (bRemove) {
+				G.SS.CAM_PAR_GA_OF[i] = m_gain_ofs[0];
+				m_gain_ofs.RemoveAt(0);
+				}
+				else {
+				G.SS.CAM_PAR_GA_OF[i] = m_gain_ofs[i];
+				}
+			}
+		}
+#endif
 		private void trackBar1_ValueChanged(object sender, EventArgs e)
 		{
 			if (m_bENTER_PARA) {
@@ -867,6 +894,12 @@ this.SPE_COD = 0;
 			}
 			GETDAT(false);//変数取込
 			if (G.FORM02 != null && (G.FORM02.isLOADED() || G.FORM02.isCONNECTED())) {
+#if true//2019.01.23(GAIN調整&自動測定)
+				if (G.CHK_VPK != 0) {
+					G.CHK_VPK = G.CHK_VPK;//for bp
+				}
+				else
+#endif
 if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 	G.CNT_MOD = G.SS.CAM_HIS_PAR1;
 }
@@ -1325,6 +1358,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					this.timer1.Interval = 1;
 					this.timer1.Enabled = true;
 				}
+#if DEBUG//2019.01.23(GAIN調整&自動測定)
+				else {
+					NXT_STS = NXT_STS;//for break.point
+				}
+#endif
 			}
 			else {
 				if (timer1.Enabled) {
@@ -1393,6 +1431,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				G.CNT_MOD = (G.SS.PLM_AUT_AFMD==0) ? 0: 1+G.SS.PLM_AUT_AFMD;
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_AUTO;
+#if true//2019.01.23(GAIN調整&自動測定)
+				if (G.SS.PLM_AUT_V_PK) {
+					push_gain_ofs();
+				}
+#endif
 				this.AUT_STS = 1;
 				timer2.Enabled = true;
 				while (timer2.Enabled) {
@@ -1466,6 +1509,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 					else if (this.AUT_STS < 20) {
 						buf += "探索中";
 					}
+#if true//2019.01.23(GAIN調整&自動測定)
+					else if (this.AUT_STS >= 700 && this.AUT_STS <= 701) {
+						buf += "GAIN調整中";
+					}
+#endif
 					else if (m_adat.trace == false) {
 						buf += (m_adat.f_idx <= 50) ? "左側" : "右側";
 					}
@@ -1481,6 +1529,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			prg.Hide();
 			prg.Dispose();
 			prg = null;
+#if true//2019.01.23(GAIN調整&自動測定)
+			if (G.SS.PLM_AUT_V_PK) {
+				pop_gain_ofs();
+			}
+#endif
 			//---
 			if (G.FORM02.get_size_mode() > 1) {
 				G.FORM02.set_size_mode(1, -1, -1);
@@ -1646,6 +1699,10 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 			public bool ir_done;
 			public int ir_lsbk;
 			public int ir_chk1;
+#if true//2019.01.23(GAIN調整&自動測定)
+			public bool gai_tune_ir_done;
+			public bool gai_tune_cl_done;
+#endif
 			//---
 			public ADATA()
 			{
@@ -1718,6 +1775,11 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				ir_nxst = 0;
 				ir_done = false;
 				ir_lsbk = 0;
+#if true//2019.01.23(GAIN調整&自動測定)
+				gai_tune_ir_done = false;
+				gai_tune_cl_done = false;
+#endif
+
 			}
 		};
 #if true//2018.12.22(測定抜け対応)
@@ -2343,6 +2405,9 @@ if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
 				this.AUT_STS = this.AUT_STS;//FOR BP
 			}
 #endif
+#if DEBUG//2019.01.23(GAIN調整&自動測定)
+System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount, this.AUT_STS, m_didx);
+#endif
 			switch (this.AUT_STS) {
 			case 0:
 				this.timer2.Enabled = false;
@@ -2889,6 +2954,10 @@ a_write("毛髪判定(中心):OK");
 					}
 a_write("AF:開始");
 					start_af(1/*1:1st*/);
+#if true//2019.01.23(GAIN調整&自動測定)
+					m_adat.gai_tune_cl_done = false;
+					m_adat.gai_tune_ir_done = false;
+#endif
 				}
 				else if (NXT_STS == (this.AUT_STS + 1)) {
 					if (m_adat.chk1 != 0) {
@@ -2956,6 +3025,12 @@ a_write("AF:終了");
 				else {
 #endif
 				if (m_adat.z_idx == 0) {
+#if true//2019.01.23(GAIN調整&自動測定)
+					if (this.AUT_STS == 17 && G.SS.PLM_AUT_V_PK && m_adat.gai_tune_cl_done == false) {
+						NXT_STS = 700;//GAIN調整
+						break;
+					}
+#endif
 					if (this.AUT_STS == 17) {
 						//if ((Environment.TickCount - m_adat.chk1) < 2000) {
 						//    //フォーカス軸移動直後のため少し待機
@@ -3214,6 +3289,19 @@ a_write("AF:終了");
 				m_adat.n_idx++;
 				}
 #endif
+#if true//2019.01.23(GAIN調整&自動測定)
+				if (G.SS.PLM_AUT_V_PK) {
+					pop_gain_ofs(false);
+					if ((G.LED_PWR_STS & 1) != 0) {
+						//白色(透過)
+						G.FORM02.set_param(Form02.CAM_PARAM.GAIN, G.SS.CAM_PAR_GA_VL[0] + G.SS.CAM_PAR_GA_OF[0]);
+					}
+					else {
+						//白色(反射)
+						G.FORM02.set_param(Form02.CAM_PARAM.GAIN, G.SS.CAM_PAR_GA_VL[1] + G.SS.CAM_PAR_GA_OF[1]);
+					}
+				}
+#endif
 #if true//2018.08.16(Z軸再原点)
 				if (G.SS.PLM_AUT_ZORG) {
 					m_pre_set[2] = false;
@@ -3301,6 +3389,12 @@ a_write("光源切替:->赤外");
 #endif
 					}
 				}
+#if true//2019.01.23(GAIN調整&自動測定)
+				if (NXT_STS == 443 && G.SS.PLM_AUT_V_PK && m_adat.gai_tune_ir_done == false) {
+					NXT_STS = 700;
+				}
+				else
+#endif
 #if true//2018.06.04 赤外同時測定
 				if (this.AUT_STS == 402 || this.AUT_STS == 422) {
 					NXT_STS = m_adat.ir_nxst;
@@ -3723,6 +3817,48 @@ a_write("AF:開始(中心)");
 				m_adat.f_ttl++;
 				break;
 #endif
+#if true//2019.01.23(GAIN調整&自動測定)
+			case 700:
+				if (G.LED_PWR_STS == 1) {
+					this.timer4.Tag = 0;//透過
+				}
+				else if (G.LED_PWR_STS == 2) {
+					this.timer4.Tag = 1;//反射
+				}
+				else if (G.LED_PWR_BAK == 1/*反射*/) {
+					this.timer4.Tag = 3;//赤外(<-反射)
+				}
+				else {
+					this.timer4.Tag = 2;//赤外(<-透過)
+				}
+				G.CNT_MOD = 0;//0:画面全体
+				G.CAM_PRC = G.CAM_STS.STS_HIST;
+				G.CHK_VPK = 1;
+				this.GAI_STS = 1;
+				this.timer4.Enabled = true;
+a_write("GAIN調整:開始");
+				break;
+			case 701:
+				//GAIN調整-終了待ち
+				if (this.GAI_STS != 0) {
+					NXT_STS = this.AUT_STS;
+				}
+				else {
+a_write("GAIN調整:終了");
+					G.CAM_PRC = G.CAM_STS.STS_AUTO;
+					if (m_adat.gai_tune_cl_done == false) {
+						m_adat.gai_tune_cl_done = true;
+						NXT_STS = 17;//初回AF後
+					}
+					else {
+						m_adat.gai_tune_ir_done = true;
+						NXT_STS = 443;//IRの保存へ
+					}
+				}
+				break;
+			case 702:
+				break;
+#endif
 			case 999:
 #if true//2018.12.22(測定抜け対応)
 				if (m_adat.nuke) {
@@ -4014,8 +4150,10 @@ a_write("AF:開始(中心)");
 			public double	gain_dx;
 			public double	gain_val;
 			public double	gain_bas;
-			public double	gain_bak;
+//			public double	gain_bak;
 			public double	vpk_bak;
+			public double	vpk_set;
+			public int		ch;
 			public int chk1, chk2;
 //			public int sts_bak;
 //			public int chk3;
@@ -4044,32 +4182,26 @@ a_write("AF:開始(中心)");
 				break;
 			case 1:
 				m_gdat = new GDATA();
+#if true//2019.01.23(GAIN調整&自動測定)
+				if (this.timer4.Tag != null) {
+					//自動測定より
+					m_gdat.ch = (int)this.timer4.Tag;
+					m_gdat.vpk_set = G.SS.CAM_PAR_TARVP[m_gdat.ch];
+				}
+				else {
+					//カメラTABより
+					m_gdat.ch = G.SS.CAM_GAI_LEDT;
+					m_gdat.vpk_set = G.SS.CAM_GAI_VSET;
+				}
+				if (this.timer4.Tag != null) {
+					//自動測定より
+					NXT_STS = 30;//点灯制御へ
+				}
+				else
+#endif
 				if (G.CNT_MOD >= 2/*毛髪矩形 or 毛髪範囲*/) {
-					/*画像全体
-					矩形範囲
-					毛髪矩形+0%
-					毛髪矩形+25%
-					毛髪矩形+50%
-					毛髪矩形+100%
-					毛髪範囲10%
-					毛髪範囲25%
-					毛髪範囲50%
-					毛髪範囲75%
-					毛髪範囲100%
-					毛髪範囲100%
-					毛髪範囲10% (横1/3)
-					毛髪範囲10% (横1/4)
-					毛髪範囲10% (横1/5)
-					 */
-					G.CAM_PRC = G.CAM_STS.STS_HIST;
-					NXT_STS = 10;//点灯制御スキップ
-
-					if (G.SS.CAM_GAI_LEDT == 0 || G.SS.CAM_GAI_LEDT == 2) {
-						NXT_STS = 2;//点灯制御へ
-					}
-					if (G.SS.CAM_GAI_LEDT == 1 || G.SS.CAM_GAI_LEDT == 3) {
-						NXT_STS = 3;//点灯制御へ
-					}
+					NXT_STS = 0;
+					G.mlog("internal error");
 				}
 				else {
 					if (G.SS.CAM_GAI_LEDT == 0) {
@@ -4116,26 +4248,8 @@ a_write("AF:開始(中心)");
 				NXT_STS = 10;
 				break;
 			case 10:
-				if (G.CNT_MOD < 2) {
-					NXT_STS = 20;
-				}
-				else {
-					m_dcur = m_didx;
-				}
+				NXT_STS = 20;
 				break;
-			case 11:
-				if ((m_didx - m_dcur) < G.SS.CAM_FCS_SKIP) {
-					NXT_STS = this.GAI_STS;
-				}
-				else if (G.IR.CIR_CNT <= 0) {
-					NXT_STS = 0;
-					G.mlog("#e毛髪が検出できませんした.");
-				}
-				else {
-					//G.CAM_PRC = G.CAM_STS.STS_HIST;
-					NXT_STS = 20;
-				}
-			break;
 			case 20://赤外点灯
 				if (G.SS.CAM_GAI_LEDT < 2) {
 					NXT_STS = 30;
@@ -4160,7 +4274,7 @@ a_write("AF:開始(中心)");
 			case 30:
 			case 40:
 				if (true) {
-					int ch = G.SS.CAM_GAI_LEDT;
+					int ch = m_gdat.ch;
 					m_gdat.gain_bas = G.SS.CAM_PAR_GA_VL[ch];
 					m_gdat.gain_val = m_gdat.gain_bas + G.SS.CAM_PAR_GA_OF[ch];
 					m_gdat.vpk_bak = double.NaN;
@@ -4185,6 +4299,10 @@ a_write("AF:開始(中心)");
 					this.textBox1.Text = string.Format("{0}", G.IR.HIST_VPK);
 					this.textBox2.Text = string.Format("{0:F6}", m_gdat.gain_val - m_gdat.gain_bas);
 				}
+				if (G.IR.HIST_VPK == m_gdat.vpk_set) {
+					NXT_STS = 99;//end
+				}
+				else
 				if (G.IR.HIST_VPK == G.SS.CAM_GAI_VSET) {
 					NXT_STS = 99;//end
 				}
@@ -4234,8 +4352,8 @@ a_write("AF:開始(中心)");
 				NXT_STS = 41;
 			break;
 			case 99:
-				if (false) {
-					G.CAM_PRC = G.CAM_STS.STS_NONE;
+				if (this.timer4.Tag != null) {
+					//自動測定より
 					NXT_STS = 0;
 				}
 				else {
@@ -4243,7 +4361,7 @@ a_write("AF:開始(中心)");
 					this.button29.Enabled = true;//再調整
 				}
 				if (true) {
-					int ch = G.SS.CAM_GAI_LEDT;
+					int ch = m_gdat.ch;
 					G.SS.CAM_PAR_GA_OF[ch] = m_gdat.gain_val - m_gdat.gain_bas;
 				}
 				if (true) {
@@ -4262,7 +4380,9 @@ a_write("AF:開始(中心)");
 			if (NXT_STS == 0) {
 				NXT_STS = 0;//for break.point
 			}
-			this.GAI_STS = NXT_STS;
+			if (this.GAI_STS != 0) {
+				this.GAI_STS = NXT_STS;
+			}
 			if (this.GAI_STS != 0) {
 				this.timer4.Enabled = true;
 			}

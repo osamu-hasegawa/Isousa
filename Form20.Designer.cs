@@ -71,6 +71,7 @@
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.checkBox8 = new System.Windows.Forms.CheckBox();
+			this.checkBox11 = new System.Windows.Forms.CheckBox();
 			this.checkBox10 = new System.Windows.Forms.CheckBox();
 			this.checkBox9 = new System.Windows.Forms.CheckBox();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
@@ -712,6 +713,7 @@
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.checkBox8);
+			this.groupBox3.Controls.Add(this.checkBox11);
 			this.groupBox3.Controls.Add(this.checkBox10);
 			this.groupBox3.Controls.Add(this.checkBox9);
 			this.groupBox3.Controls.Add(this.checkBox4);
@@ -752,11 +754,23 @@
 			this.checkBox8.Text = "1毛髪測定毎にZ軸の原点検出を行う";
 			this.checkBox8.UseVisualStyleBackColor = false;
 			// 
+			// checkBox11
+			// 
+			this.checkBox11.AutoSize = true;
+			this.checkBox11.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox11.Location = new System.Drawing.Point(104, 223);
+			this.checkBox11.Name = "checkBox11";
+			this.checkBox11.Size = new System.Drawing.Size(235, 16);
+			this.checkBox11.TabIndex = 50;
+			this.checkBox11.Text = "毛髪検出時にVピークによるゲイン調整を行う";
+			this.checkBox11.UseVisualStyleBackColor = false;
+			this.checkBox11.Click += new System.EventHandler(this.checkBox10_Click);
+			// 
 			// checkBox10
 			// 
 			this.checkBox10.AutoSize = true;
 			this.checkBox10.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox10.Location = new System.Drawing.Point(104, 204);
+			this.checkBox10.Location = new System.Drawing.Point(104, 203);
 			this.checkBox10.Name = "checkBox10";
 			this.checkBox10.Size = new System.Drawing.Size(153, 16);
 			this.checkBox10.TabIndex = 50;
@@ -768,7 +782,7 @@
 			// 
 			this.checkBox9.AutoSize = true;
 			this.checkBox9.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox9.Location = new System.Drawing.Point(104, 182);
+			this.checkBox9.Location = new System.Drawing.Point(104, 183);
 			this.checkBox9.Name = "checkBox9";
 			this.checkBox9.Size = new System.Drawing.Size(168, 16);
 			this.checkBox9.TabIndex = 50;
@@ -779,7 +793,7 @@
 			// 
 			this.checkBox4.AutoSize = true;
 			this.checkBox4.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox4.Location = new System.Drawing.Point(104, 144);
+			this.checkBox4.Location = new System.Drawing.Point(104, 143);
 			this.checkBox4.Name = "checkBox4";
 			this.checkBox4.Size = new System.Drawing.Size(229, 16);
 			this.checkBox4.TabIndex = 50;
@@ -1452,5 +1466,6 @@
 		private System.Windows.Forms.Label label26;
 		private System.Windows.Forms.Label label25;
 		private System.Windows.Forms.Label label22;
+		private System.Windows.Forms.CheckBox checkBox11;
 	}
 }
