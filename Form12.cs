@@ -3844,7 +3844,7 @@ a_write("GAIN調整:開始");
 					NXT_STS = this.AUT_STS;
 				}
 				else {
-a_write("GAIN調整:終了");
+a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)this.timer4.Tag]));
 					G.CAM_PRC = G.CAM_STS.STS_AUTO;
 					if (m_adat.gai_tune_cl_done == false) {
 						m_adat.gai_tune_cl_done = true;
@@ -4302,16 +4302,12 @@ a_write("GAIN調整:終了");
 				if (G.IR.HIST_VPK == m_gdat.vpk_set) {
 					NXT_STS = 99;//end
 				}
-				else
-				if (G.IR.HIST_VPK == G.SS.CAM_GAI_VSET) {
-					NXT_STS = 99;//end
-				}
 				else {
 					if (double.IsNaN(m_gdat.vpk_bak)) {
 					}
 					else {
-						if ((m_gdat.vpk_bak < G.SS.CAM_GAI_VSET && G.IR.HIST_VPK > G.SS.CAM_GAI_VSET)
-						 || (m_gdat.vpk_bak > G.SS.CAM_GAI_VSET && G.IR.HIST_VPK < G.SS.CAM_GAI_VSET)
+						if ((m_gdat.vpk_bak < m_gdat.vpk_set && G.IR.HIST_VPK > m_gdat.vpk_set)
+						 || (m_gdat.vpk_bak > m_gdat.vpk_set && G.IR.HIST_VPK < m_gdat.vpk_set)
 							) {
 							if ((m_gdat.gain_dx /= 10) < 0.01) {
 								NXT_STS = 99;//end
@@ -4320,7 +4316,7 @@ a_write("GAIN調整:終了");
 					}
 					if (NXT_STS == 99) {
 					}
-					else if (G.IR.HIST_VPK < G.SS.CAM_GAI_VSET) {
+					else if (G.IR.HIST_VPK < m_gdat.vpk_set) {
 						if (m_gdat.gain_val < C_GAIN_MAX) {
 							if ((m_gdat.gain_val += m_gdat.gain_dx) > C_GAIN_MAX) {
 								m_gdat.gain_val = C_GAIN_MAX;
