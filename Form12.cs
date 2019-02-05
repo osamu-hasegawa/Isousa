@@ -53,6 +53,9 @@ namespace uSCOPE
 #if true//2019.01.19(GAIN調整)
 		private int GAI_STS;
 #endif
+#if true//2019.02.03(WB調整)
+		private int WBL_STS;
+#endif
 		//private int MOK_STS;
 		private int SPE_COD=0;
 		public Form12()
@@ -173,6 +176,9 @@ namespace uSCOPE
 #if true//2019.01.19(GAIN調整)
 			if (!G.SS.ETC_UIF_GAIN) {
 				this.tabControl4.TabPages.Remove(this.tabPage9);//GAIN調整ページ
+#if true//2019.02.03(WB調整)
+				this.tabControl4.TabPages.Remove(this.tabPage10);//WB調整ページ
+#endif
 			}
 #endif
 			//init();
@@ -194,9 +200,8 @@ namespace uSCOPE
 			for (int i = 0; i < this.tabControl4.TabCount; i++) {
 				this.tabControl4.TabPages[i].BackColor = G.SS.ETC_BAK_COLOR;
 			}
-#if true//2019.01.19(GAIN調整)
-			//this.comboBox13.SelectedIndex = 1;//計算範囲(矩形)で固定
-			//this.comboBox13.Enabled = false;
+#if true//2019.02.03(WB調整)
+			checkBox14_CheckedChanged(null, null);
 #endif
 		}
 		private void OnClicks(object sender, EventArgs e)
@@ -233,6 +238,12 @@ this.SPE_COD = 0;
 						else {
 							G.FORM02.set_auto(Form02.CAM_PARAM.WHITE, 0);
 						}
+#if true//2019.02.03(WB調整)
+						if (G.UIF_LEVL == 0) {
+							//校正スキップする(ユーザモード時)
+						}
+						else
+#endif
 						if (true) {
 							//校正実行
 							this.CAL_STS = 1;
@@ -317,6 +328,9 @@ this.SPE_COD = 0;
 			else if (sender == this.button5) {
 				//ヒストグラム・実行
 				G.CNT_MOD = G.SS.CAM_HIS_PAR1;
+#if true//2019.02.03(WB調整)
+				G.CNT_OFS = 0;
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 			}
 			else if (sender == this.button7) {
@@ -326,6 +340,9 @@ this.SPE_COD = 0;
 			else if (sender == this.button9) {
 				//フォーカス・実行
 				G.CNT_MOD = G.SS.CAM_HIS_PAR1;
+#if true//2019.02.03(WB調整)
+				G.CNT_OFS = 0;
+#endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FCS_STS = 1;
 				this.timer1.Tag = null;
@@ -339,6 +356,9 @@ this.SPE_COD = 0;
 			else if (sender == this.button30) {
 				//GAIN調整・実行
 				G.CNT_MOD = G.SS.CAM_GAI_PAR1;
+#if true//2019.02.03(WB調整)
+				G.CNT_OFS = 0;
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 				G.CHK_VPK = 1;
 				this.textBox1.Text = "";
@@ -355,15 +375,44 @@ this.SPE_COD = 0;
 				}
 			}
 #endif
+#if true//2019.02.03(WB調整)
+			else if (sender == this.button33) {
+				//WB調整・実行
+				G.CNT_MOD = G.SS.CAM_WBL_PAR1;
+#if true//2019.02.03(WB調整)
+				G.CNT_OFS = 0;
+#endif
+				G.CAM_PRC = G.CAM_STS.STS_HIST;
+				G.CHK_WBL = 1;
+				this.WBL_STS = 1;
+				this.timer5.Tag = null;
+				this.timer5.Enabled = true;
+			}
+			else if (sender == this.button32) {
+				//WB調整・再調整
+				if (this.WBL_STS >= 40 && this.WBL_STS <= 43) {
+					m_wdat.wbauto_done = false;
+					m_wdat.offset_done = false;
+					this.WBL_STS = 30;
+				}
+			}
+#endif
+
 			else if (sender == this.button6 || sender == this.button8 || sender == this.button10 || sender == this.button24
 #if true//2019.01.19(GAIN調整)
 				 || sender == this.button28
+#endif
+#if true//2019.02.03(WB調整)
+				 || sender == this.button31
 #endif
 				) {
 				//停止
 				G.CAM_PRC = 0;
 #if true//2019.01.19(GAIN調整)
-				 G.CHK_VPK = 0;
+				G.CHK_VPK = 0;
+#endif
+#if true//2019.02.03(WB調整)
+				G.CHK_WBL = 0;
 #endif
 			}
 			else if (sender == this.radioButton3) {
@@ -402,6 +451,11 @@ this.SPE_COD = 0;
 #if true//2019.01.23(GAIN調整&自動測定)
 			if (this.GAI_STS != 0 && G.CAM_PRC != G.CAM_STS.STS_HIST) {
 				this.GAI_STS = 0;
+			}
+#endif
+#if true//2019.02.03(WB調整)
+			if (this.WBL_STS != 0 && G.CAM_PRC != G.CAM_STS.STS_HIST) {
+				this.WBL_STS = 0;
 			}
 #endif
 			if (G.CAM_PRC != PRC_BAK) {
@@ -461,8 +515,9 @@ this.SPE_COD = 0;
 				DDV.DDX(bUpdate, this.numericUpDown18, ref G.SS.CAM_CIR_AREA_MAX);//, 1000, 2500000);
 				DDV.DDX(bUpdate, this.numericUpDown19, ref G.SS.CAM_CIR_LENG_MAX);//, 1, 100000);
 				DDV.DDX(bUpdate, this.numericUpDown20, ref G.SS.CAM_CIR_CVAL_MIN);//, 0.0, 1);
+#if false//2019.02.03(WB調整)
 				DDV.DDX(bUpdate, this.numericUpDown27, ref G.SS.CAM_CIR_MAGN);
-
+#endif
 				DDV.DDX(bUpdate, this.comboBox4, ref G.SS.CAM_CIR_DISP);
 				DDV.DDX(bUpdate, this.checkBox3, ref G.SS.CAM_CIR_CHK1);
 				DDV.DDX(bUpdate, this.checkBox4, ref G.SS.CAM_CIR_CHK2);
@@ -508,12 +563,22 @@ this.SPE_COD = 0;
 				}
 #endif
 #if true//2019.01.19(GAIN調整)
-				DDV.DDX(bUpdate, this.comboBox12, ref G.SS.CAM_GAI_LEDT);//光源
-				DDV.DDX(bUpdate, this.comboBox13, ref G.SS.CAM_GAI_PAR1);//計算範囲
+				DDV.DDX(bUpdate, this.comboBox12     , ref G.SS.CAM_GAI_LEDT);//光源
+				DDV.DDX(bUpdate, this.comboBox13     , ref G.SS.CAM_GAI_PAR1);//計算範囲
+				DDV.DDX(bUpdate, this.numericUpDown39, ref G.SS.CAM_GAI_SKIP);
 				DDV.DDX(bUpdate, this.numericUpDown45, ref G.SS.CAM_GAI_VMIN);
 				DDV.DDX(bUpdate, this.numericUpDown44, ref G.SS.CAM_GAI_VMAX);
 				DDV.DDX(bUpdate, this.numericUpDown38, ref G.SS.CAM_GAI_VSET);
-				DDV.DDX(bUpdate, this.numericUpDown39, ref G.SS.CAM_GAI_SKIP);
+#endif
+#if true//2019.02.03(WB調整)
+				DDV.DDX(bUpdate, this.comboBox11     , ref G.SS.CAM_WBL_LEDT);//光源
+				DDV.DDX(bUpdate, this.comboBox15     , ref G.SS.CAM_WBL_PAR2);//計算方法
+				DDV.DDX(bUpdate, this.numericUpDown46, ref G.SS.CAM_WBL_SKIP);//読み捨て
+				DDV.DDX(bUpdate, this.numericUpDown49, ref G.SS.CAM_WBL_TOLE);//許容差
+				DDV.DDX(bUpdate, this.checkBox13     , ref G.SS.CAM_WBL_CHK1);
+				DDV.DDX(bUpdate, this.checkBox14     , ref G.SS.CAM_WBL_CHK2);
+				DDV.DDX(bUpdate, this.numericUpDown47, ref G.SS.CAM_WBL_OFFS);
+				G.SS.CAM_WBL_PAR1 = 0;//計算範囲=画面全体で固定
 #endif
 				//---
 				rc = true;
@@ -546,6 +611,11 @@ this.SPE_COD = 0;
 				this.button30.Enabled = false;
 				this.button29.Enabled = false;
 				this.button28.Enabled = false;
+#endif
+#if true//2019.02.03(WB調整)
+				this.button33.Enabled = false;
+				this.button32.Enabled = false;
+				this.button31.Enabled = false;
 #endif
 				this.checkBox11.Enabled = false;//深度合成
 				//---
@@ -600,6 +670,18 @@ this.SPE_COD = 0;
 					this.button30.Enabled = false;
 					this.button29.Enabled = false;
 					this.button28.Enabled = true;
+				}
+#endif
+#if true//2019.02.03(WB調整)
+				if (G.CHK_WBL != 1) {
+					this.button33.Enabled = true;
+					this.button32.Enabled = false;
+					this.button31.Enabled = false;
+				}
+				else {
+					this.button33.Enabled = false;
+					this.button32.Enabled = false;
+					this.button31.Enabled = true;
 				}
 #endif
 				//
@@ -900,9 +982,18 @@ this.SPE_COD = 0;
 				}
 				else
 #endif
-if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
-	G.CNT_MOD = G.SS.CAM_HIS_PAR1;
-}
+#if true//2019.02.03(WB調整)
+				if (G.CHK_WBL != 0) {
+					G.CHK_WBL = G.CHK_WBL;//for bp
+				}
+				else
+#endif
+				if (G.CAM_PRC == G.CAM_STS.STS_HIST) {
+					G.CNT_MOD = G.SS.CAM_HIS_PAR1;
+#if true//2019.02.03(WB調整)
+					G.CNT_OFS = 0;
+#endif
+				}
 				G.FORM02.UPDATE_PROC();
 			}
 		}
@@ -2444,10 +2535,16 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 					if ((G.LED_PWR_STS & 1) != 0) {
 						//白色(透過)
 						G.CNT_MOD = (G.SS.IMP_AUT_AFMD[0]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[0];
+#if true//2019.02.03(WB調整)
+						G.CNT_OFS = G.SS.IMP_AUT_SOFS[0];//透過(表面)
+#endif
 					}
 					else {
 						//白色(反射)
 						G.CNT_MOD = (G.SS.IMP_AUT_AFMD[1]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[1];
+#if true//2019.02.03(WB調整)
+						G.CNT_OFS = G.SS.IMP_AUT_SOFS[1];//反射(表面)
+#endif
 					}
 #endif
 #if true//2018.12.22(測定抜け対応)
@@ -2941,10 +3038,16 @@ a_write("毛髪判定(中心):OK");
 				if ((G.LED_PWR_STS & 1) != 0) {
 					//白色(透過)
 					G.CNT_MOD = (G.SS.IMP_AUT_AFMD[0]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[0];
+#if true//2019.02.03(WB調整)
+					G.CNT_OFS = G.SS.IMP_AUT_SOFS[0];//透過(表面)
+#endif
 				}
 				else {
 					//白色(反射)
 					G.CNT_MOD = (G.SS.IMP_AUT_AFMD[1]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[1];
+#if true//2019.02.03(WB調整)
+					G.CNT_OFS = G.SS.IMP_AUT_SOFS[1];//反射(表面)
+#endif
 				}
 #endif
 				if (this.AUT_STS == 15 && NXT_STS == 16) {
@@ -3707,10 +3810,16 @@ a_write("光源切替:->反射");
 				if ((G.LED_PWR_STS & 1) != 0) {
 					//白色(透過):中心用
 					G.CNT_MOD = (G.SS.IMP_AUT_AFMD[2]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[2];
+#if true//2019.02.03(WB調整)
+					G.CNT_OFS = G.SS.IMP_AUT_COFS[0];//透過(中心)
+#endif
 				}
 				else {
 					//白色(反射):中心用
 					G.CNT_MOD = (G.SS.IMP_AUT_AFMD[3]==0) ? 0: 1+G.SS.IMP_AUT_AFMD[3];
+#if true//2019.02.03(WB調整)
+					G.CNT_OFS = G.SS.IMP_AUT_COFS[1];//反射(中心)
+#endif
 				}
 #endif
 
@@ -3832,6 +3941,9 @@ a_write("AF:開始(中心)");
 					this.timer4.Tag = 2;//赤外(<-透過)
 				}
 				G.CNT_MOD = 0;//0:画面全体
+#if true//2019.02.03(WB調整)
+				G.CNT_OFS = 0;
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 				G.CHK_VPK = 1;
 				this.GAI_STS = 1;
@@ -4388,6 +4500,472 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				G.FORM02.set_layout();
 				UPDSTS();
 			}
+		}
+#endif
+#if true//2019.02.03(WB調整)
+		private class WDATA
+		{
+			public double	gain_dx;
+			public double	gain_val;
+			//public double	gain_bas;
+			public double	wbl_dif;
+			public double	wbl_tol;
+			public double	wbl_bak;
+			public int		lch;//光源
+			public int		cch;//最大値カラーR/G/B
+		//	public int		mch;//最小値カラーR/G/B
+			public int		ich;
+		//	public List<int>idone;
+			public int		chk1, chk2;
+			public bool		wbauto_done;
+			public bool		offset_done;
+			//---
+			//---
+			public WDATA()
+			{
+				chk1 = 0;
+				chk2 = 0;
+			//	idone = new List<int>();
+				gain_dx =-1.0;
+				wbauto_done = false;
+				offset_done = false;
+			}
+		};
+		private const double C_WBL_MAX  = 7.9;//7.984375
+		private const double C_WBL_MIN  = 1;
+		private WDATA m_wdat = null;
+		private double get_max(double f1, double f2, double f3, out int idx)
+		{
+			if (f1 >= f2 && f1 >= f3) {
+				idx = 0;
+				return(f1);
+			}
+			if (f2 >= f1 && f2 >= f3) {
+				idx = 1;
+				return(f2);
+			}
+			idx = 2;
+			return(f3);
+		}
+		private double get_min(double f1, double f2, double f3, out int idx)
+		{
+			if (f1 <= f2 && f1 <= f3) {
+				idx = 0;
+				return(f1);
+			}
+			if (f2 <= f1 && f2 <= f3) {
+				idx = 1;
+				return(f2);
+			}
+			idx = 2;
+			return(f3);
+		}
+		private double get_dif(double f1, double f2, double f3)
+		{
+			int		imin, imax;
+			double	fmin = get_min(f1, f2, f3, out imin);
+			double	fmax = get_max(f1, f2, f3, out imax);
+			return((fmax-fmin)/fmax*100.0);
+		}
+		private void timer5_Tick(object sender, EventArgs e)
+		{
+			int NXT_STS = this.WBL_STS+1;
+
+			this.timer5.Enabled = false;
+
+			switch (this.WBL_STS) {
+			case 0:
+				break;
+			case 1:
+				//---
+				this.textBox3.Text = "";
+				this.textBox4.Text = "";
+				this.textBox5.Text = "";
+				this.textBox6.Text = "";
+				this.textBox7.Text = "";
+				this.textBox8.Text = "";
+				this.textBox9.Text = "";
+				//---
+				m_wdat = new WDATA();
+				if (this.timer5.Tag != null) {
+					//自動測定より
+					m_wdat.lch = (int)this.timer5.Tag;
+					m_wdat.wbl_tol = G.SS.CAM_WBL_TOLE;
+				}
+				else {
+					//カメラTABより
+					m_wdat.lch = G.SS.CAM_WBL_LEDT;
+					m_wdat.wbl_tol = G.SS.CAM_WBL_TOLE;
+				}
+				if (this.timer5.Tag != null) {
+					//自動測定より
+					NXT_STS = 30;//点灯制御へ
+				}
+				else if (G.CNT_MOD >= 2/*毛髪矩形 or 毛髪範囲*/) {
+					NXT_STS = 0;
+					G.mlog("internal error");
+				}
+				else {
+					if (G.SS.CAM_WBL_LEDT == 0) {
+						NXT_STS = 2;//点灯制御へ
+					}
+					if (G.SS.CAM_WBL_LEDT == 1) {
+						NXT_STS = 3;//点灯制御へ
+					}
+					if (G.SS.CAM_WBL_LEDT >= 2) {
+						NXT_STS = 20;//点灯制御へ
+					}
+				}
+				break;
+			case 2://透過点灯
+				if (G.LED_PWR_STS == 1) {
+					NXT_STS = 10;
+				}
+				else {
+					G.FORM10.LED_SET(0, false);//透過
+					G.FORM10.LED_SET(1, false);//反射
+					G.FORM10.LED_SET(2, false);//赤外
+					G.FORM10.LED_SET(0, true);//透過
+					m_wdat.chk1 = Environment.TickCount;
+					NXT_STS = 5;
+				}
+				break;
+			case 3://反射点灯
+				if (G.LED_PWR_STS == 2) {
+					NXT_STS = 10;
+				}
+				else {
+					G.FORM10.LED_SET(0, false);//透過
+					G.FORM10.LED_SET(1, false);//反射
+					G.FORM10.LED_SET(2, false);//赤外
+					G.FORM10.LED_SET(1, true);//反射
+					m_wdat.chk1 = Environment.TickCount;
+					NXT_STS = 5;
+				}
+				break;
+			case 5://カメラ安定待機
+				if ((Environment.TickCount - m_wdat.chk1) < (G.SS.ETC_LED_WAIT*1000)) {
+					NXT_STS = this.AUT_STS;
+				}
+				NXT_STS = 10;
+				break;
+			case 10:
+				NXT_STS = 20;
+				break;
+			case 20://赤外点灯
+				if (G.SS.CAM_WBL_LEDT < 2) {
+					NXT_STS = 30;
+				}
+				else if (G.LED_PWR_STS == 4) {
+					NXT_STS = 30;
+				}
+				else {
+					G.FORM10.LED_SET(0, false);//透過
+					G.FORM10.LED_SET(1, false);//反射
+					G.FORM10.LED_SET(2, false);//赤外
+					G.FORM10.LED_SET(2, true);//赤外
+					m_wdat.chk1 = Environment.TickCount;
+				}
+				break;
+			case 21://カメラ安定待機
+				if ((Environment.TickCount - m_wdat.chk1) < (G.SS.ETC_LED_WAIT*1000)) {
+					NXT_STS = this.AUT_STS;
+				}
+				NXT_STS = 30;
+				break;
+			case 30:
+			case 40:
+				if (G.SS.CAM_WBL_CHK1 && m_wdat.wbauto_done == false) {
+					NXT_STS = 50;
+					break;
+				}
+				if (G.SS.CAM_WBL_CHK2 && m_wdat.offset_done == false) {
+					NXT_STS = 60;
+					break;
+				}
+				if (true) {
+					m_wdat.wbl_bak = double.NaN;
+					m_wdat.gain_dx = -0.1;
+					//---
+					get_max(G.IR.HIST_RPK, G.IR.HIST_GPK, G.IR.HIST_BPK, out m_wdat.cch);
+					m_wdat.ich = m_wdat.cch;
+					//---
+					int lch = m_wdat.lch;
+					switch (m_wdat.cch) {
+					case  0:
+						m_wdat.gain_val = G.SS.CAM_PAR_WB_RV[lch];
+						this.textBox3.BackColor = Color.LightGreen;
+						this.textBox6.BackColor = Color.LightGreen;
+					break;
+					case  1:
+						m_wdat.gain_val = G.SS.CAM_PAR_WB_GV[lch];
+						this.textBox4.BackColor = Color.LightGreen;
+						this.textBox7.BackColor = Color.LightGreen;
+						break;
+					default:
+						m_wdat.gain_val = G.SS.CAM_PAR_WB_BV[lch];
+						this.textBox5.BackColor = Color.LightGreen;
+						this.textBox8.BackColor = Color.LightGreen;
+						break;
+					}
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, m_wdat.cch);
+					//m_wdat.vpk_bak = double.NaN;
+					if (this.WBL_STS != 40) {
+					this.button29.Enabled = false;//再調整
+					}
+				}
+				break;
+			case 31:
+			case 41:
+				m_dcur = m_didx;
+				break;
+			case 32:
+			case 42:
+				if ((m_didx - m_dcur) < G.SS.CAM_WBL_SKIP) {
+					NXT_STS = this.WBL_STS;
+				}
+				break;
+			case 33:
+			case 43:
+				//測定
+				if (true) {
+					m_wdat.wbl_dif = get_dif(G.IR.HIST_RPK, G.IR.HIST_GPK, G.IR.HIST_BPK);
+					this.textBox3.Text = string.Format("{0}", G.IR.HIST_RPK);
+					this.textBox4.Text = string.Format("{0}", G.IR.HIST_GPK);
+					this.textBox5.Text = string.Format("{0}", G.IR.HIST_BPK);
+					this.textBox9.Text = string.Format("{0:F0}", m_wdat.wbl_dif);
+				}
+				if (true) {
+					int lch = m_wdat.lch;
+					this.textBox6.Text = string.Format("{0:F3}", m_wdat.cch == 0 ? m_wdat.gain_val: G.SS.CAM_PAR_WB_RV[lch]);
+					this.textBox7.Text = string.Format("{0:F3}", m_wdat.cch == 1 ? m_wdat.gain_val: G.SS.CAM_PAR_WB_GV[lch]);
+					this.textBox8.Text = string.Format("{0:F3}", m_wdat.cch == 2 ? m_wdat.gain_val: G.SS.CAM_PAR_WB_BV[lch]);
+				}
+				if (NXT_STS == 44) {
+					NXT_STS = 41;
+				}
+				break;
+			case 34:
+				if (m_wdat.wbl_dif <= m_wdat.wbl_tol) {
+					NXT_STS = 99;//end
+				}
+				else {
+					if (double.IsNaN(m_wdat.wbl_bak)) {
+					}
+					else {
+						int itmp;
+						get_max(G.IR.HIST_RPK, G.IR.HIST_GPK, G.IR.HIST_BPK, out itmp);
+						if (m_wdat.ich != itmp) {
+							m_wdat.ich = itmp;
+							m_wdat.gain_dx /= 10;
+							if (Math.Abs(m_wdat.gain_dx) < 0.001) {
+								NXT_STS = 99;//end
+							}
+							else {
+								m_wdat.gain_dx *= -1;//方向逆転
+							}
+						}
+					}
+
+					if (NXT_STS == 99) {
+					}
+					else if (m_wdat.gain_dx > 0) {
+						if (m_wdat.gain_val < C_WBL_MAX) {
+							if ((m_wdat.gain_val += m_wdat.gain_dx) > C_WBL_MAX) {
+								m_wdat.gain_val = C_WBL_MAX;
+							}
+						}
+						else {
+							NXT_STS = 99;//end
+						}
+					}
+					else {
+						if (m_wdat.gain_val > C_WBL_MIN) {
+							if ((m_wdat.gain_val += m_wdat.gain_dx) < C_WBL_MIN) {
+								m_wdat.gain_val = C_WBL_MIN;
+							}
+						}
+						else {
+							NXT_STS = 99;//end
+						}
+					}
+				}
+				m_wdat.wbl_bak = m_wdat.wbl_dif;
+				break;
+			case 35:
+				G.FORM02.set_param(Form02.CAM_PARAM.BALANCE, m_wdat.gain_val);
+				NXT_STS = 31;
+				break;
+			case 50:
+				//WB自動実行
+				G.FORM02.set_auto(Form02.CAM_PARAM.WHITE, /*auto*/1);
+				m_wdat.chk1 = Environment.TickCount;
+				break;
+			case 51:
+			case 54:
+				if (true) {
+					double fval, fmax, fmin;
+					int lch = m_wdat.lch;
+					//---
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 0);
+					G.FORM02.get_param(Form02.CAM_PARAM.BALANCE, out fval, out fmax, out fmin);
+					G.SS.CAM_PAR_WB_RV[lch] = fval;
+					//---
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 1);
+					G.FORM02.get_param(Form02.CAM_PARAM.BALANCE, out fval, out fmax, out fmin);
+					G.SS.CAM_PAR_WB_GV[lch] = fval;
+					//---
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 2);
+					G.FORM02.get_param(Form02.CAM_PARAM.BALANCE, out fval, out fmax, out fmin);
+					G.SS.CAM_PAR_WB_BV[lch] = fval;
+					//---
+					this.textBox6.Text = string.Format("{0:F3}", G.SS.CAM_PAR_WB_RV[lch]);
+					this.textBox7.Text = string.Format("{0:F3}", G.SS.CAM_PAR_WB_GV[lch]);
+					this.textBox8.Text = string.Format("{0:F3}", G.SS.CAM_PAR_WB_BV[lch]);
+				}
+				break;
+			case 52://カメラ安定待機
+				if ((Environment.TickCount - m_wdat.chk1) < (G.SS.ETC_LED_WAIT*1000)) {
+					NXT_STS = 51;
+				}
+				break;
+			case 53:
+				G.FORM02.set_auto(Form02.CAM_PARAM.WHITE, /*const*/0);
+				break;
+			case 55:
+				m_wdat.wbauto_done = true;
+				NXT_STS = 30;
+				break;
+			case 60:
+				//OFFSET自動実行
+				if (true) {
+					int lch = m_wdat.lch;
+					int itmp;
+					bool flag;
+					get_max(G.IR.HIST_RPK, G.IR.HIST_GPK, G.IR.HIST_BPK, out itmp);
+					switch (itmp) {
+					case  0:flag = (G.SS.CAM_PAR_WB_RV[lch] <= C_WBL_MIN); break;
+					case  1:flag = (G.SS.CAM_PAR_WB_GV[lch] <= C_WBL_MIN); break;
+					default:flag = (G.SS.CAM_PAR_WB_BV[lch] <= C_WBL_MIN); break;
+					}
+					if (!flag) {
+						m_wdat.offset_done = true;
+						NXT_STS = 30;
+					}
+				}
+				break;
+			case 61:
+				if (true) {
+					int lch = m_wdat.lch;
+					double ofs = G.SS.CAM_WBL_OFFS;
+					//---
+					if ((G.SS.CAM_PAR_WB_RV[lch] += ofs) >= C_WBL_MAX) {
+						G.SS.CAM_PAR_WB_RV[lch] = C_WBL_MAX;
+					}
+					if ((G.SS.CAM_PAR_WB_GV[lch] += ofs) >= C_WBL_MAX) {
+						G.SS.CAM_PAR_WB_GV[lch] = C_WBL_MAX;
+					}
+					if ((G.SS.CAM_PAR_WB_BV[lch] += ofs) >= C_WBL_MAX) {
+						G.SS.CAM_PAR_WB_BV[lch] = C_WBL_MAX;
+					}
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 0);
+					G.FORM02.set_param(Form02.CAM_PARAM.BALANCE, G.SS.CAM_PAR_WB_RV[lch]);
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 1);
+					G.FORM02.set_param(Form02.CAM_PARAM.BALANCE, G.SS.CAM_PAR_WB_GV[lch]);
+					G.FORM02.set_param(Form02.CAM_PARAM.BAL_SEL, 2);
+					G.FORM02.set_param(Form02.CAM_PARAM.BALANCE, G.SS.CAM_PAR_WB_BV[lch]);
+				}
+				m_wdat.chk1 = Environment.TickCount;
+				break;
+			case 62:
+				if (true) {
+					int lch = m_wdat.lch;
+					//---
+					this.textBox6.Text = string.Format("{0:F3}", G.SS.CAM_PAR_WB_RV[lch]);
+					this.textBox7.Text = string.Format("{0:F3}", G.SS.CAM_PAR_WB_GV[lch]);
+					this.textBox8.Text = string.Format("{0:F3}", G.SS.CAM_PAR_WB_BV[lch]);
+				}
+				break;
+			case 63://カメラ安定待機
+				if ((Environment.TickCount - m_wdat.chk1) < (G.SS.ETC_LED_WAIT*1000)) {
+					NXT_STS = this.WBL_STS;
+				}
+				else {
+					m_wdat.offset_done = true;
+					NXT_STS = 30;
+				}
+				break;
+			case 99:
+				//if (m_wdat.wbl_dif > m_wdat.wbl_tol && m_wdat.idone.Count() < 3) {
+				//    NXT_STS = 30;
+				//}
+				this.textBox3.BackColor = SystemColors.Control;
+				this.textBox6.BackColor = SystemColors.Control;
+				this.textBox4.BackColor = SystemColors.Control;
+				this.textBox7.BackColor = SystemColors.Control;
+				this.textBox5.BackColor = SystemColors.Control;
+				this.textBox8.BackColor = SystemColors.Control;
+				break;
+			case 100:
+				//if (this.timer5.Tag != null) {
+				//    //自動測定より
+				//    NXT_STS = 0;
+				//}
+				//else {
+				//    NXT_STS = 41;
+				//    m_wdat.cch = -1;
+				//    this.button32.Enabled = true;//再調整
+				//}
+				if (true) {
+					int lch = m_wdat.lch;
+					switch (m_wdat.cch) {
+					case  0:G.SS.CAM_PAR_WB_RV[lch] = m_wdat.gain_val; break;
+					case  1:G.SS.CAM_PAR_WB_GV[lch] = m_wdat.gain_val; break;
+					default:G.SS.CAM_PAR_WB_BV[lch] = m_wdat.gain_val; break;
+					}
+				}
+				if (true) {
+					if (this.timer5.Tag == null) {
+						for (int i = 0; i < 1; i++) {
+							Console.Beep(1600, 250);
+							Thread.Sleep(250);
+						}
+						//Thread.Sleep(3000);
+					}
+				}
+				if (this.timer5.Tag != null) {
+					//自動測定より
+					NXT_STS = 0;
+				}
+				else {
+					NXT_STS = 41;
+					m_wdat.cch = -1;
+					this.button32.Enabled = true;//再調整
+				}
+				break;
+			default:
+				break;
+			}
+			if (NXT_STS == 0) {
+				NXT_STS = 0;//for break.point
+			}
+			if (this.WBL_STS != 0) {
+				this.WBL_STS = NXT_STS;
+			}
+			if (this.WBL_STS != 0) {
+				this.timer5.Enabled = true;
+			}
+			else {
+				G.CAM_PRC = G.CAM_STS.STS_NONE;
+				G.CHK_WBL = 0;
+				G.FORM02.set_layout();
+				UPDSTS();
+			}
+		}
+
+		private void checkBox14_CheckedChanged(object sender, EventArgs e)
+		{
+			this.numericUpDown47.Enabled = this.checkBox14.Checked;
 		}
 #endif
 	}

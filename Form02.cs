@@ -1905,12 +1905,31 @@ namespace uSCOPE
 					ShowException(ex);
 					}
 				}
+#if true//2019.02.03(WB調整)
+				if (G.CNT_OFS != 0) {
+					int dy = (int)(G.IR.CIR_PX * (G.CNT_OFS/100.0));
+					if (G.CNT_OFS < 0) {
+						G.CNT_OFS = G.CNT_OFS;
+					}
+					for (int i = 0; i < G.IR.MSK_PLY_CNT; i++) {
+						G.IR.MSK_PLY[i].Y -= dy;
+					}
+				}
+#endif
 				for (int i = 0; i < G.IR.MSK_PLY_CNT; i++) {
 					pts[i].x = G.IR.MSK_PLY[i].X;
 					pts[i].y = G.IR.MSK_PLY[i].Y;
 
 					G.IR.MSK_PLY_IMG[i] = BMPCD_TO_IMGCD(G.IR.MSK_PLY[i]);
 				}
+#if true//2019.02.03(WB調整)
+				//if (G.CNT_OFS != 0) {
+				//    int dy = (int)(G.IR.CIR_PX * (G.CNT_OFS/100.0));
+				//    for (int i = 0; i < G.IR.MSK_PLY_CNT; i++) {
+				//        pts[i].y -= dy;
+				//    }
+				//}
+#endif
 				OCV_ZERO((int)IMG.IMG_M);
 				OCV_FILL_POLY((int)IMG.IMG_M, ref pts[0], G.IR.MSK_PLY_CNT, 0xFFFFFF);
 			}
@@ -3586,6 +3605,69 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				reset_mask_poly(G.CNT_MOD-6);
 			}
 		}
+#if true//2019.02.03(WB調整)
+		private void check_wbl()
+		{
+			if (G.IR.HISTVALH[0] >= G.IR.HISTVALS[0]) {
+				G.IR.HISTVALH[0] -=G.IR.HISTVALS[0];//無彩色分を減算
+			}
+			if (G.SS.CAM_WBL_PAR2 == 0) {
+				double fmax;
+				fmax = double.MinValue;
+				for (int i = 60/2; i < 180/2; i++) {
+					if (fmax < G.IR.HISTVALH[i]) {
+						fmax = G.IR.HISTVALH[i];
+					}
+				}
+				G.IR.HIST_GPK = fmax;
+				//---
+				fmax = double.MinValue;
+				for (int i = 180/2; i < 300/2; i++) {
+					if (fmax < G.IR.HISTVALH[i]) {
+						fmax = G.IR.HISTVALH[i];
+					}
+				}
+				G.IR.HIST_BPK = fmax;
+				//---
+				fmax = double.MinValue;
+				for (int i = 300/2; i < 360/2; i++) {
+					if (fmax < G.IR.HISTVALH[i]) {
+						fmax = G.IR.HISTVALH[i];
+					}
+				}
+				for (int i = 0/2; i < 60/2; i++) {
+					if (fmax < G.IR.HISTVALH[i]) {
+						fmax = G.IR.HISTVALH[i];
+					}
+				}
+				G.IR.HIST_RPK = fmax;
+			}
+			else {
+				double fsum;
+				fsum = 0;
+				for (int i = 60/2; i < 180/2; i++) {
+					fsum += G.IR.HISTVALH[i];
+				}
+				G.IR.HIST_GPK = fsum;
+				//---
+				fsum = 0;
+				for (int i = 180/2; i < 300/2; i++) {
+					fsum += G.IR.HISTVALH[i];
+				}
+				G.IR.HIST_BPK = fsum;
+				//---
+				fsum = 0;
+				for (int i = 300/2; i < 360/2; i++) {
+					fsum += G.IR.HISTVALH[i];
+				}
+				for (int i = 0/2; i < 60/2; i++) {
+					fsum += G.IR.HISTVALH[i];
+				}
+				G.IR.HIST_RPK = fsum;
+			}
+		}
+#endif
+
 		private void post_proc()
 		{
 			string buf1 = null, buf2 = null;
@@ -3896,6 +3978,9 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 									catch (Exception ex) {
 										Trace.WriteLineIf((G.AS.TRACE_LEVEL & 4)!=0, ex.Message);
 									}
+#if true//2019.02.03(WB調整)
+									G.IR.CIR_PX = p;
+#endif
 									p = PX2UM(p);
 									//多曲線の接続点の描画
 									if (mode == G.CAM_STS.STS_HAIR && G.SS.CAM_CIR_CHK2) {
@@ -4021,6 +4106,12 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 						this.radioButton4.Checked = true;
 					}
 #endif
+#if true//2019.02.03(WB調整)
+					if (G.CHK_WBL != 0 && G.SS.ETC_HIS_MODE == 0) {
+						G.SS.ETC_HIS_MODE = 1;
+						this.radioButton4.Checked = true;
+					}
+#endif
 					if (G.SS.ETC_HIS_MODE == 0) {
 						//calc_hist(m_img_rgb[0], mask, G.IR.HISTVALR);
 						//calc_hist(m_img_rgb[1], mask, G.IR.HISTVALG);
@@ -4047,6 +4138,11 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 								}
 							}
 							G.IR.HIST_VPK = imax;	//V(of HSV)'s peak pos
+						}
+#endif
+#if true//2019.02.03(WB調整)
+						if (G.CHK_WBL != 0) {
+							check_wbl();
 						}
 #endif
 					}

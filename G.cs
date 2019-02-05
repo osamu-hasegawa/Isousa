@@ -185,8 +185,9 @@ namespace uSCOPE
 			public int CAM_CIR_AREA_MAX = 1250000;
 			public int CAM_CIR_LENG_MAX = 12500;
 			public double CAM_CIR_CVAL_MIN = 0.05;
+#if false//2019.02.03(WB調整)
 			public double CAM_CIR_MAGN = 8.0;
-
+#endif
 			public int CAM_DIR_PREC = 15;
 			public int CAM_CIR_DISP = 0;
 			public bool CAM_CIR_CHK1 = true;
@@ -211,10 +212,22 @@ namespace uSCOPE
 			//---
 			public int CAM_GAI_LEDT = 0;//光源
 			public int CAM_GAI_PAR1 = 1;//計算範囲
-			public int CAM_GAI_VMIN = 10;
-			public int CAM_GAI_VMAX = 245;
-			public int CAM_GAI_VSET = 64;
-			public int CAM_GAI_SKIP = 1;
+			public int CAM_GAI_SKIP = 1;//読み捨て
+			public int CAM_GAI_VMIN = 10;//検索範囲min
+			public int CAM_GAI_VMAX = 245;//検索範囲max
+			public int CAM_GAI_VSET = 64;//設定値
+			//---
+#endif
+#if true//2019.02.03(WB調整)
+			//---
+			public int CAM_WBL_LEDT = 0;//光源
+			public int CAM_WBL_PAR1 = 0;//計算範囲
+			public int CAM_WBL_PAR2 = 0;//計算方法
+			public int CAM_WBL_SKIP = 3;//読み捨て
+			public int CAM_WBL_TOLE = 30;//許容差
+			public bool CAM_WBL_CHK1 = false;
+			public bool CAM_WBL_CHK2 = true;
+			public double CAM_WBL_OFFS = 0.3;
 			//---
 #endif
 #if true//2018.09.27(20本対応と解析用パラメータ追加)
@@ -240,7 +253,12 @@ namespace uSCOPE
 			public double[] IMP_GIZ_UPPR = {0,0,0,0,0,0};
 
 			public int[] IMP_POL_PREC = {28,28,28,28,28,28};
+#if false//2019.02.03(WB調整)
 			public double[] IMP_OPT_MAGN = {8.0,8.0,8.0,8.0,8.0,8.0};
+#else
+			public int[] IMP_AUT_SOFS = {0, 0, 0, 0, 0, 0};//表面AFオフセット
+			public int[] IMP_AUT_COFS = {0, 0, 0, 0, 0, 0};//中心AFオフセット
+#endif
 			public int[] IMP_AUT_AFMD = {0, 0, 0, 0, 0, 0};
 #else
 			public int[] IMP_FLT_COEF = {5,5,5,5};
@@ -784,7 +802,9 @@ namespace uSCOPE
 				RESIZE_ARRAY(ref cln.IMP_GIZ_LOWR, ref G.SS.IMP_GIZ_LOWR);
 				RESIZE_ARRAY(ref cln.IMP_GIZ_UPPR, ref G.SS.IMP_GIZ_UPPR);
 				RESIZE_ARRAY(ref cln.IMP_POL_PREC, ref G.SS.IMP_POL_PREC);
+#if false//2019.02.03(WB調整)
 				RESIZE_ARRAY(ref cln.IMP_OPT_MAGN, ref G.SS.IMP_OPT_MAGN);
+#endif
 				RESIZE_ARRAY(ref cln.IMP_AUT_AFMD, ref G.SS.IMP_AUT_AFMD);
 #endif
 				return (cln);
@@ -868,6 +888,11 @@ namespace uSCOPE
 #if true//2019.01.19(GAIN調整)
 			public double	HIST_VPK;	//V(of HSV)'s peak pos
 #endif
+#if true//2019.02.03(WB調整)
+			public double	HIST_RPK;
+			public double	HIST_GPK;
+			public double	HIST_BPK;
+#endif
 			//---
 			public double[] HISTVALR = new double[256];
 			public double[] HISTVALG = new double[256];
@@ -882,6 +907,9 @@ namespace uSCOPE
 			public double CIR_L;
 			public double CIR_C;
 			public double CIR_P;
+#if true//2019.02.03(WB調整)
+			public double CIR_PX;
+#endif
 			public double CIR_U;
 			public Rectangle CIR_RT;
 			//---
@@ -925,6 +953,11 @@ namespace uSCOPE
 				this.CONTRAST = double.NaN;
 #if true//2019.01.19(GAIN調整)
 				this.HIST_VPK = double.NaN;	//V(of HSV)'s peak pos
+#endif
+#if true//2019.02.03(WB調整)
+				this.HIST_RPK = double.NaN;
+				this.HIST_GPK = double.NaN;
+				this.HIST_BPK = double.NaN;
 #endif
 				//---
 				this.CIR_CNT = 0;
@@ -994,6 +1027,9 @@ namespace uSCOPE
 #if true//2019.01.19(GAIN調整)
 		static public int CHK_VPK = 0;
 #endif
+#if true//2019.02.03(WB調整)
+		static public int CHK_WBL = 0;
+#endif
 		//static public int AUT_STS;
 		//static public int MOK_STS;
 		static public int CAM_WID;
@@ -1008,6 +1044,9 @@ namespace uSCOPE
 		static public int CAM_WBL_STS=2;//0:固定, 1:自動, 2:不定
 		static public bool bJITAN=false;
 		static public int CNT_MOD;
+#if true//2019.02.03(WB調整)
+		static public int CNT_OFS;
+#endif
 		//-----------------------
 		static public DialogResult mlog(string str)
 		{
@@ -1213,8 +1252,12 @@ namespace uSCOPE
 			TMP_LEN_UPPR;
 		private static double
 			TMP_CIR_LOWR,
-			TMP_CIR_UPPR,
-			TMP_OPT_MAGN;
+			TMP_CIR_UPPR
+#if false//2019.02.03(WB調整)
+			,
+			TMP_OPT_MAGN
+#endif
+			;
 		private static
 		int TMP_POL_PREC;
 
@@ -1237,7 +1280,9 @@ namespace uSCOPE
 			TMP_CIR_LOWR = G.SS.CAM_CIR_CVAL_MIN;
 			TMP_CIR_UPPR = G.SS.CAM_CIR_CVAL    ;
 			//---
+#if false//2019.02.03(WB調整)
 			TMP_OPT_MAGN = G.SS.CAM_CIR_MAGN;
+#endif
 			TMP_POL_PREC = G.SS.CAM_DIR_PREC;
 			//---
 			TMP_IMP_PUSHED = true;
@@ -1264,7 +1309,9 @@ namespace uSCOPE
 			G.SS.CAM_CIR_CVAL_MIN = TMP_CIR_LOWR;
 			G.SS.CAM_CIR_CVAL     = TMP_CIR_UPPR;
 			//---
+#if false//2019.02.03(WB調整)
 			G.SS.CAM_CIR_MAGN     = TMP_OPT_MAGN;
+#endif
 			G.SS.CAM_DIR_PREC     = TMP_POL_PREC;
 			//---
 			TMP_IMP_PUSHED = false;
@@ -1292,7 +1339,9 @@ namespace uSCOPE
 			G.SS.CAM_CIR_CVAL_MIN = G.SS.IMP_CIR_LOWR[i];//, 0.0, 1);
 			G.SS.CAM_CIR_CVAL     = G.SS.IMP_CIR_UPPR[i];//, 0.0, 1);
 			//---
+#if false//2019.02.03(WB調整)
 			G.SS.CAM_CIR_MAGN = G.SS.IMP_OPT_MAGN[i];
+#endif
 			G.SS.CAM_DIR_PREC = G.SS.IMP_POL_PREC[i];//, 5, 100);
 			}
 		}

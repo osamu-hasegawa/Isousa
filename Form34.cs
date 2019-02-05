@@ -39,6 +39,10 @@ namespace uSCOPE
 		//
 		private NumericUpDown[] numPRECI;
 		private NumericUpDown[] numMAGNI;
+#if true//2019.02.03(WB調整)
+		private NumericUpDown[] numSOFFS;
+		private NumericUpDown[] numCOFFS;
+#endif
 		public int Q;
 
 		public Form34()
@@ -84,6 +88,12 @@ namespace uSCOPE
 #if true//2018.11.13(毛髪中心AF)
 				this.comboBox11.Enabled = false;//透過(中心)
 				this.comboBox12.Enabled = false;//反射(中心)
+#endif
+#if true//2019.02.03(WB調整)
+				this.numericUpDown1.Enabled = false;
+				this.numericUpDown2.Enabled = false;
+				this.numericUpDown3.Enabled = false;
+				this.numericUpDown4.Enabled = false;
 #endif
 				this.label4.Visible = true;
 			}
@@ -141,7 +151,9 @@ namespace uSCOPE
 					if (i < 3) {
 					DDV.DDX(bUpdate, numPRECI[i], ref m_ss.IMP_POL_PREC[Q+i]);
 					}
+#if false//2019.02.03(WB調整)
 					DDV.DDX(bUpdate, numMAGNI[i], ref m_ss.IMP_OPT_MAGN[Q+i]);
+#endif
 					//---
 					if (i == 3) {
 					//DDV.DDX(bUpdate, this.numericUpDown71, ref m_ss.IMP_CUV_LOWR[i]);
@@ -156,6 +168,12 @@ namespace uSCOPE
 #if true//2018.11.13(毛髪中心AF)
 				DDV.DDX(bUpdate, this.comboBox11, ref m_ss.IMP_AUT_AFMD[2]);//透過(中心)
 				DDV.DDX(bUpdate, this.comboBox12, ref m_ss.IMP_AUT_AFMD[3]);//反射(中心)
+#endif
+#if true//2019.02.03(WB調整)
+				DDV.DDX(bUpdate, this.numericUpDown1, ref m_ss.IMP_AUT_SOFS[0]);//透過(表面)
+				DDV.DDX(bUpdate, this.numericUpDown2, ref m_ss.IMP_AUT_SOFS[1]);//反射(表面)
+				DDV.DDX(bUpdate, this.numericUpDown3, ref m_ss.IMP_AUT_COFS[0]);//透過(中心)
+				DDV.DDX(bUpdate, this.numericUpDown4, ref m_ss.IMP_AUT_COFS[1]);//反射(中心)
 #endif
 				}
 #if true//2018.08.21
