@@ -352,6 +352,9 @@ namespace uSCOPE
 			public bool PLM_AUT_ZORG = false;
 			public bool PLM_AUT_ZNOR = false;
 #endif
+#if true//2019.02.14(Z軸初期位置戻し)
+			public bool	PLM_AUT_ZRET;//Z軸初期位置戻し
+#endif
 			//---
 			public int ETC_LED_WAIT = 18;
 			public int ETC_UIF_LEVL =  0;

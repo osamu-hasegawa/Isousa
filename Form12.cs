@@ -3411,6 +3411,12 @@ a_write("AF:終了");
 					NXT_STS = -(500-1);	//500を経由して10へ遷移
 				}
 #endif
+#if true//2019.02.14(Z軸初期位置戻し)
+				else if (G.SS.PLM_AUT_ZRET) {//Z軸初期位置戻し
+					m_pre_set[2] = true;
+					m_pre_pos[2] = G.SS.PLM_POSF[3];
+				}
+#endif
 				break;
 			case 100:
 			case 400://赤外同時測定
@@ -3798,6 +3804,13 @@ a_write("光源切替:->反射");
 				NXT_STS = -this.AUT_STS;
 			break;
 			case 501:
+#if true//2019.02.14(Z軸初期位置戻し)
+				if (G.SS.PLM_AUT_ZRET) {//Z軸初期位置戻し
+					MOVE_ABS_Z(G.SS.PLM_POSF[3]);//FOCUS/Z軸
+					NXT_STS = -(10 - 1);//->10
+					break;
+				}
+#endif
 				MOVE_ABS_Z(m_adat.sta_pos_z);
 				NXT_STS = -(10 - 1);//->10
 			break;

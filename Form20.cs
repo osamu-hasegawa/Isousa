@@ -135,6 +135,9 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox8, ref m_ss.PLM_AUT_ZORG);//Z軸原点
 				DDV.DDX(bUpdate, this.checkBox9, ref m_ss.PLM_AUT_ZNOR);//右側カット
 #endif
+#if true//2019.02.14(Z軸初期位置戻し)
+				DDV.DDX(bUpdate, this.checkBox12,ref m_ss.PLM_AUT_ZRET);//Z軸初期位置戻し
+#endif
 				if (bUpdate == false) {
 					if (this.textBox2.Text == "") {
 						G.mlog("フォルダを指定してください.");

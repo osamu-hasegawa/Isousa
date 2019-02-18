@@ -71,6 +71,7 @@
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.checkBox8 = new System.Windows.Forms.CheckBox();
+			this.checkBox12 = new System.Windows.Forms.CheckBox();
 			this.checkBox11 = new System.Windows.Forms.CheckBox();
 			this.checkBox10 = new System.Windows.Forms.CheckBox();
 			this.checkBox9 = new System.Windows.Forms.CheckBox();
@@ -713,6 +714,7 @@
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.checkBox8);
+			this.groupBox3.Controls.Add(this.checkBox12);
 			this.groupBox3.Controls.Add(this.checkBox11);
 			this.groupBox3.Controls.Add(this.checkBox10);
 			this.groupBox3.Controls.Add(this.checkBox9);
@@ -749,10 +751,22 @@
 			this.checkBox8.BackColor = System.Drawing.SystemColors.Control;
 			this.checkBox8.Location = new System.Drawing.Point(104, 163);
 			this.checkBox8.Name = "checkBox8";
-			this.checkBox8.Size = new System.Drawing.Size(204, 16);
+			this.checkBox8.Size = new System.Drawing.Size(206, 16);
 			this.checkBox8.TabIndex = 50;
-			this.checkBox8.Text = "1毛髪測定毎にZ軸の原点検出を行う";
+			this.checkBox8.Text = "１毛髪測定毎にZ軸の原点検出を行う";
 			this.checkBox8.UseVisualStyleBackColor = false;
+			// 
+			// checkBox12
+			// 
+			this.checkBox12.AutoSize = true;
+			this.checkBox12.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox12.Location = new System.Drawing.Point(104, 245);
+			this.checkBox12.Name = "checkBox12";
+			this.checkBox12.Size = new System.Drawing.Size(221, 16);
+			this.checkBox12.TabIndex = 50;
+			this.checkBox12.Text = "１毛髪測定毎にＺ位置を初期位置に戻す";
+			this.checkBox12.UseVisualStyleBackColor = false;
+			this.checkBox12.Click += new System.EventHandler(this.checkBox10_Click);
 			// 
 			// checkBox11
 			// 
@@ -1467,5 +1481,6 @@
 		private System.Windows.Forms.Label label25;
 		private System.Windows.Forms.Label label22;
 		private System.Windows.Forms.CheckBox checkBox11;
+		private System.Windows.Forms.CheckBox checkBox12;
 	}
 }
