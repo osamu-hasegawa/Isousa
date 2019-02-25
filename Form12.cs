@@ -1003,7 +1003,13 @@ this.SPE_COD = 0;
 			try {
 				/*				rd = new StreamReader(filename, Encoding.GetEncoding("Shift_JIS"));*/
 				wr = new StreamWriter(path, true, Encoding.Default);
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+				wr.WriteLine("読み捨て,"    + G.SS.CAM_FCS_SKIP.ToString());
+				wr.WriteLine("平均化," + G.SS.CAM_FCS_FAVG.ToString());
+				wr.WriteLine("DATE,X(pls),Y(pls),Z(pls),POS,S,L,C,P,CONTRAST");
+#else
 				wr.WriteLine("DATE,POS,S,L,C,P,CONTRAST");
+#endif
 				wr.Close();
 			}
 			catch (Exception) {
@@ -1017,18 +1023,40 @@ this.SPE_COD = 0;
 				/*				rd = new StreamReader(filename, Encoding.GetEncoding("Shift_JIS"));*/
 				wr = new StreamWriter(path, true, Encoding.Default);
 				buf = string.Format("{0}", dat.dt.ToString());
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+				buf += string.Format(",{0}", DN(G.PLM_POS[0], 5));
+				buf += string.Format(",{0}", DN(G.PLM_POS[1], 5));
+				buf += string.Format(",{0}", DN(G.PLM_POS[2], 4));
+#endif
 				buf += string.Format(",{0}", dat.pos);
 				buf += string.Format(",{0:F0}", dat.s);
 				buf += string.Format(",{0:F0}", dat.l);
 				buf += string.Format(",{0:F2}", dat.c);
 				buf += string.Format(",{0:F0}", dat.p);
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+				buf += string.Format(",{0:F20}", dat.contrast);
+#else
 				buf += string.Format(",{0:F3}", dat.contrast);
+#endif
 				wr.WriteLine(buf);
 				wr.Close();
 			}
 			catch (Exception) {
 			}
 		}
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+		private void f_write(string path, string buf)
+		{
+			StreamWriter wr;
+			try {
+				wr = new StreamWriter(path, true, Encoding.Default);
+				wr.WriteLine(buf);
+				wr.Close();
+			}
+			catch (Exception) {
+			}
+		}
+#endif
 		private void MOVE_ABS(int q, int pos)
 		{
 			if (G.PLM_POS[q] != pos) {
@@ -1185,9 +1213,16 @@ this.SPE_COD = 0;
 					NXT_STS = this.FCS_STS;
 				}
 				else if (G.IR.CIR_CNT <= 0) {
-						this.FCS_STS = 0;
-						timer1.Enabled = false;
+					this.FCS_STS = 0;
+					timer1.Enabled = false;
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+					if (this.timer1.Tag == null) {
+						//カメラTABより
+#endif
 						G.mlog("#e毛髪が検出できませんした.");
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+					}
+#endif
 				}
 				else {
 					G.CAM_PRC = G.CAM_STS.STS_FCUS;
@@ -1202,9 +1237,18 @@ this.SPE_COD = 0;
 					DateTime dt = DateTime.Now;
 					m_path = T.GetDocFolder();
 					m_path += "\\";
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+					m_path += "AF\\";
+					if (System.IO.Directory.Exists(m_path) == false) {
+						System.IO.Directory.CreateDirectory(m_path);
+					}
+#endif
 					m_path += string.Format("{0:0000}{1:00}{2:00}-{3:00}{4:00}{5:00}",
 							dt.Year, dt.Month, dt.Day,
 							dt.Hour, dt.Minute, dt.Second);
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+					m_path += string.Format("(X,Y,Z={0},{1},{2})", G.PLM_POS[0], G.PLM_POS[1], G.PLM_POS[2]);
+#endif
 					m_path += ".csv";
 					f_write(m_path);
 				}
@@ -1315,6 +1359,22 @@ this.SPE_COD = 0;
 					m_dat.c /= G.SS.CAM_FCS_FAVG;
 					m_dat.p /= G.SS.CAM_FCS_FAVG;
 					m_dat.contrast /= G.SS.CAM_FCS_FAVG;
+#if DEBUG//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+					if (this.timer1.Tag == null/*カメラTABより*/) {
+						if (m_dat.pos == 57 || m_dat.pos == 58) {
+							m_dat.pos = m_dat.pos;
+						}
+						int	lz = (G.SS.PLM_PLIM[2] - G.SS.PLM_MLIM[2]);
+						int dz = (m_dat.pos - G.SS.PLM_MLIM[2]);
+						double fz = (double)dz / (double)lz;//0～1
+						Random rnd = new Random(Environment.TickCount);
+						fz = rnd.NextDouble();
+						m_dat.contrast = fz;//Math.Sin(fz * Math.PI);
+						// pos=57,fz=0.4994350282485876 , ctr=0.99999842484570045
+						//           0.4994350282485876 ,     0.99999842484570045
+						//     58,   0.50056497175141246,     0.99999842484570045
+					}
+#endif
 					m_fdat.Add(m_dat);
 					if (G.SS.CAM_FCS_CHK2) {
 						f_write(m_path, m_dat);
@@ -1384,6 +1444,15 @@ this.SPE_COD = 0;
 			case 20:
 				//最大値位置へ移動
 				get_max(m_fdat, out imax, out fmax);
+#if DEBUG//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+				if (true) {
+					int nxt = ((FDATA)m_fdat[imax]).pos;
+					int cur = G.PLM_POS[2];
+					if (nxt < cur) {
+						//G.mlog("バックラッシュ制御が必要！");
+					}
+				}
+#endif
 				MOVE_ABS_Z(((FDATA)m_fdat[imax]).pos);
 				NXT_STS = -this.FCS_STS;
 				break;
@@ -1404,6 +1473,9 @@ this.SPE_COD = 0;
 					this.FCS_STS = 0;
 					timer1.Enabled = false;
 				}
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+				f_write(m_path, string.Format(",,,MAXPOS,{0},,,,CONTRAST,{1}", posz, m_contrast));
+#endif
 				if (false) {
 					double	f1, f2, f3;
 					G.FORM02.get_param(Form02.CAM_PARAM.EXPOSURE, out f1, out f2, out f3);
@@ -1455,11 +1527,13 @@ this.SPE_COD = 0;
 				}
 #endif
 			}
+#if false//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
 			else {
 				if (timer1.Enabled) {
 					this.FCS_STS = NXT_STS;
 				}
 			}
+#endif
 		}
 		/*
 		 * iTag:1(AF初回), 2:(AF2回目以降), 3:(毛髪径によるAF...位置合わせ用)
@@ -1529,7 +1603,13 @@ this.SPE_COD = 0;
 #endif
 				this.AUT_STS = 1;
 				timer2.Enabled = true;
-				while (timer2.Enabled) {
+				while (
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+					this.AUT_STS != 0
+#else
+					timer2.Enabled
+#endif
+					) {
 					Application.DoEvents();
 					string buf;
 					//bool bWAIT = false;
@@ -2377,8 +2457,14 @@ this.SPE_COD = 0;
 			}
 			DialogResult ret;
 			timer2.Enabled = false;
+#if true//2019.02.23(毛髪スキップ時文言変更)
+			ret = G.mlog(string.Format("#q未検出の毛髪が存在する可能性があります。検出条件を変えて再検出しますか？（測定済み:{0}本）", m_adat.h_cnt));
+#else
 			ret = G.mlog(string.Format("#q測定済み({0}本)の毛髪間隔が一定ではありません。測定抜けのチェックを行いますか？", m_adat.h_cnt));
+#endif
+#if false//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
 			timer2.Enabled = true;
+#endif
 			if (ret != System.Windows.Forms.DialogResult.Yes) {
 				return(false);
 			}
@@ -2484,6 +2570,9 @@ this.SPE_COD = 0;
 			int NXT_STS = this.AUT_STS + 1;
 			int yy, y0, ypos;
 
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+			this.timer2.Enabled = false;
+#endif
 			if (G.bCANCEL) {
 				G.CAM_PRC = G.CAM_STS.STS_NONE;
 				this.AUT_STS = 0;
@@ -2979,7 +3068,9 @@ a_write("毛髪判定(中心):OK");
 						if (ret == DialogResult.Yes) {
 						NXT_STS = 10;//抜けデバッグのため毛髪をスキップさせる
 						}
+#if false//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
 						this.timer2.Enabled = true;
+#endif
 					}
 				}
 #endif
@@ -4103,6 +4194,9 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 			}
 			if (this.AUT_STS != 0) {
 				this.AUT_STS = NXT_STS;
+#if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+				this.timer2.Enabled = true;
+#endif
 			}
 		}
 

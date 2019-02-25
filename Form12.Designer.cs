@@ -108,6 +108,9 @@
 			this.label66 = new System.Windows.Forms.Label();
 			this.label59 = new System.Windows.Forms.Label();
 			this.tabPage10 = new System.Windows.Forms.TabPage();
+			this.panel14 = new System.Windows.Forms.Panel();
+			this.panel13 = new System.Windows.Forms.Panel();
+			this.checkBox14 = new System.Windows.Forms.CheckBox();
 			this.checkBox13 = new System.Windows.Forms.CheckBox();
 			this.label68 = new System.Windows.Forms.Label();
 			this.numericUpDown46 = new System.Windows.Forms.NumericUpDown();
@@ -119,6 +122,7 @@
 			this.textBox3 = new System.Windows.Forms.TextBox();
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.label69 = new System.Windows.Forms.Label();
+			this.numericUpDown47 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown49 = new System.Windows.Forms.NumericUpDown();
 			this.panel7 = new System.Windows.Forms.Panel();
 			this.comboBox15 = new System.Windows.Forms.ComboBox();
@@ -265,10 +269,6 @@
 			this.timer3 = new System.Windows.Forms.Timer(this.components);
 			this.timer4 = new System.Windows.Forms.Timer(this.components);
 			this.timer5 = new System.Windows.Forms.Timer(this.components);
-			this.checkBox14 = new System.Windows.Forms.CheckBox();
-			this.numericUpDown47 = new System.Windows.Forms.NumericUpDown();
-			this.panel13 = new System.Windows.Forms.Panel();
-			this.panel14 = new System.Windows.Forms.Panel();
 			this.tabControl4.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel9.SuspendLayout();
@@ -292,6 +292,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).BeginInit();
 			this.tabPage10.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown46)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown47)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown49)).BeginInit();
 			this.tabPage5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown15)).BeginInit();
@@ -335,7 +336,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown36)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown35)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown34)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown47)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl4
@@ -1425,6 +1425,34 @@
 			this.tabPage10.TabIndex = 9;
 			this.tabPage10.Text = "WB";
 			// 
+			// panel14
+			// 
+			this.panel14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel14.Location = new System.Drawing.Point(119, 73);
+			this.panel14.Name = "panel14";
+			this.panel14.Size = new System.Drawing.Size(2, 20);
+			this.panel14.TabIndex = 70;
+			// 
+			// panel13
+			// 
+			this.panel13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel13.Location = new System.Drawing.Point(120, 71);
+			this.panel13.Name = "panel13";
+			this.panel13.Size = new System.Drawing.Size(150, 2);
+			this.panel13.TabIndex = 69;
+			// 
+			// checkBox14
+			// 
+			this.checkBox14.AutoSize = true;
+			this.checkBox14.Location = new System.Drawing.Point(10, 49);
+			this.checkBox14.Name = "checkBox14";
+			this.checkBox14.Size = new System.Drawing.Size(182, 16);
+			this.checkBox14.TabIndex = 68;
+			this.checkBox14.Text = "ゲイン下限時は加算してから開始";
+			this.checkBox14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox14.UseVisualStyleBackColor = true;
+			this.checkBox14.CheckedChanged += new System.EventHandler(this.checkBox14_CheckedChanged);
+			// 
 			// checkBox13
 			// 
 			this.checkBox13.AutoSize = true;
@@ -1540,6 +1568,31 @@
 			this.label69.Size = new System.Drawing.Size(53, 12);
 			this.label69.TabIndex = 63;
 			this.label69.Text = "計算方法";
+			// 
+			// numericUpDown47
+			// 
+			this.numericUpDown47.DecimalPlaces = 2;
+			this.numericUpDown47.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.numericUpDown47.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.numericUpDown47.Location = new System.Drawing.Point(210, 47);
+			this.numericUpDown47.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.numericUpDown47.Name = "numericUpDown47";
+			this.numericUpDown47.Size = new System.Drawing.Size(61, 19);
+			this.numericUpDown47.TabIndex = 59;
+			this.numericUpDown47.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown47.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
 			// 
 			// numericUpDown49
 			// 
@@ -3570,7 +3623,7 @@
 			// 
 			// timer2
 			// 
-			this.timer2.Interval = 50;
+			this.timer2.Interval = 1;
 			this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
 			// 
 			// timer3
@@ -3587,59 +3640,6 @@
 			// 
 			this.timer5.Interval = 1;
 			this.timer5.Tick += new System.EventHandler(this.timer5_Tick);
-			// 
-			// checkBox14
-			// 
-			this.checkBox14.AutoSize = true;
-			this.checkBox14.Location = new System.Drawing.Point(10, 49);
-			this.checkBox14.Name = "checkBox14";
-			this.checkBox14.Size = new System.Drawing.Size(182, 16);
-			this.checkBox14.TabIndex = 68;
-			this.checkBox14.Text = "ゲイン下限時は加算してから開始";
-			this.checkBox14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox14.UseVisualStyleBackColor = true;
-			this.checkBox14.CheckedChanged += new System.EventHandler(this.checkBox14_CheckedChanged);
-			// 
-			// numericUpDown47
-			// 
-			this.numericUpDown47.DecimalPlaces = 2;
-			this.numericUpDown47.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.numericUpDown47.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-			this.numericUpDown47.Location = new System.Drawing.Point(210, 47);
-			this.numericUpDown47.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			this.numericUpDown47.Name = "numericUpDown47";
-			this.numericUpDown47.Size = new System.Drawing.Size(61, 19);
-			this.numericUpDown47.TabIndex = 59;
-			this.numericUpDown47.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown47.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-			// 
-			// panel13
-			// 
-			this.panel13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel13.Location = new System.Drawing.Point(120, 71);
-			this.panel13.Name = "panel13";
-			this.panel13.Size = new System.Drawing.Size(150, 2);
-			this.panel13.TabIndex = 69;
-			// 
-			// panel14
-			// 
-			this.panel14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel14.Location = new System.Drawing.Point(119, 73);
-			this.panel14.Name = "panel14";
-			this.panel14.Size = new System.Drawing.Size(2, 20);
-			this.panel14.TabIndex = 70;
 			// 
 			// Form12
 			// 
@@ -3680,6 +3680,7 @@
 			this.tabPage10.ResumeLayout(false);
 			this.tabPage10.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown46)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown47)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown49)).EndInit();
 			this.tabPage5.ResumeLayout(false);
 			this.tabPage5.PerformLayout();
@@ -3728,7 +3729,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown36)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown35)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown34)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown47)).EndInit();
 			this.ResumeLayout(false);
 
 		}
