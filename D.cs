@@ -8,7 +8,7 @@ namespace uSCOPE
 {
     class D
     {
-#if true
+#if _X64//2019.02.27(ＡＦ２実装)
 		[DllImport("USBHIDHELPER64.DLL")]
 		static extern Int32 TEST00(UInt32 vid, UInt32 pid, IntPtr pcnt);
 
@@ -33,6 +33,24 @@ namespace uSCOPE
 		BOOL APIENTRY WRITE_HID(LPBYTE pbuf, DWORD size);
 		BOOL APIENTRY READ_HID(LPBYTE pbuf, DWORD size);
 		*/
+#else
+		[DllImport("USBHIDHELPER32.DLL")]
+		static extern Int32 TEST00(UInt32 vid, UInt32 pid, IntPtr pcnt);
+
+		[DllImport("USBHIDHELPER32.DLL", EntryPoint = "HID_ENUM")]
+		static extern Int32 _HID_ENUM(UInt32 vid, UInt32 pid, IntPtr pcnt);
+
+		[DllImport("USBHIDHELPER32.DLL")]
+		static extern Int32 HID_OPEN(UInt32 vid, UInt32 pid, UInt32 did);
+    
+		[DllImport("USBHIDHELPER32.DLL")]
+		static extern Int32 HID_CLOSE();
+    
+		[DllImport("USBHIDHELPER32.DLL")]
+		static extern Int32 WRITE_HID(byte[] pbuf, int size);
+    
+		[DllImport("USBHIDHELPER32.DLL")]
+		static extern Int32 READ_HID(byte[] pbuf, int size);
 #endif
 	    /**/
 	    public const int CMD_GET_ECHOBAC				= 0x01;
@@ -173,6 +191,55 @@ namespace uSCOPE
 			//}
 			//m_bPresetDone = true;
 	    }
+#if true//2019.02.27(ＡＦ２実装)
+	    static public void RESET_FCS_SPD()
+		{
+			int		HSPD, LSPD, JSPD;
+			int		i = 2;
+
+		    if (true) {
+			    HSPD = G.SS.PLM_HSPD[i];
+				LSPD = G.SS.PLM_LSPD[i];
+				JSPD = G.SS.PLM_JSPD[i];
+			    if (!CMDOUT(CMD_SET_PLM_PRM, /*AXIS=*/i, /*HISPD*/0, B2(HSPD), B1(HSPD), null)) {
+				    return;
+			    }
+			    if (!CMDOUT(CMD_SET_PLM_PRM, /*AXIS=*/i, /*LOSPD*/1, B2(LSPD), B1(LSPD), null)) {
+				    return;
+			    }
+			    if (!CMDOUT(CMD_SET_PLM_PRM, /*AXIS=*/i, /*JGSPD*/2, B2(JSPD), B1(JSPD), null)) {
+				    return;
+			    }
+		    }
+			//再計算
+			if (!CMDOUT(CMD_SET_PLM_PRM, -1, 0, 0, 0, null)) {
+				return;
+			}
+		}
+	    static public void SET_FCS_SPD(int spd)
+		{
+		    int		HSPD, LSPD, JSPD;
+			int		i = 2;
+		    if (true) {
+			    HSPD = spd;
+				LSPD = 1;
+				JSPD = (HSPD+LSPD)/2;
+			    if (!CMDOUT(CMD_SET_PLM_PRM, /*AXIS=*/i, /*HISPD*/0, B2(HSPD), B1(HSPD), null)) {
+				    return;
+			    }
+			    if (!CMDOUT(CMD_SET_PLM_PRM, /*AXIS=*/i, /*LOSPD*/1, B2(LSPD), B1(LSPD), null)) {
+				    return;
+			    }
+			    if (!CMDOUT(CMD_SET_PLM_PRM, /*AXIS=*/i, /*JGSPD*/2, B2(JSPD), B1(JSPD), null)) {
+				    return;
+			    }
+		    }
+			//再計算
+			if (!CMDOUT(CMD_SET_PLM_PRM, -1, 0, 0, 0, null)) {
+				return;
+			}
+	    }
+#endif
 		static private int HID_ENUM(uint vid, uint pid, out int pcnt)
 		{
 #if true

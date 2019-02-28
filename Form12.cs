@@ -26,6 +26,16 @@ namespace uSCOPE
 			public double s, l;
 			public double c, p;
 			public double contrast;
+#if true//2019.02.27(ＡＦ２実装)
+			public bool		AF2;
+			public int		imax;
+			public double	cmax;
+			public double	c2nd;
+			public double	cbak;
+			public int		zmax;
+			public List<int>	l_zpos;
+			public List<double>	l_cont;
+#endif
 		};
 		private ArrayList m_fdat = new ArrayList();
 		private int[] m_pos = null;
@@ -48,6 +58,9 @@ namespace uSCOPE
 		private int	m_tic;
 		private int	m_icam;
 		private int FCS_STS;
+#if true//2019.02.27(ＡＦ２実装)
+		private int FC2_STS;
+#endif
 		public  int AUT_STS;
 		private int CAL_STS;
 #if true//2019.01.19(GAIN調整)
@@ -71,6 +84,9 @@ namespace uSCOPE
 			this.tabControl4.TabPages.Remove(this.tabPage2);//2値化
 			this.tabControl4.TabPages.Remove(this.tabPage8);//CUTI.1
 			this.tabControl4.TabPages.Remove(this.tabPage3);//CUTI.2
+#if true//2019.02.27(ＡＦ２実装)
+			this.tabControl4.TabPages.Remove(this.tabPage11);//ＡＦ２
+#endif
 			//---[メイン]
 			var lc1 = this.button11.Location;//左下
 			var lc2 = this.button12.Location;//右下
@@ -348,6 +364,17 @@ this.SPE_COD = 0;
 				this.timer1.Tag = null;
 				this.timer1.Enabled = true;
 			}
+#if true//2019.02.27(ＡＦ２実装)
+			else if (sender == this.button35) {
+				//フォーカス・実行
+				G.CNT_MOD = G.SS.CAM_HIS_PAR1;
+				G.CNT_OFS = 0;
+				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
+				this.FC2_STS = 1;
+				this.timer6.Tag = null;
+				this.timer6.Enabled = true;
+			}
+#endif
 			else if (sender == this.button25) {
 				//キューティクル・実行
 				G.CAM_PRC =  G.CAM_STS.STS_CUTI;
@@ -405,6 +432,9 @@ this.SPE_COD = 0;
 #if true//2019.02.03(WB調整)
 				 || sender == this.button31
 #endif
+#if true//2019.02.27(ＡＦ２実装)
+				 || sender == this.button34
+#endif
 				) {
 				//停止
 				G.CAM_PRC = 0;
@@ -448,6 +478,11 @@ this.SPE_COD = 0;
 			if (this.FCS_STS != 0 && G.CAM_PRC != G.CAM_STS.STS_FCUS) {
 				this.FCS_STS = 0;
 			}
+#if true//2019.02.27(ＡＦ２実装)
+			if (this.FC2_STS != 0 && G.CAM_PRC != G.CAM_STS.STS_FCUS) {
+				this.FC2_STS = 0;
+			}
+#endif
 #if true//2019.01.23(GAIN調整&自動測定)
 			if (this.GAI_STS != 0 && G.CAM_PRC != G.CAM_STS.STS_HIST) {
 				this.GAI_STS = 0;
@@ -536,6 +571,16 @@ this.SPE_COD = 0;
 				//DDV.DDX(bUpdate, this.checkBox7, ref G.SS.CAM_FCS_CHK1);
 				DDV.DDX(bUpdate, this.checkBox8, ref G.SS.CAM_FCS_CHK2);
 				DDV.DDX(bUpdate, this.checkBox7, ref G.SS.CAM_FCS_USSD);
+#if true//2019.02.27(ＡＦ２実装)
+				DDV.DDX(bUpdate, this.numericUpDown50, ref G.SS.CAM_FC2_LMIN);
+				DDV.DDX(bUpdate, this.numericUpDown51, ref G.SS.CAM_FC2_LMAX);
+				DDV.DDX(bUpdate, this.numericUpDown52, ref G.SS.CAM_FC2_FSPD);
+				DDV.DDX(bUpdate, this.numericUpDown53, ref G.SS.CAM_FC2_DPLS);
+				DDV.DDX(bUpdate, this.numericUpDown54, ref G.SS.CAM_FC2_SKIP);
+				DDV.DDX(bUpdate, this.numericUpDown55, ref G.SS.CAM_FC2_FAVG);
+				DDV.DDX(bUpdate, this.numericUpDown48, ref G.SS.CAM_FC2_DROP);
+				DDV.DDX(bUpdate, this.checkBox16, ref G.SS.CAM_FC2_CHK1);
+#endif
 				//---
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton10, this.radioButton9 }, ref G.SS.TST_PAR_GAUS);
 				DDV.DDX(bUpdate, this.numericUpDown28, ref G.SS.TST_PAR_VAL1);//半径1(カーネルサイズ)
@@ -604,6 +649,10 @@ this.SPE_COD = 0;
 				this.button8.Enabled = false;
 				this.button9.Enabled = false;//af.exec
 				this.button10.Enabled = false;
+#if true//2019.02.27(ＡＦ２実装)
+				this.button35.Enabled = false;
+				this.button34.Enabled = false;
+#endif
 				this.button11.Enabled = false;//auto.mes
 				this.button26.Enabled = false;
 				this.button27.Enabled = false;
@@ -652,6 +701,24 @@ this.SPE_COD = 0;
 					this.button7.Enabled = false;
 					this.button8.Enabled = true;
 				}
+#if true//2019.02.27(ＡＦ２実装)
+				if (this.FC2_STS == 0) {
+					this.button35.Enabled = true;
+					this.button34.Enabled = false;
+				}
+				else {
+					this.button35.Enabled = false;
+					this.button34.Enabled = true;
+				}
+				if (this.FCS_STS == 0) {
+					this.button9.Enabled = true;
+					this.button10.Enabled = false;
+				}
+				else {
+					this.button9.Enabled = false;
+					this.button10.Enabled = true;
+				}
+#else
 				if (G.CAM_PRC !=  G.CAM_STS.STS_FCUS) {
 					this.button9.Enabled = true;
 					this.button10.Enabled = false;
@@ -660,6 +727,7 @@ this.SPE_COD = 0;
 					this.button9.Enabled = false;
 					this.button10.Enabled = true;
 				}
+#endif
 #if true//2019.01.19(GAIN調整)
 				if (G.CHK_VPK != 1) {
 					this.button30.Enabled = true;
@@ -1026,7 +1094,16 @@ this.SPE_COD = 0;
 #if true//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
 				buf += string.Format(",{0}", DN(G.PLM_POS[0], 5));
 				buf += string.Format(",{0}", DN(G.PLM_POS[1], 5));
+#if true//2019.02.27(ＡＦ２実装)
+				if (dat.AF2) {
+				buf += string.Format(",{0}", DN(dat.pos     , 4));
+				}
+				else {
+#endif
 				buf += string.Format(",{0}", DN(G.PLM_POS[2], 4));
+#if true//2019.02.27(ＡＦ２実装)
+				}
+#endif
 #endif
 				buf += string.Format(",{0}", dat.pos);
 				buf += string.Format(",{0:F0}", dat.s);
@@ -1359,7 +1436,7 @@ this.SPE_COD = 0;
 					m_dat.c /= G.SS.CAM_FCS_FAVG;
 					m_dat.p /= G.SS.CAM_FCS_FAVG;
 					m_dat.contrast /= G.SS.CAM_FCS_FAVG;
-#if DEBUG//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
+#if false//2019.02.23(自動測定中の(不要な)MSGBOX表示のBTN押下で測定で終了してしまう現象)
 					if (this.timer1.Tag == null/*カメラTABより*/) {
 						if (m_dat.pos == 57 || m_dat.pos == 58) {
 							m_dat.pos = m_dat.pos;
@@ -5073,6 +5150,333 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 		private void checkBox14_CheckedChanged(object sender, EventArgs e)
 		{
 			this.numericUpDown47.Enabled = this.checkBox14.Checked;
+		}
+#endif
+#if true//2019.02.27(ＡＦ２実装)
+		private void get_max_2nd(List<double>cont,/* List<int>zpos,*/ out int imax, out double cmax, out double c2nd)
+		{
+			imax = 0;
+			cmax = cont[0];
+
+			for (int i = 1; i < cont.Count; i++) {
+				if (cmax < cont[i]) {
+					cmax = cont[i];
+					imax = i;
+				}
+			}
+
+			//m_dat.imax = imax;
+			//m_dat.cmax = cmax;
+			//m_dat.zmax = zpos[imax];
+			if (imax >= cont.Count-1) {//右端
+    			c2nd = cont[imax-1];
+			}
+			else if (imax == 0) {//左端
+    			c2nd = cont[imax+1];
+			}
+			else if (cont[imax-1] > cont[imax+1]) {
+				c2nd = cont[imax-1];
+			}
+			else {
+				c2nd = cont[imax+1];
+			}
+			return;
+		}
+		private void timer6_Tick(object sender, EventArgs e)
+		{
+			int NXT_STS = this.FC2_STS+1;
+			//double fmax;
+			//int imax;
+
+			this.timer6.Enabled = false;
+
+			switch (this.FC2_STS) {
+			case 0:
+				break;
+			case 1:
+				if (true/*CONTRAST*/ && G.CNT_MOD >= 2/*毛髪矩形 or 毛髪範囲*/) {
+					/*画像全体
+					矩形範囲
+					毛髪矩形+0%
+					毛髪矩形+25%
+					毛髪矩形+50%
+					毛髪矩形+100%
+					毛髪範囲10%
+					毛髪範囲25%
+					毛髪範囲50%
+					毛髪範囲75%
+					毛髪範囲100%
+					毛髪範囲100%
+					毛髪範囲10% (横1/3)
+					毛髪範囲10% (横1/4)
+					毛髪範囲10% (横1/5)
+					 */
+					G.CAM_PRC = G.CAM_STS.STS_HIST;
+				}
+				else {
+					NXT_STS = 11;
+				}
+				break;
+			case 2:
+				m_dcur = m_didx;
+				break;
+			case 3:
+				if ((m_didx - m_dcur) < G.SS.CAM_FC2_SKIP) {
+					NXT_STS = this.FC2_STS;
+				}
+				else if (G.IR.CIR_CNT <= 0) {
+					this.FC2_STS = 0;
+					timer6.Enabled = false;
+					if (this.timer6.Tag == null) {
+						//カメラTABより
+						G.mlog("#e毛髪が検出できませんした.");
+					}
+				}
+				else {
+					G.CAM_PRC = G.CAM_STS.STS_FCUS;
+					NXT_STS = 11;
+				}
+			break;
+			case 10:
+				break;
+			case 11://大ステップによる探索範囲
+				m_tic1 = Environment.TickCount;
+				if (G.SS.CAM_FC2_CHK1) {
+					DateTime dt = DateTime.Now;
+					m_path = T.GetDocFolder();
+					m_path += "\\";
+					m_path += "AF\\";
+					if (System.IO.Directory.Exists(m_path) == false) {
+						System.IO.Directory.CreateDirectory(m_path);
+					}
+					m_path += string.Format("{0:0000}{1:00}{2:00}-{3:00}{4:00}{5:00}",
+							dt.Year, dt.Month, dt.Day,
+							dt.Hour, dt.Minute, dt.Second);
+					m_path += string.Format("(X,Y,Z={0},{1},{2})", G.PLM_POS[0], G.PLM_POS[1], G.PLM_POS[2]);
+					m_path += ".csv";
+					f_write(m_path);
+				}
+
+				if (this.timer6.Tag == null) {
+					//カメラTABより
+					m_pmin = G.SS.CAM_FC2_LMIN;
+					m_pmax = G.SS.CAM_FC2_LMAX;
+				}
+				//else if ((int)this.timer6.Tag == 1) {
+				//    int tmp = G.PLM_POS[2] - G.SS.PLM_OFFS[2];
+				//    m_pmin = tmp - G.SS.PLM_AUT_HANI;
+				//    m_pmax = tmp + G.SS.PLM_AUT_HANI;
+				//}
+				//else if ((int)this.timer6.Tag == 2) {
+				//    int tmp = G.PLM_POS[2] - G.SS.PLM_OFFS[2];
+				//    m_pmin = tmp - G.SS.PLM_AUT_2HAN;
+				//    m_pmax = tmp + G.SS.PLM_AUT_2HAN;
+				//}
+				else {
+					m_pmin = G.SS.PLM_AUT_HPMN;
+					m_pmax = G.SS.PLM_AUT_HPMX;
+				}
+				m_pmin -= G.SS.CAM_FC2_DPLS;
+				m_pmax += G.SS.CAM_FC2_DPLS;
+#if true//2018.05.22(バックラッシュ方向反転対応)
+				if (G.SS.PLM_BSLA[2] < 0) {
+					if (m_pmin < m_pmax) {
+						int tmp = m_pmin;
+						m_pmin = m_pmax;
+						m_pmax = tmp;
+					}
+				}
+#endif
+				break;
+			case 12:
+				//f軸-> min
+				MOVE_ABS_Z(m_pmin);
+				NXT_STS = -this.FC2_STS;
+				break;
+			case 13:
+				D.SET_FCS_SPD(G.SS.CAM_FC2_FSPD);
+				break;
+			case 14:
+			case 20:
+				m_fcnt = 0;
+				m_contrast = 0;
+				m_dcur = m_didx;
+				break;
+			case 15:
+			case 21:
+				if ((m_didx - m_dcur) < G.SS.CAM_FC2_SKIP) {
+					NXT_STS = this.FC2_STS;
+				}
+				else {
+					m_fcnt++;
+				}
+			break;
+			case 16:
+				G.IR.FC2_POS = new List<int>();
+				G.IR.FC2_CTR = new List<double>();
+				G.FC2_FLG = true;
+				m_dat.dt = DateTime.Now;
+				MOVE_ABS_Z(m_pmax);
+			break;
+			case 17:
+				//f軸停止待ち
+				if ((G.PLM_STS & (1 << 2)) != 0) {
+					NXT_STS = this.FC2_STS;
+				}
+				else {
+					D.RESET_FCS_SPD();
+					G.FC2_FLG = false;
+				}
+			break;
+			case 18:
+				m_dat.s = double.NaN;
+				m_dat.l = double.NaN;
+				m_dat.c = double.NaN;
+				m_dat.p = double.NaN;
+				m_dat.AF2 = true;
+				if (G.IR.FC2_POS.Count <= 3 || G.IR.FC2_CTR.Count != G.IR.FC2_POS.Count) {
+					G.mlog("探索スピードが速すぎるか探索範囲が狭すぎます.");
+					this.FC2_STS = 0;
+					break;
+				}
+				if (true) {
+					//全データを保存する
+					DateTime sta = m_dat.dt;
+					TimeSpan ela = (DateTime.Now-m_dat.dt);
+					double itv = ela.Seconds/(G.IR.FC2_CTR.Count-1);
+					for (int i = 0; i < G.IR.FC2_CTR.Count; i++) {
+						m_dat.dt       = sta.AddSeconds((int)(itv*i));
+						m_dat.pos      = G.IR.FC2_POS[i];
+						m_dat.contrast = G.IR.FC2_CTR[i];
+						if (G.SS.CAM_FC2_CHK1) {
+							f_write(m_path, m_dat);
+						}
+					}
+					if (G.SS.CAM_FC2_CHK1) {
+						f_write(m_path, "***精密探索***");
+					}
+				}
+				break;
+			case 19:
+				if (true) {
+					List<int> zpos = new List<int>();
+					List<double>cont = new List<double>();
+					zpos.Add(G.IR.FC2_POS[0]);
+					cont.Add(G.IR.FC2_CTR[0]);
+					for (int i = 1; i < G.IR.FC2_CTR.Count; i++) {
+						if (G.IR.FC2_POS[i] == zpos[zpos.Count-1]) {
+							if (G.IR.FC2_CTR[i] > cont[cont.Count-1]) {
+								//同一のZPOSでコントスラトが高ければ書き換え
+								cont.RemoveAt(cont.Count-1);
+								cont.Add(G.IR.FC2_CTR[i]);
+							}
+							else {
+								//当該データはスキップ
+							}
+						}
+						else {
+							zpos.Add(G.IR.FC2_POS[i]);
+							cont.Add(G.IR.FC2_CTR[i]);
+						}
+					}
+					//---
+					get_max_2nd(cont, out m_dat.imax, out m_dat.cmax, out m_dat.c2nd);
+					m_dat.zmax = zpos[m_dat.imax];
+					m_dat.l_cont = new List<double>();
+					m_dat.l_zpos = new List<int>();
+					m_dat.cbak = 0;
+				}
+                MOVE_ABS_Z(m_dat.zmax-G.SS.CAM_FC2_DPLS);
+				NXT_STS = -this.FC2_STS;
+				break;
+			case 22:
+				m_contrast += G.IR.CONTRAST;
+				if (m_fcnt < G.SS.CAM_FC2_FAVG) {
+					m_dcur++;
+					NXT_STS = 21;
+				}
+				else {
+					m_contrast /= m_fcnt;
+				}
+				break;
+			case 23:
+				if (true) {
+					m_dat.l_cont.Add(m_contrast);
+					m_dat.l_zpos.Add(G.PLM_POS[2]);
+				}
+				if (G.SS.CAM_FC2_CHK1) {
+					m_dat.dt       = DateTime.Now;
+					m_dat.pos      = G.PLM_POS[2];
+					m_dat.contrast = m_contrast;
+					f_write(m_path, m_dat);
+				}
+				if (m_contrast >= (m_dat.cmax+m_dat.c2nd)/2) {
+					//検索終了(最大と次点の中間値以上の検知で終了とする)
+					m_dat.cmax = m_contrast;
+				}
+				else if ((m_dat.cbak - m_contrast) >= G.SS.CAM_FC2_DROP) {
+					//精密探索をやり直し
+					int imax, zpos;
+					get_max_2nd(m_dat.l_cont, out imax, out m_dat.cmax, out m_dat.c2nd);
+					zpos = m_dat.l_zpos[imax];
+					m_dat.l_cont.Clear();
+					m_dat.l_zpos.Clear();
+					m_contrast = 0;
+					MOVE_ABS_Z(zpos);
+					NXT_STS = -(20 - 1);//->20
+					if (G.SS.CAM_FC2_CHK1) {
+						f_write(m_path, "***コントラストドロップ検知***");
+					}
+				}
+				else {
+					//1PLS進める
+					MOVE_REL_Z(1);
+					NXT_STS = -(20 - 1);//->20
+				}
+				m_dat.cbak = m_contrast;
+				break;
+			case 24:
+				if (true) {
+					G.CAM_PRC = G.CAM_STS.STS_NONE;
+					this.FC2_STS = 0;
+				}
+				f_write(m_path, string.Format(",,,MAXPOS,{0},,,,CONTRAST,{1}", G.PLM_POS[2], m_dat.cmax));
+				if (this.timer6.Tag == null) {
+					for (int i = 0; i < 1; i++) {
+						Console.Beep(1600, 250);
+						Thread.Sleep(250);
+					}
+				}
+				UPDSTS();
+				break;
+			default:
+				//f軸停止待ち
+				if ((G.PLM_STS & (1 << 2)) == 0) {
+					if (m_bsla[2] != 0) {
+						Thread.Sleep(1000/G.SS.PLM_LSPD[2]);//2018.05.21
+						//バックラッシュ対応
+						MOVE_REL_Z(m_bsla[2]);
+						m_bsla[2] = 0;
+						NXT_STS = this.FC2_STS;
+					}
+					else {
+						NXT_STS = (-this.FC2_STS) + 1;
+					}
+				}
+				else {
+					NXT_STS = this.FC2_STS;
+				}
+				break;
+			}
+			//---
+			if (this.FC2_STS != 0) {
+				this.FC2_STS = NXT_STS;
+				this.timer6.Enabled = true;
+			}
+			else {
+				D.RESET_FCS_SPD();
+				NXT_STS = NXT_STS;//for break.point
+			}
 		}
 #endif
 	}

@@ -2164,6 +2164,11 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OnImageGrabbed()::WxH" + m_width
 							//this.BeginInvoke(new DLG_VOID_BOOL(this.disp_bmp), new object[] {true});
 						}
 						else {
+#if true//2019.02.27(ＡＦ２実装)
+							if (G.FC2_FLG) {
+								G.IR.FC2_TMP = G.PLM_POS[2];
+							}
+#endif
 							post_proc();
 						}
 						disp_bmp(true);
@@ -4185,6 +4190,12 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 					//}
 					G.IR.CONTRAST = (G.IR.HIST_MAX - G.IR.HIST_MIN) / (G.IR.HIST_MAX + G.IR.HIST_MIN);
 				}
+#if true//2019.02.27(ＡＦ２実装)
+				if (G.FC2_FLG && G.IR.FC2_POS != null) {
+					G.IR.FC2_POS.Add(G.IR.FC2_TMP);
+					G.IR.FC2_CTR.Add(G.IR.CONTRAST);
+				}
+#endif
 				//---
 				//---
 				string buf = "";

@@ -188,6 +188,22 @@
 			this.button9 = new System.Windows.Forms.Button();
 			this.checkBox7 = new System.Windows.Forms.CheckBox();
 			this.checkBox8 = new System.Windows.Forms.CheckBox();
+			this.tabPage11 = new System.Windows.Forms.TabPage();
+			this.numericUpDown51 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown50 = new System.Windows.Forms.NumericUpDown();
+			this.label78 = new System.Windows.Forms.Label();
+			this.label79 = new System.Windows.Forms.Label();
+			this.label81 = new System.Windows.Forms.Label();
+			this.label82 = new System.Windows.Forms.Label();
+			this.label83 = new System.Windows.Forms.Label();
+			this.numericUpDown53 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown52 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown48 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown55 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown54 = new System.Windows.Forms.NumericUpDown();
+			this.button34 = new System.Windows.Forms.Button();
+			this.button35 = new System.Windows.Forms.Button();
+			this.checkBox16 = new System.Windows.Forms.CheckBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.button20 = new System.Windows.Forms.Button();
 			this.button21 = new System.Windows.Forms.Button();
@@ -269,6 +285,8 @@
 			this.timer3 = new System.Windows.Forms.Timer(this.components);
 			this.timer4 = new System.Windows.Forms.Timer(this.components);
 			this.timer5 = new System.Windows.Forms.Timer(this.components);
+			this.timer6 = new System.Windows.Forms.Timer(this.components);
+			this.label80 = new System.Windows.Forms.Label();
 			this.tabControl4.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel9.SuspendLayout();
@@ -311,6 +329,14 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown14)).BeginInit();
+			this.tabPage11.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown50)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown53)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown52)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown48)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).BeginInit();
 			this.tabPage2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown25)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown23)).BeginInit();
@@ -347,6 +373,7 @@
 			this.tabControl4.Controls.Add(this.tabPage10);
 			this.tabControl4.Controls.Add(this.tabPage5);
 			this.tabControl4.Controls.Add(this.tabPage6);
+			this.tabControl4.Controls.Add(this.tabPage11);
 			this.tabControl4.Controls.Add(this.tabPage2);
 			this.tabControl4.Controls.Add(this.tabPage8);
 			this.tabControl4.Controls.Add(this.tabPage3);
@@ -2550,6 +2577,285 @@
 			this.checkBox8.UseVisualStyleBackColor = true;
 			this.checkBox8.CheckedChanged += new System.EventHandler(this.OnControlStateChanged);
 			// 
+			// tabPage11
+			// 
+			this.tabPage11.BackColor = System.Drawing.Color.SteelBlue;
+			this.tabPage11.Controls.Add(this.numericUpDown51);
+			this.tabPage11.Controls.Add(this.numericUpDown50);
+			this.tabPage11.Controls.Add(this.label78);
+			this.tabPage11.Controls.Add(this.label80);
+			this.tabPage11.Controls.Add(this.label79);
+			this.tabPage11.Controls.Add(this.label81);
+			this.tabPage11.Controls.Add(this.label82);
+			this.tabPage11.Controls.Add(this.label83);
+			this.tabPage11.Controls.Add(this.numericUpDown53);
+			this.tabPage11.Controls.Add(this.numericUpDown52);
+			this.tabPage11.Controls.Add(this.numericUpDown48);
+			this.tabPage11.Controls.Add(this.numericUpDown55);
+			this.tabPage11.Controls.Add(this.numericUpDown54);
+			this.tabPage11.Controls.Add(this.button34);
+			this.tabPage11.Controls.Add(this.button35);
+			this.tabPage11.Controls.Add(this.checkBox16);
+			this.tabPage11.Location = new System.Drawing.Point(4, 22);
+			this.tabPage11.Name = "tabPage11";
+			this.tabPage11.Size = new System.Drawing.Size(277, 155);
+			this.tabPage11.TabIndex = 10;
+			this.tabPage11.Text = "AF2";
+			// 
+			// numericUpDown51
+			// 
+			this.numericUpDown51.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.numericUpDown51.Location = new System.Drawing.Point(218, 10);
+			this.numericUpDown51.Maximum = new decimal(new int[] {
+            1259712,
+            0,
+            0,
+            0});
+			this.numericUpDown51.Minimum = new decimal(new int[] {
+            1259712,
+            0,
+            0,
+            -2147483648});
+			this.numericUpDown51.Name = "numericUpDown51";
+			this.numericUpDown51.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown51.TabIndex = 24;
+			this.numericUpDown51.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown51.Value = new decimal(new int[] {
+            8500,
+            0,
+            0,
+            0});
+			// 
+			// numericUpDown50
+			// 
+			this.numericUpDown50.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.numericUpDown50.Location = new System.Drawing.Point(158, 10);
+			this.numericUpDown50.Maximum = new decimal(new int[] {
+            1259712,
+            0,
+            0,
+            0});
+			this.numericUpDown50.Minimum = new decimal(new int[] {
+            1259712,
+            0,
+            0,
+            -2147483648});
+			this.numericUpDown50.Name = "numericUpDown50";
+			this.numericUpDown50.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown50.TabIndex = 23;
+			this.numericUpDown50.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown50.Value = new decimal(new int[] {
+            2800,
+            0,
+            0,
+            -2147483648});
+			// 
+			// label78
+			// 
+			this.label78.AutoSize = true;
+			this.label78.Location = new System.Drawing.Point(220, 43);
+			this.label78.Name = "label78";
+			this.label78.Size = new System.Drawing.Size(41, 12);
+			this.label78.TabIndex = 40;
+			this.label78.Text = "平均化";
+			// 
+			// label79
+			// 
+			this.label79.AutoSize = true;
+			this.label79.Location = new System.Drawing.Point(159, 43);
+			this.label79.Name = "label79";
+			this.label79.Size = new System.Drawing.Size(49, 12);
+			this.label79.TabIndex = 39;
+			this.label79.Text = "読み捨て";
+			// 
+			// label81
+			// 
+			this.label81.AutoSize = true;
+			this.label81.Location = new System.Drawing.Point(96, 14);
+			this.label81.Name = "label81";
+			this.label81.Size = new System.Drawing.Size(53, 12);
+			this.label81.TabIndex = 37;
+			this.label81.Text = "探索範囲";
+			// 
+			// label82
+			// 
+			this.label82.AutoSize = true;
+			this.label82.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label82.Location = new System.Drawing.Point(68, 31);
+			this.label82.Name = "label82";
+			this.label82.Size = new System.Drawing.Size(69, 24);
+			this.label82.TabIndex = 36;
+			this.label82.Text = "遅れ\r\nパルス数[pls]";
+			// 
+			// label83
+			// 
+			this.label83.AutoSize = true;
+			this.label83.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label83.Location = new System.Drawing.Point(3, 31);
+			this.label83.Name = "label83";
+			this.label83.Size = new System.Drawing.Size(68, 24);
+			this.label83.TabIndex = 36;
+			this.label83.Text = "探索\r\nスピード[pps]";
+			// 
+			// numericUpDown53
+			// 
+			this.numericUpDown53.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.numericUpDown53.Location = new System.Drawing.Point(70, 58);
+			this.numericUpDown53.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+			this.numericUpDown53.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown53.Name = "numericUpDown53";
+			this.numericUpDown53.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown53.TabIndex = 26;
+			this.numericUpDown53.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown53.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			// 
+			// numericUpDown52
+			// 
+			this.numericUpDown52.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.numericUpDown52.Location = new System.Drawing.Point(6, 58);
+			this.numericUpDown52.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.numericUpDown52.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown52.Name = "numericUpDown52";
+			this.numericUpDown52.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown52.TabIndex = 25;
+			this.numericUpDown52.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown52.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+			// 
+			// numericUpDown48
+			// 
+			this.numericUpDown48.DecimalPlaces = 2;
+			this.numericUpDown48.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+			this.numericUpDown48.Location = new System.Drawing.Point(218, 98);
+			this.numericUpDown48.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown48.Name = "numericUpDown48";
+			this.numericUpDown48.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown48.TabIndex = 29;
+			this.numericUpDown48.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown48.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// numericUpDown55
+			// 
+			this.numericUpDown55.Location = new System.Drawing.Point(218, 58);
+			this.numericUpDown55.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.numericUpDown55.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown55.Name = "numericUpDown55";
+			this.numericUpDown55.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown55.TabIndex = 29;
+			this.numericUpDown55.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown55.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// numericUpDown54
+			// 
+			this.numericUpDown54.Location = new System.Drawing.Point(158, 58);
+			this.numericUpDown54.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+			this.numericUpDown54.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown54.Name = "numericUpDown54";
+			this.numericUpDown54.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown54.TabIndex = 28;
+			this.numericUpDown54.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown54.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// button34
+			// 
+			this.button34.Location = new System.Drawing.Point(3, 126);
+			this.button34.Name = "button34";
+			this.button34.Size = new System.Drawing.Size(47, 26);
+			this.button34.TabIndex = 35;
+			this.button34.Tag = "1";
+			this.button34.Text = "停止";
+			this.button34.UseVisualStyleBackColor = true;
+			this.button34.Click += new System.EventHandler(this.OnClicks);
+			// 
+			// button35
+			// 
+			this.button35.Location = new System.Drawing.Point(3, 98);
+			this.button35.Name = "button35";
+			this.button35.Size = new System.Drawing.Size(47, 26);
+			this.button35.TabIndex = 34;
+			this.button35.Tag = "0";
+			this.button35.Text = "実行";
+			this.button35.UseVisualStyleBackColor = true;
+			this.button35.Click += new System.EventHandler(this.OnClicks);
+			// 
+			// checkBox16
+			// 
+			this.checkBox16.AutoSize = true;
+			this.checkBox16.Location = new System.Drawing.Point(196, 135);
+			this.checkBox16.Name = "checkBox16";
+			this.checkBox16.Size = new System.Drawing.Size(86, 16);
+			this.checkBox16.TabIndex = 33;
+			this.checkBox16.Text = "データの保存";
+			this.checkBox16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox16.UseVisualStyleBackColor = true;
+			// 
 			// tabPage2
 			// 
 			this.tabPage2.BackColor = System.Drawing.Color.SteelBlue;
@@ -3641,6 +3947,19 @@
 			this.timer5.Interval = 1;
 			this.timer5.Tick += new System.EventHandler(this.timer5_Tick);
 			// 
+			// timer6
+			// 
+			this.timer6.Interval = 1;
+			this.timer6.Tick += new System.EventHandler(this.timer6_Tick);
+			// 
+			// label80
+			// 
+			this.label80.Location = new System.Drawing.Point(142, 97);
+			this.label80.Name = "label80";
+			this.label80.Size = new System.Drawing.Size(74, 26);
+			this.label80.TabIndex = 39;
+			this.label80.Text = "コントラストドロップ検出閾値";
+			// 
 			// Form12
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -3701,6 +4020,15 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown14)).EndInit();
+			this.tabPage11.ResumeLayout(false);
+			this.tabPage11.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown50)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown53)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown52)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown48)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).EndInit();
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown25)).EndInit();
@@ -3975,5 +4303,23 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown47;
 		private System.Windows.Forms.Panel panel14;
 		private System.Windows.Forms.Panel panel13;
+		private System.Windows.Forms.TabPage tabPage11;
+		private System.Windows.Forms.NumericUpDown numericUpDown51;
+		private System.Windows.Forms.NumericUpDown numericUpDown50;
+		private System.Windows.Forms.Label label78;
+		private System.Windows.Forms.Label label79;
+		private System.Windows.Forms.Label label81;
+		private System.Windows.Forms.Label label83;
+		private System.Windows.Forms.NumericUpDown numericUpDown53;
+		private System.Windows.Forms.NumericUpDown numericUpDown52;
+		private System.Windows.Forms.NumericUpDown numericUpDown55;
+		private System.Windows.Forms.NumericUpDown numericUpDown54;
+		private System.Windows.Forms.Button button34;
+		private System.Windows.Forms.Button button35;
+		private System.Windows.Forms.CheckBox checkBox16;
+		private System.Windows.Forms.Label label82;
+		private System.Windows.Forms.Timer timer6;
+		private System.Windows.Forms.NumericUpDown numericUpDown48;
+		private System.Windows.Forms.Label label80;
     }
 }

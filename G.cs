@@ -207,6 +207,17 @@ namespace uSCOPE
 			public int CAM_FCS_SKIP = 1;
 			public int CAM_FCS_FAVG = 1;
 			public bool CAM_FCS_USSD = false;
+#if true//2019.02.27(ＡＦ２実装)
+			//---
+			public int CAM_FC2_LMIN = -50;
+			public int CAM_FC2_LMAX = +50;
+			public int CAM_FC2_FSPD =   3;
+			public int CAM_FC2_DPLS =   5;
+			public int CAM_FC2_SKIP =   4;
+			public int CAM_FC2_FAVG =   1;
+			public double CAM_FC2_DROP = 0.13;
+			public bool CAM_FC2_CHK1 = false;
+#endif
 			//---
 #if true//2019.01.19(GAIN調整)
 			//---
@@ -939,6 +950,11 @@ namespace uSCOPE
 			//---
 			public int WIDTH;
 			public int HEIGHT;
+#if true//2019.02.27(ＡＦ２実装)
+			public int		FC2_TMP;
+			public List<int> FC2_POS = null;
+			public List<double> FC2_CTR = null;
+#endif
 			//---
 			public Object Clone()
 			{
@@ -1049,6 +1065,9 @@ namespace uSCOPE
 		static public int CNT_MOD;
 #if true//2019.02.03(WB調整)
 		static public int CNT_OFS;
+#endif
+#if true//2019.02.27(ＡＦ２実装)
+		static public bool FC2_FLG=false;
 #endif
 		//-----------------------
 		static public DialogResult mlog(string str)
