@@ -192,6 +192,7 @@
 			this.numericUpDown51 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown50 = new System.Windows.Forms.NumericUpDown();
 			this.label78 = new System.Windows.Forms.Label();
+			this.label80 = new System.Windows.Forms.Label();
 			this.label79 = new System.Windows.Forms.Label();
 			this.label81 = new System.Windows.Forms.Label();
 			this.label82 = new System.Windows.Forms.Label();
@@ -286,7 +287,6 @@
 			this.timer4 = new System.Windows.Forms.Timer(this.components);
 			this.timer5 = new System.Windows.Forms.Timer(this.components);
 			this.timer6 = new System.Windows.Forms.Timer(this.components);
-			this.label80 = new System.Windows.Forms.Label();
 			this.tabControl4.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel9.SuspendLayout();
@@ -2667,6 +2667,14 @@
 			this.label78.TabIndex = 40;
 			this.label78.Text = "平均化";
 			// 
+			// label80
+			// 
+			this.label80.Location = new System.Drawing.Point(142, 97);
+			this.label80.Name = "label80";
+			this.label80.Size = new System.Drawing.Size(74, 26);
+			this.label80.TabIndex = 39;
+			this.label80.Text = "コントラストドロップ検出閾値";
+			// 
 			// label79
 			// 
 			this.label79.AutoSize = true;
@@ -2709,11 +2717,6 @@
 			// 
 			this.numericUpDown53.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.numericUpDown53.Location = new System.Drawing.Point(70, 58);
-			this.numericUpDown53.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
 			this.numericUpDown53.Minimum = new decimal(new int[] {
             1,
             0,
@@ -2734,7 +2737,7 @@
 			this.numericUpDown52.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.numericUpDown52.Location = new System.Drawing.Point(6, 58);
 			this.numericUpDown52.Maximum = new decimal(new int[] {
-            10,
+            1000,
             0,
             0,
             0});
@@ -3951,14 +3954,6 @@
 			// 
 			this.timer6.Interval = 1;
 			this.timer6.Tick += new System.EventHandler(this.timer6_Tick);
-			// 
-			// label80
-			// 
-			this.label80.Location = new System.Drawing.Point(142, 97);
-			this.label80.Name = "label80";
-			this.label80.Size = new System.Drawing.Size(74, 26);
-			this.label80.TabIndex = 39;
-			this.label80.Text = "コントラストドロップ検出閾値";
 			// 
 			// Form12
 			// 

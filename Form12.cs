@@ -31,8 +31,9 @@ namespace uSCOPE
 			public int		imax;
 			public double	cmax;
 			public double	c2nd;
-			public double	cbak;
+			public double	cthr;
 			public int		zmax;
+			public bool		drop;
 			public List<int>	l_zpos;
 			public List<double>	l_cont;
 #endif
@@ -5384,7 +5385,8 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					m_dat.zmax = zpos[m_dat.imax];
 					m_dat.l_cont = new List<double>();
 					m_dat.l_zpos = new List<int>();
-					m_dat.cbak = 0;
+					m_dat.drop = false;
+					m_dat.cmax = 0;
 				}
                 MOVE_ABS_Z(m_dat.zmax-G.SS.CAM_FC2_DPLS);
 				NXT_STS = -this.FC2_STS;
@@ -5410,17 +5412,25 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					m_dat.contrast = m_contrast;
 					f_write(m_path, m_dat);
 				}
-				if (m_contrast >= (m_dat.cmax+m_dat.c2nd)/2) {
+				break;
+			case 24:
+				if (m_dat.cmax < m_contrast) {
+					m_dat.cmax = m_contrast;
+				}
+				if (m_dat.drop == true && m_contrast >= m_dat.cthr) {
 					//検索終了(最大と次点の中間値以上の検知で終了とする)
 					m_dat.cmax = m_contrast;
 				}
-				else if ((m_dat.cbak - m_contrast) >= G.SS.CAM_FC2_DROP) {
+				else if ((m_dat.cmax - m_contrast) >= G.SS.CAM_FC2_DROP) {
 					//精密探索をやり直し
 					int imax, zpos;
 					get_max_2nd(m_dat.l_cont, out imax, out m_dat.cmax, out m_dat.c2nd);
 					zpos = m_dat.l_zpos[imax];
 					m_dat.l_cont.Clear();
 					m_dat.l_zpos.Clear();
+					m_dat.cthr = (m_dat.cmax+m_dat.c2nd)/2;
+					m_dat.drop = true;
+					m_dat.cmax = 0;
 					m_contrast = 0;
 					MOVE_ABS_Z(zpos);
 					NXT_STS = -(20 - 1);//->20
@@ -5433,9 +5443,8 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					MOVE_REL_Z(1);
 					NXT_STS = -(20 - 1);//->20
 				}
-				m_dat.cbak = m_contrast;
 				break;
-			case 24:
+			case 25:
 				if (true) {
 					G.CAM_PRC = G.CAM_STS.STS_NONE;
 					this.FC2_STS = 0;
