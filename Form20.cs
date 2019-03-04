@@ -77,12 +77,18 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown4, ref m_ss.PLM_AUT_HANI);
 				DDV.DDX(bUpdate, this.numericUpDown5, ref m_ss.PLM_AUT_DISL);
 				DDV.DDX(bUpdate, this.numericUpDown6, ref m_ss.PLM_AUT_DISS);
+#if true//2019.03.02(直線近似)
+				DDV.DDX(bUpdate, this.numericUpDown20,ref m_ss.PLM_AUT_DISM);
+#endif
 				//---
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton1, this.radioButton2, this.radioButton3 }, ref G.SS.PLM_AUT_FCMD);
 				DDV.DDX(bUpdate, this.numericUpDown3 , ref m_ss.PLM_AUT_CTDR);
 				DDV.DDX(bUpdate, this.numericUpDown7 , ref m_ss.PLM_AUT_2HAN);
 				DDV.DDX(bUpdate, this.numericUpDown8 , ref m_ss.PLM_AUT_2DSL);
 				DDV.DDX(bUpdate, this.numericUpDown9 , ref m_ss.PLM_AUT_2DSS);
+#if true//2019.03.02(直線近似)
+				DDV.DDX(bUpdate, this.numericUpDown21, ref m_ss.PLM_AUT_2DSM);
+#endif
 				DDV.DDX(bUpdate, this.checkBox1      , ref m_ss.PLM_AUT_2FST);
 				//---
 				DDV.DDX(bUpdate, this.comboBox2      , ref m_ss.PLM_AUT_FLTP);
@@ -112,6 +118,9 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown19, ref m_ss.PLM_AUT_HPMX);
 				DDV.DDX(bUpdate, this.numericUpDown15, ref m_ss.PLM_AUT_HPSL);
 				DDV.DDX(bUpdate, this.numericUpDown16, ref m_ss.PLM_AUT_HPSS);
+#if true//2019.03.02(直線近似)
+				DDV.DDX(bUpdate, this.numericUpDown22, ref m_ss.PLM_AUT_HPSM);
+#endif
 				//---
 				//DDV.DDX(bUpdate, this.checkBox4      , ref m_ss.PLM_AUT_ZMUL);
 				//DDV.DDX(bUpdate, this.numericUpDown17, ref m_ss.PLM_AUT_ZHAN);
@@ -137,6 +146,9 @@ namespace uSCOPE
 #endif
 #if true//2019.02.14(Z軸初期位置戻し)
 				DDV.DDX(bUpdate, this.checkBox12,ref m_ss.PLM_AUT_ZRET);//Z軸初期位置戻し
+#endif
+#if true//2019.03.02(直線近似)
+				DDV.DDX(bUpdate, this.checkBox13,ref m_ss.PLM_AUT_AF_2);//AF2使用
 #endif
 				if (bUpdate == false) {
 					if (this.textBox2.Text == "") {
@@ -289,14 +301,27 @@ namespace uSCOPE
 
 		private void radioButton1_Click(object sender, EventArgs e)
 		{
-			if (this.radioButton1.Checked) {
+#if true//2019.03.02(直線近似)
+			if (!this.checkBox13.Checked) {
+				check_for_af2();
+			}
+#endif
+			if (this.radioButton1.Checked) {//初回のみ
 				this.numericUpDown7.Enabled = false;
 				this.numericUpDown8.Enabled = false;
+#if true//2019.03.02(直線近似)
+				this.numericUpDown9.Enabled = false;
+				this.numericUpDown21.Enabled = false;
+#endif
 				this.checkBox1.Enabled = false;
 			}
 			else {
 				this.numericUpDown7.Enabled = true;
 				this.numericUpDown8.Enabled = true;
+#if true//2019.03.02(直線近似)
+				this.numericUpDown9.Enabled = true;
+				this.numericUpDown21.Enabled = true;
+#endif
 				this.checkBox1.Enabled = true;
 			}
 			if (this.radioButton3.Checked) {
@@ -305,6 +330,11 @@ namespace uSCOPE
 			else {
 				this.numericUpDown3.Enabled = false;
 			}
+#if true//2019.03.02(直線近似)
+			if (this.checkBox13.Checked) {
+				check_for_af2();
+			}
+#endif
 		}
 
 		private void checkBox2_Click(object sender, EventArgs e)
@@ -322,6 +352,9 @@ namespace uSCOPE
 			this.numericUpDown19.Enabled = bl;
 			this.numericUpDown15.Enabled = bl;
 			this.numericUpDown16.Enabled = bl;
+#if true//2019.03.02(直線近似)
+			this.numericUpDown22.Enabled = bl;
+#endif
 #if true//2018.12.22(測定抜け対応)
 			//this.checkBox10.Enabled = bl;
 			this.numericUpDown12.Enabled = (this.checkBox2.Checked == false);
@@ -369,6 +402,17 @@ namespace uSCOPE
 		private void checkBox10_Click(object sender, EventArgs e)
 		{
 			checkBox2_Click(null, null);
+		}
+#endif
+#if true//2019.03.02(直線近似)
+		private void check_for_af2()
+		{
+			this.numericUpDown5.Enabled = !this.checkBox13.Checked;
+			this.numericUpDown6.Enabled = !this.checkBox13.Checked;
+			this.numericUpDown8.Enabled = !this.checkBox13.Checked;
+			this.numericUpDown9.Enabled = !this.checkBox13.Checked;
+			this.numericUpDown20.Enabled = !this.checkBox13.Checked;
+			this.numericUpDown21.Enabled = !this.checkBox13.Checked;
 		}
 #endif
 	}

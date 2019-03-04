@@ -220,6 +220,9 @@ namespace uSCOPE
 #if true//2019.02.03(WB調整)
 			checkBox14_CheckedChanged(null, null);
 #endif
+#if true//2019.03.02(直線近似)
+			checkBox15_Click(null, null);
+#endif
 		}
 		private void OnClicks(object sender, EventArgs e)
 		{
@@ -554,6 +557,12 @@ this.SPE_COD = 0;
 #if false//2019.02.03(WB調整)
 				DDV.DDX(bUpdate, this.numericUpDown27, ref G.SS.CAM_CIR_MAGN);
 #endif
+#if true//2019.03.02(直線近似)
+				DDV.DDX(bUpdate, this.checkBox15     ,ref G.SS.CAM_CIR_LINE);
+				DDV.DDX(bUpdate, this.numericUpDown27,ref G.SS.CAM_CIR_LPER);
+				DDV.DDX(bUpdate, this.numericUpDown59,ref G.SS.CAM_CIR_LCNT);
+				DDV.DDX(bUpdate, this.checkBox3      ,ref G.SS.CAM_CIR_CHK5);
+#endif
 				DDV.DDX(bUpdate, this.comboBox4, ref G.SS.CAM_CIR_DISP);
 				DDV.DDX(bUpdate, this.checkBox3, ref G.SS.CAM_CIR_CHK1);
 				DDV.DDX(bUpdate, this.checkBox4, ref G.SS.CAM_CIR_CHK2);
@@ -581,6 +590,11 @@ this.SPE_COD = 0;
 				DDV.DDX(bUpdate, this.numericUpDown55, ref G.SS.CAM_FC2_FAVG);
 				DDV.DDX(bUpdate, this.numericUpDown48, ref G.SS.CAM_FC2_DROP);
 				DDV.DDX(bUpdate, this.checkBox16, ref G.SS.CAM_FC2_CHK1);
+#endif
+#if true//2019.03.02(直線近似)
+				DDV.DDX(bUpdate, this.numericUpDown56, ref G.SS.CAM_FC2_CNDA);
+				DDV.DDX(bUpdate, this.numericUpDown57, ref G.SS.CAM_FC2_CNDB);
+				DDV.DDX(bUpdate, this.numericUpDown58, ref G.SS.CAM_FC2_BPLS);
 #endif
 				//---
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton10, this.radioButton9 }, ref G.SS.TST_PAR_GAUS);
@@ -1036,6 +1050,9 @@ this.SPE_COD = 0;
 			G.set_imp_param(i, mask);
 			GETDAT(true);//画面更新
 			OnControlStateChanged(null, null);
+#if true//2019.03.02(直線近似)
+			checkBox15_Click(null, null);
+#endif
 		}
 
 		private void OnControlStateChanged(object sender, EventArgs e)
@@ -1340,19 +1357,31 @@ this.SPE_COD = 0;
 				else if ((int)this.timer1.Tag == 1) {
 					//自動測定より(初回)
 					m_diss = G.SS.PLM_AUT_DISS;
+#if true//2019.03.02(直線近似)
+					m_dism = G.SS.PLM_AUT_DISM;
+#else
 					m_dism = G.SS.PLM_AUT_DISS;
+#endif
 					m_disl = G.SS.PLM_AUT_DISL;
 				}
 				else if ((int)this.timer1.Tag == 2) {
 					//自動測定より(２回以降)
 					m_diss = G.SS.PLM_AUT_2DSS;
+#if true//2019.03.02(直線近似)
+					m_dism = G.SS.PLM_AUT_2DSM;
+#else
 					m_dism = G.SS.PLM_AUT_2DSS;
+#endif
 					m_disl = G.SS.PLM_AUT_2DSL;
 				}
 				else {
 					//自動測定より(フォーカス位置探索用)
 					m_diss = G.SS.PLM_AUT_HPSS;
+#if true//2019.03.02(直線近似)
+					m_dism = G.SS.PLM_AUT_HPSM;
+#else
 					m_dism = G.SS.PLM_AUT_HPSS;
+#endif
 					m_disl = G.SS.PLM_AUT_HPSL;
 				}
 				if (this.timer1.Tag == null) {
@@ -1642,6 +1671,14 @@ this.SPE_COD = 0;
 				G.SS.CAM_FCS_PAR1 = 0;
 				G.FORM02.set_mask_by_result();
 			}
+#if true//2019.03.02(直線近似)
+			if (iTag != 3 && G.SS.PLM_AUT_AF_2) {
+				this.FC2_STS = 1;
+				this.timer6.Tag = iTag;
+				this.timer6.Enabled = true;
+				return;
+			}
+#endif
 			//---
 			this.timer1.Tag = iTag;
 			G.CAM_PRC = G.CAM_STS.STS_FCUS;
@@ -2980,7 +3017,11 @@ a_write("AF:開始");
 			break;
 			case 6:
 				//AF処理(終了待ち)
-				if (this.FCS_STS != 0) {
+				if (this.FCS_STS != 0
+#if true//2019.03.02(直線近似)
+				 || this.FC2_STS != 0
+#endif
+					) {
 					NXT_STS = this.AUT_STS;
 					//m_adat.chk2 = 1;
 					//G.mlog("m_adat.chk2参照箇所のチェック");
@@ -3255,7 +3296,11 @@ a_write("AF:開始");
 			case 636:
 #endif
 				//AF処理(終了待ち)
-				if (this.FCS_STS != 0) {
+				if (this.FCS_STS != 0
+#if true//2019.03.02(直線近似)
+				 || this.FC2_STS != 0
+#endif
+					) {
 					NXT_STS = this.AUT_STS;
 					m_adat.chk2 = 1;
 				}
@@ -5263,16 +5308,16 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					m_pmin = G.SS.CAM_FC2_LMIN;
 					m_pmax = G.SS.CAM_FC2_LMAX;
 				}
-				//else if ((int)this.timer6.Tag == 1) {
-				//    int tmp = G.PLM_POS[2] - G.SS.PLM_OFFS[2];
-				//    m_pmin = tmp - G.SS.PLM_AUT_HANI;
-				//    m_pmax = tmp + G.SS.PLM_AUT_HANI;
-				//}
-				//else if ((int)this.timer6.Tag == 2) {
-				//    int tmp = G.PLM_POS[2] - G.SS.PLM_OFFS[2];
-				//    m_pmin = tmp - G.SS.PLM_AUT_2HAN;
-				//    m_pmax = tmp + G.SS.PLM_AUT_2HAN;
-				//}
+				else if ((int)this.timer6.Tag == 1) {
+				    int tmp = G.PLM_POS[2] - G.SS.PLM_OFFS[2];
+				    m_pmin = tmp - G.SS.PLM_AUT_HANI;
+				    m_pmax = tmp + G.SS.PLM_AUT_HANI;
+				}
+				else if ((int)this.timer6.Tag == 2) {
+				    int tmp = G.PLM_POS[2] - G.SS.PLM_OFFS[2];
+				    m_pmin = tmp - G.SS.PLM_AUT_2HAN;
+				    m_pmax = tmp + G.SS.PLM_AUT_2HAN;
+				}
 				else {
 					m_pmin = G.SS.PLM_AUT_HPMN;
 					m_pmax = G.SS.PLM_AUT_HPMX;
@@ -5315,6 +5360,7 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 			case 16:
 				G.IR.FC2_POS = new List<int>();
 				G.IR.FC2_CTR = new List<double>();
+				G.FC2_DONE = 0;
 				G.FC2_FLG = true;
 				m_dat.dt = DateTime.Now;
 				MOVE_ABS_Z(m_pmax);
@@ -5323,6 +5369,10 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				//f軸停止待ち
 				if ((G.PLM_STS & (1 << 2)) != 0) {
 					NXT_STS = this.FC2_STS;
+					if (G.FC2_DONE == 2) {
+						G.FC2_DONE++;
+						D.SET_STG_STOP(2);
+					}
 				}
 				else {
 					D.RESET_FCS_SPD();
@@ -5380,6 +5430,14 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 							cont.Add(G.IR.FC2_CTR[i]);
 						}
 					}
+#if true//2019.03.02(直線近似)
+					//---
+					if (zpos.Count <= 3) {
+						G.mlog("探索スピードが速すぎるか探索範囲が狭すぎます.");
+						this.FC2_STS = 0;
+						break;
+					}
+#endif
 					//---
 					get_max_2nd(cont, out m_dat.imax, out m_dat.cmax, out m_dat.c2nd);
 					m_dat.zmax = zpos[m_dat.imax];
@@ -5432,7 +5490,11 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					m_dat.drop = true;
 					m_dat.cmax = 0;
 					m_contrast = 0;
+#if true//2019.03.02(直線近似)
+					MOVE_ABS_Z(zpos-G.SS.CAM_FC2_BPLS);
+#else
 					MOVE_ABS_Z(zpos);
+#endif
 					NXT_STS = -(20 - 1);//->20
 					if (G.SS.CAM_FC2_CHK1) {
 						f_write(m_path, "***コントラストドロップ検知***");
@@ -5487,6 +5549,15 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				NXT_STS = NXT_STS;//for break.point
 			}
 		}
+#if true//2019.03.02(直線近似)
+		private void checkBox15_Click(object sender, EventArgs e)
+		{
+			this.numericUpDown27.Enabled = this.checkBox15.Checked;
+			this.numericUpDown59.Enabled = this.checkBox15.Checked;
+			this.checkBox3.Enabled       = this.checkBox15.Checked;
+			this.numericUpDown15.Enabled =!this.checkBox15.Checked;
+		}
+#endif
 #endif
 	}
 }

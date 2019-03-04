@@ -196,7 +196,11 @@ namespace uSCOPE
 		{
 			int		HSPD, LSPD, JSPD;
 			int		i = 2;
-
+#if true//2019.03.02(直線近似)
+			if ((G.AS.DEBUG_MODE & 1) != 0) {
+				DBGMODE.bLOWSPD = false;
+			}
+#endif
 		    if (true) {
 			    HSPD = G.SS.PLM_HSPD[i];
 				LSPD = G.SS.PLM_LSPD[i];
@@ -220,6 +224,11 @@ namespace uSCOPE
 		{
 		    int		HSPD, LSPD, JSPD;
 			int		i = 2;
+#if true//2019.03.02(直線近似)
+			if ((G.AS.DEBUG_MODE & 1) != 0) {
+				DBGMODE.bLOWSPD = true;
+			}
+#endif
 		    if (true) {
 			    HSPD = spd;
 				LSPD = 1;

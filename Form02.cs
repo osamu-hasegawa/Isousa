@@ -2790,14 +2790,14 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			}
 			return(i);
 		}
-		static private void draw_marker(POINT pt)
+		static private void draw_marker(POINT pt, int col = 0x00FFFF)
 		{
 			RECT rt;
 			rt.Left = pt.x - 4;
 			rt.Top = pt.y-4;
 			rt.Right = rt.Left + 9;
 			rt.Bottom = rt.Top + 9;
-			OCV_DRAW_RECT((Int32)IMG.IMG_A, ref rt, 0x00FFFF, -1);
+			OCV_DRAW_RECT((Int32)IMG.IMG_A, ref rt, col, -1);
 		}
 #if true
 		private struct VERTEX
@@ -3160,7 +3160,152 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 		}
 #endif
 #endif
+#if true//2019.03.02(直線近似)
+		// l1:上辺, l2:下辺, x:l1上のx座標
+		// return
+		//	l1,l2を両辺とする二等辺三角形の底辺を返す
+		//  l3:底辺,p1:l1とl3の交点, p2:l2とl3の交点
+		static private DIAMR get_diam3(FN1D l1, FN1D l2, int x)
+		{
+			DIAMR l3 = new DIAMR();
+			double r1 = Math.Atan2(l1.A, 1.0);
+			double r2 = Math.Atan2(l2.A, 1.0);
+			double r3, a3, b3, a2, b2, a1, b1;
+			PointF p1 = new PointF(), p2 = new PointF();
 
+			//l1辺のa1, b1
+			a1 = l1.A;
+			b1 = l1.B;
+			//l2辺のa2, b2
+			a2 = l2.A;
+			b2 = l2.B;
+			//r1,r2の正規化(-90~+90deg)
+			if (r1 >= (Math.PI / 2)) {
+				r1 -= (Math.PI);
+			}
+			if (r1 <= -(Math.PI / 2)) {
+				r1 += +(Math.PI);
+			}
+			if (r2 >= (Math.PI / 2)) {
+				r2 -= (Math.PI);
+			}
+			if (r2 <= -(Math.PI / 2)) {
+				r2 += +(Math.PI);
+			}
+			//底辺の角度と傾き
+			r3 = ((r1 + r2) / 2);
+			a3 = (-1) / Math.Tan(r3);
+			if (double.IsInfinity(a3)) {//底辺が90°?
+				//l1辺上の点p1
+				p1.X = x;
+				p1.Y = (float)(a1 * x + b1);
+				//l2辺上の点p2
+				p2.X = x;
+				p2.Y = (float)(a2 * x + b2);
+			}
+			else {
+				//l1辺上の点p1
+				p1.X = x;
+				p1.Y = (float)(a1 * x + b1);
+				//p1を通るl3のb3
+				b3 = p1.Y - a3 * p1.X;
+				//p2:l2, l3の交点
+				p2 = get_cross_p(a2, b2, a3, b3);
+			}
+			l3.len = Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2));
+			l3.p1 = Point.Round(p1);
+			l3.p2 = Point.Round(p2);
+			return (l3);
+		}
+		private double calc_diam3(FN1D ft, FN1D fb)
+		{
+			int cnt;
+			int xmin = 0,
+				xmax = m_width-1,
+				ymin = int.MaxValue,
+				ymax = int.MinValue;
+			int xlen, ylen;
+
+			if (true) {
+				G.IR.PLY_PTS[0].X = 0;
+				G.IR.PLY_PTS[0].Y = (int)ft.GetYatX(0);
+				G.IR.PLY_PTS[1].X = 0;
+				G.IR.PLY_PTS[1].Y = (int)fb.GetYatX(0);
+				G.IR.PLY_PTS[2].X = xmax;
+				G.IR.PLY_PTS[2].Y = (int)fb.GetYatX(xmax);
+				G.IR.PLY_PTS[3].X = xmax;
+				G.IR.PLY_PTS[3].Y = (int)ft.GetYatX(xmax);
+				if (G.IR.PLY_PTS[0].Y < G.IR.PLY_PTS[3].Y) {
+					ymin = G.IR.PLY_PTS[0].Y;
+				}
+				else {
+					ymin = G.IR.PLY_PTS[3].Y;
+				}
+				if (G.IR.PLY_PTS[1].Y > G.IR.PLY_PTS[2].Y) {
+					ymax = G.IR.PLY_PTS[1].Y;
+				}
+				else {
+					ymax = G.IR.PLY_PTS[2].Y;
+				}
+				G.IR.PLY_PTS[4] = G.IR.PLY_PTS[0];
+			}
+			G.IR.PLY_CNT = cnt = 4;
+			//---
+			xlen = xmax - xmin;
+			ylen = ymax - ymin;
+			//---
+			G.IR.PLY_XMAX = xmax;
+			G.IR.PLY_XMIN = xmin;
+			G.IR.PLY_YMAX = ymax;
+			G.IR.PLY_YMIN = ymin;
+			//---
+			//---
+			if (G.SS.CAM_CIR_CHK2 && (G.CAM_PRC == G.CAM_STS.STS_HAIR || G.CAM_PRC == G.CAM_STS.STS_AUTO || (G.CAM_PRC == G.CAM_STS.STS_FCUS && G.SS.CAM_FCS_PAR1 > 1))) {
+				for (int i = 0; i < cnt; i++) {
+					POINT p1, p2;
+					p1 = P2P(G.IR.PLY_PTS[i+0]);
+					p2 = P2P(G.IR.PLY_PTS[i+1]);
+					OCV_DRAW_LINE((Int32)IMG.IMG_A, ref p1, ref p2, 0x008000, 4);
+					draw_marker(p1);
+				}
+				for (int i = 0; i < cnt; i++) {
+					if (G.SS.CAM_CIR_CHK2 && (G.CAM_PRC == G.CAM_STS.STS_HAIR || G.CAM_PRC == G.CAM_STS.STS_AUTO || (G.CAM_PRC == G.CAM_STS.STS_FCUS && G.SS.CAM_FCS_PAR1 > 1))) {
+						POINT p1, p2;
+						p1 = P2P(G.IR.PLY_PTS[i+0]);
+						draw_marker(p1);
+					}
+				}
+			}
+			G.IR.DIA_CNT = 0;
+			//--- 
+			int dcnt = 0;
+			double dlen = 0;
+			for (int i = 0; i < 10; i++) {
+				int gap = xlen/20;
+				int x = xmin + gap + i * (xlen-2*gap) / 9;
+				DIAMR dm = get_diam3(ft, fb, x);
+				if (true) {
+					G.IR.DIA_TOP[G.IR.DIA_CNT] = dm.p1;
+					G.IR.DIA_BTM[G.IR.DIA_CNT] = dm.p2;
+					if (G.IR.DIA_CNT > 0 && (G.IR.DIA_TOP[G.IR.DIA_CNT-1].X >= dm.p1.X || G.IR.DIA_BTM[G.IR.DIA_CNT-1].X >= dm.p2.X)) {
+					G.IR.DIA_CNT=G.IR.DIA_CNT;
+					}
+					else {
+					G.IR.DIA_CNT++;
+					}
+				}
+				if (G.SS.CAM_CIR_CHK4 && (G.CAM_PRC == G.CAM_STS.STS_HAIR || G.CAM_PRC == G.CAM_STS.STS_AUTO || (G.CAM_PRC == G.CAM_STS.STS_FCUS && G.SS.CAM_FCS_PAR1 > 1))) {
+					POINT p1, p2;
+					p1 = P2P(dm.p1);
+					p2 = P2P(dm.p2);
+					OCV_DRAW_LINE((Int32)IMG.IMG_A, ref p1, ref p2, 0xFFFF00, 4);
+				}
+				dlen += dm.len;
+				dcnt++;
+			}
+			return(dlen / dcnt);
+		}
+#endif
 		public double PX2UM(double px)
 		{
 			//const
@@ -3397,103 +3542,118 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 		[DllImport("IMGSUB64.DLL")]
 		private static extern void OCV_SAVE(Int32 I, string file);
 #endif
+#if true//2019.03.02(直線近似)
+		[DllImport("IMGSUB64.DLL")]
+		private static extern void OCV_FIND_EDGE(Int32 I, ref RECT pr, Int32 wid_per, Int32 cnt, ref POINT ptop, ref POINT pbtm);
+		[DllImport("IMGSUB64.DLL")]
+		private static extern Int32 OCV_FIT_LINE(ref POINT pl, Int32 pcnt, Int32 type, double param, double reps, double aeps, out float pf);
+#endif
+
 #else
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_TERM();
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_RESET_MASK(Int32 x, Int32 y, Int32 w, Int32 h);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_RESET(Int32 wid, Int32 hei);//, Int32 mx, Int32 my, Int32 mw, Int32 mh);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern Int32 OCV_SET_IMG(IntPtr ptr, Int32 wid, Int32 hei, Int32 str, Int32 bpp);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern Int32 OCV_GET_IMG(IntPtr ptr, Int32 wid, Int32 hei, Int32 str, Int32 bpp);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_TO_GRAY(Int32 I, Int32 H);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_TO_HSV(Int32 I, Int32 H);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_MERGE(Int32 H1, Int32 H2, Int32 H3, Int32 I);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_SPLIT(Int32 I, Int32 H1, Int32 H2, Int32 H3);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_SMOOTH(Int32 I, Int32 cof);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_THRESH_BIN(Int32 I, Int32 H, Int32 thval, Int32 inv);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_THRESH_HSV(Int32 I1, Int32 I2, Int32 I3, Int32 H, Int32 minh, Int32 maxh, Int32 mins, Int32 maxs, Int32 minv, Int32 maxv);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_CAL_HIST(Int32 I, Int32 bMASK, ref double pval, out double pmin, out double pmax, out double pavg);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_PUTTEXT(Int32 I, string buf, Int32 x, Int32 y, Int32 c);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_FIND_FIRST(Int32 I, Int32 mode);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern IntPtr OCV_FIND_NEXT(IntPtr pos, Int32 smax, Int32 smin, Int32 lmax, Int32 lmin, double cmax, double cmin, out double ps, out double pl, out double pc);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_FIND_TERM();
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_DRAW_CONTOURS(Int32 I, IntPtr pos, Int32 c1, Int32 c2);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_DRAW_CONTOURS2(Int32 I, IntPtr pos, Int32 c1, Int32 c2, Int32 thickness);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern Int32	OCV_CONTOURS_CNT(IntPtr pos);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_CONTOURS_PTS(IntPtr pos, Int32 idx, out POINT p);
-		[DllImport("IMGSUB.DLL")]
+#if false//2019.03.02(直線近似)
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_FIT_LINE(IntPtr pos, out float f);
-		[DllImport("IMGSUB.DLL")]
+#endif
+		[DllImport("IMGSUB32.DLL")]
 		private static extern Int32 OCV_APPROX_PTS(IntPtr pos, Int32 bSIGNE, Int32 PREC);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_GET_PTS(Int32 idx, out POINT p);
 		private struct RECT { public Int32 Left; public Int32 Top; public Int32 Right; public Int32 Bottom; }
 		private struct POINT { public Int32 x; public Int32 y;}
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_DRAW_LINE(Int32 I, ref POINT p1, ref POINT p2, Int32 c, Int32 thick);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_DRAW_RECT(Int32 I, ref RECT pr, Int32 c, Int32 thickness);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_BOUNDING_RECT(IntPtr pos, out RECT pr);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_DRAW_TEXT(Int32 I, Int32 x, Int32 y, string buf, Int32 c);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_MIN_AREA_RECT2(IntPtr pos, out POINT p1, out POINT p2, out POINT p3, out POINT p4);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_FILL_POLY(Int32 I, ref POINT p, Int32 n, Int32 c);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_ZERO(Int32 I);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_SOBEL(Int32 I, Int32 H, Int32 xorder, Int32 yorder, Int32 apert_size);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void OCV_LAPLACE(Int32 I, Int32 H, Int32 apert_size);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_CANNY(Int32 I, Int32 H, double th1, double th2, Int32 apert_size);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_MINMAX(Int32 I, ref double pmin, ref double pmax);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_SCALE(Int32 I, Int32 H, double scale, double shift);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_SMOOTH2(Int32 I, Int32 cof, double sig1, double sig2);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_DIFF(Int32 I, Int32 H, Int32 J);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_TO_01(Int32 I, Int32 ZERO_VAL, Int32 NONZERO_VAL);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_THINNING(Int32 I, Int32 H, Int32 cnt);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_COPY(Int32 I, Int32 H);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_NOT(Int32 I, Int32 H);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_ERODE(Int32 I, Int32 H, Int32 kernel_size, Int32 cnt);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_DILATE(Int32 I, Int32 H, Int32 kernel_size, Int32 cnt);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_MINMAX_ROI(Int32 I, Int32 x, Int32 y, Int32 w, Int32 h, ref Int32 pmin, ref Int32 pmax);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_AND(Int32 I, Int32 H, Int32 J);
-		[DllImport("IMGSUB.DLL")]
+		[DllImport("IMGSUB32.DLL")]
 		private static extern void	OCV_SAVE(Int32 I, string file);
+#if true//2019.03.02(直線近似)
+		[DllImport("IMGSUB32.DLL")]
+		private static extern void OCV_FIND_EDGE(Int32 I, ref RECT pr, Int32 wid_per, Int32 cnt, ref POINT ptop, ref POINT pbtm);
+		[DllImport("IMGSUB32.DLL")]
+		private static extern Int32 OCV_FIT_LINE(ref POINT pl, Int32 pcnt, Int32 type, double param, double reps, double aeps, out float pf);
+#endif
 #endif
 		private static int PF2BPP(PixelFormat pf)
 		{
@@ -3896,7 +4056,11 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				if (true) {
 					IntPtr pos = (IntPtr)0;//, bak = (IntPtr)(-1);
 					double s, l, c;
-
+#if true//2019.03.02(直線近似)
+					IntPtr pos_max = (IntPtr)0;
+					//double s_max, l_max, c_max;
+					int	bSIGNE_max = 0;
+#endif
 					for (;;) {
 						//for (; pos != null; pos = pos.HNext) {
 						pos = OCV_FIND_NEXT(pos,
@@ -3917,7 +4081,35 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 						RECT	rc;
 						s = Math.Abs(s);
 						//c = Math.Abs(c);
-
+#if true//2019.03.02(直線近似)
+						if (G.IR.CIR_CNT == 0 || s >= G.IR.CIR_S) {
+							pos_max = pos;
+							bSIGNE_max = bSIGNE;
+							G.IR.CIR_S = s;
+							G.IR.CIR_L = l;
+							G.IR.CIR_C = c;
+							OCV_BOUNDING_RECT(pos, out rc);
+							G.IR.CIR_RT = new Rectangle(rc.Left, rc.Top, (rc.Right-rc.Left), (rc.Bottom-rc.Top));
+						}
+						//輪郭の描画
+						if (mode == G.CAM_STS.STS_HAIR && G.SS.CAM_CIR_CHK1) {
+							OCV_DRAW_CONTOURS((Int32)IMG.IMG_A, pos, 0x0000FF, 0xFF0000);
+						}
+						G.IR.CIR_CNT++;
+					}
+					if (G.IR.CIR_CNT > 0) {
+						int bSIGNE = bSIGNE_max;
+						double p = double.NaN;
+						RECT	rc;
+						pos = pos_max;
+						s = G.IR.CIR_S;
+						l = G.IR.CIR_L;
+						c = G.IR.CIR_C;
+						rc.Left   = G.IR.CIR_RT.Left;
+						rc.Top    = G.IR.CIR_RT.Top;
+						rc.Right  = G.IR.CIR_RT.Right;
+						rc.Bottom = G.IR.CIR_RT.Bottom;
+#endif
 						//if (fmax < s) {
 						//    fmax = s;
 						//    pmax = pos;
@@ -3930,6 +4122,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 						//}
 						if (true) {
 							//CHK1:輪郭, CHK2:多曲線, CHK3:特徴値, CHK4:毛髪径
+#if false//2019.03.02(直線近似)
 							//輪郭の描画
 							if (mode == G.CAM_STS.STS_HAIR && G.SS.CAM_CIR_CHK1) {
 								//Cv.DrawContours(m_img_a, pos, Cv.RGB(255, 0, 0), Cv.RGB(0, 0, 255), 0, 2);//Cv.FILLED);
@@ -3939,6 +4132,8 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 								G.IR.CIR_CNT++;
 								continue;
 							}
+#endif
+#if false//2019.03.02(直線近似)
 							if (false) {
 								POINT	p1, p2, p3, p4;
 								OCV_MIN_AREA_RECT2(pos, out p1, out p2, out p3, out p4);
@@ -3948,6 +4143,66 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 								OCV_DRAW_LINE((Int32)IMG.IMG_A, ref p3, ref p4, 0xc08000, 4);
 								OCV_DRAW_LINE((Int32)IMG.IMG_A, ref p4, ref p1, 0xc08000, 4);
 							}
+#endif
+#if true//2019.03.02(直線近似)
+
+							if (G.SS.CAM_CIR_LINE) {
+								int	SCNT = G.SS.CAM_CIR_LCNT;
+								OCV_ZERO((int)IMG.IMG_T);
+								OCV_DRAW_CONTOURS2((Int32)IMG.IMG_T, pos, 0xFFFFFF, 0x000000, -1);
+								if (disp == 1) {
+									OCV_MERGE((int)IMG.IMG_T, (int)IMG.IMG_T, (int)IMG.IMG_T, (int)IMG.IMG_A);
+								}
+								//OCV_BOUNDING_RECT(pos, out rc);
+
+								POINT[] pt = new POINT[SCNT];
+								POINT[]	pb = new POINT[SCNT];
+								OCV_FIND_EDGE((Int32)IMG.IMG_T, ref rc, G.SS.CAM_CIR_LPER, SCNT, ref pt[0], ref pb[0]);
+								/*
+								//Distance types for Distance Transform and M-estimators
+								enum {
+								x	CV_DIST_USER    =-1,  // User defined distance
+									CV_DIST_L1      =1,   // distance = |x1-x2| + |y1-y2|
+									CV_DIST_L2      =2,   // the simple euclidean distance
+								x	CV_DIST_C       =3,   // distance = max(|x1-x2|,|y1-y2|)
+									CV_DIST_L12     =4,   // L1-L2 metric: distance = 2(sqrt(1+x*x/2) - 1))
+									CV_DIST_FAIR    =5,   // distance = c^2(|x|/c-log(1+|x|/c)), c = 1.3998
+									CV_DIST_WELSCH  =6,   // distance = c^2/2(1-exp(-(x/c)^2)), c = 2.9846
+									CV_DIST_HUBER   =7    // distance = |x|<c ? x^2/2 : c(|x|-c/2), c=1.345
+								};*/
+
+								float[]	flt = new float[4];
+								float[]	flb = new float[4];
+								int	ret1, ret2;
+								ret1 = OCV_FIT_LINE(ref pt[0], SCNT, /*CV_DIST_L2*/1, /*param*/0, /*reps*/0.01, /*aeps*/0.01, out flt[0]);
+								ret2 = OCV_FIT_LINE(ref pb[0], SCNT, /*CV_DIST_L2*/1, /*param*/0, /*reps*/0.01, /*aeps*/0.01, out flb[0]);
+								if (ret1 != 0 && ret2 != 0) {
+									FN1D ft, fb;
+									ft = new FN1D((flt[1]/flt[0]), new PointF(flt[2], flt[3]));
+									fb = new FN1D((flb[1]/flb[0]), new PointF(flb[2], flb[3]));
+									//毛髪径
+									try {
+										p = calc_diam3(ft, fb);
+									}
+									catch (Exception ex) {
+										Trace.WriteLineIf((G.AS.TRACE_LEVEL & 4)!=0, ex.Message);
+									}
+								}
+								else {
+									p = double.NaN;
+								}
+								G.IR.CIR_PX = p;
+								p = PX2UM(p);
+								if (G.SS.CAM_CIR_CHK5) {
+									for (int i = 0; i < SCNT; i++) {
+										draw_marker(pt[i], 0x0000FF);
+										draw_marker(pb[i], 0x000080);
+									}
+								}
+							}
+							else
+
+#endif
 							//多曲線と毛髪径
 							if (true) {
 								//CvSeq<CvPoint> tmp;
@@ -3956,6 +4211,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 								//n = tmp.Count();
 								n = OCV_APPROX_PTS(pos, bSIGNE, G.SS.CAM_DIR_PREC);
 								if (n >= 4) {
+#if false//2019.03.02(直線近似)
 									//Point[] pts = new Point[n];
 									//for (int i = 0; i < n; i++) {
 									//    if (bSIGNE) {//左回り時は順番の入れ替え
@@ -3976,6 +4232,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 											//Cv.DrawLine(m_img_a, P2P(pts[i]), P2P(pts[h]), Cv.RGB(0, 128, 0), 4);
 										}
 									}
+#endif
 									//毛髪径
 									try {
 										p = calc_diam2(n/*m_img_a, pts*/);
@@ -4009,11 +4266,13 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 									}
 								}
 							}
+#if false//2019.03.02(直線近似)
 							if (true) {
 								//RECT	rt;
 								OCV_BOUNDING_RECT(pos, out rc);
 								//rc = Cv.BoundingRect(pos);
 							}
+#endif
 							//特徴値
 							if (true) {
 								string buf="";
@@ -4039,6 +4298,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 									//OCV_PUTTEXT((Int32)IMG.IMG_A, buf, 50, 100, 0x00FF00);
 								}
 							}
+#if false//2019.03.02(直線近似)
 							if (G.IR.CIR_CNT <= 0 || G.IR.CIR_S < s) {
 								G.IR.CIR_S = s;
 								G.IR.CIR_L = l;
@@ -4049,6 +4309,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 								G.IR.CIR_RT = new Rectangle(rc.Left, rc.Top, (rc.Right-rc.Left), (rc.Bottom-rc.Top));
 							}
 							G.IR.CIR_CNT++;
+#endif
 						}
 					}
 					//輪郭に隣接する矩形の取得
@@ -4194,6 +4455,14 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				if (G.FC2_FLG && G.IR.FC2_POS != null) {
 					G.IR.FC2_POS.Add(G.IR.FC2_TMP);
 					G.IR.FC2_CTR.Add(G.IR.CONTRAST);
+#if true//2019.03.02(直線近似)
+					if (G.FC2_DONE == 0 && G.IR.CONTRAST >= G.SS.CAM_FC2_CNDA) {
+						G.FC2_DONE++;
+					}
+					if (G.FC2_DONE == 1 && G.IR.CONTRAST <= G.SS.CAM_FC2_CNDB) {
+						G.FC2_DONE++;
+					}
+#endif
 				}
 #endif
 				//---

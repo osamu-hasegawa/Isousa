@@ -43,6 +43,9 @@ namespace uSCOPE
 		private NumericUpDown[] numSOFFS;
 		private NumericUpDown[] numCOFFS;
 #endif
+#if true//2019.03.02(直線近似)
+		private CheckBox[]      chkRLINE;
+#endif
 		public int Q;
 
 		public Form34()
@@ -74,6 +77,10 @@ namespace uSCOPE
 			numPRECI = new NumericUpDown[] { this.numericUpDown18, this.numericUpDown37, this.numericUpDown56};
 			numMAGNI = new NumericUpDown[] { this.numericUpDown19, this.numericUpDown38, this.numericUpDown57};
 			//
+#if true//2019.03.02(直線近似)
+			chkRLINE = new CheckBox[] { this.checkBox1, this.checkBox2, this.checkBox3};
+#endif
+
 			DDX(true);
 			for (int i = 0; i < cmbBINAR.Length; i++) {
 				comboBox2_SelectedIndexChanged(cmbBINAR[i], null);
@@ -97,6 +104,9 @@ namespace uSCOPE
 #endif
 				this.label4.Visible = true;
 			}
+#if true//2019.03.02(直線近似)
+			checkBox1_CheckedChanged(null, null);
+#endif
 		}
 
 		//private void Form34_FormClosing(object sender, FormClosingEventArgs e)
@@ -153,6 +163,9 @@ namespace uSCOPE
 					}
 #if false//2019.02.03(WB調整)
 					DDV.DDX(bUpdate, numMAGNI[i], ref m_ss.IMP_OPT_MAGN[Q+i]);
+#endif
+#if true//2019.03.02(直線近似)
+					DDV.DDX(bUpdate, chkRLINE[i], ref m_ss.IMP_REG_LINE[Q+i]);
 #endif
 					//---
 					if (i == 3) {
@@ -214,5 +227,13 @@ namespace uSCOPE
 			numV_LOW[i].Enabled = b;
 			numV_UPR[i].Enabled = b;
 		}
+#if true//2019.03.02(直線近似)
+		private void checkBox1_CheckedChanged(object sender, EventArgs e)
+		{
+			this.numericUpDown18.Enabled = !this.checkBox1.Checked;
+			this.numericUpDown37.Enabled = !this.checkBox2.Checked;
+			this.numericUpDown56.Enabled = !this.checkBox3.Checked;
+		}
+#endif
 	}
 }

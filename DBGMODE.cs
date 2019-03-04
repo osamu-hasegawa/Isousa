@@ -35,7 +35,9 @@ namespace uSCOPE
 		static public Form m_fm = null;
 		static public DLG_VOID_OBJ_IGEA m_fg = null;
 		static public DLG_VOID_OBJ_GSEA m_fs = null;
-
+#if true//2019.03.02(直線近似)
+		static public bool bLOWSPD = false;
+#endif
 	    static private int B4(int l) {
 		    return ((byte)((l & 0xff000000) >> 24));
 	    }
@@ -220,7 +222,16 @@ namespace uSCOPE
 				PLM_TIC[idx] = System.Environment.TickCount;
 				PLM_DIR[idx] = (buf[2]&0x80)==0 ? +1:-1;
 				PLM_SPD[idx] = G.SS.PLM_LSPD[idx];
+#if true//2019.03.02(直線近似)
+				if (DBGMODE.bLOWSPD) {
+				PLM_PPS[idx] = G.SS.CAM_FC2_FSPD;
+				}
+				else {
+#endif
 				PLM_PPS[idx] = G.SS.PLM_HSPD[idx];
+#if true//2019.03.02(直線近似)
+				}
+#endif
 				PLM_MOD[idx] = 1;
 				if ((buf[2]&0x80)==0) {
 				PLM_RST[idx] = MAKELONG(0x00, buf[2], buf[3], buf[4]);
@@ -351,6 +362,11 @@ namespace uSCOPE
 					}
 					else if (PLM_MOD[i] == 2) {	//定速中
 						cnt = (int)(PLM_SPD[i] * ela / 1000);
+#if true//2019.03.02(直線近似)
+						if (bLOWSPD && ela > 0 && cnt == 0) {
+							continue;
+						}
+#endif
 						PLM_RST[i] -= cnt;
 						cnt*= PLM_DIR[i];
 						PLM_CNT[i] += cnt;

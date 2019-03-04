@@ -76,6 +76,16 @@ namespace uSCOPE
 			this.P1 = p1;
 			this.P2 = p2;
 		}
+#if true//2019.03.02(直線近似)
+		public FN1D(double A, PointF p1)
+		{//傾きAで点p0を通る直線
+			this.valid = true;
+			this.A = A;
+			this.B = p1.Y - A * p1.X;
+			this.C = (p1.Y - this.B) / this.A;
+			this.P1 = p1;
+		}
+#endif
 		//FN1D(double A, Point p0)
 		//{//傾きAで点p0を通る直線
 		//}

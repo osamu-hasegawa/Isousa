@@ -189,6 +189,12 @@ namespace uSCOPE
 			public double CAM_CIR_MAGN = 8.0;
 #endif
 			public int CAM_DIR_PREC = 15;
+#if true//2019.03.02(直線近似)
+			public bool CAM_CIR_LINE = true;
+			public int CAM_CIR_LPER = 95;
+			public int CAM_CIR_LCNT = 50;
+			public bool CAM_CIR_CHK5 = false;
+#endif
 			public int CAM_CIR_DISP = 0;
 			public bool CAM_CIR_CHK1 = true;
 			public bool CAM_CIR_CHK2 = false;
@@ -217,6 +223,11 @@ namespace uSCOPE
 			public int CAM_FC2_FAVG =   1;
 			public double CAM_FC2_DROP = 0.13;
 			public bool CAM_FC2_CHK1 = false;
+#endif
+#if true//2019.03.02(直線近似)
+			public double CAM_FC2_CNDA =   1.0;
+			public double CAM_FC2_CNDB =   0.0;
+			public int CAM_FC2_BPLS =   0;
 #endif
 			//---
 #if true//2019.01.19(GAIN調整)
@@ -264,6 +275,9 @@ namespace uSCOPE
 			public double[] IMP_GIZ_UPPR = {0,0,0,0,0,0};
 
 			public int[] IMP_POL_PREC = {28,28,28,28,28,28};
+#if true//2019.03.02(直線近似)
+			public bool[] IMP_REG_LINE = {false, false, false, false, false, false};//直線近似
+#endif
 #if false//2019.02.03(WB調整)
 			public double[] IMP_OPT_MAGN = {8.0,8.0,8.0,8.0,8.0,8.0};
 #else
@@ -335,6 +349,11 @@ namespace uSCOPE
 			public int PLM_AUT_HPMX = 6000;
 			public int PLM_AUT_HPSL = 200;
 			public int PLM_AUT_HPSS = 200;
+#if true//2019.03.02(直線近似)
+			public int PLM_AUT_DISM = 10;
+			public int PLM_AUT_2DSM = 10;
+			public int PLM_AUT_HPSM = 200;
+#endif
 			//---
 			public bool PLM_AUT_CNST = false;
 			public bool PLM_AUT_RTRY = false;
@@ -365,6 +384,9 @@ namespace uSCOPE
 #endif
 #if true//2019.02.14(Z軸初期位置戻し)
 			public bool	PLM_AUT_ZRET;//Z軸初期位置戻し
+#endif
+#if true//2019.03.02(直線近似)
+			public bool PLM_AUT_AF_2 = false;//AF2使用
 #endif
 			//---
 			public int ETC_LED_WAIT = 18;
@@ -1069,6 +1091,9 @@ namespace uSCOPE
 #if true//2019.02.27(ＡＦ２実装)
 		static public bool FC2_FLG=false;
 #endif
+#if true//2019.03.02(直線近似)
+		static public int FC2_DONE=0;
+#endif
 		//-----------------------
 		static public DialogResult mlog(string str)
 		{
@@ -1365,6 +1390,9 @@ namespace uSCOPE
 			G.SS.CAM_CIR_MAGN = G.SS.IMP_OPT_MAGN[i];
 #endif
 			G.SS.CAM_DIR_PREC = G.SS.IMP_POL_PREC[i];//, 5, 100);
+#if true//2019.03.02(直線近似)
+			G.SS.CAM_CIR_LINE = G.SS.IMP_REG_LINE[i];
+#endif
 			}
 		}
 #if true//2019.01.15(パスワード画面)
