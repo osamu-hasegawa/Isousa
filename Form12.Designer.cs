@@ -51,9 +51,9 @@
 			this.button26 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.checkBox11 = new System.Windows.Forms.CheckBox();
 			this.button27 = new System.Windows.Forms.Button();
 			this.button11 = new System.Windows.Forms.Button();
+			this.button36 = new System.Windows.Forms.Button();
 			this.tabPage7 = new System.Windows.Forms.TabPage();
 			this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
@@ -635,28 +635,15 @@
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.checkBox11);
 			this.groupBox1.Controls.Add(this.button27);
 			this.groupBox1.Controls.Add(this.button11);
+			this.groupBox1.Controls.Add(this.button36);
 			this.groupBox1.Location = new System.Drawing.Point(2, 46);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(140, 106);
 			this.groupBox1.TabIndex = 29;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "自動撮影";
-			// 
-			// checkBox11
-			// 
-			this.checkBox11.AutoSize = true;
-			this.checkBox11.Enabled = false;
-			this.checkBox11.Location = new System.Drawing.Point(79, 67);
-			this.checkBox11.Name = "checkBox11";
-			this.checkBox11.Size = new System.Drawing.Size(48, 28);
-			this.checkBox11.TabIndex = 3;
-			this.checkBox11.Text = "深度\r\n合成";
-			this.checkBox11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox11.UseVisualStyleBackColor = true;
-			this.checkBox11.Visible = false;
 			// 
 			// button27
 			// 
@@ -684,6 +671,19 @@
 			this.button11.Text = "自動選択";
 			this.button11.UseVisualStyleBackColor = true;
 			this.button11.Click += new System.EventHandler(this.OnClicks);
+			// 
+			// button36
+			// 
+			this.button36.BackColor = System.Drawing.Color.SteelBlue;
+			this.button36.Location = new System.Drawing.Point(70, 60);
+			this.button36.Name = "button36";
+			this.button36.Size = new System.Drawing.Size(66, 40);
+			this.button36.TabIndex = 2;
+			this.button36.Tag = "3";
+			this.button36.Text = "画像判定";
+			this.button36.UseVisualStyleBackColor = true;
+			this.button36.Visible = false;
+			this.button36.Click += new System.EventHandler(this.button36_Click);
 			// 
 			// tabPage7
 			// 
@@ -4135,7 +4135,6 @@
 			this.panel8.ResumeLayout(false);
 			this.panel6.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
 			this.tabPage7.ResumeLayout(false);
 			this.tabPage7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
@@ -4407,8 +4406,7 @@
 		protected System.Windows.Forms.Button button26;
 		private System.Windows.Forms.Timer timer3;
 		protected System.Windows.Forms.Button button27;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox checkBox11;
+		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.TabPage tabPage9;
 		private System.Windows.Forms.NumericUpDown numericUpDown44;
 		private System.Windows.Forms.NumericUpDown numericUpDown45;
@@ -4493,5 +4491,6 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown27;
 		private System.Windows.Forms.Label label88;
 		private System.Windows.Forms.Label label16;
+		protected System.Windows.Forms.Button button36;
     }
 }

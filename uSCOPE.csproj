@@ -258,6 +258,18 @@
     <Compile Include="Form03BAK.Designer.cs">
       <DependentUpon>Form03BAK.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form04.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form04.Designer.cs">
+      <DependentUpon>Form04.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form26.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form26.Designer.cs">
+      <DependentUpon>Form26.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="DlgProgress.resx">
       <DependentUpon>DlgProgress.cs</DependentUpon>
     </EmbeddedResource>
@@ -342,6 +354,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form03BAK.resx">
       <DependentUpon>Form03BAK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form04.resx">
+      <DependentUpon>Form04.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form26.resx">
+      <DependentUpon>Form26.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest" />

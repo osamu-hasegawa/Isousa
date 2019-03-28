@@ -681,7 +681,9 @@ this.SPE_COD = 0;
 				this.button32.Enabled = false;
 				this.button31.Enabled = false;
 #endif
+#if false//2019.03.14(NG画像判定)
 				this.checkBox11.Enabled = false;//深度合成
+#endif
 				//---
 				this.radioButton3.Enabled = false;
 				this.radioButton4.Enabled = false;
@@ -772,13 +774,17 @@ this.SPE_COD = 0;
 					this.button11.Enabled = true;
 					this.button26.Enabled = true;
 					this.button27.Enabled = true;
+#if false//2019.03.14(NG画像判定)
 					this.checkBox11.Enabled = true;//深度合成
+#endif
 				}
 				else {
 					this.button11.Enabled = false;
 					this.button26.Enabled = false;
 					this.button27.Enabled = false;
+#if false//2019.03.14(NG画像判定)
 					this.checkBox11.Enabled = false;//深度合成
+#endif
 				}
 				if (G.FORM02.isCONNECTED()) {
 					this.radioButton3.Enabled = true;
@@ -4351,7 +4357,32 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				G.FORM03.Show();
 			}
 		}
-
+#if true//2019.03.14(NG画像判定)
+		private void button36_Click(object sender, EventArgs e)
+		{
+			Form frm;
+			if (G.UIF_LEVL == 0/*0:ユーザ用(暫定版)*/) {
+				frm = new Form26();
+			}
+			else {
+				frm = new Form26();
+			}
+			if (frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+				if (G.FORM02 != null) {
+					if (G.FORM02.isCONNECTED()) {
+						G.FORM02.Stop();
+					}
+				}
+				if (G.FORM04 != null) {
+					G.FORM04.Close();
+					G.FORM04 = null;
+					Application.DoEvents();
+				}
+				G.FORM04 = new Form04();
+				G.FORM04.Show();
+			}
+		}
+#endif
 		private void timer3_Tick(object sender, EventArgs e)
 		{
 			int NXT_STS = this.CAL_STS+1;

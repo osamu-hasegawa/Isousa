@@ -41,6 +41,9 @@ namespace uSCOPE
 			//---
 			radioButton1_Click(null, null);
 			//---
+#if true//2019.03.16(NODATA対応)
+			this.comboBox3.SelectedIndex = 0;
+#endif
 		}
 		static public string[] cut_IZ(string[] files)
 		{
@@ -114,7 +117,13 @@ namespace uSCOPE
 					}
 					for (int i = 0; i < zpos.Length; i++) {
 						string tmp = System.IO.Path.GetFileNameWithoutExtension(zpos[i]);
+#if true//2019.03.16(NODATA対応)
+						// 012345678901
+						// 0CR_00_ZP00D
+						zpos[i] = tmp.Substring(tmp.Length-5);
+#else
 						zpos[i] = tmp.Substring(7);
+#endif
 					}
 				}
 				//files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
@@ -243,9 +252,15 @@ namespace uSCOPE
 				files_10 = System.IO.Directory.GetFiles(path, "*_Z10.*");
 #endif
 				if (true) {
+#if true//2019.03.16(NODATA対応)
+					files_ct = System.IO.Directory.GetFiles(path, "*CT_??" + zpos + ".*");
+					files_cr = System.IO.Directory.GetFiles(path, "*CR_??" + zpos + ".*");
+					files_ir = System.IO.Directory.GetFiles(path, "*IR_??" + zpos + ".*");
+#else
 					files_ct = System.IO.Directory.GetFiles(path, "?CT_??" + zpos + ".*");
 					files_cr = System.IO.Directory.GetFiles(path, "?CR_??" + zpos + ".*");
 					files_ir = System.IO.Directory.GetFiles(path, "?IR_??" + zpos + ".*");
+#endif
 				}
 #if true
 				if (true) {
@@ -324,6 +339,11 @@ namespace uSCOPE
 				//---
 				DDV.DDX(bUpdate, this.numericUpDown11, ref G.SS.MOZ_CND_HMAX);
 				DDV.DDX(bUpdate, this.numericUpDown12, ref G.SS.MOZ_CND_HWID);
+#endif
+#if true//2019.03.16(NODATA対応)
+				DDV.DDX(bUpdate, this.comboBox1      , ref G.SS.MOZ_BOK_AFMD[0]);
+				DDV.DDX(bUpdate, this.comboBox2      , ref G.SS.MOZ_BOK_AFMD[1]);
+				DDV.DDX(bUpdate, this.numericUpDown1 , ref G.SS.MOZ_BOK_CTHD);
 #endif
 				//---
 				if (bUpdate == false) {
@@ -404,6 +424,11 @@ namespace uSCOPE
 			check_fst(this.comboBox8 , this.checkBox9.Checked);
 			check_fst(this.comboBox12, this.checkBox9.Checked);
 #endif
+		}
+
+		private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

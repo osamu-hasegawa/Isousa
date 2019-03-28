@@ -184,18 +184,18 @@
 			this.checkBox19 = new System.Windows.Forms.CheckBox();
 			this.checkBox12 = new System.Windows.Forms.CheckBox();
 			this.checkBox11 = new System.Windows.Forms.CheckBox();
-			this.checkBox3 = new System.Windows.Forms.CheckBox();
 			this.button3 = new System.Windows.Forms.Button();
 			this.radioButton2 = new System.Windows.Forms.RadioButton();
 			this.panel15 = new System.Windows.Forms.Panel();
-			this.panel9 = new System.Windows.Forms.Panel();
 			this.label18 = new System.Windows.Forms.Label();
 			this.panel6 = new System.Windows.Forms.Panel();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.radioButton1 = new System.Windows.Forms.RadioButton();
+			this.checkBox3 = new System.Windows.Forms.CheckBox();
+			this.panel9 = new System.Windows.Forms.Panel();
+			this.label4 = new System.Windows.Forms.Label();
 			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
 			this.label17 = new System.Windows.Forms.Label();
 			this.panel16 = new System.Windows.Forms.Panel();
@@ -227,6 +227,8 @@
 			this.radioButton7 = new System.Windows.Forms.RadioButton();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
+			this.checkBox21 = new System.Windows.Forms.CheckBox();
+			this.panel18 = new System.Windows.Forms.Panel();
 			this.tabControl3.SuspendLayout();
 			this.tabPage6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -1488,7 +1490,9 @@
 			// 
 			// groupBox4
 			// 
+			this.groupBox4.Controls.Add(this.panel18);
 			this.groupBox4.Controls.Add(this.panel17);
+			this.groupBox4.Controls.Add(this.checkBox21);
 			this.groupBox4.Controls.Add(this.checkBox20);
 			this.groupBox4.Controls.Add(this.checkBox19);
 			this.groupBox4.Controls.Add(this.checkBox12);
@@ -1567,20 +1571,6 @@
 			this.checkBox11.UseVisualStyleBackColor = true;
 			this.checkBox11.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
-			// checkBox3
-			// 
-			this.checkBox3.AutoSize = true;
-			this.checkBox3.Checked = true;
-			this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox3.Enabled = false;
-			this.checkBox3.Location = new System.Drawing.Point(54, 236);
-			this.checkBox3.Name = "checkBox3";
-			this.checkBox3.Size = new System.Drawing.Size(76, 16);
-			this.checkBox3.TabIndex = 11;
-			this.checkBox3.Text = "R*0(中心)";
-			this.checkBox3.UseVisualStyleBackColor = true;
-			this.checkBox3.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-			// 
 			// button3
 			// 
 			this.button3.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1611,14 +1601,6 @@
 			this.panel15.Name = "panel15";
 			this.panel15.Size = new System.Drawing.Size(130, 2);
 			this.panel15.TabIndex = 10;
-			// 
-			// panel9
-			// 
-			this.panel9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel9.Location = new System.Drawing.Point(66, 202);
-			this.panel9.Name = "panel9";
-			this.panel9.Size = new System.Drawing.Size(130, 2);
-			this.panel9.TabIndex = 10;
 			// 
 			// label18
 			// 
@@ -1655,15 +1637,6 @@
 			this.label8.TabIndex = 0;
 			this.label8.Text = "毛髪径/毛髄径・グラフ";
 			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(52, 218);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(98, 12);
-			this.label4.TabIndex = 0;
-			this.label4.Text = "キューティクル・グラフ";
-			// 
 			// panel4
 			// 
 			this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1682,6 +1655,37 @@
 			this.radioButton1.Text = "毛髪全体";
 			this.radioButton1.UseVisualStyleBackColor = true;
 			this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			// 
+			// checkBox3
+			// 
+			this.checkBox3.AutoSize = true;
+			this.checkBox3.Checked = true;
+			this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox3.Enabled = false;
+			this.checkBox3.Location = new System.Drawing.Point(54, 236);
+			this.checkBox3.Name = "checkBox3";
+			this.checkBox3.Size = new System.Drawing.Size(76, 16);
+			this.checkBox3.TabIndex = 11;
+			this.checkBox3.Text = "R*0(中心)";
+			this.checkBox3.UseVisualStyleBackColor = true;
+			this.checkBox3.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			// 
+			// panel9
+			// 
+			this.panel9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel9.Location = new System.Drawing.Point(66, 202);
+			this.panel9.Name = "panel9";
+			this.panel9.Size = new System.Drawing.Size(130, 2);
+			this.panel9.TabIndex = 10;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(52, 218);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(98, 12);
+			this.label4.TabIndex = 0;
+			this.label4.Text = "キューティクル・グラフ";
 			// 
 			// numericUpDown2
 			// 
@@ -2139,6 +2143,25 @@
 			this.label5.TabIndex = 0;
 			this.label5.Text = "光学倍率";
 			// 
+			// checkBox21
+			// 
+			this.checkBox21.AutoSize = true;
+			this.checkBox21.Location = new System.Drawing.Point(17, 272);
+			this.checkBox21.Name = "checkBox21";
+			this.checkBox21.Size = new System.Drawing.Size(86, 16);
+			this.checkBox21.TabIndex = 11;
+			this.checkBox21.Text = "コントスラト値";
+			this.checkBox21.UseVisualStyleBackColor = true;
+			this.checkBox21.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+			// 
+			// panel18
+			// 
+			this.panel18.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel18.Location = new System.Drawing.Point(14, 265);
+			this.panel18.Name = "panel18";
+			this.panel18.Size = new System.Drawing.Size(130, 2);
+			this.panel18.TabIndex = 12;
+			// 
 			// Form03
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -2341,5 +2364,7 @@
 		private System.Windows.Forms.Panel panel17;
 		private System.Windows.Forms.CheckBox checkBox20;
 		private System.Windows.Forms.Label label18;
+		private System.Windows.Forms.Panel panel18;
+		private System.Windows.Forms.CheckBox checkBox21;
 	}
 }

@@ -469,6 +469,12 @@ retry:
 			public double ow_l_xum;//    0+ow_l_wid
 			public double ow_r_xum;//width-ow_r_wid
 #endif
+#if true//2019.03.16(NODATA対応)
+			public double contr;
+			public double contr_avg;
+			public double contr_drop;
+			public bool bNODATA;
+#endif
 			//public int 
 			//public float start_pix_of_seg;
 			//カラー画像と
@@ -3131,7 +3137,11 @@ retry:
 				if (G.SS.MOZ_FST_CK01) {
 					//既に合成済みの場合は合成処理をスキップする
 					string[] CL_ZDEPT = null;
+#if true//2019.03.16(NODATA対応)
+					CL_ZDEPT = System.IO.Directory.GetFiles(path_dep, "*C?_??_ZDEPT.*");
+#else
 					CL_ZDEPT = System.IO.Directory.GetFiles(path_dep, "?C?_??_ZDEPT.*");
+#endif
 					if (CL_ZDEPT.Length > 0) {
 						return(true);
 					}
@@ -3340,7 +3350,13 @@ retry:
 #if true//2018.11.13(毛髪中心AF)
 							string k_z;
 #endif
+#if true//2019.03.16(NODATA対応)
+							// 012345678901
+							// 0CR_00_ZP00D
+							tmp = tmp.Substring(tmp.Length-5);
+#else
 							tmp = tmp.Substring(7);
+#endif
 							m_zpos_org.Add(tmp);
 #if true//2018.11.13(毛髪中心AF)
 							k_z = tmp.Substring(0, 1);
@@ -3522,7 +3538,28 @@ retry:
 					//---
 					test_pr0(seg, /*b1st=*/(i==0));
 					ar_seg.Add(seg);
+#if true//2019.03.16(NODATA対応)
+					string tmp;
+					G.CAM_STS bak = G.CAM_PRC;
+					tmp = to_xx_path(seg.path_of_dm, "ZP00D");
+					Bitmap bmp = new Bitmap(tmp);
+					if (G.SS.MOZ_BOK_AFMD[mode_of_cl] == 0) {
+						G.CNT_MOD = 0;
+					}
+					else {
+						G.CNT_MOD = G.SS.MOZ_BOK_AFMD[mode_of_cl]+1;
+					}
+					G.CNT_OFS = 0;
+					G.CAM_PRC = G.CAM_STS.STS_HIST;
+					G.FORM02.load_file(bmp, false);
+					seg.contr = G.IR.CONTRAST;
+					seg.contr_drop = double.NaN;
+					seg.contr_avg = double.NaN;
+					G.CAM_PRC = bak;
+					bmp.Dispose();
+#endif
 				}
+
 #if true//2018.11.22(数値化エラー対応)
 				if (!bFileExist) {
 					G.mlog(string.Format("毛髪画像が不完全のため{0}本目の毛髪画像の読み込みをスキップします。", m_hair.Count+1));
@@ -3536,6 +3573,20 @@ retry:
 					this.listView1.LargeImageList = hr.il_dm;
 					this.listView2.LargeImageList = hr.il_ir;
 				}
+#if true//2019.03.16(NODATA対応)
+				if (true) {
+					double contr_avg = 0;
+					for (int i = 0; i < segs.Length; i++) {
+						contr_avg += segs[i].contr;
+					}
+					contr_avg /= segs.Length;
+					for (int i = 0; i < segs.Length; i++) {
+						segs[i].contr_drop = -(segs[i].contr - contr_avg) / contr_avg * 100;
+						segs[i].contr_avg = contr_avg;
+						segs[i].bNODATA = (segs[i].contr_drop >= G.SS.MOZ_BOK_CTHD);
+					}
+				}
+#endif
 				for (int i = 0; i < segs.Length; i++) {
 #if true//2018.11.28(メモリリーク)
 					//GC.Collect();
@@ -3685,6 +3736,13 @@ retry:
 #if false//2018.08.21
 					else if (G.SS.MOZ_CND_PDFL == 1 && G.SS.MOZ_IRC_NOMZ) {
 						G.SS.MOZ_IRC_NOMZ = G.SS.MOZ_IRC_NOMZ;//断面・毛髄径計算は行わない
+					}
+#endif
+#if true//2019.03.16(NODATA対応)
+					if (segs[i].bNODATA) {
+						//処理しない
+						m_dia_cnt = 0;
+						G.IR.CIR_CNT = 0;
 					}
 #endif
 					else if (G.IR.CIR_CNT > 0) {
@@ -3904,6 +3962,10 @@ retry:
 #if false//2018.07.10
 					this.panel13.Visible = false;//Z位置とZ選択用コンボ
 #endif
+#endif
+#if true//2019.03.16(NODATA対応)
+					this.checkBox21.Visible = false;
+					this.panel18.Visible = false;
 #endif
 				}
 				if (G.SS.MOZ_CND_NOMZ) {
@@ -4160,7 +4222,13 @@ retry:
 #endif
 #if true//2018.10.10(毛髪径算出・改造)
 #if true//2018.10.27(画面テキスト)
-		private void draw_text(Image img, string txt, float fp=60)
+		private void draw_text(Image img, string txt, float fp=60
+#if true//2019.03.16(NODATA対応)
+			,StringAlignment v_align=StringAlignment.Far
+			,StringAlignment h_align=StringAlignment.Far
+			,Brush brs = default(Brush)
+#endif
+			)
 #else
 		private void draw_text(Image img, string txt)
 #endif
@@ -4173,10 +4241,18 @@ retry:
 #endif
 			RectangleF rt = new RectangleF(0, 0, img.Width, img.Height);
 			StringFormat sf  = new StringFormat();
+#if true//2019.03.16(NODATA対応)
+			if (brs == null) {
+				brs = Brushes.LimeGreen;
+			}
+			sf.Alignment     = h_align;
+			sf.LineAlignment = v_align;
+			gr.DrawString(txt, fnt, brs, rt, sf);
+#else
 			sf.Alignment = StringAlignment.Far;
 			sf.LineAlignment = StringAlignment.Far;
-
 			gr.DrawString(txt, fnt, Brushes.LimeGreen, rt, sf);
+#endif
 			gr.Dispose();
 		}
 		private void draw_moudan(hair hr)
@@ -4719,6 +4795,16 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					draw_text(bmp_dm, string.Format("キューティクル枚数={0:F0}\r\ntest", gi_cut_cnt));
 #endif
 					draw_text(bmp_pd, string.Format("直径={0:F1}um", gi_mou_dia));
+#endif
+#if true//2019.03.16(NODATA対応)
+					if (this.checkBox21.Checked) {
+					draw_text(bmp_dm, string.Format("CONTRAST={0:F3}, AVG={1:F3}, DROP={2:F1}%", seg.contr, seg.contr_avg, seg.contr_drop), 60, StringAlignment.Near, StringAlignment.Near);
+					}
+					if (seg.bNODATA) {
+					draw_text(bmp_dm, "NO DATA", 60, StringAlignment.Far, StringAlignment.Near, Brushes.Red);
+					draw_text(bmp_pd, "NO DATA", 60, StringAlignment.Far, StringAlignment.Near, Brushes.Red);
+					draw_text(bmp_ir, "NO DATA", 60, StringAlignment.Far, StringAlignment.Near, Brushes.Red);
+					}
 #endif
 					this.pictureBox1.Image = bmp_dm;
 					this.pictureBox3.Image = bmp_pd;
@@ -5309,10 +5395,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 				q |= 1|2;//画像ファイル と グラフ
 			}
 #endif
-
-
-
-
+#if true//2019.03.16(NODATA対応)
+			if (sender == this.checkBox21) {
+				q |= 1;//画像ファイル
+			}
+#endif
 			//this.button1.Visible = !this.button1.Visible;
 			if ((q & 1) != 0) {
 				draw_image(hr);

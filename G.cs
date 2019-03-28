@@ -547,6 +547,15 @@ namespace uSCOPE
 #if true//2018.11.13(毛髪中心AF)
 			public int MOZ_FST_IMTP = 0;
 #endif
+#if true//2019.03.16(NODATA対応)
+			public int[] MOZ_BOK_AFMD = {0,0};
+			public int MOZ_BOK_CTHD = 25;
+#endif
+#if true//2019.03.14(NG画像判定)
+			//[XmlIgnoreAttribute]
+			public string NGJ_CND_FOLD = "";
+			public int NGJ_CND_FMOD = 0;
+#endif
 #if true//2019.01.11(混在対応) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 			public int[]    ANL_CND_CTYP = {0,0};//キューティクル(0:BPF,1:2d)
 			public double[] ANL_CND_BPF1 = {0.047,0.047};
@@ -1051,6 +1060,9 @@ namespace uSCOPE
 		static public Form01	FORM01 = null;
 		static public Form02	FORM02 = null;
 		static public Form03	FORM03 = null;
+#if true//2019.03.14(NG画像判定)
+		static public Form04	FORM04 = null;
+#endif
 		static public Form10	FORM10 = null;
 		static public Form11	FORM11 = null;
 		static public Form12	FORM12 = null;

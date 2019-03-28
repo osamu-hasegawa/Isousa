@@ -78,6 +78,16 @@
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
 			this.button4 = new System.Windows.Forms.Button();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.comboBox2 = new System.Windows.Forms.ComboBox();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.comboBox3 = new System.Windows.Forms.ComboBox();
+			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
@@ -88,6 +98,8 @@
 			this.groupBox7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
+			this.groupBox3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// button3
@@ -697,7 +709,7 @@
 			// 
 			// button4
 			// 
-			this.button4.Location = new System.Drawing.Point(312, 166);
+			this.button4.Location = new System.Drawing.Point(311, 307);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(288, 36);
 			this.button4.TabIndex = 51;
@@ -706,6 +718,149 @@
 			this.button4.UseVisualStyleBackColor = true;
 			this.button4.Click += new System.EventHandler(this.OnClicks);
 			// 
+			// groupBox3
+			// 
+			this.groupBox3.Controls.Add(this.comboBox2);
+			this.groupBox3.Controls.Add(this.comboBox1);
+			this.groupBox3.Controls.Add(this.label9);
+			this.groupBox3.Controls.Add(this.comboBox3);
+			this.groupBox3.Controls.Add(this.numericUpDown1);
+			this.groupBox3.Controls.Add(this.label5);
+			this.groupBox3.Controls.Add(this.label3);
+			this.groupBox3.Controls.Add(this.label8);
+			this.groupBox3.Controls.Add(this.label7);
+			this.groupBox3.Location = new System.Drawing.Point(312, 161);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(288, 135);
+			this.groupBox3.TabIndex = 63;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "ピンボケ画像検出";
+			// 
+			// comboBox2
+			// 
+			this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox2.FormattingEnabled = true;
+			this.comboBox2.Items.AddRange(new object[] {
+            "画像全体",
+            "毛髪矩形+0%",
+            "毛髪矩形+25%",
+            "毛髪矩形+50%",
+            "毛髪矩形+100%",
+            "毛髪範囲10%",
+            "毛髪範囲25%",
+            "毛髪範囲50%",
+            "毛髪範囲75%",
+            "毛髪範囲100%",
+            "毛髪範囲110%",
+            "毛髪範囲120%",
+            "毛髪範囲130%",
+            "毛髪範囲10% (横1/3)",
+            "毛髪範囲10% (横1/4)",
+            "毛髪範囲10% (横1/5)"});
+			this.comboBox2.Location = new System.Drawing.Point(147, 54);
+			this.comboBox2.Name = "comboBox2";
+			this.comboBox2.Size = new System.Drawing.Size(135, 20);
+			this.comboBox2.TabIndex = 6;
+			this.comboBox2.Tag = "0";
+			this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+			// 
+			// comboBox1
+			// 
+			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Items.AddRange(new object[] {
+            "画像全体",
+            "毛髪矩形+0%",
+            "毛髪矩形+25%",
+            "毛髪矩形+50%",
+            "毛髪矩形+100%",
+            "毛髪範囲10%",
+            "毛髪範囲25%",
+            "毛髪範囲50%",
+            "毛髪範囲75%",
+            "毛髪範囲100%",
+            "毛髪範囲110%",
+            "毛髪範囲120%",
+            "毛髪範囲130%",
+            "毛髪範囲10% (横1/3)",
+            "毛髪範囲10% (横1/4)",
+            "毛髪範囲10% (横1/5)"});
+			this.comboBox1.Location = new System.Drawing.Point(147, 28);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(135, 20);
+			this.comboBox1.TabIndex = 6;
+			this.comboBox1.Tag = "0";
+			this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+			// 
+			// label9
+			// 
+			this.label9.AutoSize = true;
+			this.label9.Location = new System.Drawing.Point(207, 84);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(73, 12);
+			this.label9.TabIndex = 55;
+			this.label9.Text = "% 以上ドロップ";
+			// 
+			// comboBox3
+			// 
+			this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox3.FormattingEnabled = true;
+			this.comboBox3.Items.AddRange(new object[] {
+            "ZP00D"});
+			this.comboBox3.Location = new System.Drawing.Point(147, 107);
+			this.comboBox3.Name = "comboBox3";
+			this.comboBox3.Size = new System.Drawing.Size(75, 20);
+			this.comboBox3.TabIndex = 0;
+			// 
+			// numericUpDown1
+			// 
+			this.numericUpDown1.Location = new System.Drawing.Point(147, 81);
+			this.numericUpDown1.Name = "numericUpDown1";
+			this.numericUpDown1.Size = new System.Drawing.Size(54, 19);
+			this.numericUpDown1.TabIndex = 56;
+			this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown1.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(27, 58);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(97, 12);
+			this.label5.TabIndex = 17;
+			this.label5.Text = "計算範囲(反射用)";
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(27, 20);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(97, 24);
+			this.label3.TabIndex = 17;
+			this.label3.Text = "コントスラト\r\n計算範囲(透過用)";
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(27, 85);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(90, 12);
+			this.label8.TabIndex = 39;
+			this.label8.Text = "ピンボケ判定閾値";
+			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(27, 112);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(53, 12);
+			this.label7.TabIndex = 39;
+			this.label7.Text = "対象画像";
+			// 
 			// Form21
 			// 
 			this.AcceptButton = this.button1;
@@ -713,6 +868,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button2;
 			this.ClientSize = new System.Drawing.Size(608, 468);
+			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.checkBox3);
 			this.Controls.Add(this.checkBox2);
@@ -747,6 +903,9 @@
 			this.groupBox7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).EndInit();
+			this.groupBox3.ResumeLayout(false);
+			this.groupBox3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -804,6 +963,16 @@
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.Label label18;
 		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.GroupBox groupBox3;
+		private System.Windows.Forms.ComboBox comboBox2;
+		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.ComboBox comboBox3;
+		private System.Windows.Forms.NumericUpDown numericUpDown1;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Label label7;
 
 	}
 }
