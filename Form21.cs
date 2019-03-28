@@ -341,8 +341,8 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown12, ref G.SS.MOZ_CND_HWID);
 #endif
 #if true//2019.03.16(NODATA対応)
-				DDV.DDX(bUpdate, this.comboBox1      , ref G.SS.MOZ_BOK_AFMD[0]);
-				DDV.DDX(bUpdate, this.comboBox2      , ref G.SS.MOZ_BOK_AFMD[1]);
+				DDV.DDX(bUpdate, this.comboBox1      , ref G.SS.MOZ_BOK_AFMD[0]);//透過(表面)
+				DDV.DDX(bUpdate, this.comboBox2      , ref G.SS.MOZ_BOK_AFMD[1]);//反射(表面)
 				DDV.DDX(bUpdate, this.numericUpDown1 , ref G.SS.MOZ_BOK_CTHD);
 #endif
 				//---

@@ -553,8 +553,11 @@ namespace uSCOPE
 #if true//2018.11.13(毛髪中心AF)
 			public int MOZ_FST_IMTP = 0;
 #endif
-#if true//2019.03.16(NODATA対応)
-			public int[] MOZ_BOK_AFMD = {0,0};
+#if true//2019.03.21(NODATA-1化)
+			public int[] MOZ_BOK_AFMD = {0,0,0,0};//透過(表面), 反射(表面), 透過(中心), 反射(中心)
+			public int[] MOZ_BOK_SOFS = {0, 0};//オフセット, 透過(表面), 反射(表面)
+			public int[] MOZ_BOK_COFS = {0, 0};//オフセット, 透過(中心), 反射(中心)
+			public bool[] MOZ_BOK_USSD = {false, false, false, false};//標準偏差, 透過(表面), 反射(表面), 透過(中心), 反射(中心)
 			public int MOZ_BOK_CTHD = 25;
 #endif
 #if true//2019.03.14(NG画像判定)
@@ -857,6 +860,9 @@ namespace uSCOPE
 				RESIZE_ARRAY(ref cln.IMP_OPT_MAGN, ref G.SS.IMP_OPT_MAGN);
 #endif
 				RESIZE_ARRAY(ref cln.IMP_AUT_AFMD, ref G.SS.IMP_AUT_AFMD);
+#endif
+#if true//2019.03.21(NODATA-1化)
+				RESIZE_ARRAY(ref cln.MOZ_BOK_AFMD, ref G.SS.MOZ_BOK_AFMD);
 #endif
 				return (cln);
 			}

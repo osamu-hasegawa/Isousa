@@ -158,6 +158,8 @@
 			this.label50 = new System.Windows.Forms.Label();
 			this.label49 = new System.Windows.Forms.Label();
 			this.label26 = new System.Windows.Forms.Label();
+			this.label25 = new System.Windows.Forms.Label();
+			this.label35 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown32)).BeginInit();
@@ -222,6 +224,8 @@
 			this.groupBox2.Controls.Add(this.checkBox1);
 			this.groupBox2.Controls.Add(this.comboBox12);
 			this.groupBox2.Controls.Add(this.comboBox11);
+			this.groupBox2.Controls.Add(this.label35);
+			this.groupBox2.Controls.Add(this.label25);
 			this.groupBox2.Controls.Add(this.label4);
 			this.groupBox2.Controls.Add(this.label34);
 			this.groupBox2.Controls.Add(this.label3);
@@ -2276,6 +2280,32 @@
 			this.label26.TabIndex = 1;
 			this.label26.Text = "平滑化";
 			// 
+			// label25
+			// 
+			this.label25.AutoSize = true;
+			this.label25.BackColor = System.Drawing.SystemColors.Control;
+			this.label25.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.label25.ForeColor = System.Drawing.Color.MediumAquamarine;
+			this.label25.Location = new System.Drawing.Point(16, 391);
+			this.label25.Name = "label25";
+			this.label25.Size = new System.Drawing.Size(144, 16);
+			this.label25.TabIndex = 64;
+			this.label25.Text = "ピンボケ判定に使用";
+			this.label25.Visible = false;
+			// 
+			// label35
+			// 
+			this.label35.AutoSize = true;
+			this.label35.BackColor = System.Drawing.SystemColors.Control;
+			this.label35.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.label35.ForeColor = System.Drawing.Color.MediumAquamarine;
+			this.label35.Location = new System.Drawing.Point(228, 391);
+			this.label35.Name = "label35";
+			this.label35.Size = new System.Drawing.Size(144, 16);
+			this.label35.TabIndex = 64;
+			this.label35.Text = "ピンボケ判定に使用";
+			this.label35.Visible = false;
+			// 
 			// Form34
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -2479,6 +2509,8 @@
 		private System.Windows.Forms.CheckBox checkBox8;
 		private System.Windows.Forms.CheckBox checkBox5;
 		private System.Windows.Forms.Panel panel19;
+		private System.Windows.Forms.Label label25;
+		private System.Windows.Forms.Label label35;
 
 	}
 }

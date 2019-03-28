@@ -6143,13 +6143,13 @@ skip:
 					csv.set(c, r+1, seg.name_of_dm);
 					csv.set(c, r+2, seg.name_of_pd);
 					csv.set(c, r+3, seg.name_of_ir);
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 					if (seg.bNODATA) {
-					csv.set(c, r+4, "NO DATA");
-					csv.set(c, r+5, "NO DATA");
-					csv.set(c, r+6, "NO DATA");
-					csv.set(c, r+7, "NO DATA");
-					csv.set(c, r+8, "NO DATA");
+					csv.set(c, r+4, "-1");
+					csv.set(c, r+5, "-1");
+					csv.set(c, r+6, "-1");
+					csv.set(c, r+7, "-1");
+					csv.set(c, r+8, "-1");
 					}
 					else {
 #endif
@@ -6182,9 +6182,9 @@ skip:
 					//---
 					csv.set(c, r, "度数");
 					for (int i = 0; i < G.SS.MOZ_CND_HCNT; i++) {
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(c, r+1+i, "NO DATA");
+						csv.set(c, r+1+i, "-1");
 						}
 						else {
 #endif
@@ -6211,9 +6211,9 @@ skip:
 					//---
 					csv.set(c, r, "H度数");
 					for (int i = 0; i < 180; i++) {
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(c, r+1+i, "NO DATA");
+						csv.set(c, r+1+i, "-1");
 						}
 						else {
 #endif
@@ -6237,9 +6237,9 @@ skip:
 					//---
 					csv.set(c, r, "S度数");
 					for (int i = 0; i < 256; i++) {
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(c, r+1+i, "NO DATA");
+						csv.set(c, r+1+i, "-1");
 						}
 						else {
 #endif
@@ -6263,9 +6263,9 @@ skip:
 					//---
 					csv.set(c, r, "V度数");
 					for (int i = 0; i < 256; i++) {
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(c, r+1+i, "NO DATA");
+						csv.set(c, r+1+i, "-1");
 						}
 						else {
 #endif
@@ -6289,9 +6289,9 @@ skip:
 					//---
 					csv.set(c, r, "H度数");
 					for (int i = 0; i < 180; i++) {
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(c, r+1+i, "NO DATA");
+						csv.set(c, r+1+i, "-1");
 						}
 						else {
 #endif
@@ -6315,9 +6315,9 @@ skip:
 					//---
 					csv.set(c, r, "S度数");
 					for (int i = 0; i < 256; i++) {
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(c, r+1+i, "NO DATA");
+						csv.set(c, r+1+i, "-1");
 						}
 						else {
 #endif
@@ -6341,9 +6341,9 @@ skip:
 					//---
 					csv.set(c, r, "V度数");
 					for (int i = 0; i < 256; i++) {
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(c, r+1+i, "NO DATA");
+						csv.set(c, r+1+i, "-1");
 						}
 						else {
 #endif
@@ -6403,9 +6403,9 @@ skip:
 					//---
 					csv.set(c, r, "V度数");
 					for (int i = 0; i < 256; i++) {
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(c, r+1+i, "NO DATA");
+						csv.set(c, r+1+i, "-1");
 						}
 						else {
 #endif
@@ -6449,11 +6449,11 @@ skip:
 							break;
 						}
 						csv.set(0, r, F1S(xum));
-#if true//2019.03.16(NODATA対応)
+#if true//2019.03.21(NODATA-1化)
 						if (seg.bNODATA) {
-						csv.set(1, r, "NO DATA");
-						csv.set(2, r, "NO DATA");
-						csv.set(3, r, "NO DATA");
+						csv.set(1, r, "-1");
+						csv.set(2, r, "-1");
+						csv.set(3, r, "-1");
 						}
 						else {
 						double ff1 = TO_VAL(seg.val_cen_fil[i]);

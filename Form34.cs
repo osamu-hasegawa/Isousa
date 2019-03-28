@@ -90,6 +90,7 @@ namespace uSCOPE
 				this.label30.Text = "白色LED(透過)画像時";
 				this.label40.Text = "白色LED(反射)画像時";
 				this.label31.Text = "赤外LED画像時";
+#if true//2019.03.21(NODATA-1化)
 				this.comboBox9.Enabled = false;
 				this.comboBox10.Enabled = false;
 #if true//2018.11.13(毛髪中心AF)
@@ -108,6 +109,10 @@ namespace uSCOPE
 				this.checkBox6.Enabled = false;
 				this.checkBox9.Enabled = false;
 #endif
+#else
+				this.label25.Visible = true;
+				this.label35.Visible = true;
+#endif
 				this.label4.Visible = true;
 			}
 #if true//2019.03.02(直線近似)
@@ -115,30 +120,6 @@ namespace uSCOPE
 #endif
 		}
 
-		//private void Form34_FormClosing(object sender, FormClosingEventArgs e)
-		//{
-		//    if (this.DialogResult != DialogResult.OK) {
-		//        return;
-		//    }
-		//    if (DDX(false) == false) {
-		//        e.Cancel = true;
-		//    }
-		//    else {
-		//        //for (int i = 0; i < 4; i++) {
-		//        //    bool flag = false;
-		//        //    if (m_ss.PLM_LSPD[i] != G.SS.PLM_LSPD[i]) { flag = true; }
-		//        //    if (m_ss.PLM_JSPD[i] != G.SS.PLM_JSPD[i]) { flag = true; }
-		//        //    if (m_ss.PLM_HSPD[i] != G.SS.PLM_HSPD[i]) { flag = true; }
-		//        //    if (m_ss.PLM_ACCL[i] != G.SS.PLM_ACCL[i]) { flag = true; }
-		//        //    if (m_ss.PLM_MLIM[i] != G.SS.PLM_MLIM[i]) { flag = true; }
-		//        //    if (m_ss.PLM_PLIM[i] != G.SS.PLM_PLIM[i]) { flag = true; }
-		//        //    if (flag) {
-		//        //        G.mlog("#i速度、加速度、リミットの設定変更は「CONNECT」ボタン押下時に反映されます。");
-		//        //        break;
-		//        //    }
-		//        //}
-		//    }
-		//}
 		private bool DDX(bool bUpdate)
         {
             bool rc=false;
@@ -175,10 +156,6 @@ namespace uSCOPE
 #endif
 					//---
 					if (i == 3) {
-					//DDV.DDX(bUpdate, this.numericUpDown71, ref m_ss.IMP_CUV_LOWR[i]);
-					//DDV.DDX(bUpdate, this.numericUpDown72, ref m_ss.IMP_CUV_UPPR[i]);
-					//DDV.DDX(bUpdate, this.numericUpDown73, ref m_ss.IMP_GIZ_LOWR[i]);
-					//DDV.DDX(bUpdate, this.numericUpDown74, ref m_ss.IMP_GIZ_UPPR[i]);
 					}
 				}
 				if (Q == 0) {
@@ -201,12 +178,21 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox9, ref m_ss.IMP_AUT_USSD[3]);//反射(中心)
 #endif
 				}
-#if true//2018.08.21
-				//DDV.DDX(bUpdate, this.checkBox3, ref G.SS.MOZ_IRC_CK00);
-				//DDV.DDX(bUpdate, this.checkBox4, ref G.SS.MOZ_IRC_CK01);
-				//DDV.DDX(bUpdate, this.checkBox5, ref G.SS.MOZ_IRC_CK02);
-				//DDV.DDX(bUpdate, this.checkBox6, ref G.SS.MOZ_IRC_CK03);
-				//DDV.DDX(bUpdate, this.comboBox11, ref G.SS.MOZ_IRC_DISP);
+#if false//2019.03.21(NODATA-1化)
+				if (Q == 3) {
+				DDV.DDX(bUpdate, this.comboBox9     , ref m_ss.MOZ_BOK_AFMD[0]);//透過(表面):コントスラト計算範囲
+				DDV.DDX(bUpdate, this.comboBox10    , ref m_ss.MOZ_BOK_AFMD[1]);//反射(表面):コントスラト計算範囲
+				DDV.DDX(bUpdate, this.comboBox11    , ref m_ss.MOZ_BOK_AFMD[2]);//透過(中心):コントスラト計算範囲
+				DDV.DDX(bUpdate, this.comboBox12    , ref m_ss.MOZ_BOK_AFMD[3]);//反射(中心):コントスラト計算範囲
+				DDV.DDX(bUpdate, this.numericUpDown1, ref m_ss.MOZ_BOK_SOFS[0]);//透過(表面):上下オフセット
+				DDV.DDX(bUpdate, this.numericUpDown2, ref m_ss.MOZ_BOK_SOFS[1]);//反射(表面):上下オフセット
+				DDV.DDX(bUpdate, this.numericUpDown3, ref m_ss.MOZ_BOK_COFS[0]);//透過(中心):上下オフセット
+				DDV.DDX(bUpdate, this.numericUpDown4, ref m_ss.MOZ_BOK_COFS[1]);//反射(中心):上下オフセット
+				DDV.DDX(bUpdate, this.checkBox5     , ref m_ss.MOZ_BOK_USSD[0]);//透過(表面):標準偏差
+				DDV.DDX(bUpdate, this.checkBox8     , ref m_ss.MOZ_BOK_USSD[1]);//反射(表面):標準偏差
+				DDV.DDX(bUpdate, this.checkBox6     , ref m_ss.MOZ_BOK_USSD[2]);//透過(中心):標準偏差
+				DDV.DDX(bUpdate, this.checkBox9     , ref m_ss.MOZ_BOK_USSD[3]);//反射(中心):標準偏差
+				}
 #endif
 				//-----
                 rc = true;
