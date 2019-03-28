@@ -72,6 +72,7 @@
 			this.trackBar2 = new System.Windows.Forms.TrackBar();
 			this.trackBar4 = new System.Windows.Forms.TrackBar();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.checkBox7 = new System.Windows.Forms.CheckBox();
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -189,7 +190,6 @@
 			this.numericUpDown14 = new System.Windows.Forms.NumericUpDown();
 			this.button10 = new System.Windows.Forms.Button();
 			this.button9 = new System.Windows.Forms.Button();
-			this.checkBox7 = new System.Windows.Forms.CheckBox();
 			this.checkBox8 = new System.Windows.Forms.CheckBox();
 			this.tabPage11 = new System.Windows.Forms.TabPage();
 			this.numericUpDown51 = new System.Windows.Forms.NumericUpDown();
@@ -948,6 +948,7 @@
 			// tabPage4
 			// 
 			this.tabPage4.BackColor = System.Drawing.Color.SteelBlue;
+			this.tabPage4.Controls.Add(this.checkBox7);
 			this.tabPage4.Controls.Add(this.panel4);
 			this.tabPage4.Controls.Add(this.checkBox2);
 			this.tabPage4.Controls.Add(this.checkBox1);
@@ -968,6 +969,18 @@
 			this.tabPage4.Size = new System.Drawing.Size(277, 155);
 			this.tabPage4.TabIndex = 1;
 			this.tabPage4.Text = "ヒストグラム";
+			// 
+			// checkBox7
+			// 
+			this.checkBox7.AutoSize = true;
+			this.checkBox7.Location = new System.Drawing.Point(137, 65);
+			this.checkBox7.Name = "checkBox7";
+			this.checkBox7.Size = new System.Drawing.Size(105, 16);
+			this.checkBox7.TabIndex = 25;
+			this.checkBox7.Text = "標準偏差を使用";
+			this.checkBox7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox7.UseVisualStyleBackColor = true;
+			this.checkBox7.CheckedChanged += new System.EventHandler(this.OnControlStateChanged);
 			// 
 			// panel4
 			// 
@@ -2302,7 +2315,6 @@
 			this.tabPage6.Controls.Add(this.numericUpDown14);
 			this.tabPage6.Controls.Add(this.button10);
 			this.tabPage6.Controls.Add(this.button9);
-			this.tabPage6.Controls.Add(this.checkBox7);
 			this.tabPage6.Controls.Add(this.checkBox8);
 			this.tabPage6.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.tabPage6.Location = new System.Drawing.Point(4, 22);
@@ -2599,18 +2611,6 @@
 			this.button9.Text = "実行";
 			this.button9.UseVisualStyleBackColor = true;
 			this.button9.Click += new System.EventHandler(this.OnClicks);
-			// 
-			// checkBox7
-			// 
-			this.checkBox7.AutoSize = true;
-			this.checkBox7.Location = new System.Drawing.Point(87, 135);
-			this.checkBox7.Name = "checkBox7";
-			this.checkBox7.Size = new System.Drawing.Size(105, 16);
-			this.checkBox7.TabIndex = 9;
-			this.checkBox7.Text = "標準偏差を使用";
-			this.checkBox7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox7.UseVisualStyleBackColor = true;
-			this.checkBox7.CheckedChanged += new System.EventHandler(this.OnControlStateChanged);
 			// 
 			// checkBox8
 			// 
@@ -4319,7 +4319,6 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown24;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.CheckBox checkBox7;
 		private System.Windows.Forms.Button button13;
 		private System.Windows.Forms.ComboBox comboBox8;
 		private System.Windows.Forms.ComboBox comboBox7;
@@ -4492,5 +4491,6 @@
 		private System.Windows.Forms.Label label88;
 		private System.Windows.Forms.Label label16;
 		protected System.Windows.Forms.Button button36;
+		private System.Windows.Forms.CheckBox checkBox7;
     }
 }

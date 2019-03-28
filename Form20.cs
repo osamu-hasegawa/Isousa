@@ -89,7 +89,9 @@ namespace uSCOPE
 #if true//2019.03.02(直線近似)
 				DDV.DDX(bUpdate, this.numericUpDown21, ref m_ss.PLM_AUT_2DSM);
 #endif
+#if false//2019.03.18(AF順序)
 				DDV.DDX(bUpdate, this.checkBox1      , ref m_ss.PLM_AUT_2FST);
+#endif
 				//---
 				DDV.DDX(bUpdate, this.comboBox2      , ref m_ss.PLM_AUT_FLTP);
 				DDV.DDX(bUpdate, this.textBox2       , ref m_ss.PLM_AUT_FOLD);
@@ -149,6 +151,9 @@ namespace uSCOPE
 #endif
 #if true//2019.03.02(直線近似)
 				DDV.DDX(bUpdate, this.checkBox13,ref m_ss.PLM_AUT_AF_2);//AF2使用
+#endif
+#if true//2019.03.18(AF順序)
+				DDV.DDX(bUpdate, this.checkBox14,ref m_ss.IMP_AUT_EXAF);//測定順序を中心→表面
 #endif
 				if (bUpdate == false) {
 					if (this.textBox2.Text == "") {
@@ -240,6 +245,12 @@ namespace uSCOPE
 					//        return(false);
 					//    }
 					//}
+#if true//2019.03.18(AF順序)
+					if (m_ss.IMP_AUT_EXAF && m_ss.PLM_AUT_ZDCK == false) {
+						G.mlog("「毛髪径判定」が選択されていません.");
+						this.checkBox14.Focus();
+					}
+#endif
 				}
                 rc = true;
             }

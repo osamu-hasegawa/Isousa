@@ -117,6 +117,7 @@
 			this.label24 = new System.Windows.Forms.Label();
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.label23 = new System.Windows.Forms.Label();
+			this.checkBox14 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -456,12 +457,14 @@
 			// 
 			// checkBox1
 			// 
+			this.checkBox1.BackColor = System.Drawing.Color.Red;
 			this.checkBox1.Location = new System.Drawing.Point(305, 33);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(153, 28);
 			this.checkBox1.TabIndex = 8;
 			this.checkBox1.Text = "画像サイズ縮小による高速化(計算範囲は画像全体)";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.checkBox1.UseVisualStyleBackColor = false;
+			this.checkBox1.Visible = false;
 			// 
 			// panel1
 			// 
@@ -780,6 +783,7 @@
 			this.groupBox3.Controls.Add(this.checkBox9);
 			this.groupBox3.Controls.Add(this.checkBox4);
 			this.groupBox3.Controls.Add(this.checkBox5);
+			this.groupBox3.Controls.Add(this.checkBox14);
 			this.groupBox3.Controls.Add(this.checkBox3);
 			this.groupBox3.Controls.Add(this.numericUpDown13);
 			this.groupBox3.Controls.Add(this.numericUpDown11);
@@ -820,7 +824,7 @@
 			// 
 			this.checkBox13.AutoSize = true;
 			this.checkBox13.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox13.Location = new System.Drawing.Point(343, 245);
+			this.checkBox13.Location = new System.Drawing.Point(332, 245);
 			this.checkBox13.Name = "checkBox13";
 			this.checkBox13.Size = new System.Drawing.Size(101, 16);
 			this.checkBox13.TabIndex = 50;
@@ -1434,6 +1438,16 @@
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.label23.Visible = false;
 			// 
+			// checkBox14
+			// 
+			this.checkBox14.AutoSize = true;
+			this.checkBox14.Location = new System.Drawing.Point(332, 265);
+			this.checkBox14.Name = "checkBox14";
+			this.checkBox14.Size = new System.Drawing.Size(141, 16);
+			this.checkBox14.TabIndex = 66;
+			this.checkBox14.Text = "測定順序を中心→表面";
+			this.checkBox14.UseVisualStyleBackColor = true;
+			// 
 			// Form20
 			// 
 			this.AcceptButton = this.button1;
@@ -1587,5 +1601,6 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown20;
 		private System.Windows.Forms.NumericUpDown numericUpDown22;
 		private System.Windows.Forms.CheckBox checkBox13;
+		private System.Windows.Forms.CheckBox checkBox14;
 	}
 }

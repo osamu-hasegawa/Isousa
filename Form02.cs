@@ -3683,6 +3683,9 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 		//2:毛髪矩形+25%
 		//3:毛髪矩形+50%
 		//4:毛髪矩形+100%
+		//5:毛髪範囲10%
+		//6:毛髪範囲25%
+		//....
 		//---------------------
 		// ヒストグラム
 		//画像全体
@@ -4428,7 +4431,13 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 					//OCV_MERGE((int)IMG.IMG_D, (int)IMG.IMG_D, (int)IMG.IMG_D, (int)IMG.IMG_A);
 				}
 				else
-				if (G.SS.CAM_FCS_USSD) {
+				if (
+#if true//2019.03.18(AF順序)
+					G.CNT_USSD
+#else
+					G.SS.CAM_FCS_USSD
+#endif
+					) {
 					//標準偏差(最大値127.5^2で正規化)
 					// 255, 0 = avg=127.5
 					// 

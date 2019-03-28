@@ -311,6 +311,10 @@ namespace uSCOPE
 			public double[] IMP_OPT_MAGN = {8.0,8.0,8.0,8.0};
 			public int[] IMP_AUT_AFMD = {0, 0, 0, 0};
 #endif
+#if true//2019.03.18(AF順序)
+			public bool IMP_AUT_EXAF = false;//AF順序(中心→表面)
+			public bool[] IMP_AUT_USSD = {false, false, false, false};//AF標準偏差
+#endif
 			//---
 			public bool PLM_AUT_FINI = true;
 			public bool PLM_AUT_ZINI = true;
@@ -332,7 +336,9 @@ namespace uSCOPE
 			public int PLM_AUT_2HAN = 100;
 			public int PLM_AUT_2DSL = 25;
 			public int PLM_AUT_2DSS = 5;
+#if false//2019.03.18(AF順序)
 			public bool PLM_AUT_2FST = false;
+#endif
 			//---
 			public bool PLM_AUT_HPOS = false;
 			public int PLM_AUT_HMOD = 0;
@@ -1099,6 +1105,9 @@ namespace uSCOPE
 		static public int CNT_MOD;
 #if true//2019.02.03(WB調整)
 		static public int CNT_OFS;
+#endif
+#if true//2019.03.18(AF順序)
+		static public bool CNT_USSD = false;
 #endif
 #if true//2019.02.27(ＡＦ２実装)
 		static public bool FC2_FLG=false;

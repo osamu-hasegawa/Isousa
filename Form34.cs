@@ -102,6 +102,12 @@ namespace uSCOPE
 				this.numericUpDown3.Enabled = false;
 				this.numericUpDown4.Enabled = false;
 #endif
+#if true//2019.03.18(AF順序)
+				this.checkBox5.Enabled = false;
+				this.checkBox8.Enabled = false;
+				this.checkBox6.Enabled = false;
+				this.checkBox9.Enabled = false;
+#endif
 				this.label4.Visible = true;
 			}
 #if true//2019.03.02(直線近似)
@@ -187,6 +193,12 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown2, ref m_ss.IMP_AUT_SOFS[1]);//反射(表面)
 				DDV.DDX(bUpdate, this.numericUpDown3, ref m_ss.IMP_AUT_COFS[0]);//透過(中心)
 				DDV.DDX(bUpdate, this.numericUpDown4, ref m_ss.IMP_AUT_COFS[1]);//反射(中心)
+#endif
+#if true//2019.03.18(AF順序)
+				DDV.DDX(bUpdate, this.checkBox5, ref m_ss.IMP_AUT_USSD[0]);//透過(表面)
+				DDV.DDX(bUpdate, this.checkBox8, ref m_ss.IMP_AUT_USSD[1]);//反射(表面)
+				DDV.DDX(bUpdate, this.checkBox6, ref m_ss.IMP_AUT_USSD[2]);//透過(中心)
+				DDV.DDX(bUpdate, this.checkBox9, ref m_ss.IMP_AUT_USSD[3]);//反射(中心)
 #endif
 				}
 #if true//2018.08.21

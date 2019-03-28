@@ -351,6 +351,9 @@ this.SPE_COD = 0;
 #if true//2019.02.03(WB調整)
 				G.CNT_OFS = 0;
 #endif
+#if true//2019.03.18(AF順序)
+				G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 			}
 			else if (sender == this.button7) {
@@ -363,6 +366,9 @@ this.SPE_COD = 0;
 #if true//2019.02.03(WB調整)
 				G.CNT_OFS = 0;
 #endif
+#if true//2019.03.18(AF順序)
+				G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FCS_STS = 1;
 				this.timer1.Tag = null;
@@ -373,6 +379,9 @@ this.SPE_COD = 0;
 				//フォーカス・実行
 				G.CNT_MOD = G.SS.CAM_HIS_PAR1;
 				G.CNT_OFS = 0;
+#if true//2019.03.18(AF順序)
+				G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FC2_STS = 1;
 				this.timer6.Tag = null;
@@ -412,6 +421,9 @@ this.SPE_COD = 0;
 				G.CNT_MOD = G.SS.CAM_WBL_PAR1;
 #if true//2019.02.03(WB調整)
 				G.CNT_OFS = 0;
+#endif
+#if true//2019.03.18(AF順序)
+				G.CNT_USSD = G.SS.CAM_FCS_USSD;
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 				G.CHK_WBL = 1;
@@ -1085,6 +1097,9 @@ this.SPE_COD = 0;
 #if true//2019.02.03(WB調整)
 					G.CNT_OFS = 0;
 #endif
+#if true//2019.03.18(AF順序)
+					G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 				}
 				G.FORM02.UPDATE_PROC();
 			}
@@ -1653,6 +1668,7 @@ this.SPE_COD = 0;
 		 */
 		public void start_af(int iTag)
 		{
+#if false//2019.03.18(AF順序)
 			m_adat.chk3 = 0;
 			if (iTag == 2 && G.SS.PLM_AUT_2FST) {
 				if (G.FORM02.get_size_mode() <= 1) {
@@ -1665,10 +1681,15 @@ this.SPE_COD = 0;
 					m_adat.chk3 = 1;
 				}
 			}
+#endif
 			if (iTag == 3) {
 				G.SS.CAM_FCS_PAR1 = 2;//毛髪径最大化によるAF
 			}
-			else if (G.CNT_MOD == 0 || m_adat.chk3 == 1) {
+			else if (G.CNT_MOD == 0
+#if false//2019.03.18(AF順序)
+				|| m_adat.chk3 == 1
+#endif
+				) {
 				//Contrast全体
 				G.SS.CAM_FCS_PAR1 = 0;
 			}
@@ -1677,6 +1698,21 @@ this.SPE_COD = 0;
 				G.SS.CAM_FCS_PAR1 = 0;
 				G.FORM02.set_mask_by_result();
 			}
+#if true//2019.03.18(AF順序)
+			//G.mlog("ATODE KAKU NIN");
+			//G.CNT_USSD = G.SS.IMP_AUT_USSD[999];
+			if ((G.LED_PWR_STS & 1) != 0) {
+				//白色(透過)
+				//G.CNT_USSD = G.SS.IMP_AUT_USSD[0];
+			}
+			else {
+				//白色(反射)
+				//G.CNT_USSD = G.SS.IMP_AUT_USSD[1];
+			}
+			//G.mlog("ATODE KAKU NIN");
+			//G.CNT_USSD = G.SS.IMP_AUT_USSD[999];
+#endif
+
 #if true//2019.03.02(直線近似)
 			if (iTag != 3 && G.SS.PLM_AUT_AF_2) {
 				this.FC2_STS = 1;
@@ -1708,9 +1744,11 @@ this.SPE_COD = 0;
 			m_adat.trace = false;
 			m_adat.retry = false;
 			try {
+#if false//2019.03.18(AF順序)
 				if (G.FORM02.get_size_mode() > 1) {
 					G.FORM02.set_size_mode(1, -1, -1);
 				}
+#endif
 				prg.Show("自動撮影", G.FORM01);
 				prg.SetStatus("実行中...");
 #if false//2018.05.17
@@ -1786,12 +1824,22 @@ this.SPE_COD = 0;
 					else if (this.FCS_STS != 0) {
 #if true//2018.11.13(毛髪中心AF)
 						if (this.AUT_STS > 600) {
+#if true//2019.03.18(AF順序)
+							if (G.SS.IMP_AUT_EXAF)
+								buf += "フォーカス(表面)";
+							else
+#endif
 						buf += "フォーカス(中心)";
 						}
 						else if (this.AUT_STS < 10) {
 						buf += "フォーカス";
 						}
 						else {
+#if true//2019.03.18(AF順序)
+							if (G.SS.IMP_AUT_EXAF)
+								buf += "フォーカス(中心)";
+							else
+#endif
 						buf += "フォーカス(表面)";
 						}
 #else
@@ -1827,9 +1875,11 @@ this.SPE_COD = 0;
 			}
 #endif
 			//---
+#if false//2019.03.18(AF順序)
 			if (G.FORM02.get_size_mode() > 1) {
 				G.FORM02.set_size_mode(1, -1, -1);
 			}
+#endif
 			G.SS.PLM_AUT_MODE = bak_of_mode;//リトライ時に書き変わるため元に戻す
 		}
 
@@ -1957,8 +2007,14 @@ this.SPE_COD = 0;
 			public int z_idx;
 			public int z_cnt;
 			public int z_cur;
+#if true//2019.03.18(AF順序)
+			public List<string> z_nam;
+			public List<int> z_pos;
+			public bool exaf_done;
+#else
 			public ArrayList z_nam;
 			public ArrayList z_pos;
+#endif
 #if true//2018.11.13(毛髪中心AF)
 			public int k_pre_pos_z;
 			public double k_sta_contrast;
@@ -2033,8 +2089,13 @@ this.SPE_COD = 0;
 				z_idx = 0;
 				z_cnt = 1;
 				z_cur = 0;
+#if true//2019.03.18(AF順序)
+				z_nam = new List<string>();
+				z_pos = new List<int>();
+#else
 				z_nam = new ArrayList();
 				z_pos = new ArrayList();
+#endif
 #if true//2018.11.13
 				k_pre_pos_z = 0;
 				k_sta_contrast = double.NaN;
@@ -2071,7 +2132,9 @@ this.SPE_COD = 0;
 				gai_tune_ir_done = false;
 				gai_tune_cl_done = false;
 #endif
-
+#if true//2019.03.18(AF順序)
+				exaf_done = false;
+#endif
 			}
 		};
 #if true//2018.12.22(測定抜け対応)
@@ -2359,6 +2422,12 @@ this.SPE_COD = 0;
 							string tmp = (string)m_adat.z_nam[q];
 							string name_old = src.Replace("ZP00D", tmp);
 							string name_new = dst.Replace("ZP00D", tmp);
+#if true//2019.03.18(AF順序)
+							if (G.SS.IMP_AUT_EXAF) {
+								name_old = src.Replace("KP00D", tmp);
+								name_new = dst.Replace("KP00D", tmp);
+							}
+#endif
 							//---
 							buf = buf.Replace(name_old, name_new);
 #if true//2018.06.04 赤外同時測定
@@ -2376,6 +2445,12 @@ this.SPE_COD = 0;
 							string tmp = (string)m_adat.k_nam[q];
 							string name_old = src.Replace("ZP00D", tmp);
 							string name_new = dst.Replace("ZP00D", tmp);
+#if true//2019.03.18(AF順序)
+							if (G.SS.IMP_AUT_EXAF) {
+								name_old = src.Replace("KP00D", tmp);
+								name_new = dst.Replace("KP00D", tmp);
+							}
+#endif
 							//---
 							buf = buf.Replace(name_old, name_new);
 							if (G.SS.PLM_AUT_IRCK) {
@@ -2393,6 +2468,12 @@ this.SPE_COD = 0;
 							string tmp = (string)m_adat.z_nam[q];
 							string name_old = path_old.Replace("ZP00D", tmp);
 							string name_new = path_new.Replace("ZP00D", tmp);
+#if true//2019.03.18(AF順序)
+							if (G.SS.IMP_AUT_EXAF) {
+								name_old = path_old.Replace("KP00D", tmp);
+								name_new = path_new.Replace("KP00D", tmp);
+							}
+#endif
 							//---
 							System.IO.File.Move(name_old, name_new);
 #if true//2018.06.04 赤外同時測定
@@ -2410,6 +2491,12 @@ this.SPE_COD = 0;
 							string tmp = (string)m_adat.k_nam[q];
 							string name_old = path_old.Replace("ZP00D", tmp);
 							string name_new = path_new.Replace("ZP00D", tmp);
+#if true//2019.03.18(AF順序)
+							if (G.SS.IMP_AUT_EXAF) {
+								name_old = path_old.Replace("KP00D", tmp);
+								name_new = path_new.Replace("KP00D", tmp);
+							}
+#endif
 							//---
 							System.IO.File.Move(name_old, name_new);
 							if (G.SS.PLM_AUT_IRCK) {
@@ -2684,6 +2771,89 @@ this.SPE_COD = 0;
 #endif
 		}
 #endif
+#if true//2019.03.18(AF順序)
+		private int AFMD2N(int AFMD)
+		{
+			if (AFMD != 0) {
+				AFMD++;
+			}
+			return(AFMD);
+		}
+		private void set_af_mode(int AUT_STS)
+		{
+			int AFMD = -1;
+			switch (AUT_STS) {
+				case 1:
+				case 15:
+				case 25:
+				case 35:
+					if ((G.LED_PWR_STS & 1) != 0) {
+						//白色(透過)
+						if (!G.SS.IMP_AUT_EXAF) {
+							AFMD = 0;//透過(表面)
+						}
+						else {
+							AFMD = 2;//透過(中心)
+						}
+					}
+					else {
+						//白色(反射)
+						if (!G.SS.IMP_AUT_EXAF) {
+							AFMD = 1;//反射(表面)
+						}
+						else {
+							AFMD = 3;//反射(中心)
+						}
+					}
+				break;
+				case 615:
+				case 625:
+				case 635:
+					if ((G.LED_PWR_STS & 1) != 0) {
+						//白色(透過):中心用
+						if (!G.SS.IMP_AUT_EXAF) {
+							AFMD = 2;//透過(中心)
+						}
+						else {
+							AFMD = 0;//透過(表面)
+						}
+					}
+					else {
+						//白色(反射):中心用
+						if (!G.SS.IMP_AUT_EXAF) {
+							AFMD = 3;//反射(中心)
+						}
+						else {
+							AFMD = 1;//反射(表面)
+						}
+					}
+				break;
+			}
+			//---
+			switch (AFMD) {
+				case 0://透過(表面)
+					G.CNT_MOD  = AFMD2N(G.SS.IMP_AUT_AFMD[0]);
+					G.CNT_OFS  = G.SS.IMP_AUT_SOFS[0];//透過(表面)
+					G.CNT_USSD = G.SS.IMP_AUT_USSD[0];//透過(表面)
+					break;
+				case 1:
+					G.CNT_MOD  = AFMD2N(G.SS.IMP_AUT_AFMD[1]);
+					G.CNT_OFS  = G.SS.IMP_AUT_SOFS[1];//反射(表面)
+					G.CNT_USSD = G.SS.IMP_AUT_USSD[1];//反射(表面)
+					break;
+				case 2:
+					G.CNT_MOD  = AFMD2N(G.SS.IMP_AUT_AFMD[2]);
+					G.CNT_OFS  = G.SS.IMP_AUT_COFS[0];//透過(中心)
+					G.CNT_USSD = G.SS.IMP_AUT_USSD[2];//透過(中心)
+					break;
+				case 3:
+					G.CNT_MOD  = AFMD2N(G.SS.IMP_AUT_AFMD[3]);
+					G.CNT_OFS  = G.SS.IMP_AUT_COFS[1];//反射(中心)
+					G.CNT_USSD = G.SS.IMP_AUT_USSD[3];//反射(中心)
+					break;
+			}
+		}
+#endif
 		private int m_retry_cnt_of_hpos;
 		// 自動測定
 		private void timer2_Tick(object sender, EventArgs e)
@@ -2741,6 +2911,9 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 					NXT_STS = 70;//70->71->1として白色点灯->安定待機後に戻ってくる
 				}*/
 				else {
+#if true//2019.03.18(AF順序)
+					set_af_mode(this.AUT_STS);
+#else
 #if true//2018.05.17
 					if ((G.LED_PWR_STS & 1) != 0) {
 						//白色(透過)
@@ -2756,6 +2929,7 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 						G.CNT_OFS = G.SS.IMP_AUT_SOFS[1];//反射(表面)
 #endif
 					}
+#endif
 #endif
 #if true//2018.12.22(測定抜け対応)
 					if (m_adat.nuke) {
@@ -2973,6 +3147,23 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 #endif
 					    }
 					}
+#if true//2019.03.18(AF順序)
+					if (m_adat.exaf_done == false && G.SS.IMP_AUT_EXAF) {
+						m_adat.exaf_done = true;
+						if (m_adat.k_cnt <= 0) {
+							G.mlog("internal error");
+						}
+						int				tmp_cnt = m_adat.k_cnt;
+						List<string>	tmp_nam = m_adat.k_nam;
+						List<int>		tmp_pos = m_adat.k_pos;
+						m_adat.k_cnt = m_adat.z_cnt;
+						m_adat.k_nam = m_adat.z_nam;
+						m_adat.k_pos = m_adat.z_pos;
+						m_adat.z_cnt = tmp_cnt;
+						m_adat.z_nam = tmp_nam;
+						m_adat.z_pos = tmp_pos;
+					}
+#endif
 				}
 				NXT_STS = 12;
 				break;
@@ -3250,6 +3441,9 @@ a_write("毛髪判定(中心):OK");
 				else {
 					flag = flag;
 				}
+#if true//2019.03.18(AF順序)
+				set_af_mode(this.AUT_STS);
+#else
 #if true//2018.11.13(毛髪中心AF)
 				if ((G.LED_PWR_STS & 1) != 0) {
 					//白色(透過)
@@ -3265,6 +3459,7 @@ a_write("毛髪判定(中心):OK");
 					G.CNT_OFS = G.SS.IMP_AUT_SOFS[1];//反射(表面)
 #endif
 				}
+#endif
 #endif
 				if (this.AUT_STS == 15 && NXT_STS == 16) {
 					for (int i = 0; i < 2; i++) {
@@ -3313,10 +3508,12 @@ a_write("AF:開始");
 				else if (m_adat.chk2 == 1) {
 					NXT_STS = this.AUT_STS;
 					m_adat.chk2 = 0;
+#if false//2019.03.18(AF順序)
 					if (m_adat.chk3 == 1) {
 						m_adat.chk3 = 0;
 						G.FORM02.set_size_mode(1, -1, -1);
 					}
+#endif
 					m_dcur = m_didx;
 #if true//2018.11.13(毛髪中心AF)
 					if (this.AUT_STS > 600) {
@@ -3605,6 +3802,10 @@ a_write("AF:終了");
 				NXT_STS = -(10 - 1);//->10
 				//---
 				rename_aut_files();
+#if true//2019.03.18(AF順序)
+				set_af_mode(1);//初期状態に戻す
+#endif
+
 				//---
 				m_adat.h_idx++;
 #if true//2018.12.22(測定抜け対応)
@@ -4039,6 +4240,9 @@ a_write("光源切替:->反射");
 			case 615:
 			case 625:
 			case 635:
+#if true//2019.03.18(AF順序)
+				set_af_mode(this.AUT_STS);
+#else
 #if true//2018.05.17
 				if ((G.LED_PWR_STS & 1) != 0) {
 					//白色(透過):中心用
@@ -4055,7 +4259,7 @@ a_write("光源切替:->反射");
 #endif
 				}
 #endif
-
+#endif
 				if (this.AUT_STS == 615 && NXT_STS == 616) {
 a_write("AF:開始(中心)");
 					start_af(1/*1:1st*/);
