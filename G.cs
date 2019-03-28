@@ -27,6 +27,12 @@ namespace uSCOPE
 			public int APP_F02_TOP =   5;
 			public int APP_F02_WID = 600;
 			public int APP_F02_HEI = 800;
+#if true//2019.03.22(再測定表)
+			public int APP_F04_LFT =  10;
+			public int APP_F04_TOP =  10;
+			public int APP_F04_WID = 600;
+			public int APP_F04_HEI = 800;
+#endif
 			public string AUT_BEF_PATH = "";
 			public string BEFORE_PATH = "";
 			//---
@@ -212,7 +218,9 @@ namespace uSCOPE
 			public bool CAM_FCS_CHK2 = false;
 			public int CAM_FCS_SKIP = 1;
 			public int CAM_FCS_FAVG = 1;
+#if false//2019.03.22(再測定表)
 			public bool CAM_FCS_USSD = false;
+#endif
 #if true//2019.02.27(ＡＦ２実装)
 			//---
 			public int CAM_FC2_LMIN = -50;
@@ -313,8 +321,14 @@ namespace uSCOPE
 #endif
 #if true//2019.03.18(AF順序)
 			public bool IMP_AUT_EXAF = false;//AF順序(中心→表面)
+#if true//2019.03.22(再測定表)
+			//0:MAXMIN, 1:標準偏差,2:微分X, 3:微分Y, 4:微分XY
+			public int[] IMP_AUT_CMET = {0, 0, 1, 1};//AF方式(透過:表面, 反射:表面, 透過:中心, 反射:中心)
+#else
 			public bool[] IMP_AUT_USSD = {false, false, false, false};//AF標準偏差
 #endif
+#endif
+
 			//---
 			public bool PLM_AUT_FINI = true;
 			public bool PLM_AUT_ZINI = true;
@@ -557,13 +571,22 @@ namespace uSCOPE
 			public int[] MOZ_BOK_AFMD = {0,0,0,0};//透過(表面), 反射(表面), 透過(中心), 反射(中心)
 			public int[] MOZ_BOK_SOFS = {0, 0};//オフセット, 透過(表面), 反射(表面)
 			public int[] MOZ_BOK_COFS = {0, 0};//オフセット, 透過(中心), 反射(中心)
+#if true//2019.03.22(再測定表)
+			//0:MAXMIN, 1:標準偏差,2:微分X, 3:微分Y, 4:微分XY
+			public int[] MOZ_BOK_CMET = {0, 0, 1, 1};//AF方式(透過:表面, 反射:表面, 透過:中心, 反射:中心)
+#else
 			public bool[] MOZ_BOK_USSD = {false, false, false, false};//標準偏差, 透過(表面), 反射(表面), 透過(中心), 反射(中心)
+#endif
 			public int MOZ_BOK_CTHD = 25;
 #endif
 #if true//2019.03.14(NG画像判定)
 			//[XmlIgnoreAttribute]
 			public string NGJ_CND_FOLD = "";
 			public int NGJ_CND_FMOD = 0;
+#endif
+#if true//2019.03.22(再測定表)
+			public double REM_BOK_STHD = 25;
+			public double REM_BOK_CTHD = 25;
 #endif
 #if true//2019.01.11(混在対応) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 			public int[]    ANL_CND_CTYP = {0,0};//キューティクル(0:BPF,1:2d)
@@ -1112,8 +1135,13 @@ namespace uSCOPE
 #if true//2019.02.03(WB調整)
 		static public int CNT_OFS;
 #endif
+#if true//2019.03.22(再測定表)
+		static public int CNT_MET = 0;
+		static public bool CNT_NO_CONTOURS = false;
+#else
 #if true//2019.03.18(AF順序)
 		static public bool CNT_USSD = false;
+#endif
 #endif
 #if true//2019.02.27(ＡＦ２実装)
 		static public bool FC2_FLG=false;
@@ -1474,6 +1502,14 @@ namespace uSCOPE
 #endif
 		}
 #endif
-
+#if true//2019.03.18(AF順序)
+		static public int AFMD2N(int AFMD)
+		{
+			if (AFMD != 0) {
+				AFMD++;
+			}
+			return(AFMD);
+		}
+#endif
 	}
 }

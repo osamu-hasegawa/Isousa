@@ -90,7 +90,7 @@ namespace uSCOPE
 				this.label30.Text = "白色LED(透過)画像時";
 				this.label40.Text = "白色LED(反射)画像時";
 				this.label31.Text = "赤外LED画像時";
-#if true//2019.03.21(NODATA-1化)
+#if false//2019.03.22(再測定表)
 				this.comboBox9.Enabled = false;
 				this.comboBox10.Enabled = false;
 #if true//2018.11.13(毛髪中心AF)
@@ -111,7 +111,7 @@ namespace uSCOPE
 #endif
 #else
 				this.label25.Visible = true;
-				this.label35.Visible = true;
+				this.label68.Visible = true;
 #endif
 				this.label4.Visible = true;
 			}
@@ -171,14 +171,21 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown3, ref m_ss.IMP_AUT_COFS[0]);//透過(中心)
 				DDV.DDX(bUpdate, this.numericUpDown4, ref m_ss.IMP_AUT_COFS[1]);//反射(中心)
 #endif
+#if true//2019.03.22(再測定表)
+				DDV.DDX(bUpdate, this.comboBox7 , ref m_ss.IMP_AUT_CMET[0]);//透過(表面)
+				DDV.DDX(bUpdate, this.comboBox13, ref m_ss.IMP_AUT_CMET[1]);//反射(表面)
+				DDV.DDX(bUpdate, this.comboBox8 , ref m_ss.IMP_AUT_CMET[2]);//透過(中心)
+				DDV.DDX(bUpdate, this.comboBox14, ref m_ss.IMP_AUT_CMET[3]);//反射(中心)
+#else
 #if true//2019.03.18(AF順序)
 				DDV.DDX(bUpdate, this.checkBox5, ref m_ss.IMP_AUT_USSD[0]);//透過(表面)
 				DDV.DDX(bUpdate, this.checkBox8, ref m_ss.IMP_AUT_USSD[1]);//反射(表面)
 				DDV.DDX(bUpdate, this.checkBox6, ref m_ss.IMP_AUT_USSD[2]);//透過(中心)
 				DDV.DDX(bUpdate, this.checkBox9, ref m_ss.IMP_AUT_USSD[3]);//反射(中心)
 #endif
+#endif
 				}
-#if false//2019.03.21(NODATA-1化)
+#if true//2019.03.22(再測定表)
 				if (Q == 3) {
 				DDV.DDX(bUpdate, this.comboBox9     , ref m_ss.MOZ_BOK_AFMD[0]);//透過(表面):コントスラト計算範囲
 				DDV.DDX(bUpdate, this.comboBox10    , ref m_ss.MOZ_BOK_AFMD[1]);//反射(表面):コントスラト計算範囲
@@ -188,10 +195,10 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown2, ref m_ss.MOZ_BOK_SOFS[1]);//反射(表面):上下オフセット
 				DDV.DDX(bUpdate, this.numericUpDown3, ref m_ss.MOZ_BOK_COFS[0]);//透過(中心):上下オフセット
 				DDV.DDX(bUpdate, this.numericUpDown4, ref m_ss.MOZ_BOK_COFS[1]);//反射(中心):上下オフセット
-				DDV.DDX(bUpdate, this.checkBox5     , ref m_ss.MOZ_BOK_USSD[0]);//透過(表面):標準偏差
-				DDV.DDX(bUpdate, this.checkBox8     , ref m_ss.MOZ_BOK_USSD[1]);//反射(表面):標準偏差
-				DDV.DDX(bUpdate, this.checkBox6     , ref m_ss.MOZ_BOK_USSD[2]);//透過(中心):標準偏差
-				DDV.DDX(bUpdate, this.checkBox9     , ref m_ss.MOZ_BOK_USSD[3]);//反射(中心):標準偏差
+				DDV.DDX(bUpdate, this.comboBox7     , ref m_ss.MOZ_BOK_CMET[0]);//透過(表面):標準偏差
+				DDV.DDX(bUpdate, this.comboBox13    , ref m_ss.MOZ_BOK_CMET[1]);//反射(表面):標準偏差
+				DDV.DDX(bUpdate, this.comboBox8     , ref m_ss.MOZ_BOK_CMET[2]);//透過(中心):標準偏差
+				DDV.DDX(bUpdate, this.comboBox14    , ref m_ss.MOZ_BOK_CMET[3]);//反射(中心):標準偏差
 				}
 #endif
 				//-----

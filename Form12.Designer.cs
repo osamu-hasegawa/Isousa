@@ -72,11 +72,9 @@
 			this.trackBar2 = new System.Windows.Forms.TrackBar();
 			this.trackBar4 = new System.Windows.Forms.TrackBar();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
-			this.checkBox7 = new System.Windows.Forms.CheckBox();
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			this.comboBox8 = new System.Windows.Forms.ComboBox();
 			this.comboBox7 = new System.Windows.Forms.ComboBox();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -84,7 +82,6 @@
 			this.button13 = new System.Windows.Forms.Button();
 			this.button5 = new System.Windows.Forms.Button();
 			this.label19 = new System.Windows.Forms.Label();
-			this.label20 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label38 = new System.Windows.Forms.Label();
 			this.tabPage9 = new System.Windows.Forms.TabPage();
@@ -680,9 +677,8 @@
 			this.button36.Size = new System.Drawing.Size(66, 40);
 			this.button36.TabIndex = 2;
 			this.button36.Tag = "3";
-			this.button36.Text = "画像判定";
+			this.button36.Text = "再測定";
 			this.button36.UseVisualStyleBackColor = true;
-			this.button36.Visible = false;
 			this.button36.Click += new System.EventHandler(this.button36_Click);
 			// 
 			// tabPage7
@@ -948,11 +944,9 @@
 			// tabPage4
 			// 
 			this.tabPage4.BackColor = System.Drawing.Color.SteelBlue;
-			this.tabPage4.Controls.Add(this.checkBox7);
 			this.tabPage4.Controls.Add(this.panel4);
 			this.tabPage4.Controls.Add(this.checkBox2);
 			this.tabPage4.Controls.Add(this.checkBox1);
-			this.tabPage4.Controls.Add(this.comboBox8);
 			this.tabPage4.Controls.Add(this.comboBox7);
 			this.tabPage4.Controls.Add(this.comboBox1);
 			this.tabPage4.Controls.Add(this.comboBox2);
@@ -960,7 +954,6 @@
 			this.tabPage4.Controls.Add(this.button13);
 			this.tabPage4.Controls.Add(this.button5);
 			this.tabPage4.Controls.Add(this.label19);
-			this.tabPage4.Controls.Add(this.label20);
 			this.tabPage4.Controls.Add(this.label3);
 			this.tabPage4.Controls.Add(this.label38);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
@@ -969,18 +962,6 @@
 			this.tabPage4.Size = new System.Drawing.Size(277, 155);
 			this.tabPage4.TabIndex = 1;
 			this.tabPage4.Text = "ヒストグラム";
-			// 
-			// checkBox7
-			// 
-			this.checkBox7.AutoSize = true;
-			this.checkBox7.Location = new System.Drawing.Point(137, 65);
-			this.checkBox7.Name = "checkBox7";
-			this.checkBox7.Size = new System.Drawing.Size(105, 16);
-			this.checkBox7.TabIndex = 25;
-			this.checkBox7.Text = "標準偏差を使用";
-			this.checkBox7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox7.UseVisualStyleBackColor = true;
-			this.checkBox7.CheckedChanged += new System.EventHandler(this.OnControlStateChanged);
 			// 
 			// panel4
 			// 
@@ -1014,39 +995,20 @@
 			this.checkBox1.UseVisualStyleBackColor = true;
 			this.checkBox1.CheckedChanged += new System.EventHandler(this.OnControlStateChanged);
 			// 
-			// comboBox8
-			// 
-			this.comboBox8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox8.FormattingEnabled = true;
-			this.comboBox8.Items.AddRange(new object[] {
-            "グレー画像",
-            "R画像",
-            "G画像",
-            "B画像",
-            "H画像",
-            "S画像",
-            "V画像"});
-			this.comboBox8.Location = new System.Drawing.Point(7, 63);
-			this.comboBox8.Name = "comboBox8";
-			this.comboBox8.Size = new System.Drawing.Size(65, 20);
-			this.comboBox8.TabIndex = 0;
-			this.comboBox8.Visible = false;
-			this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.OnControlStateChanged);
-			// 
 			// comboBox7
 			// 
 			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox7.FormattingEnabled = true;
 			this.comboBox7.Items.AddRange(new object[] {
-            "コントラスト",
+            "MAXMIN",
             "標準偏差",
-            "積算微分値",
-            "積算2次微分値"});
-			this.comboBox7.Location = new System.Drawing.Point(6, 27);
+            "微分(X方向)",
+            "微分(Y方向)",
+            "微分(両方向)"});
+			this.comboBox7.Location = new System.Drawing.Point(137, 47);
 			this.comboBox7.Name = "comboBox7";
-			this.comboBox7.Size = new System.Drawing.Size(66, 20);
+			this.comboBox7.Size = new System.Drawing.Size(137, 20);
 			this.comboBox7.TabIndex = 0;
-			this.comboBox7.Visible = false;
 			this.comboBox7.SelectedIndexChanged += new System.EventHandler(this.OnControlStateChanged);
 			// 
 			// comboBox1
@@ -1128,22 +1090,11 @@
 			// label19
 			// 
 			this.label19.AutoSize = true;
-			this.label19.Location = new System.Drawing.Point(9, 12);
+			this.label19.Location = new System.Drawing.Point(78, 52);
 			this.label19.Name = "label19";
 			this.label19.Size = new System.Drawing.Size(53, 12);
 			this.label19.TabIndex = 11;
 			this.label19.Text = "計算方法";
-			this.label19.Visible = false;
-			// 
-			// label20
-			// 
-			this.label20.AutoSize = true;
-			this.label20.Location = new System.Drawing.Point(7, 50);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(53, 12);
-			this.label20.TabIndex = 11;
-			this.label20.Text = "対象画像";
-			this.label20.Visible = false;
 			// 
 			// label3
 			// 
@@ -4320,10 +4271,8 @@
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button button13;
-		private System.Windows.Forms.ComboBox comboBox8;
 		private System.Windows.Forms.ComboBox comboBox7;
 		private System.Windows.Forms.Label label19;
-		private System.Windows.Forms.Label label20;
 		private System.Windows.Forms.Panel panel4;
 		private System.Windows.Forms.RadioButton radioButton4;
 		private System.Windows.Forms.RadioButton radioButton3;
@@ -4491,6 +4440,5 @@
 		private System.Windows.Forms.Label label88;
 		private System.Windows.Forms.Label label16;
 		protected System.Windows.Forms.Button button36;
-		private System.Windows.Forms.CheckBox checkBox7;
     }
 }

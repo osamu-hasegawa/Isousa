@@ -1043,7 +1043,9 @@ namespace uSCOPE
 			post_proc();
 			disp_bmp(true);
 			//---
+#if false//2019.03.22(再測定表)
 			set_title();
+#endif
 			update_sts_txt(1);
 			if (!isCONNECTED()) {
 				G.FORM12.UPDSTS();
@@ -1685,7 +1687,29 @@ namespace uSCOPE
 				disp_bmp(true);
 			}
 		}
-
+#if true//2019.03.22(再測定表)
+		public void reset_mask_poly(int x, int y, int w, int h, bool bSETHISRT=false)
+		{
+			G.IR.MSK_PLY[0].X = x;
+			G.IR.MSK_PLY[0].Y = y;
+			//---
+			G.IR.MSK_PLY[1].X = x;
+			G.IR.MSK_PLY[1].Y = y + h;
+			//---
+			G.IR.MSK_PLY[2].X = x + w;
+			G.IR.MSK_PLY[2].Y = y + h;
+			//---
+			G.IR.MSK_PLY[3].X = x + w;;
+			G.IR.MSK_PLY[3].Y = y;
+			G.IR.MSK_PLY_CNT = 4;
+			if (bSETHISRT) {
+				G.SS.CAM_HIS_RT_X = x;
+				G.SS.CAM_HIS_RT_Y = y;
+				G.SS.CAM_HIS_RT_W = w;
+				G.SS.CAM_HIS_RT_H = h;
+			}
+		}
+#endif
 
 		public void reset_mask_rect()
 		{
@@ -1706,6 +1730,9 @@ namespace uSCOPE
 			CvRect rt = new CvRect(G.SS.CAM_HIS_RT_X, G.SS.CAM_HIS_RT_Y, G.SS.CAM_HIS_RT_W, G.SS.CAM_HIS_RT_H);
 			Cv.Zero(m_img_m);
 			Cv.Rectangle(m_img_m, rt, Cv.RGB(255, 255, 255));
+#endif
+#if true//2019.03.22(再測定表)
+			reset_mask_poly(G.SS.CAM_HIS_RT_X, G.SS.CAM_HIS_RT_Y, G.SS.CAM_HIS_RT_W, G.SS.CAM_HIS_RT_H, false);
 #endif
 			//---/969
 			if (true) {
@@ -3842,6 +3869,12 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			int disp;
 			G.CAM_STS mode = G.CAM_PRC;
 			int tk;
+#if true//2019.03.22(再測定表)
+			if (G.CNT_NO_CONTOURS) {
+				G.CNT_NO_CONTOURS = G.CNT_NO_CONTOURS;
+			}
+			else
+#endif
 			G.IR.clear();
 			G.IR.WIDTH = this.m_width;
 			G.IR.HEIGHT = this.m_height;
@@ -4053,6 +4086,11 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			/*
 			 * 毛髪判定
 			 */
+#if true//2019.03.22(再測定表)
+			if (G.CNT_NO_CONTOURS) {
+				G.CNT_NO_CONTOURS = G.CNT_NO_CONTOURS;
+			}else
+#endif
 			if (mode == G.CAM_STS.STS_HAIR || G.CAM_PRC == G.CAM_STS.STS_FCUS || (G.CAM_PRC == G.CAM_STS.STS_HIST && G.CNT_MOD >= 2)) {
 				OCV_FIND_FIRST((Int32)IMG.IMG_B, /*0:CV_RETR_EXTERNAL*/0);
 
@@ -4363,6 +4401,11 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				else {
 					G.IR.HIST_ALL = true;
 				}
+#if true//2019.03.22(再測定表)
+				if (G.IR.HIST_ALL) {
+					reset_mask_poly(0, 0, m_width, m_height, true);
+				}
+#endif
 				bMASK = (G.IR.HIST_ALL) ? 0 : 1;
 				//calc_hist(m_img_g, mask, G.IR.HISTVALY, out G.IR.HIST_MIN, out G.IR.HIST_MAX, out G.IR.HIST_AVG);
 				OCV_CAL_HIST((int)IMG.IMG_G, bMASK, ref G.IR.HISTVALY[0], out G.IR.HIST_MIN, out G.IR.HIST_MAX, out G.IR.HIST_AVG);
@@ -4416,26 +4459,47 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 #endif
 					}
 				}
-				if (false) {
-					double tmp, fsum = 0, fttl = 0;
-					OCV_SOBEL((int)IMG.IMG_G, (int)IMG.IMG_D, 1, 1, 3);
+				if (
+#if true//2019.03.22(再測定表)
+					G.CNT_MET >= 2
+#else
+					false
+#endif
+					) {
+					double tmp, fsum = 0, fttl = 0, fgra;
+					int dx, dy, ap;
+					switch (G.CNT_MET) {
+						case  2: dx = 1;dy = 0;ap = 0; break;
+						case  3: dx = 0;dy = 1;ap = 0; break;
+						default: dx = 1;dy = 1;ap = 0; break;
+					}
+					OCV_SOBEL((int)IMG.IMG_G, (int)IMG.IMG_D, dx, dy, 3+ap*2);
 					OCV_CAL_HIST((int)IMG.IMG_D, bMASK, ref G.IR.HISTVALD[0], out tmp, out tmp, out tmp);
 					for (int i = 0; i < 256; i++) {
 						fsum += (i * G.IR.HISTVALD[i]);
 						fttl += G.IR.HISTVALD[i];
 					}
+					fgra = fsum/fttl;
 					//G.IR.CONTRAST = fsum / (255*fttl/2);
 					G.IR.CONTRAST = fsum / (127.5*fttl/2);
 					G.IR.CONTRAST*= 10;//小さすぎるため根拠なく10倍
-					//---
-					//OCV_MERGE((int)IMG.IMG_D, (int)IMG.IMG_D, (int)IMG.IMG_D, (int)IMG.IMG_A);
+#if true//2019.03.22(再測定表)
+					if (disp == 1) {
+						OCV_SCALE((int)IMG.IMG_D, (int)IMG.IMG_D, 10, 0);
+						OCV_MERGE((int)IMG.IMG_D, (int)IMG.IMG_D, (int)IMG.IMG_D, (int)IMG.IMG_A);
+					}
+#endif
 				}
 				else
 				if (
+#if true//2019.03.22(再測定表)
+					G.CNT_MET == 1
+#else
 #if true//2019.03.18(AF順序)
 					G.CNT_USSD
 #else
 					G.SS.CAM_FCS_USSD
+#endif
 #endif
 					) {
 					//標準偏差(最大値127.5^2で正規化)

@@ -351,8 +351,12 @@ this.SPE_COD = 0;
 #if true//2019.02.03(WB調整)
 				G.CNT_OFS = 0;
 #endif
+#if true//2019.03.22(再測定表)
+				G.CNT_MET = G.SS.CAM_HIS_METH;
+#else
 #if true//2019.03.18(AF順序)
 				G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 			}
@@ -366,8 +370,12 @@ this.SPE_COD = 0;
 #if true//2019.02.03(WB調整)
 				G.CNT_OFS = 0;
 #endif
+#if true//2019.03.22(再測定表)
+				G.CNT_MET = G.SS.CAM_HIS_METH;
+#else
 #if true//2019.03.18(AF順序)
 				G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 #endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FCS_STS = 1;
@@ -379,8 +387,12 @@ this.SPE_COD = 0;
 				//フォーカス・実行
 				G.CNT_MOD = G.SS.CAM_HIS_PAR1;
 				G.CNT_OFS = 0;
+#if true//2019.03.22(再測定表)
+				G.CNT_MET = G.SS.CAM_HIS_METH;
+#else
 #if true//2019.03.18(AF順序)
 				G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 #endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FC2_STS = 1;
@@ -422,8 +434,12 @@ this.SPE_COD = 0;
 #if true//2019.02.03(WB調整)
 				G.CNT_OFS = 0;
 #endif
+#if true//2019.03.22(再測定表)
+				G.CNT_MET = G.SS.CAM_HIS_METH;
+#else
 #if true//2019.03.18(AF順序)
 				G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 				G.CHK_WBL = 1;
@@ -536,8 +552,9 @@ this.SPE_COD = 0;
 				DDV.DDX(bUpdate, this.comboBox1, ref G.SS.CAM_HIS_PAR1);
 				}
 				DDV.DDX(bUpdate, this.comboBox7, ref G.SS.CAM_HIS_METH);
+#if false//2019.03.22(再測定表)
 				DDV.DDX(bUpdate, this.comboBox8, ref G.SS.CAM_HIS_OIMG);
-
+#endif
 				DDV.DDX(bUpdate, this.numericUpDown5, ref G.SS.CAM_HIS_BVAL);//, 1, 254);
 				if (G.UIF_LEVL == 0) {
 				G.SS.CAM_HIS_DISP = 0;//0:生画像
@@ -592,7 +609,9 @@ this.SPE_COD = 0;
 				DDV.DDX(bUpdate, this.comboBox6, ref G.SS.CAM_FCS_DISP);
 				//DDV.DDX(bUpdate, this.checkBox7, ref G.SS.CAM_FCS_CHK1);
 				DDV.DDX(bUpdate, this.checkBox8, ref G.SS.CAM_FCS_CHK2);
+#if false//2019.03.22(再測定表)
 				DDV.DDX(bUpdate, this.checkBox7, ref G.SS.CAM_FCS_USSD);
+#endif
 #if true//2019.02.27(ＡＦ２実装)
 				DDV.DDX(bUpdate, this.numericUpDown50, ref G.SS.CAM_FC2_LMIN);
 				DDV.DDX(bUpdate, this.numericUpDown51, ref G.SS.CAM_FC2_LMAX);
@@ -1097,8 +1116,12 @@ this.SPE_COD = 0;
 #if true//2019.02.03(WB調整)
 					G.CNT_OFS = 0;
 #endif
+#if true//2019.03.22(再測定表)
+					G.CNT_MET = G.SS.CAM_HIS_METH;
+#else
 #if true//2019.03.18(AF順序)
 					G.CNT_USSD = G.SS.CAM_FCS_USSD;
+#endif
 #endif
 				}
 				G.FORM02.UPDATE_PROC();
@@ -2772,13 +2795,6 @@ this.SPE_COD = 0;
 		}
 #endif
 #if true//2019.03.18(AF順序)
-		private int AFMD2N(int AFMD)
-		{
-			if (AFMD != 0) {
-				AFMD++;
-			}
-			return(AFMD);
-		}
 		private void set_af_mode(int AUT_STS)
 		{
 			int AFMD = -1;
@@ -2832,24 +2848,40 @@ this.SPE_COD = 0;
 			//---
 			switch (AFMD) {
 				case 0://透過(表面)
-					G.CNT_MOD  = AFMD2N(G.SS.IMP_AUT_AFMD[0]);
+					G.CNT_MOD  = G.AFMD2N(G.SS.IMP_AUT_AFMD[0]);
 					G.CNT_OFS  = G.SS.IMP_AUT_SOFS[0];//透過(表面)
+#if true//2019.03.22(再測定表)
+					G.CNT_MET  = G.SS.IMP_AUT_CMET[0];//透過(表面)
+#else
 					G.CNT_USSD = G.SS.IMP_AUT_USSD[0];//透過(表面)
+#endif
 					break;
 				case 1:
-					G.CNT_MOD  = AFMD2N(G.SS.IMP_AUT_AFMD[1]);
+					G.CNT_MOD  = G.AFMD2N(G.SS.IMP_AUT_AFMD[1]);
 					G.CNT_OFS  = G.SS.IMP_AUT_SOFS[1];//反射(表面)
+#if true//2019.03.22(再測定表)
+					G.CNT_MET  = G.SS.IMP_AUT_CMET[1];//反射(表面)
+#else
 					G.CNT_USSD = G.SS.IMP_AUT_USSD[1];//反射(表面)
+#endif
 					break;
 				case 2:
-					G.CNT_MOD  = AFMD2N(G.SS.IMP_AUT_AFMD[2]);
+					G.CNT_MOD  = G.AFMD2N(G.SS.IMP_AUT_AFMD[2]);
 					G.CNT_OFS  = G.SS.IMP_AUT_COFS[0];//透過(中心)
+#if true//2019.03.22(再測定表)
+					G.CNT_MET  = G.SS.IMP_AUT_CMET[2];//透過(中心)
+#else
 					G.CNT_USSD = G.SS.IMP_AUT_USSD[2];//透過(中心)
+#endif
 					break;
 				case 3:
-					G.CNT_MOD  = AFMD2N(G.SS.IMP_AUT_AFMD[3]);
+					G.CNT_MOD  = G.AFMD2N(G.SS.IMP_AUT_AFMD[3]);
 					G.CNT_OFS  = G.SS.IMP_AUT_COFS[1];//反射(中心)
+#if true//2019.03.22(再測定表)
+					G.CNT_MET  = G.SS.IMP_AUT_CMET[3];//反射(中心)
+#else
 					G.CNT_USSD = G.SS.IMP_AUT_USSD[3];//反射(中心)
+#endif
 					break;
 			}
 		}
