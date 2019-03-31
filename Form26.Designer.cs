@@ -563,7 +563,7 @@
 			this.MinimizeBox = false;
 			this.Name = "Form26";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "毛髄径算出";
+			this.Text = "再測定";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form26_FormClosing);
 			this.Load += new System.EventHandler(this.Form26_Load);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();

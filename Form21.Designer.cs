@@ -474,6 +474,7 @@
 			// comboBox7
 			// 
 			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox7.Enabled = false;
 			this.comboBox7.FormattingEnabled = true;
 			this.comboBox7.Items.AddRange(new object[] {
             "カラー画像",

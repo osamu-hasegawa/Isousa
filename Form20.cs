@@ -155,6 +155,9 @@ namespace uSCOPE
 #if true//2019.03.18(AF順序)
 				DDV.DDX(bUpdate, this.checkBox14,ref m_ss.IMP_AUT_EXAF);//測定順序を中心→表面
 #endif
+#if true//2019.04.01(表面赤外省略)
+				DDV.DDX(bUpdate, this.checkBox15,ref m_ss.PLM_AUT_NOSF);//表面赤外省略
+#endif
 				if (bUpdate == false) {
 					if (this.textBox2.Text == "") {
 						G.mlog("フォルダを指定してください.");

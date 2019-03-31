@@ -2421,6 +2421,9 @@ this.SPE_COD = 0;
 				if (G.SS.PLM_AUT_IRCK) {
 					string path_old_ir = to_ir_file(m_adat.fold, path_old);
 					string path_new_ir = to_ir_file(m_adat.fold, path_new);
+#if true//2019.04.01(表面赤外省略)
+					if (System.IO.File.Exists(path_old_ir))
+#endif
 					System.IO.File.Move(path_old_ir, path_new_ir);
 				}
 #endif
@@ -2503,6 +2506,9 @@ this.SPE_COD = 0;
 							if (G.SS.PLM_AUT_IRCK) {
 								string path_old_ir = to_ir_file(m_adat.fold, name_old);
 								string path_new_ir = to_ir_file(m_adat.fold, name_new);
+#if true//2019.04.01(表面赤外省略)
+								if (System.IO.File.Exists(path_old_ir))
+#endif
 								System.IO.File.Move(path_old_ir, path_new_ir);
 							}
 #endif
@@ -2525,6 +2531,9 @@ this.SPE_COD = 0;
 							if (G.SS.PLM_AUT_IRCK) {
 								string path_old_ir = to_ir_file(m_adat.fold, name_old);
 								string path_new_ir = to_ir_file(m_adat.fold, name_new);
+#if true//2019.04.01(表面赤外省略)
+								if (System.IO.File.Exists(path_old_ir))
+#endif
 								System.IO.File.Move(path_old_ir, path_new_ir);
 							}
 						}
@@ -2772,6 +2781,9 @@ this.SPE_COD = 0;
 				for (int h = 0; h < files.Length; h++) {
 					string old_path = files[h];
 					string upd_path = old_path.Replace(old_ir_name[i], upd_ir_name[i]);
+#if true//2019.04.01(表面赤外省略)
+					if (System.IO.File.Exists(old_path))
+#endif
 					System.IO.File.Move(old_path, upd_path);
 				}
 			}
@@ -2884,6 +2896,22 @@ this.SPE_COD = 0;
 #endif
 					break;
 			}
+		}
+#endif
+#if true//2019.04.01(表面赤外省略)
+		private bool is_sf()
+		{
+			bool ret;
+			if (m_adat.k_idx >= 0) {
+				ret = false;//中心
+			}
+			else {
+				ret = true;//表面
+			}
+			if (G.SS.IMP_AUT_EXAF) {
+				ret = !ret;
+			}
+			return(ret);
 		}
 #endif
 		private int m_retry_cnt_of_hpos;
@@ -3657,6 +3685,14 @@ a_write("AF:終了");
 #if true//2018.06.04 赤外同時測定
 				}
 				if (G.SS.PLM_AUT_IRCK) {
+#if true//2019.04.01(表面赤外省略)
+					if (G.SS.PLM_AUT_NOSF && is_sf()) {
+						if (m_adat.ir_done == false) {
+							m_adat.ir_done = true;
+							m_adat.ir_chk1 = m_adat.chk1;
+						}
+					}
+#endif
 					if (m_adat.ir_done == false) {
 						m_adat.ir_nxst = this.AUT_STS;
 						m_adat.ir_lsbk = G.LED_PWR_STS;
@@ -4364,6 +4400,14 @@ a_write("AF:開始(中心)");
 #if true//2018.06.04 赤外同時測定
 				}
 				if (G.SS.PLM_AUT_IRCK) {
+#if true//2019.04.01(表面赤外省略)
+					if (G.SS.PLM_AUT_NOSF && is_sf()) {
+						if (m_adat.ir_done == false) {
+							m_adat.ir_done = true;
+							m_adat.ir_chk1 = m_adat.chk1;
+						}
+					}
+#endif
 					if (m_adat.ir_done == false) {
 						m_adat.ir_nxst = this.AUT_STS;
 						m_adat.ir_lsbk = G.LED_PWR_STS;

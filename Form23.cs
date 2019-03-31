@@ -19,6 +19,9 @@ namespace uSCOPE
 		List<string> m_zpos = new List<string>();
 		List<string> m_kpos = new List<string>();
 #endif
+#if true//2019.04.01(表面赤外省略)
+		List<string> m_ipos = new List<string>();
+#endif
 		public Form23()
 		{
 			InitializeComponent();
@@ -41,12 +44,39 @@ namespace uSCOPE
 #endif
 			if (G.UIF_LEVL == 0) {
             }
+#if true//2019.04.01(表面赤外省略)
+			G.SS.MOZ_FST_MODE = 0;
+#endif
             //---
             DDX(true);
 			//---
 			radioButton1_Click(null, null);
 			//---
 		}
+#if true//2019.04.01(表面赤外省略)
+		private bool get_zpos(string path, string ct, out string[] zpos)
+		{
+			zpos = null;
+
+			if (true) {
+				for (int i = 0; i <= 23; i++) {
+					string NS = i.ToString();
+					zpos = System.IO.Directory.GetFiles(path, NS + ct + "_00_*.*");
+					if (zpos.Length > 0) {
+						break;
+					}
+				}
+			}
+			if (zpos.Length <= 0) {
+				return(false);
+			}
+			for (int i = 0; i < zpos.Length; i++) {
+				string tmp = System.IO.Path.GetFileNameWithoutExtension(zpos[i]);
+				zpos[i] = tmp.Substring(tmp.Length-5);
+			}
+			return(true);
+		}
+#endif
 		private void check_z10(string path)
 		{
 			string[] files_10;
@@ -54,6 +84,9 @@ namespace uSCOPE
 #if true//2018.11.13(毛髪中心AF)
 			m_zpos.Clear();
 			m_kpos.Clear();
+#endif
+#if true//2019.04.01(表面赤外省略)
+			m_ipos.Clear();
 #endif
 			//
 #if true//2018.08.13
@@ -69,6 +102,19 @@ namespace uSCOPE
 				this.comboBox10.Enabled = false;
 				this.comboBox12.Enabled = false;
 #endif
+#if true//2019.04.01(表面赤外省略)
+				if (!get_zpos(path, "CR", out zpos)) {
+					if (!get_zpos(path, "CT", out zpos)) {
+						return;
+					}
+				}
+				string[] ipos = null;
+				if (get_zpos(path, "IR", out ipos)) {
+					for (int i = 0; i < ipos.Length; i++) {
+						m_ipos.Add(ipos[i]);
+					}
+				}
+#else
 				if (true) {
 					zpos = System.IO.Directory.GetFiles(path, "0CR_00_*.*");
 					if (zpos.Length <= 0) {
@@ -114,6 +160,7 @@ namespace uSCOPE
 #endif
 					return;
 				}
+#endif
 #if true//2018.08.13
 			}
 			catch (Exception ex) {
@@ -150,9 +197,11 @@ namespace uSCOPE
 					//if (this.comboBox19.SelectedIndex == 0 || this.comboBox19.SelectedIndex == 2) {
 						this.comboBox8.Items.Add(m_zpos[i]);
 					//}
+#if false//2019.04.01(表面赤外省略)
 					//if (this.comboBox20.SelectedIndex == 0 || this.comboBox20.SelectedIndex == 2) {
 						this.comboBox12.Items.Add(m_zpos[i]);
 					//}
+#endif
 				}
 				for (int i = 0; i < m_kpos.Count; i++) {
 					//if (this.comboBox18.SelectedIndex == 1 || this.comboBox18.SelectedIndex == 2) {
@@ -161,10 +210,17 @@ namespace uSCOPE
 					//if (this.comboBox19.SelectedIndex == 1 || this.comboBox19.SelectedIndex == 2) {
 						this.comboBox8.Items.Add(m_kpos[i]);
 					//}
+#if false//2019.04.01(表面赤外省略)
 					//if (this.comboBox20.SelectedIndex == 1 || this.comboBox20.SelectedIndex == 2) {
 						this.comboBox12.Items.Add(m_kpos[i]);
 					//}
+#endif
 				}
+#if true//2019.04.01(表面赤外省略)
+				for (int i = 0; i < m_ipos.Count; i++) {
+					this.comboBox12.Items.Add(m_ipos[i]);
+				}
+#endif
 #else
 				if (true) {
 					for (int i = 0; i < zpos.Length; i++) {
@@ -180,7 +236,9 @@ namespace uSCOPE
 					this.comboBox8.Items.Insert(0, "深度合成");
 #if true //2018.08.21
 					this.comboBox10.Items.Insert(0, "深度合成");
+#if false//2019.04.01(表面赤外省略)
 					this.comboBox12.Items.Insert(0, "深度合成");
+#endif
 #endif
 				}
 #if false//2018.08.21

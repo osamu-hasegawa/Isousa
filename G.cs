@@ -408,6 +408,9 @@ namespace uSCOPE
 #if true//2019.03.02(直線近似)
 			public bool PLM_AUT_AF_2 = false;//AF2使用
 #endif
+#if true//2019.04.01(表面赤外省略)
+			public bool PLM_AUT_NOSF = false;//表面赤外省略
+#endif
 			//---
 			public int ETC_LED_WAIT = 18;
 			public int ETC_UIF_LEVL =  0;

@@ -80,6 +80,7 @@
 			this.checkBox9 = new System.Windows.Forms.CheckBox();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
 			this.checkBox5 = new System.Windows.Forms.CheckBox();
+			this.checkBox14 = new System.Windows.Forms.CheckBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
 			this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown11 = new System.Windows.Forms.NumericUpDown();
@@ -117,7 +118,7 @@
 			this.label24 = new System.Windows.Forms.Label();
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.label23 = new System.Windows.Forms.Label();
-			this.checkBox14 = new System.Windows.Forms.CheckBox();
+			this.checkBox15 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -783,6 +784,7 @@
 			this.groupBox3.Controls.Add(this.checkBox9);
 			this.groupBox3.Controls.Add(this.checkBox4);
 			this.groupBox3.Controls.Add(this.checkBox5);
+			this.groupBox3.Controls.Add(this.checkBox15);
 			this.groupBox3.Controls.Add(this.checkBox14);
 			this.groupBox3.Controls.Add(this.checkBox3);
 			this.groupBox3.Controls.Add(this.numericUpDown13);
@@ -900,6 +902,16 @@
 			this.checkBox5.Text = "露光時間/ゲイン/WBが自動のときは毛髪検出時に固定にする";
 			this.checkBox5.UseVisualStyleBackColor = true;
 			this.checkBox5.Click += new System.EventHandler(this.checkBox2_Click);
+			// 
+			// checkBox14
+			// 
+			this.checkBox14.AutoSize = true;
+			this.checkBox14.Location = new System.Drawing.Point(332, 265);
+			this.checkBox14.Name = "checkBox14";
+			this.checkBox14.Size = new System.Drawing.Size(141, 16);
+			this.checkBox14.TabIndex = 66;
+			this.checkBox14.Text = "測定順序を中心→表面";
+			this.checkBox14.UseVisualStyleBackColor = true;
 			// 
 			// checkBox3
 			// 
@@ -1438,15 +1450,15 @@
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.label23.Visible = false;
 			// 
-			// checkBox14
+			// checkBox15
 			// 
-			this.checkBox14.AutoSize = true;
-			this.checkBox14.Location = new System.Drawing.Point(332, 265);
-			this.checkBox14.Name = "checkBox14";
-			this.checkBox14.Size = new System.Drawing.Size(141, 16);
-			this.checkBox14.TabIndex = 66;
-			this.checkBox14.Text = "測定順序を中心→表面";
-			this.checkBox14.UseVisualStyleBackColor = true;
+			this.checkBox15.AutoSize = true;
+			this.checkBox15.Location = new System.Drawing.Point(332, 285);
+			this.checkBox15.Name = "checkBox15";
+			this.checkBox15.Size = new System.Drawing.Size(153, 16);
+			this.checkBox15.TabIndex = 66;
+			this.checkBox15.Text = "表面赤外画像測定を省略";
+			this.checkBox15.UseVisualStyleBackColor = true;
 			// 
 			// Form20
 			// 
@@ -1602,5 +1614,6 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown22;
 		private System.Windows.Forms.CheckBox checkBox13;
 		private System.Windows.Forms.CheckBox checkBox14;
+		private System.Windows.Forms.CheckBox checkBox15;
 	}
 }

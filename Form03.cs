@@ -2820,10 +2820,12 @@ retry:
 			else {
 				buf = name.Replace("CL", "IR");
 			}
+#if false//2019.04.01(表面赤外省略)
 			if (!System.IO.File.Exists(fold+"\\"+buf)) {
 				//buf = null;
 				return(null);
 			}
+#endif
 			return(fold+"\\"+buf);
 		}
 #if true//2018.08.21
@@ -3340,23 +3342,31 @@ retry:
 						bInit = true;
 #endif
 					}
+#if false//2019.04.01(表面赤外省略)
 					//---
 					//if (CL_ZP00D.Length > 0) {
 						IR_ZP00D = fst_to_ir_file(path, CL_ZP00D);
 					//}
 					//---
 					//---
+#endif
 					for (int i = 0; i < CL_ZP00D.Length; i++) {
 						ArrayList ar_cl_con = new ArrayList();
+#if false//2019.04.01(表面赤外省略)
 						ArrayList ar_ir_con = new ArrayList();
+#endif
 						ArrayList ar_cl_bmp_dep = new ArrayList();
+#if false//2019.04.01(表面赤外省略)
 						ArrayList ar_ir_bmp_dep = new ArrayList();
+#endif
 						string tmp;
 						string[] CL_ZXXD, IR_ZXXD;
 						if (true) {
 							tmp = System.IO.Path.GetFileName(CL_ZP00D[i]);
 							CL_ZXXD = System.IO.Directory.GetFiles(path, tmp.Replace("ZP00D", "Z???D"));
+#if false//2019.04.01(表面赤外省略)
 							IR_ZXXD = fst_to_ir_file(path, CL_ZXXD);
+#endif
 						}
 
 						switch (G.SS.MOZ_FST_MODE) {
@@ -3364,11 +3374,14 @@ retry:
 							if (!fst_calc_contrast(CL_ZXXD, ar_cl_con, ar_cl_bmp_dep)) {
 								return(false);
 							}
+#if false//2019.04.01(表面赤外省略)
 							if (!fst_calc_contrast(IR_ZXXD, null     , ar_ir_bmp_dep)) {
 								return(false);
 							}
 							ar_ir_con = ar_cl_con;
+#endif
 						break;
+#if false//2019.04.01(表面赤外省略)
 						case /*IR*/1:
 							if (!fst_calc_contrast(CL_ZXXD, null     , ar_cl_bmp_dep)) {
 								return(false);
@@ -3378,13 +3391,16 @@ retry:
 							}
 							ar_cl_con = ar_ir_con;
 						break;
+#endif
 						default/*CL,IR*/:
 							if (!fst_calc_contrast(CL_ZXXD, ar_cl_con, ar_cl_bmp_dep)) {
 								return(false);
 							}
+#if false//2019.04.01(表面赤外省略)
 							if (!fst_calc_contrast(IR_ZXXD, ar_ir_con, ar_ir_bmp_dep)) {
 								return(false);
 							}
+#endif
 						break;
 						}
 
@@ -3399,6 +3415,7 @@ retry:
 							bmp_dep.Dispose();
 							bmp_dep = null;
 						}
+#if false//2019.04.01(表面赤外省略)
 						if (true) {
 							string name = System.IO.Path.GetFileName(IR_ZP00D[i]);// name: xIR_xx_ZP00D.xxx
 
@@ -3410,13 +3427,15 @@ retry:
 							bmp_dep.Dispose();
 							bmp_dep = null;
 						}
-
+#endif
 						for (int j = 0; j < ar_cl_bmp_dep.Count; j++) {
 							Bitmap bmp;
 							bmp = (Bitmap)ar_cl_bmp_dep[j];
 							bmp.Dispose();
+#if false//2019.04.01(表面赤外省略)
 							bmp = (Bitmap)ar_ir_bmp_dep[j];
 							bmp.Dispose();
+#endif
 						}
 					}
 				}

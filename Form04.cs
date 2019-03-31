@@ -338,10 +338,12 @@ namespace uSCOPE
 			else {
 				buf = name.Replace("CL", "IR");
 			}
+#if false//2019.04.01(表面赤外省略)
 			if (!System.IO.File.Exists(fold+"\\"+buf)) {
 				//buf = null;
 				return(null);
 			}
+#endif
 			return(fold+"\\"+buf);
 		}
 #if true//2018.08.21
