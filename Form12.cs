@@ -37,6 +37,9 @@ namespace uSCOPE
 			public List<int>	l_zpos;
 			public List<double>	l_cont;
 #endif
+#if true//2019.04.04(微分閾値追加)
+			public int		dcnt;//ドロップ回数
+#endif
 		};
 		private ArrayList m_fdat = new ArrayList();
 		private int[] m_pos = null;
@@ -223,6 +226,9 @@ namespace uSCOPE
 #if true//2019.03.02(直線近似)
 			checkBox15_Click(null, null);
 #endif
+#if true//2019.04.04(微分閾値追加)
+			radioButton11_Click(null, null);
+#endif
 		}
 		private void OnClicks(object sender, EventArgs e)
 		{
@@ -358,6 +364,9 @@ this.SPE_COD = 0;
 				G.CNT_USSD = G.SS.CAM_FCS_USSD;
 #endif
 #endif
+#if true//2019.04.04(微分閾値追加)
+				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 			}
 			else if (sender == this.button7) {
@@ -377,6 +386,9 @@ this.SPE_COD = 0;
 				G.CNT_USSD = G.SS.CAM_FCS_USSD;
 #endif
 #endif
+#if true//2019.04.04(微分閾値追加)
+				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
+#endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FCS_STS = 1;
 				this.timer1.Tag = null;
@@ -393,6 +405,9 @@ this.SPE_COD = 0;
 #if true//2019.03.18(AF順序)
 				G.CNT_USSD = G.SS.CAM_FCS_USSD;
 #endif
+#endif
+#if true//2019.04.04(微分閾値追加)
+				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
 #endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FC2_STS = 1;
@@ -440,6 +455,9 @@ this.SPE_COD = 0;
 #if true//2019.03.18(AF順序)
 				G.CNT_USSD = G.SS.CAM_FCS_USSD;
 #endif
+#endif
+#if true//2019.04.04(微分閾値追加)
+				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 				G.CHK_WBL = 1;
@@ -555,6 +573,9 @@ this.SPE_COD = 0;
 #if false//2019.03.22(再測定表)
 				DDV.DDX(bUpdate, this.comboBox8, ref G.SS.CAM_HIS_OIMG);
 #endif
+#if true//2019.04.04(微分閾値追加)
+				DDV.DDX(bUpdate, this.numericUpDown60, ref G.SS.CAM_HIS_DTHD);
+#endif
 				DDV.DDX(bUpdate, this.numericUpDown5, ref G.SS.CAM_HIS_BVAL);//, 1, 254);
 				if (G.UIF_LEVL == 0) {
 				G.SS.CAM_HIS_DISP = 0;//0:生画像
@@ -621,6 +642,10 @@ this.SPE_COD = 0;
 				DDV.DDX(bUpdate, this.numericUpDown55, ref G.SS.CAM_FC2_FAVG);
 				DDV.DDX(bUpdate, this.numericUpDown48, ref G.SS.CAM_FC2_DROP);
 				DDV.DDX(bUpdate, this.checkBox16, ref G.SS.CAM_FC2_CHK1);
+#endif
+#if true//2019.04.04(微分閾値追加)
+				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton11, this.radioButton12}, ref G.SS.CAM_FC2_DTYP);
+				DDV.DDX(bUpdate, this.numericUpDown61, ref G.SS.CAM_FC2_DCNT);
 #endif
 #if true//2019.03.02(直線近似)
 				DDV.DDX(bUpdate, this.numericUpDown56, ref G.SS.CAM_FC2_CNDA);
@@ -1098,6 +1123,9 @@ this.SPE_COD = 0;
 				return;
 			}
 			GETDAT(false);//変数取込
+#if true//2019.04.04(微分閾値追加)
+			this.numericUpDown60.Enabled = (this.comboBox7.SelectedIndex >= 2);
+#endif
 			if (G.FORM02 != null && (G.FORM02.isLOADED() || G.FORM02.isCONNECTED())) {
 #if true//2019.01.23(GAIN調整&自動測定)
 				if (G.CHK_VPK != 0) {
@@ -1122,6 +1150,9 @@ this.SPE_COD = 0;
 #if true//2019.03.18(AF順序)
 					G.CNT_USSD = G.SS.CAM_FCS_USSD;
 #endif
+#endif
+#if true//2019.04.04(微分閾値追加)
+					G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
 #endif
 				}
 				G.FORM02.UPDATE_PROC();
@@ -5539,6 +5570,20 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 			}
 			return;
 		}
+#if true//2019.04.04(微分閾値追加)
+		private bool is_dropped()
+		{
+			bool ret;
+			if (G.SS.CAM_FC2_DTYP == 0) {
+				ret = ((m_dat.cmax - m_contrast) >= G.SS.CAM_FC2_DROP);
+			}
+			else {
+				ret = (m_dat.dcnt >= G.SS.CAM_FC2_DCNT);//ドロップ回数
+#endif
+			}
+			return(ret);
+		}
+#endif
 		private void timer6_Tick(object sender, EventArgs e)
 		{
 			int NXT_STS = this.FC2_STS+1;
@@ -5785,12 +5830,26 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 			case 24:
 				if (m_dat.cmax < m_contrast) {
 					m_dat.cmax = m_contrast;
+#if true//2019.04.04(微分閾値追加)
+					m_dat.dcnt = 0;//ドロップ回数
+#endif
 				}
+#if true//2019.04.04(微分閾値追加)
+				else {
+					m_dat.dcnt++;//ドロップ回数
+				}
+#endif
 				if (m_dat.drop == true && m_contrast >= m_dat.cthr) {
 					//検索終了(最大と次点の中間値以上の検知で終了とする)
 					m_dat.cmax = m_contrast;
 				}
-				else if ((m_dat.cmax - m_contrast) >= G.SS.CAM_FC2_DROP) {
+				else if (
+#if true//2019.04.04(微分閾値追加)
+					is_dropped()
+#else
+					(m_dat.cmax - m_contrast) >= G.SS.CAM_FC2_DROP
+#endif
+					) {
 					//精密探索をやり直し
 					int imax, zpos;
 					get_max_2nd(m_dat.l_cont, out imax, out m_dat.cmax, out m_dat.c2nd);
@@ -5800,6 +5859,9 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					m_dat.cthr = (m_dat.cmax+m_dat.c2nd)/2;
 					m_dat.drop = true;
 					m_dat.cmax = 0;
+#if true//2019.04.04(微分閾値追加)
+					m_dat.dcnt = 0;//ドロップ回数
+#endif
 					m_contrast = 0;
 #if true//2019.03.02(直線近似)
 					MOVE_ABS_Z(zpos-G.SS.CAM_FC2_BPLS);
@@ -5869,6 +5931,18 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 			this.numericUpDown15.Enabled =!this.checkBox15.Checked;
 		}
 #endif
+#if true//2019.04.04(微分閾値追加)
+		private void radioButton11_Click(object sender, EventArgs e)
+		{
+			if (this.radioButton11.Checked) {
+				this.numericUpDown48.Enabled = true;
+				this.numericUpDown61.Enabled = false;
+			}
+			else {
+				this.numericUpDown48.Enabled = false;
+				this.numericUpDown61.Enabled = true;
+			}
+		}
 #endif
 	}
 }

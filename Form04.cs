@@ -980,6 +980,18 @@ namespace uSCOPE
 			if (true) {
 				G.pop_imp_para();
 			}
+#if true//2019.04.02(再測定実装)
+			//---
+			if (this.Left <= -32000 || this.Top <= -32000) {
+				//最小化時は更新しない
+			}
+			else {
+			G.AS.APP_F04_LFT = this.Left;
+			G.AS.APP_F04_TOP = this.Top;
+			G.AS.APP_F04_WID = this.Width;
+			G.AS.APP_F04_HEI = this.Height;
+			}
+#endif
 			//---
 			G.FORM04 = null;
 			G.FORM12.UPDSTS();

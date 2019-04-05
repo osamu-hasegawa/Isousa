@@ -172,6 +172,9 @@ namespace uSCOPE
 			public int CAM_HIS_RT_Y = 100;
 			public int CAM_HIS_RT_W = 200;
 			public int CAM_HIS_RT_H = 200;
+#if true//2019.04.04(微分閾値追加)
+			public int CAM_HIS_DTHD = 0;
+#endif
 			//---
 			public int CAM_CND_MODH = 1;
 			public int CAM_CND_MINH = 320;
@@ -231,6 +234,10 @@ namespace uSCOPE
 			public int CAM_FC2_FAVG =   1;
 			public double CAM_FC2_DROP = 0.13;
 			public bool CAM_FC2_CHK1 = false;
+#endif
+#if true//2019.04.04(微分閾値追加)
+			public int CAM_FC2_DTYP =   0;//停止方法(0:ドロップ率, 1:ドロップ回数)
+			public int CAM_FC2_DCNT =  10;//停止ドロップ回数
 #endif
 #if true//2019.03.02(直線近似)
 			public double CAM_FC2_CNDA =   1.0;
@@ -1145,6 +1152,9 @@ namespace uSCOPE
 #if true//2019.03.18(AF順序)
 		static public bool CNT_USSD = false;
 #endif
+#endif
+#if true//2019.04.04(微分閾値追加)
+		static public int CNT_DTHD = 0;
 #endif
 #if true//2019.02.27(ＡＦ２実装)
 		static public bool FC2_FLG=false;

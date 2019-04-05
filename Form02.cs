@@ -4476,6 +4476,12 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 					OCV_SOBEL((int)IMG.IMG_G, (int)IMG.IMG_D, dx, dy, 3+ap*2);
 					OCV_CAL_HIST((int)IMG.IMG_D, bMASK, ref G.IR.HISTVALD[0], out tmp, out tmp, out tmp);
 					for (int i = 0; i < 256; i++) {
+#if true//2019.04.04(微分閾値追加)
+						if (i < G.CNT_DTHD) {
+							i = i;
+						}
+						else
+#endif
 						fsum += (i * G.IR.HISTVALD[i]);
 						fttl += G.IR.HISTVALD[i];
 					}

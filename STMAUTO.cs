@@ -7,6 +7,12 @@ namespace uSCOPE
 {
 	class STMAUTO
 	{
+		enum STS {
+			_00_NUL_STAT = 0,
+			_10_INI_XXXX = 10,
+			_11_INI_WAIT,
+			_20_NAN_IKAK = 20,
+		};
 #if false
 		static public int MACH(int AUT_STS)
 		{

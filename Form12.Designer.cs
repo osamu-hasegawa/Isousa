@@ -72,6 +72,7 @@
 			this.trackBar2 = new System.Windows.Forms.TrackBar();
 			this.trackBar4 = new System.Windows.Forms.TrackBar();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.numericUpDown60 = new System.Windows.Forms.NumericUpDown();
 			this.panel4 = new System.Windows.Forms.Panel();
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -81,6 +82,7 @@
 			this.button6 = new System.Windows.Forms.Button();
 			this.button13 = new System.Windows.Forms.Button();
 			this.button5 = new System.Windows.Forms.Button();
+			this.label20 = new System.Windows.Forms.Label();
 			this.label19 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label38 = new System.Windows.Forms.Label();
@@ -189,10 +191,11 @@
 			this.button9 = new System.Windows.Forms.Button();
 			this.checkBox8 = new System.Windows.Forms.CheckBox();
 			this.tabPage11 = new System.Windows.Forms.TabPage();
+			this.radioButton11 = new System.Windows.Forms.RadioButton();
+			this.radioButton12 = new System.Windows.Forms.RadioButton();
 			this.numericUpDown51 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown50 = new System.Windows.Forms.NumericUpDown();
 			this.label78 = new System.Windows.Forms.Label();
-			this.label80 = new System.Windows.Forms.Label();
 			this.label84 = new System.Windows.Forms.Label();
 			this.label85 = new System.Windows.Forms.Label();
 			this.label79 = new System.Windows.Forms.Label();
@@ -206,6 +209,7 @@
 			this.numericUpDown56 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown53 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown52 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown61 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown48 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown55 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown54 = new System.Windows.Forms.NumericUpDown();
@@ -310,6 +314,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar4)).BeginInit();
 			this.tabPage4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown60)).BeginInit();
 			this.tabPage9.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown39)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown44)).BeginInit();
@@ -345,6 +350,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown56)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown53)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown52)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown61)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown48)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).BeginInit();
@@ -944,6 +950,7 @@
 			// tabPage4
 			// 
 			this.tabPage4.BackColor = System.Drawing.Color.SteelBlue;
+			this.tabPage4.Controls.Add(this.numericUpDown60);
 			this.tabPage4.Controls.Add(this.panel4);
 			this.tabPage4.Controls.Add(this.checkBox2);
 			this.tabPage4.Controls.Add(this.checkBox1);
@@ -953,6 +960,7 @@
 			this.tabPage4.Controls.Add(this.button6);
 			this.tabPage4.Controls.Add(this.button13);
 			this.tabPage4.Controls.Add(this.button5);
+			this.tabPage4.Controls.Add(this.label20);
 			this.tabPage4.Controls.Add(this.label19);
 			this.tabPage4.Controls.Add(this.label3);
 			this.tabPage4.Controls.Add(this.label38);
@@ -962,6 +970,25 @@
 			this.tabPage4.Size = new System.Drawing.Size(277, 155);
 			this.tabPage4.TabIndex = 1;
 			this.tabPage4.Text = "ヒストグラム";
+			// 
+			// numericUpDown60
+			// 
+			this.numericUpDown60.Location = new System.Drawing.Point(138, 71);
+			this.numericUpDown60.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.numericUpDown60.Name = "numericUpDown60";
+			this.numericUpDown60.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown60.TabIndex = 30;
+			this.numericUpDown60.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown60.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown60.ValueChanged += new System.EventHandler(this.OnControlStateChanged);
 			// 
 			// panel4
 			// 
@@ -1086,6 +1113,15 @@
 			this.button5.Text = "実行";
 			this.button5.UseVisualStyleBackColor = true;
 			this.button5.Click += new System.EventHandler(this.OnClicks);
+			// 
+			// label20
+			// 
+			this.label20.AutoSize = true;
+			this.label20.Location = new System.Drawing.Point(79, 74);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(53, 12);
+			this.label20.TabIndex = 11;
+			this.label20.Text = "微分閾値";
 			// 
 			// label19
 			// 
@@ -2578,10 +2614,11 @@
 			// tabPage11
 			// 
 			this.tabPage11.BackColor = System.Drawing.Color.SteelBlue;
+			this.tabPage11.Controls.Add(this.radioButton11);
+			this.tabPage11.Controls.Add(this.radioButton12);
 			this.tabPage11.Controls.Add(this.numericUpDown51);
 			this.tabPage11.Controls.Add(this.numericUpDown50);
 			this.tabPage11.Controls.Add(this.label78);
-			this.tabPage11.Controls.Add(this.label80);
 			this.tabPage11.Controls.Add(this.label84);
 			this.tabPage11.Controls.Add(this.label85);
 			this.tabPage11.Controls.Add(this.label79);
@@ -2595,6 +2632,7 @@
 			this.tabPage11.Controls.Add(this.numericUpDown56);
 			this.tabPage11.Controls.Add(this.numericUpDown53);
 			this.tabPage11.Controls.Add(this.numericUpDown52);
+			this.tabPage11.Controls.Add(this.numericUpDown61);
 			this.tabPage11.Controls.Add(this.numericUpDown48);
 			this.tabPage11.Controls.Add(this.numericUpDown55);
 			this.tabPage11.Controls.Add(this.numericUpDown54);
@@ -2607,6 +2645,30 @@
 			this.tabPage11.TabIndex = 10;
 			this.tabPage11.Text = "AF2";
 			// 
+			// radioButton11
+			// 
+			this.radioButton11.AutoSize = true;
+			this.radioButton11.Checked = true;
+			this.radioButton11.Location = new System.Drawing.Point(213, 105);
+			this.radioButton11.Name = "radioButton11";
+			this.radioButton11.Size = new System.Drawing.Size(69, 28);
+			this.radioButton11.TabIndex = 41;
+			this.radioButton11.TabStop = true;
+			this.radioButton11.Text = "ドロップ検\r\n出閾値";
+			this.radioButton11.UseVisualStyleBackColor = true;
+			this.radioButton11.Click += new System.EventHandler(this.radioButton11_Click);
+			// 
+			// radioButton12
+			// 
+			this.radioButton12.AutoSize = true;
+			this.radioButton12.Location = new System.Drawing.Point(134, 119);
+			this.radioButton12.Name = "radioButton12";
+			this.radioButton12.Size = new System.Drawing.Size(81, 16);
+			this.radioButton12.TabIndex = 41;
+			this.radioButton12.Text = "ドロップ回数";
+			this.radioButton12.UseVisualStyleBackColor = true;
+			this.radioButton12.Click += new System.EventHandler(this.radioButton11_Click);
+			// 
 			// numericUpDown51
 			// 
 			this.numericUpDown51.Increment = new decimal(new int[] {
@@ -2614,7 +2676,7 @@
             0,
             0,
             0});
-			this.numericUpDown51.Location = new System.Drawing.Point(218, 34);
+			this.numericUpDown51.Location = new System.Drawing.Point(218, 21);
 			this.numericUpDown51.Maximum = new decimal(new int[] {
             1259712,
             0,
@@ -2642,7 +2704,7 @@
             0,
             0,
             0});
-			this.numericUpDown50.Location = new System.Drawing.Point(158, 34);
+			this.numericUpDown50.Location = new System.Drawing.Point(158, 21);
 			this.numericUpDown50.Maximum = new decimal(new int[] {
             1259712,
             0,
@@ -2666,20 +2728,11 @@
 			// label78
 			// 
 			this.label78.AutoSize = true;
-			this.label78.Location = new System.Drawing.Point(220, 59);
+			this.label78.Location = new System.Drawing.Point(220, 46);
 			this.label78.Name = "label78";
 			this.label78.Size = new System.Drawing.Size(41, 12);
 			this.label78.TabIndex = 40;
 			this.label78.Text = "平均化";
-			// 
-			// label80
-			// 
-			this.label80.AutoSize = true;
-			this.label80.Location = new System.Drawing.Point(220, 98);
-			this.label80.Name = "label80";
-			this.label80.Size = new System.Drawing.Size(53, 24);
-			this.label80.TabIndex = 39;
-			this.label80.Text = "ドロップ\r\n検出閾値";
 			// 
 			// label84
 			// 
@@ -2704,7 +2757,7 @@
 			// label79
 			// 
 			this.label79.AutoSize = true;
-			this.label79.Location = new System.Drawing.Point(159, 59);
+			this.label79.Location = new System.Drawing.Point(159, 46);
 			this.label79.Name = "label79";
 			this.label79.Size = new System.Drawing.Size(49, 12);
 			this.label79.TabIndex = 39;
@@ -2713,7 +2766,7 @@
 			// label81
 			// 
 			this.label81.AutoSize = true;
-			this.label81.Location = new System.Drawing.Point(194, 19);
+			this.label81.Location = new System.Drawing.Point(194, 6);
 			this.label81.Name = "label81";
 			this.label81.Size = new System.Drawing.Size(53, 12);
 			this.label81.TabIndex = 37;
@@ -2732,11 +2785,11 @@
 			// 
 			this.label86.AutoSize = true;
 			this.label86.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.label86.Location = new System.Drawing.Point(147, 96);
+			this.label86.Location = new System.Drawing.Point(159, 83);
 			this.label86.Name = "label86";
-			this.label86.Size = new System.Drawing.Size(69, 24);
+			this.label86.Size = new System.Drawing.Size(113, 12);
 			this.label86.TabIndex = 36;
-			this.label86.Text = "戻り追加\r\nパルス数[pls]";
+			this.label86.Text = "戻り追加パルス数[pls]";
 			// 
 			// label82
 			// 
@@ -2760,15 +2813,15 @@
 			// 
 			// numericUpDown58
 			// 
-			this.numericUpDown58.ForeColor = System.Drawing.Color.LightCoral;
-			this.numericUpDown58.Location = new System.Drawing.Point(158, 128);
+			this.numericUpDown58.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.numericUpDown58.Location = new System.Drawing.Point(161, 98);
 			this.numericUpDown58.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
 			this.numericUpDown58.Name = "numericUpDown58";
-			this.numericUpDown58.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown58.Size = new System.Drawing.Size(46, 19);
 			this.numericUpDown58.TabIndex = 26;
 			this.numericUpDown58.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown58.Value = new decimal(new int[] {
@@ -2870,6 +2923,24 @@
             0,
             0});
 			// 
+			// numericUpDown61
+			// 
+			this.numericUpDown61.Location = new System.Drawing.Point(158, 135);
+			this.numericUpDown61.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+			this.numericUpDown61.Name = "numericUpDown61";
+			this.numericUpDown61.Size = new System.Drawing.Size(58, 19);
+			this.numericUpDown61.TabIndex = 29;
+			this.numericUpDown61.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown61.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+			// 
 			// numericUpDown48
 			// 
 			this.numericUpDown48.DecimalPlaces = 2;
@@ -2878,7 +2949,7 @@
             0,
             0,
             131072});
-			this.numericUpDown48.Location = new System.Drawing.Point(219, 128);
+			this.numericUpDown48.Location = new System.Drawing.Point(218, 135);
 			this.numericUpDown48.Maximum = new decimal(new int[] {
             1,
             0,
@@ -2896,7 +2967,7 @@
 			// 
 			// numericUpDown55
 			// 
-			this.numericUpDown55.Location = new System.Drawing.Point(218, 74);
+			this.numericUpDown55.Location = new System.Drawing.Point(218, 61);
 			this.numericUpDown55.Maximum = new decimal(new int[] {
             10,
             0,
@@ -2919,7 +2990,7 @@
 			// 
 			// numericUpDown54
 			// 
-			this.numericUpDown54.Location = new System.Drawing.Point(158, 74);
+			this.numericUpDown54.Location = new System.Drawing.Point(158, 61);
 			this.numericUpDown54.Maximum = new decimal(new int[] {
             20,
             0,
@@ -4098,6 +4169,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.trackBar4)).EndInit();
 			this.tabPage4.ResumeLayout(false);
 			this.tabPage4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown60)).EndInit();
 			this.tabPage9.ResumeLayout(false);
 			this.tabPage9.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown39)).EndInit();
@@ -4138,6 +4210,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown56)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown53)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown52)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown61)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown48)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).EndInit();
@@ -4426,7 +4499,6 @@
 		private System.Windows.Forms.Label label82;
 		private System.Windows.Forms.Timer timer6;
 		private System.Windows.Forms.NumericUpDown numericUpDown48;
-		private System.Windows.Forms.Label label80;
 		private System.Windows.Forms.Label label84;
 		private System.Windows.Forms.Label label85;
 		private System.Windows.Forms.Label label87;
@@ -4440,5 +4512,10 @@
 		private System.Windows.Forms.Label label88;
 		private System.Windows.Forms.Label label16;
 		protected System.Windows.Forms.Button button36;
+		private System.Windows.Forms.Label label20;
+		private System.Windows.Forms.NumericUpDown numericUpDown60;
+		private System.Windows.Forms.NumericUpDown numericUpDown61;
+		private System.Windows.Forms.RadioButton radioButton12;
+		private System.Windows.Forms.RadioButton radioButton11;
     }
 }
