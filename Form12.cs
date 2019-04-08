@@ -1797,6 +1797,9 @@ this.SPE_COD = 0;
 #endif
 			m_adat.trace = false;
 			m_adat.retry = false;
+#if true//2018.04.08(ＡＦパラメータ)
+			G.push_af2_para();
+#endif
 			try {
 #if false//2019.03.18(AF順序)
 				if (G.FORM02.get_size_mode() > 1) {
@@ -1927,6 +1930,9 @@ this.SPE_COD = 0;
 			if (G.SS.PLM_AUT_V_PK) {
 				pop_gain_ofs();
 			}
+#endif
+#if true//2018.04.08(ＡＦパラメータ)
+			G.pop_af2_para();
 #endif
 			//---
 #if false//2019.03.18(AF順序)
@@ -2898,6 +2904,18 @@ this.SPE_COD = 0;
 #else
 					G.CNT_USSD = G.SS.IMP_AUT_USSD[0];//透過(表面)
 #endif
+#if true//2018.04.08(ＡＦパラメータ)
+					G.SS.CAM_FC2_FSPD = G.SS.IMP_FC2_FSPD[0];
+					G.SS.CAM_FC2_DPLS = G.SS.IMP_FC2_DPLS[0];
+					G.SS.CAM_FC2_CNDA = G.SS.IMP_FC2_CNDA[0];
+					G.SS.CAM_FC2_CNDB = G.SS.IMP_FC2_CNDB[0];
+					G.SS.CAM_FC2_SKIP = G.SS.IMP_FC2_SKIP[0];
+					G.SS.CAM_FC2_FAVG = G.SS.IMP_FC2_FAVG[0];
+					G.SS.CAM_FC2_BPLS = G.SS.IMP_FC2_BPLS[0];
+					G.SS.CAM_FC2_DTYP = G.SS.IMP_FC2_DTYP[0];
+					G.SS.CAM_FC2_DROP = G.SS.IMP_FC2_DROP[0];
+					G.SS.CAM_FC2_DCNT = G.SS.IMP_FC2_DCNT[0];
+#endif
 					break;
 				case 1:
 					G.CNT_MOD  = G.AFMD2N(G.SS.IMP_AUT_AFMD[1]);
@@ -2906,6 +2924,18 @@ this.SPE_COD = 0;
 					G.CNT_MET  = G.SS.IMP_AUT_CMET[1];//反射(表面)
 #else
 					G.CNT_USSD = G.SS.IMP_AUT_USSD[1];//反射(表面)
+#endif
+#if true//2018.04.08(ＡＦパラメータ)
+					G.SS.CAM_FC2_FSPD = G.SS.IMP_FC2_FSPD[1];
+					G.SS.CAM_FC2_DPLS = G.SS.IMP_FC2_DPLS[1];
+					G.SS.CAM_FC2_CNDA = G.SS.IMP_FC2_CNDA[1];
+					G.SS.CAM_FC2_CNDB = G.SS.IMP_FC2_CNDB[1];
+					G.SS.CAM_FC2_SKIP = G.SS.IMP_FC2_SKIP[1];
+					G.SS.CAM_FC2_FAVG = G.SS.IMP_FC2_FAVG[1];
+					G.SS.CAM_FC2_BPLS = G.SS.IMP_FC2_BPLS[1];
+					G.SS.CAM_FC2_DTYP = G.SS.IMP_FC2_DTYP[1];
+					G.SS.CAM_FC2_DROP = G.SS.IMP_FC2_DROP[1];
+					G.SS.CAM_FC2_DCNT = G.SS.IMP_FC2_DCNT[1];
 #endif
 					break;
 				case 2:
@@ -2916,6 +2946,18 @@ this.SPE_COD = 0;
 #else
 					G.CNT_USSD = G.SS.IMP_AUT_USSD[2];//透過(中心)
 #endif
+#if true//2018.04.08(ＡＦパラメータ)
+					G.SS.CAM_FC2_FSPD = G.SS.IMP_FC2_FSPD[2];
+					G.SS.CAM_FC2_DPLS = G.SS.IMP_FC2_DPLS[2];
+					G.SS.CAM_FC2_CNDA = G.SS.IMP_FC2_CNDA[2];
+					G.SS.CAM_FC2_CNDB = G.SS.IMP_FC2_CNDB[2];
+					G.SS.CAM_FC2_SKIP = G.SS.IMP_FC2_SKIP[2];
+					G.SS.CAM_FC2_FAVG = G.SS.IMP_FC2_FAVG[2];
+					G.SS.CAM_FC2_BPLS = G.SS.IMP_FC2_BPLS[2];
+					G.SS.CAM_FC2_DTYP = G.SS.IMP_FC2_DTYP[2];
+					G.SS.CAM_FC2_DROP = G.SS.IMP_FC2_DROP[2];
+					G.SS.CAM_FC2_DCNT = G.SS.IMP_FC2_DCNT[2];
+#endif
 					break;
 				case 3:
 					G.CNT_MOD  = G.AFMD2N(G.SS.IMP_AUT_AFMD[3]);
@@ -2924,6 +2966,18 @@ this.SPE_COD = 0;
 					G.CNT_MET  = G.SS.IMP_AUT_CMET[3];//反射(中心)
 #else
 					G.CNT_USSD = G.SS.IMP_AUT_USSD[3];//反射(中心)
+#endif
+#if true//2018.04.08(ＡＦパラメータ)
+					G.SS.CAM_FC2_FSPD = G.SS.IMP_FC2_FSPD[3];
+					G.SS.CAM_FC2_DPLS = G.SS.IMP_FC2_DPLS[3];
+					G.SS.CAM_FC2_CNDA = G.SS.IMP_FC2_CNDA[3];
+					G.SS.CAM_FC2_CNDB = G.SS.IMP_FC2_CNDB[3];
+					G.SS.CAM_FC2_SKIP = G.SS.IMP_FC2_SKIP[3];
+					G.SS.CAM_FC2_FAVG = G.SS.IMP_FC2_FAVG[3];
+					G.SS.CAM_FC2_BPLS = G.SS.IMP_FC2_BPLS[3];
+					G.SS.CAM_FC2_DTYP = G.SS.IMP_FC2_DTYP[3];
+					G.SS.CAM_FC2_DROP = G.SS.IMP_FC2_DROP[3];
+					G.SS.CAM_FC2_DCNT = G.SS.IMP_FC2_DCNT[3];
 #endif
 					break;
 			}

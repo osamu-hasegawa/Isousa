@@ -62,6 +62,14 @@ namespace uSCOPE
 			f2.Q = 0;
 			f5.Q = 3;
 #endif
+#if true//2018.04.08(ＡＦパラメータ)
+			Form35 f6 = new Form35();
+			f6.m_ss = m_ss;
+			f6.TopLevel = false;
+			this.tabPage6.Controls.Add(f6);
+			this.tabPage6.Text = f6.Text;
+			f6.Visible = true;
+#endif
 			//---
 			DDX(true);
 			this.tabControl1.SelectedIndex = m_last_idx;

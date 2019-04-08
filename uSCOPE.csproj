@@ -272,6 +272,12 @@
     <Compile Include="Form26.Designer.cs">
       <DependentUpon>Form26.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form35.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form35.designer.cs">
+      <DependentUpon>Form35.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="DlgProgress.resx">
       <DependentUpon>DlgProgress.cs</DependentUpon>
     </EmbeddedResource>
@@ -362,6 +368,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form26.resx">
       <DependentUpon>Form26.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form35.resx">
+      <DependentUpon>Form35.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest" />

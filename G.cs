@@ -335,7 +335,19 @@ namespace uSCOPE
 			public bool[] IMP_AUT_USSD = {false, false, false, false};//AF標準偏差
 #endif
 #endif
-
+#if true//2018.04.08(ＡＦパラメータ)
+			//(透過:表面, 反射:表面, 透過:中心, 反射:中心)
+			public int[]    IMP_FC2_FSPD = {  3,3,3,3};//探索スピード[pps]
+			public int[]    IMP_FC2_DPLS = {  5,5,5,5};//遅れパルス数[pls]
+			public double[] IMP_FC2_CNDA = {   1,1,1,1};//条件Ａ
+			public double[] IMP_FC2_CNDB = {   0,0,0,0};//条件Ｂ
+			public int[]    IMP_FC2_SKIP = {   3,3,3,3};//読み捨て
+			public int[]    IMP_FC2_FAVG = {   1,1,1,1};//平均化
+			public int[]    IMP_FC2_BPLS = {   1,1,1,1};//戻り追加パルス数[pls]
+			public int[]    IMP_FC2_DTYP = {   0,0,0,0};//停止方法(0:ドロップ率, 1:ドロップ回数)
+			public double[] IMP_FC2_DROP = { 0.13,0.13,0.13,0.13};//ドロップ検出閾値
+			public int[]    IMP_FC2_DCNT = {  10,10,10,10};//停止ドロップ回数
+#endif
 			//---
 			public bool PLM_AUT_FINI = true;
 			public bool PLM_AUT_ZINI = true;
@@ -1463,6 +1475,45 @@ namespace uSCOPE
 #endif
 			}
 		}
+#if true//2018.04.08(ＡＦパラメータ)
+		private static
+		List<object> TMP_AF2_PARA = null;
+		static public void push_af2_para()
+		{
+			if (TMP_AF2_PARA == null) {
+				TMP_AF2_PARA = new List<object>();
+			}
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_FSPD);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_DPLS);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_SKIP);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_FAVG);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_DROP);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_DTYP);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_DCNT);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_CNDA);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_CNDB);
+			TMP_AF2_PARA.Add(G.SS.CAM_FC2_BPLS);
+			//---
+		}
+		static public void pop_af2_para()
+		{
+			if (TMP_AF2_PARA == null || TMP_AF2_PARA.Count <= 0) {
+				G.mlog("over pop!!!");
+				return;
+			}
+			G.SS.CAM_FC2_FSPD = (int   )TMP_AF2_PARA[0];
+			G.SS.CAM_FC2_DPLS = (int   )TMP_AF2_PARA[1];
+			G.SS.CAM_FC2_SKIP = (int   )TMP_AF2_PARA[2];
+			G.SS.CAM_FC2_FAVG = (int   )TMP_AF2_PARA[3];
+			G.SS.CAM_FC2_DROP = (double)TMP_AF2_PARA[4];
+			G.SS.CAM_FC2_DTYP = (int   )TMP_AF2_PARA[5];
+			G.SS.CAM_FC2_DCNT = (int   )TMP_AF2_PARA[6];
+			G.SS.CAM_FC2_CNDA = (double)TMP_AF2_PARA[7];
+			G.SS.CAM_FC2_CNDB = (double)TMP_AF2_PARA[8];
+			G.SS.CAM_FC2_BPLS = (int   )TMP_AF2_PARA[9];
+			TMP_AF2_PARA.RemoveRange(0, 10);
+		}
+#endif
 #if true//2019.01.15(パスワード画面)
 		/*static string ByteArrayToString(byte[] arrInput)
 		{
