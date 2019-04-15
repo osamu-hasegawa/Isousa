@@ -543,7 +543,7 @@
             131072});
 			this.numericUpDown40.Location = new System.Drawing.Point(369, 384);
 			this.numericUpDown40.Maximum = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});
@@ -568,7 +568,7 @@
             131072});
 			this.numericUpDown39.Location = new System.Drawing.Point(296, 384);
 			this.numericUpDown39.Maximum = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});
@@ -948,7 +948,7 @@
             131072});
 			this.numericUpDown31.Location = new System.Drawing.Point(369, 136);
 			this.numericUpDown31.Maximum = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});
@@ -983,7 +983,7 @@
             131072});
 			this.numericUpDown30.Location = new System.Drawing.Point(296, 136);
 			this.numericUpDown30.Maximum = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});
@@ -1008,7 +1008,7 @@
             131072});
 			this.numericUpDown22.Location = new System.Drawing.Point(146, 384);
 			this.numericUpDown22.Maximum = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});
@@ -1056,7 +1056,7 @@
             131072});
 			this.numericUpDown21.Location = new System.Drawing.Point(73, 384);
 			this.numericUpDown21.Maximum = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});
@@ -1462,7 +1462,7 @@
             131072});
 			this.numericUpDown13.Location = new System.Drawing.Point(146, 136);
 			this.numericUpDown13.Maximum = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});
@@ -1495,7 +1495,7 @@
             131072});
 			this.numericUpDown12.Location = new System.Drawing.Point(73, 136);
 			this.numericUpDown12.Maximum = new decimal(new int[] {
-            2,
+            10,
             0,
             0,
             0});

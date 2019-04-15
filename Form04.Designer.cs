@@ -27,15 +27,25 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Column10 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
 			this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -50,10 +60,13 @@
 			this.tabControl2 = new System.Windows.Forms.TabControl();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
+			this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+			this.label3 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.button4 = new System.Windows.Forms.Button();
@@ -63,19 +76,6 @@
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.checkBox8 = new System.Windows.Forms.CheckBox();
 			this.checkBox21 = new System.Windows.Forms.CheckBox();
-			this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Column10 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.label3 = new System.Windows.Forms.Label();
-			this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-			this.label7 = new System.Windows.Forms.Label();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.button1 = new System.Windows.Forms.Button();
@@ -93,10 +93,10 @@
 			this.tabControl2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			this.groupBox5.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
 			this.tabPage2.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -126,7 +126,100 @@
 			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dataGridView1.Size = new System.Drawing.Size(782, 491);
 			this.dataGridView1.TabIndex = 20;
+			this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
 			this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+			// 
+			// Column2
+			// 
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.Column2.DefaultCellStyle = dataGridViewCellStyle1;
+			this.Column2.HeaderText = "ファイル名";
+			this.Column2.Name = "Column2";
+			this.Column2.Width = 125;
+			// 
+			// Column3
+			// 
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			dataGridViewCellStyle2.Format = "N3";
+			dataGridViewCellStyle2.NullValue = null;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.Column3.DefaultCellStyle = dataGridViewCellStyle2;
+			this.Column3.HeaderText = "表面・コントラスト値";
+			this.Column3.Name = "Column3";
+			this.Column3.Width = 80;
+			// 
+			// Column4
+			// 
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			dataGridViewCellStyle3.Format = "N3";
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.Column4.DefaultCellStyle = dataGridViewCellStyle3;
+			this.Column4.HeaderText = "表面・ドロップ率[%]";
+			this.Column4.Name = "Column4";
+			this.Column4.Width = 80;
+			// 
+			// Column5
+			// 
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			dataGridViewCellStyle4.Format = "N3";
+			dataGridViewCellStyle4.NullValue = null;
+			this.Column5.DefaultCellStyle = dataGridViewCellStyle4;
+			this.Column5.HeaderText = "中心・コントラスト値";
+			this.Column5.Name = "Column5";
+			this.Column5.Width = 80;
+			// 
+			// Column6
+			// 
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			dataGridViewCellStyle5.Format = "N3";
+			dataGridViewCellStyle5.NullValue = null;
+			this.Column6.DefaultCellStyle = dataGridViewCellStyle5;
+			this.Column6.HeaderText = "中心・ドロップ率[%]";
+			this.Column6.Name = "Column6";
+			this.Column6.Width = 80;
+			// 
+			// Column7
+			// 
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			dataGridViewCellStyle6.Format = "N3";
+			dataGridViewCellStyle6.NullValue = null;
+			this.Column7.DefaultCellStyle = dataGridViewCellStyle6;
+			this.Column7.HeaderText = "毛径・左[um]";
+			this.Column7.Name = "Column7";
+			this.Column7.Width = 75;
+			// 
+			// Column8
+			// 
+			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			dataGridViewCellStyle7.Format = "N3";
+			dataGridViewCellStyle7.NullValue = null;
+			this.Column8.DefaultCellStyle = dataGridViewCellStyle7;
+			this.Column8.HeaderText = "毛径・右[um]";
+			this.Column8.Name = "Column8";
+			this.Column8.Width = 75;
+			// 
+			// Column9
+			// 
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			dataGridViewCellStyle8.Format = "N3";
+			dataGridViewCellStyle8.NullValue = null;
+			this.Column9.DefaultCellStyle = dataGridViewCellStyle8;
+			this.Column9.HeaderText = "毛径・変化率[%]";
+			this.Column9.Name = "Column9";
+			this.Column9.Width = 75;
+			// 
+			// Column10
+			// 
+			this.Column10.HeaderText = "再撮影";
+			this.Column10.Name = "Column10";
+			this.Column10.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.Column10.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.Column10.Width = 75;
+			// 
+			// Column1
+			// 
+			this.Column1.HeaderText = "再作成";
+			this.Column1.Name = "Column1";
 			// 
 			// pictureBox1
 			// 
@@ -295,6 +388,15 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "判定閾値";
 			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(145, 118);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(11, 12);
+			this.label7.TabIndex = 70;
+			this.label7.Text = "%";
+			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
@@ -312,6 +414,27 @@
 			this.label9.Size = new System.Drawing.Size(11, 12);
 			this.label9.TabIndex = 70;
 			this.label9.Text = "%";
+			// 
+			// numericUpDown3
+			// 
+			this.numericUpDown3.BackColor = System.Drawing.SystemColors.Window;
+			this.numericUpDown3.DecimalPlaces = 1;
+			this.numericUpDown3.Enabled = false;
+			this.numericUpDown3.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.numericUpDown3.Location = new System.Drawing.Point(93, 116);
+			this.numericUpDown3.Name = "numericUpDown3";
+			this.numericUpDown3.Size = new System.Drawing.Size(49, 19);
+			this.numericUpDown3.TabIndex = 71;
+			this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown3.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
 			// 
 			// numericUpDown2
 			// 
@@ -350,6 +473,16 @@
             0,
             0,
             0});
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.BackColor = System.Drawing.Color.Black;
+			this.label3.Location = new System.Drawing.Point(6, 107);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(89, 24);
+			this.label3.TabIndex = 69;
+			this.label3.Text = "毛径\r\n変化率判定閾値";
 			// 
 			// label1
 			// 
@@ -464,138 +597,6 @@
 			this.checkBox21.UseVisualStyleBackColor = true;
 			this.checkBox21.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
-			// Column2
-			// 
-			dataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.Column2.DefaultCellStyle = dataGridViewCellStyle25;
-			this.Column2.HeaderText = "ファイル名";
-			this.Column2.Name = "Column2";
-			this.Column2.Width = 125;
-			// 
-			// Column3
-			// 
-			dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			dataGridViewCellStyle26.Format = "N3";
-			dataGridViewCellStyle26.NullValue = null;
-			dataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.Column3.DefaultCellStyle = dataGridViewCellStyle26;
-			this.Column3.HeaderText = "表面・コントラスト値";
-			this.Column3.Name = "Column3";
-			this.Column3.Width = 80;
-			// 
-			// Column4
-			// 
-			dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			dataGridViewCellStyle27.Format = "N3";
-			dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.Column4.DefaultCellStyle = dataGridViewCellStyle27;
-			this.Column4.HeaderText = "表面・ドロップ率[%]";
-			this.Column4.Name = "Column4";
-			this.Column4.Width = 80;
-			// 
-			// Column5
-			// 
-			dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			dataGridViewCellStyle28.Format = "N3";
-			dataGridViewCellStyle28.NullValue = null;
-			this.Column5.DefaultCellStyle = dataGridViewCellStyle28;
-			this.Column5.HeaderText = "中心・コントラスト値";
-			this.Column5.Name = "Column5";
-			this.Column5.Width = 80;
-			// 
-			// Column6
-			// 
-			dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			dataGridViewCellStyle29.Format = "N3";
-			dataGridViewCellStyle29.NullValue = null;
-			this.Column6.DefaultCellStyle = dataGridViewCellStyle29;
-			this.Column6.HeaderText = "中心・ドロップ率[%]";
-			this.Column6.Name = "Column6";
-			this.Column6.Width = 80;
-			// 
-			// Column7
-			// 
-			dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			dataGridViewCellStyle30.Format = "N3";
-			dataGridViewCellStyle30.NullValue = null;
-			this.Column7.DefaultCellStyle = dataGridViewCellStyle30;
-			this.Column7.HeaderText = "毛径・左[um]";
-			this.Column7.Name = "Column7";
-			this.Column7.Width = 75;
-			// 
-			// Column8
-			// 
-			dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			dataGridViewCellStyle31.Format = "N3";
-			dataGridViewCellStyle31.NullValue = null;
-			this.Column8.DefaultCellStyle = dataGridViewCellStyle31;
-			this.Column8.HeaderText = "毛径・右[um]";
-			this.Column8.Name = "Column8";
-			this.Column8.Width = 75;
-			// 
-			// Column9
-			// 
-			dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			dataGridViewCellStyle32.Format = "N3";
-			dataGridViewCellStyle32.NullValue = null;
-			this.Column9.DefaultCellStyle = dataGridViewCellStyle32;
-			this.Column9.HeaderText = "毛径・変化率[%]";
-			this.Column9.Name = "Column9";
-			this.Column9.Width = 75;
-			// 
-			// Column10
-			// 
-			this.Column10.HeaderText = "再撮影";
-			this.Column10.Name = "Column10";
-			this.Column10.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.Column10.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.Column10.Width = 75;
-			// 
-			// Column1
-			// 
-			this.Column1.HeaderText = "再作成";
-			this.Column1.Name = "Column1";
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.BackColor = System.Drawing.Color.Black;
-			this.label3.Location = new System.Drawing.Point(6, 107);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(89, 24);
-			this.label3.TabIndex = 69;
-			this.label3.Text = "毛径\r\n変化率判定閾値";
-			// 
-			// numericUpDown3
-			// 
-			this.numericUpDown3.BackColor = System.Drawing.SystemColors.Window;
-			this.numericUpDown3.DecimalPlaces = 1;
-			this.numericUpDown3.Enabled = false;
-			this.numericUpDown3.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-			this.numericUpDown3.Location = new System.Drawing.Point(93, 116);
-			this.numericUpDown3.Name = "numericUpDown3";
-			this.numericUpDown3.Size = new System.Drawing.Size(49, 19);
-			this.numericUpDown3.TabIndex = 71;
-			this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numericUpDown3.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-			// 
-			// label7
-			// 
-			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(145, 118);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(11, 12);
-			this.label7.TabIndex = 70;
-			this.label7.Text = "%";
-			// 
 			// tabPage2
 			// 
 			this.tabPage2.BackColor = System.Drawing.Color.Black;
@@ -622,7 +623,6 @@
 			// 
 			// button1
 			// 
-			this.button1.Enabled = false;
 			this.button1.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.button1.Location = new System.Drawing.Point(14, 19);
 			this.button1.Name = "button1";
@@ -630,6 +630,7 @@
 			this.button1.TabIndex = 70;
 			this.button1.Text = "再測定を実行";
 			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// label10
 			// 
@@ -678,11 +679,11 @@
 			this.tabPage3.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
 			this.tabPage2.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();

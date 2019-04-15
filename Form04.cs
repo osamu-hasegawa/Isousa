@@ -23,7 +23,7 @@ namespace uSCOPE
 		private int m_isel = 0;
 		private string MOZ_CND_FOLD;
 		//---
-		private ArrayList m_hair = new ArrayList();
+		private List<hair> m_hair = new List<hair>();
 		//---
 		private Bitmap	m_bmp_dm1;
 		private Bitmap	m_bmp_ir1;
@@ -66,6 +66,9 @@ namespace uSCOPE
 			public int	width;		//当該画像のサイズ
 			public int	height;		//当該画像のサイズ
 			public int total_idx;
+#if true//2019.04.09(再測定実装)
+			public bool bREMES;
+#endif
 #if true//2019.03.16(NODATA対応)
 			public double zp_contr;
 			public double zp_contr_avg;
@@ -255,6 +258,16 @@ namespace uSCOPE
 		ArrayList m_ah_cl = new ArrayList();
 		ArrayList m_ah_ir = new ArrayList();
 		ArrayList m_rst = new ArrayList();
+#if true//2019.04.09(再測定実装)
+		struct PLS_XYZ {
+			public int X, Y, Z;
+			public PLS_XYZ(int X, int Y, int Z) {
+				this.X = X;
+				this.Y = Y;
+				this.Z = Z;
+			}
+		};
+#endif
 		struct log_info {
 			public Point pls_org;
 			public double stg_pitch;	//[um/pls]
@@ -262,6 +275,9 @@ namespace uSCOPE
 			public double zoom;
 			//---
 			public Dictionary<string, Point> map_of_pos;
+#if true//2019.04.09(再測定実装)
+			public Dictionary<string, PLS_XYZ> map_of_xyz;
+#endif
 		};
 		log_info m_log_info;
 		//---
@@ -271,7 +287,9 @@ namespace uSCOPE
 			string buf;
 			string[] clms;
 			StreamReader sr;
-
+#if true//2019.04.09(再測定実装)
+			m_log_info.map_of_xyz = new Dictionary<string,PLS_XYZ>();
+#endif
 			m_log_info.map_of_pos = new Dictionary<string,Point>();
 			m_log_info.zoom = 8;
 			m_log_info.stg_pitch = 2.5;		//[um/pls]
@@ -291,6 +309,13 @@ namespace uSCOPE
 							Point pt = new Point(ptx, pty);
 							m_log_info.map_of_pos.Add(key, pt);
 						}
+#if true//2019.04.09(再測定実装)
+						int ptz;
+						if (int.TryParse(clms[1], out ptx) && int.TryParse(clms[2], out pty) &&  int.TryParse(clms[3], out ptz)) {
+							PLS_XYZ pt = new PLS_XYZ(ptx, pty, ptz);
+							m_log_info.map_of_xyz.Add(key, pt);
+						}
+#endif
 					}
 					else if (buf.Contains("ZOOM軸(pls/倍)") && clms.Length >= 2) {
 						string tmp = clms[1];
@@ -628,7 +653,11 @@ namespace uSCOPE
 			objs.Add(seg.mou_len_l);
 			objs.Add(seg.mou_len_r);
 			objs.Add(seg.mou_len_c);
+#if true//2019.04.09(再測定実装)
+			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
+#else
 			objs.Add(false);
+#endif
 			idx = this.dataGridView1.Rows.Add(objs.ToArray());
 			this.dataGridView1.Rows[idx].HeaderCell.Value = (idx+1).ToString();
 			this.dataGridView1.Rows[idx].Tag = MAKELONG(s_idx, h_idx);
@@ -830,7 +859,6 @@ namespace uSCOPE
 					hr.seg = segs;//(seg_of_hair[])ar_seg.ToArray(typeof(seg_of_hair));
 					hr.cnt_of_seg = hr.seg.Length;
 					m_hair.Add(hr);
-
 				}
 				enable_forms(true);
 
@@ -1193,20 +1221,6 @@ namespace uSCOPE
 				int idx = (int)this.dataGridView1.SelectedRows[0].Tag;
 				int h = HIWORD(idx);
 				int i = LOWORD(idx);
-#else
-			string buf = this.dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-			if (buf.Length < 2) {
-				return;
-			}
-			int h, i;
-			if (buf[1] >= '0' && buf[1] <= '9') {
-				h = int.Parse(buf.Substring(0, 2));
-				i = int.Parse(buf.Substring(5, 2));
-			}
-			else {
-				h = int.Parse(buf.Substring(0, 1));
-				i = int.Parse(buf.Substring(4, 2));
-			}
 #endif
 				m_i = h;
 				m_isel = i;
@@ -1262,6 +1276,189 @@ namespace uSCOPE
 				else {
 					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
 				}
+#if true//2019.04.09(再測定実装)
+				this.dataGridView1.Rows[i].Cells[8].Value = flag;
+#endif
+			}
+		}
+#endif
+		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.ColumnIndex == 8) {
+				if ((bool)this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) {
+					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+				}
+				else {
+					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
+				}
+			}
+		}
+#if true//2019.04.09(再測定実装)
+		private int get_offs(string name)
+		{
+			int		offs;
+			string	tmp = name.Substring(name.Length-5);
+			string	k_z = tmp.Substring(0, 1);
+			int		sgn;
+			if (tmp.Substring(1, 1) == "P") {
+				sgn = +1;
+			}
+			else {
+				sgn = -1;
+			}
+			tmp = tmp.Substring(2, 2);
+			offs = int.Parse(tmp);
+			return(sgn*offs);
+		}
+		//?CR_??_????D.???
+		//?CT_??_????D.???
+		//?IR_??_????D.???
+		private void add_remes(List<G.RE_MES> remes, string name)
+		{
+			G.RE_MES mes = new G.RE_MES();
+			string nam;
+			string tmp;
+			string[] files;
+
+			if (true) {
+				mes.fold = this.MOZ_CND_FOLD;
+			}
+			if (true) {
+				int	p;
+				name = name.ToUpper();
+				if ((p = name.IndexOf("CR")) >= 1) {
+				}
+				else if ((p = name.IndexOf("CT")) >= 1) {
+				}
+				else {
+					throw new Exception("Internal Error");
+				}
+				mes.hno = name.Substring(0, p);
+				mes.crt = name.Substring(p, 2);
+				p+=2;
+				mes.sno = name.Substring(p, 4);
+			}
+			if (false) {
+				files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "*.*");
+				tmp = "";
+				for (int i = 0; i < files.Length; i++) {
+					tmp += System.IO.Path.GetFileName(files[i]);
+					tmp += "\r";
+				}
+				G.mlog(tmp);
+			}
+			files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "ZP00D.*");
+			if (files.Length == 1) {
+				tmp = files[0];
+				if (true) {
+					//表面ＡＦ画像
+					nam = System.IO.Path.GetFileName(tmp);
+					mes.name_of_zp.Add(nam);
+					mes.offs_of_zp.Add(0);
+					//---
+					PLS_XYZ pos;
+					if (m_log_info.map_of_xyz.TryGetValue(nam, out pos)) {
+						mes.pls_x = pos.X;
+						mes.pls_y = pos.Y;
+						mes.pls_z_of_zp = pos.Z;
+					}
+				}
+				files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "Z???D.*");
+				for (int i = 0; i < files.Length; i++) {
+					nam = System.IO.Path.GetFileName(files[i]);
+					tmp = System.IO.Path.GetFileNameWithoutExtension(files[i]);
+					tmp = tmp.ToUpper();
+					if (tmp.IndexOf("ZP00D") >= 0) {
+						continue;
+					}
+					mes.name_of_zp.Add(nam);
+					mes.offs_of_zp.Add(get_offs(tmp));					
+				}
+			}
+			files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "KP00D.*");
+			if (files.Length == 1) {
+				tmp = files[0];
+				if (true) {
+					//中心ＡＦ画像
+					nam = System.IO.Path.GetFileName(tmp);
+					mes.name_of_kp.Add(nam);
+					mes.offs_of_kp.Add(0);
+					//---
+					PLS_XYZ pos;
+					if (m_log_info.map_of_xyz.TryGetValue(nam, out pos)) {
+					//	mes.pls_x = pos.X; //XとYはZPとKPで同じ,Zのみ異なる
+					//	mes.pls_y = pos.Y;
+						mes.pls_z_of_kp = pos.Z;
+					}
+				}
+				files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "K???D.*");
+				for (int i = 0; i < files.Length; i++) {
+					nam = System.IO.Path.GetFileName(files[i]);
+					tmp = System.IO.Path.GetFileNameWithoutExtension(files[i]);
+					tmp = tmp.ToUpper();
+					if (tmp.IndexOf("KP00D") >= 0) {
+						continue;
+					}
+					mes.name_of_kp.Add(nam);
+					mes.offs_of_kp.Add(get_offs(tmp));					
+				}
+			}
+			//該当のＩＲファイルの有無をチェック
+			if (true) {
+				for (int i = 0; i < mes.name_of_zp.Count; i++) {
+					tmp = this.MOZ_CND_FOLD + "\\" + mes.name_of_zp[i];
+					tmp = to_ir_file(tmp);
+					if (System.IO.File.Exists(tmp)) {
+						mes.name_of_zr.Add(System.IO.Path.GetFileName(tmp));
+					}
+					else {
+						mes.name_of_zr.Add(null);
+					}
+				}
+			}
+			if (true) {
+				for (int i = 0; i < mes.name_of_kp.Count; i++) {
+					tmp = this.MOZ_CND_FOLD + "\\" + mes.name_of_kp[i];
+					tmp = to_ir_file(tmp);
+					if (System.IO.File.Exists(tmp)) {
+						mes.name_of_kr.Add(System.IO.Path.GetFileName(tmp));
+					}
+					else {
+						mes.name_of_kr.Add(null);
+					}
+				}
+			}
+			remes.Add(mes);
+		}
+		private void button1_Click(object sender, EventArgs e)
+		{//再測定
+			for (int q = 0; q < this.dataGridView1.Rows.Count; q++) {
+				bool flag = false;
+				flag = (bool)this.dataGridView1.Rows[q].Cells[8].Value;
+				if (true) {
+					int idx = (int)this.dataGridView1.Rows[q].Tag;
+					int h = HIWORD(idx);
+					int i = LOWORD(idx);
+					m_i = h;
+					m_isel = i;
+					hair hr = m_hair[m_i];
+					seg_of_hair seg = (seg_of_hair)hr.seg[m_isel];
+					seg.bREMES = flag;
+				}
+			}
+			//---
+			G.REMES.Clear();
+			//---
+			for (int q = 0; q < m_hair.Count; q++) {
+				for (int i = 0; i < m_hair[q].seg.Count(); i++) {
+					//G.mlog("seg.name_of_dm:\r\r" + seg.name_of_dm);
+					if (m_hair[q].seg[i].bREMES) {
+						add_remes(G.REMES, m_hair[q].seg[i].name_of_dm);
+					}
+				}
+			}
+			if (true) {
+				G.FORM12.BeginInvoke(new G.DLG_VOID_VOID(G.FORM12.do_re_mes));
 			}
 		}
 #endif

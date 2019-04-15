@@ -1080,6 +1080,39 @@ namespace uSCOPE
 				this.EDG_CNT = 0;
 			}
 		}
+#if true//2019.04.09(再測定実装)
+		public class RE_MES {
+			public string		fold;
+			//---
+			public string		hno;//毛髪番号
+			public string		crt;//"CR" / "CT"
+			public string		sno;//"_??_"
+			public int			pls_x;
+			public int			pls_y;
+			public int			pls_z_of_kp;	//KP00のZ座標
+			public int			pls_z_of_zp;	//ZP00のZ座標
+			//---
+			public List<string>	name_of_kp;//kp00d, kp02d, km02d,...
+			public List<string>	name_of_zp;//zp00d, zp02d, zm02d,...
+			public List<int>	offs_of_kp;//    0,     2,    -2,...
+			public List<int>	offs_of_zp;//    0,     2,    -2,...
+			public List<string>	name_of_kr;//該当IRがあれば名前/無ければnull
+			public List<string>	name_of_zr;//
+
+			public RE_MES() {
+				this.name_of_kp = new List<string>();
+				this.name_of_zp = new List<string>();
+				this.offs_of_kp = new List<int   >();
+				this.offs_of_zp = new List<int   >();
+				this.name_of_kr = new List<string>();
+				this.name_of_zr = new List<string>();
+			}
+			public string h_name() {
+				return(this.hno + this.crt +  this.sno);
+			}
+		};
+		static public List<RE_MES> REMES = new List<RE_MES>();
+#endif
 		public enum PLM_STS_BITS
 		{
 			BIT_ONMOV = 0x0001,	//移動中
