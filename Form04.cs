@@ -88,6 +88,11 @@ namespace uSCOPE
 			public Point[]	msk_of_dm;//コントラスト計算多曲線
 			public Point[]	msk_of_pd;//コントラスト計算多曲線
 #endif
+#if true//2019.04.02(再測定表ユーザモード)
+			public string[] bak_folds;
+			public int bak_cnt;
+			public bool bTMR;
+#endif
 			//---
 			//---
 #if true//2018.10.10(毛髪径算出・改造)
@@ -658,10 +663,88 @@ namespace uSCOPE
 #else
 			objs.Add(false);
 #endif
+#if true//2019.04.02(再測定表ユーザモード)
+			objs.Add(false);//再作成
+			objs.Add(seg.bak_cnt);
+			objs.Add(seg.bTMR);
+#endif
 			idx = this.dataGridView1.Rows.Add(objs.ToArray());
 			this.dataGridView1.Rows[idx].HeaderCell.Value = (idx+1).ToString();
 			this.dataGridView1.Rows[idx].Tag = MAKELONG(s_idx, h_idx);
 		}
+#if true//2019.04.02(再測定表ユーザモード)
+		private List<string> BAK_FOLDS = new List<string>();
+		private List<string[]> BAK_FILES = new List<string[]>();
+
+		private void search_bak_dir()
+		{
+			this.BAK_FOLDS.AddRange(System.IO.Directory.GetDirectories(this.MOZ_CND_FOLD, "BAK_????????_??????"));
+			this.BAK_FOLDS.Sort();
+			//順序を逆にして[0]が直近のバックアップ, [N-1]が最古のバックアップにする
+			this.BAK_FOLDS.Reverse();
+			//---
+			int i = 0;
+			while (true) {
+				string[] files;
+				List<string> lst = new List<string>();
+
+				files = System.IO.Directory.GetFiles(this.BAK_FOLDS[i], "*CT_??_ZP00D.*");
+				for (int h = 0; h < files.Length; h++) {
+					lst.Add(System.IO.Path.GetFileName(files[h]));
+				}
+				//---
+				files = System.IO.Directory.GetFiles(this.BAK_FOLDS[i], "*CR_??_ZP00D.*");
+				for (int h = 0; h < files.Length; h++) {
+					lst.Add(System.IO.Path.GetFileName(files[h]));
+				}
+				//---
+				if (lst.Count <= 0) {
+					this.BAK_FOLDS.RemoveAt(i);
+				}
+				else {
+					this.BAK_FILES.Add(lst.ToArray());
+					i++;
+				}
+				if (i >= this.BAK_FOLDS.Count) {
+					break;
+				}
+			}
+		}
+		// nameが直近の再測定データかどうか?
+		private bool is_tmr(string name)
+		{
+			if (BAK_FILES.Count <= 0) {
+				return(false);//再測定データがない場合
+			}
+			string[] files = this.BAK_FILES[0];
+			for (int i = 0; i <files.Length; i++) {
+				if (files[i].Contains(name)) {
+					return(true);
+				}
+			}
+			return(false);
+		}
+		private string[] get_remes_folds(string name, out int cnt)
+		{
+			List<string> folds = new List<string>();
+
+			cnt = 0;
+			if (this.BAK_FOLDS.Count != this.BAK_FILES.Count) {
+				throw new Exception("Internal Error");
+			}
+			for (int i = 0; i < this.BAK_FILES.Count; i++) {
+				string[] files = this.BAK_FILES[i];
+				for (int h = 0; h < files.Length; h++) {
+					if (files[h].Contains(name)) {
+						folds.Add(this.BAK_FOLDS[i]);
+						cnt++;
+						break;
+					}
+				}
+			}
+			return(folds.ToArray());
+		}
+#endif
 		//---
 		private void load()
 		{
@@ -759,6 +842,10 @@ namespace uSCOPE
 						seg.name_of_dm = name_dm1;
 						seg.name_of_pd = name_pd1;
 						seg.name_of_ir = name_ir1;
+#if true//2019.04.02(再測定表ユーザモード)
+						seg.bak_folds = get_remes_folds(name_dm1, out seg.bak_cnt);
+						seg.bTMR = is_tmr(name_dm1);
+#endif
 						//---
 	dlg.SetStatus(string.Format("計算中 {0}/{1}\r{2}/{3}本", i+1, cnt_of_seg, m_hair.Count+1, cnt_of_hair));
 						//---
@@ -945,6 +1032,22 @@ namespace uSCOPE
 			this.dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240,244,249);//Color.DarkGray;
 			//
 			this.Text = this.Text + "[" + this.MOZ_CND_FOLD + "]";
+#if true//2019.04.02(再測定表ユーザモード)
+			if (G.UIF_LEVL == 0) {
+				this.dataGridView1.Columns[3].Visible = false;
+				this.dataGridView1.Columns[4].Visible = false;
+				this.dataGridView1.Columns[10].Visible = false;//再測定回数
+				//---
+				this.label1.Visible = false;//中心
+				this.numericUpDown2.Visible = false;//中心
+				this.label2.Visible = false;//中心
+			}
+			if (true) {
+				this.dataGridView1.Columns[11].Visible = false;//直近？
+			}
+			this.comboBox1.SelectedIndex = 0;
+			search_bak_dir();
+#endif
 		}
 
 		private void Form04_Load(object sender, EventArgs e)
@@ -1096,7 +1199,18 @@ namespace uSCOPE
 					buf_pd = /*to_xx_path(*/seg.path_of_pd;//, null/*ZVAL2ORG(this.comboBox8.Text)*/);
 					buf_ir = /*to_xx_path(*/seg.path_of_ir;//, null/*ZVAL2ORG(this.comboBox12.Text)*/);
 				}
-
+#if true//2019.04.02(再測定表ユーザモード)
+				if (this.comboBox1.SelectedIndex > 0 && seg.bak_cnt > 0) {
+					int i = this.comboBox1.SelectedIndex;
+					if (i > seg.bak_cnt) {
+						i = seg.bak_cnt;
+					}
+					i--;
+					buf_dm = seg.bak_folds[i] + "\\" + seg.name_of_dm;
+					buf_pd = seg.bak_folds[i] + "\\" + seg.name_of_pd;
+					buf_ir = seg.bak_folds[i] + "\\" + seg.name_of_ir;
+				}
+#endif
 				bmp_dm = to_img_from_file(buf_dm);
 				bmp_pd = to_img_from_file(buf_pd);
 				bmp_ir = to_img_from_file(buf_ir);
@@ -1266,10 +1380,16 @@ namespace uSCOPE
 				if (val >= G.SS.REM_BOK_STHD) {
 					flag = true;
 				}
+#if true//2019.04.02(再測定表ユーザモード)
+				if (G.UIF_LEVL != 0) {
+#endif
 				val = (double)this.dataGridView1.Rows[i].Cells[4].Value;
 				if (val >= G.SS.REM_BOK_CTHD) {
 					flag = true;
 				}
+#if true//2019.04.02(再測定表ユーザモード)
+				}
+#endif
 				if (flag) {
 					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 96, 96);//;Color.Red;
 				}
@@ -1459,6 +1579,26 @@ namespace uSCOPE
 			}
 			if (true) {
 				G.FORM12.BeginInvoke(new G.DLG_VOID_VOID(G.FORM12.do_re_mes));
+			}
+		}
+#endif
+#if true//2019.04.02(再測定表ユーザモード)
+		private void checkBox3_CheckedChanged(object sender, EventArgs e)
+		{
+			for (int q = 0; q < this.dataGridView1.Rows.Count; q++) {
+				bool flag = (bool)this.dataGridView1.Rows[q].Cells[11].Value;
+				if (this.checkBox3.Checked) {
+					this.dataGridView1.Rows[q].Visible = flag;
+				}
+				else {
+					this.dataGridView1.Rows[q].Visible = true;
+				}
+				if (this.checkBox6.Checked && flag) {
+					this.dataGridView1.Rows[q].DefaultCellStyle.BackColor = Color.LimeGreen;
+				}
+				else {
+					this.dataGridView1.Rows[q].DefaultCellStyle.BackColor = Color.Empty;
+				}
 			}
 		}
 #endif
