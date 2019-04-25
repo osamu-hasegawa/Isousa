@@ -254,12 +254,6 @@
     <Compile Include="frmPassSet.designer.cs">
       <DependentUpon>frmPassSet.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form03BAK.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form03BAK.Designer.cs">
-      <DependentUpon>Form03BAK.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form04.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -359,9 +353,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmPassSet.resx">
       <DependentUpon>frmPassSet.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form03BAK.resx">
-      <DependentUpon>Form03BAK.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form04.resx">
       <DependentUpon>Form04.cs</DependentUpon>

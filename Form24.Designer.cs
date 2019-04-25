@@ -123,11 +123,11 @@
 			this.label36 = new System.Windows.Forms.Label();
 			this.label37 = new System.Windows.Forms.Label();
 			this.panel8 = new System.Windows.Forms.Panel();
+			this.button_cancel = new System.Windows.Forms.Button();
 			this.panel9 = new System.Windows.Forms.Panel();
 			this.radioButton10 = new System.Windows.Forms.RadioButton();
 			this.radioButton11 = new System.Windows.Forms.RadioButton();
 			this.label41 = new System.Windows.Forms.Label();
-			this.button_cancel = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
@@ -1468,6 +1468,16 @@
 			this.panel8.Size = new System.Drawing.Size(321, 32);
 			this.panel8.TabIndex = 1;
 			// 
+			// button_cancel
+			// 
+			this.button_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.button_cancel.Location = new System.Drawing.Point(336, 5);
+			this.button_cancel.Name = "button_cancel";
+			this.button_cancel.Size = new System.Drawing.Size(41, 22);
+			this.button_cancel.TabIndex = 118;
+			this.button_cancel.Text = "cancel";
+			this.button_cancel.UseVisualStyleBackColor = true;
+			// 
 			// panel9
 			// 
 			this.panel9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1509,16 +1519,6 @@
 			this.label41.TabIndex = 77;
 			this.label41.Text = "カラー";
 			// 
-			// button_cancel
-			// 
-			this.button_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_cancel.Location = new System.Drawing.Point(336, 5);
-			this.button_cancel.Name = "button_cancel";
-			this.button_cancel.Size = new System.Drawing.Size(41, 22);
-			this.button_cancel.TabIndex = 118;
-			this.button_cancel.Text = "cancel";
-			this.button_cancel.UseVisualStyleBackColor = true;
-			// 
 			// Form24
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1527,7 +1527,9 @@
 			this.ClientSize = new System.Drawing.Size(321, 507);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.panel8);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "Form24";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

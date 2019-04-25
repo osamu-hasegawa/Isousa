@@ -684,6 +684,9 @@ namespace uSCOPE
 			this.BAK_FOLDS.Reverse();
 			//---
 			int i = 0;
+			if (this.BAK_FOLDS.Count <= 0) {
+				return;
+			}
 			while (true) {
 				string[] files;
 				List<string> lst = new List<string>();
@@ -1552,6 +1555,10 @@ namespace uSCOPE
 		}
 		private void button1_Click(object sender, EventArgs e)
 		{//再測定
+			if (!D.isCONNECTED() || !G.FORM11.isORG_ALL_DONE()) {
+				G.mlog("CONNECT及び原点復帰をしてください.");
+				return;
+			}
 			for (int q = 0; q < this.dataGridView1.Rows.Count; q++) {
 				bool flag = false;
 				flag = (bool)this.dataGridView1.Rows[q].Cells[8].Value;
@@ -1576,6 +1583,10 @@ namespace uSCOPE
 						add_remes(G.REMES, m_hair[q].seg[i].name_of_dm);
 					}
 				}
+			}
+			if (G.REMES.Count <= 0) {
+				G.mlog("再撮影対象のチェック項目をＯＮしてください.");
+				return;
 			}
 			if (true) {
 				G.FORM12.BeginInvoke(new G.DLG_VOID_VOID(G.FORM12.do_re_mes));

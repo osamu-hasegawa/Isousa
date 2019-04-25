@@ -60,6 +60,65 @@ namespace uSCOPE
 #if true//2018.10.10(毛髪径算出・改造)
 		public string m_errstr;
 #endif
+#if true//2019.04.17(毛髄検出複線化)
+		private void chk_pt(seg_of_hair seg, int idx)
+		{
+#if false
+			Point p1;
+			Point p2;
+			int	i = idx;
+
+			p1 = (Point)seg.moz_zpb[i];
+			p2 = (Point)seg.moz_zpt[i];
+			if (seg.moz_inf[i].pml != p2 || seg.moz_inf[i].pmr != p1) {
+				G.mlog("seg.moz_inf[i].pml != p2 || seg.moz_inf[i].pmr != p1 @ i=" + i.ToString());
+			}
+			if (seg.moz_hnf == null || seg.moz_hpb.Count <= 0 || seg.moz_hpt.Count <= 0) {
+				return;
+			}
+			//---
+			p1 = seg.moz_hpb[i];//補間データ
+			p2 = seg.moz_hpt[i];
+			if (seg.moz_hnf[i].pml != p2 || seg.moz_hnf[i].pmr != p1) {
+				G.mlog("seg.moz_hnf[i].pml != p2 || seg.moz_hnf[i].pmr != p1 @ i=" + i.ToString());
+			}
+#endif
+		}
+		private void get_pt(seg_of_hair seg, int idx, bool bATO, out Point p1, out Point p2)
+		{
+			if (!bATO) {
+				p1 = seg.moz_inf[idx].pmr;//moz_zpb
+				p2 = seg.moz_inf[idx].pml;//moz_zpt
+			}
+			else {
+				p1 = seg.moz_hnf[idx].pmr;//moz_hpb
+				p2 = seg.moz_hnf[idx].pml;//moz_hpt
+			}
+		}
+		private void get_pt(seg_of_hair seg, int idx, bool bATO, out Point p1, out Point p2, out double len)
+		{
+			if (!bATO) {
+				p1  = seg.moz_inf[idx].pmr;
+				p2  = seg.moz_inf[idx].pml;
+				len = seg.moz_inf[idx].moz_zpl;
+			}
+			else {
+				p1  = seg.moz_hnf[idx].pmr;
+				p2  = seg.moz_hnf[idx].pml;
+				len = seg.moz_hnf[idx].moz_zpl;
+			}
+		}
+		private void get_pl(seg_of_hair seg, int idx, bool bATO, out double len)
+		{
+			if (!bATO) {
+				len = seg.moz_inf[idx].moz_zpl;
+			}
+			else {
+				len = seg.moz_hnf[idx].moz_zpl;
+			}
+		}
+
+#endif
 		//---
 		public Form03()
 		{
@@ -361,6 +420,16 @@ retry:
 			public int			ihl;
 			public int			ihr;
 #endif
+#if true//2019.04.17(毛髄検出複線化)
+			public double		moz_zpl;//毛髄:長さ径
+			public bool			moz_out;//外れ:true, 正常:false
+			public int			moz_lbl;//ラベル番号(0:毛髄無し,以外:毛髄領域の連番)
+			public double		moz_sum;//該当ラベルの積算値を格納([0]にラベル1の積算値)
+
+			//public Point		zpt;//毛髄:上側点
+			//public Point		zpb;//毛髄:下側点
+			//public double		zpl;//毛髄:長さ径
+#endif
 			//---
 			public void clear() {
 				if (pbf != null) {
@@ -542,26 +611,36 @@ retry:
 			//---
 			//赤外情報
 			public int	 cnt_of_moz;
+#if false//2019.04.17(毛髄検出複線化)
 			public ArrayList moz_zpt;//毛髄:上側点
 			public ArrayList moz_zpb;//毛髄:下側点
 			public ArrayList moz_zpl;//毛髄:長さ径
+#endif
 			public ArrayList moz_top;
 			public ArrayList moz_btm;
 #if true//2018.10.10(毛髪径算出・改造)
 			public List<seg_of_mouz>
 								moz_inf;
+#if false//2019.04.17(毛髄検出複線化)
 			public List<bool>	moz_out;//外れ:true, 正常:false
 			public List<int>	moz_lbl;//ラベル番号(0:毛髄無し,以外:毛髄領域の連番)
 			public List<double> moz_sum;//該当ラベルの積算値を格納([0]にラベル1の積算値)
 			public List<Point>	moz_hpt;//毛髄:上側点:補間後
 			public List<Point>	moz_hpb;//毛髄:下側点:補間後
 			public List<double>	moz_hpl;//毛髄:長さ径:補間後
+#endif
 			public List<seg_of_mouz>
 								moz_hnf;//毛髄:補間後
 			public double		moz_rsl;//毛髄面積:Sl
 			public double		moz_rsd;//毛髄面積:Sd
 			public double		moz_hsl;//毛髄面積:Sl(補間後)
 			public double		moz_hsd;//毛髄面積:Sd(補間後)
+#endif
+#if true//2019.04.17(毛髄検出複線化)
+			public List<seg_of_mouz>
+								moz_inf1,moz_inf2,moz_inf3;
+			public List<seg_of_mouz>
+								moz_hnf1,moz_hnf2,moz_hnf3;//毛髄:補間後
 #endif
 			//---
 #if true//2018.10.10(毛髪径算出・改造)
@@ -630,19 +709,31 @@ retry:
 				//---
 				//赤外情報
 				this.cnt_of_moz = 0;
+#if false//2019.04.17(毛髄検出複線化)
 				this.moz_zpt = new ArrayList();//毛髄:上側点
 				this.moz_zpb = new ArrayList();//毛髄:下側点
 				this.moz_zpl = new ArrayList();//毛髄:長さ径
+#endif
 				this.moz_top = new ArrayList();
 				this.moz_btm = new ArrayList();
 #if true//2018.10.10(毛髪径算出・改造)
 				this.moz_inf = new List<seg_of_mouz>();
 				//this.moz_fs2 = new List<bool>();//S1,S2区分,S1:true, S2:false
 				//this.moz_avg = new List<double>();//毛髄:毛髄範囲の画素平均値(生画像による)
+#if false//2019.04.17(毛髄検出複線化)
 				this.moz_out = new List<bool>();
 				this.moz_hpt = new List<Point>();//毛髄:上側点:補間後
 				this.moz_hpb = new List<Point>();//毛髄:下側点:補間後
 				this.moz_hpl = new List<double>();//毛髄:長さ径:補間後
+#endif
+#endif
+#if true//2019.04.17(毛髄検出複線化)
+				this.moz_inf1 = new List<seg_of_mouz>();
+				this.moz_inf2 = new List<seg_of_mouz>();
+				this.moz_inf3 = new List<seg_of_mouz>();
+				this.moz_hnf1 = new List<seg_of_mouz>();
+				this.moz_hnf2 = new List<seg_of_mouz>();
+				this.moz_hnf3 = new List<seg_of_mouz>();
 #endif
 #if true //2018.12.17(オーバーラップ範囲)
 				this.ow_l_wid = -1;
@@ -770,22 +861,36 @@ retry:
 #if true//2018.10.10(毛髪径算出・改造)
 		void detect_area(seg_of_hair seg)
 		{
+#if true//2019.04.17(毛髄検出複線化)
+			int len = seg.moz_inf.Count;
+#else
 			int len = seg.moz_zpl.Count;
+#endif
 			List<int> lbl = new List<int>();
 			List<double> sum = Enumerable.Repeat<double>(0, len).ToList();
 			int n_of_lbl = 0;
 			double pl_bak = 0;
+#if true//2019.04.17(毛髄検出複線化)
+			Point pt_bak, pb_bak;
+			get_pt(seg, 0, false, out pb_bak, out pt_bak);
+#else
 			Point pt_bak = (Point)seg.moz_zpt[0];
 			Point pb_bak = (Point)seg.moz_zpb[0];
-
+#endif
 			//ラベリングによる領域分割
 
 			for (int i = 0; i < len; i++) {
+#if true//2019.04.17(毛髄検出複線化)
+				Point pt, pb;
+				double pl;
+				chk_pt(seg, i);
+				get_pt(seg, i, false, out pb, out pt, out pl);
+#else
 				Point pt = (Point)seg.moz_zpt[i];	//毛髄:上側点
 				Point pb = (Point)seg.moz_zpb[i];	//毛髄:下側点
 				double pl = (double)seg.moz_zpl[i];	//毛髄:長さ径
+#endif
 				int no;
-
 				if (pl <= 0) {
 					no = 0;			//毛髄無し
 				}
@@ -816,7 +921,13 @@ retry:
 					if (lbl[i] != no) {
 						break;
 					}
+#if true//2019.04.17(毛髄検出複線化)
+					double tmp;
+					get_pl(seg, i, false, out tmp);
+					ttl += tmp;
+#else
 					ttl += (double)seg.moz_zpl[i];
+#endif
 				}
 				sum[no-1] = ttl;
 				if (G.SS.MOZ_CND_CHK1 && ttl <= G.SS.MOZ_CND_SMVL) {
@@ -826,8 +937,17 @@ retry:
 				}
 				i--;//一つ戻してから再開
 			}
+#if true//2019.04.17(毛髄検出複線化)
+			for (int i = 0; i < len; i++) {
+				seg_of_mouz mz = seg.moz_inf[i];
+				mz.moz_lbl = lbl[i];
+				mz.moz_sum = sum[i];
+				seg.moz_inf[i] = mz;
+			}
+#else
 			seg.moz_lbl = lbl;
 			seg.moz_sum = sum;
+#endif
 		}
 		void detect_outliers(seg_of_hair seg)
 		{
@@ -835,8 +955,11 @@ retry:
 			double THR_OF_VAL;
 			double avg = 0, div = 0, std = 0, evl;
 			int cnt;
-
+#if true//2019.04.17(毛髄検出複線化)
+			int len = seg.moz_inf.Count;
+#else
 			int len = seg.moz_zpl.Count;
+#endif
 			double[] buf;
 			double[] buf_ddf;
 			bool[] otl = Enumerable.Repeat<bool>(false, len).ToArray();
@@ -849,11 +972,20 @@ retry:
 					// 毛髄径
 					buf = new double[len];
 					for (int i = 0; i < len; i++) {
-						if (seg.moz_lbl[i] < 0) {
+						if (seg.moz_inf[i].moz_lbl < 0) {
 							buf[i] = 0;
 						}
 						else {
+#if true//2019.04.17(毛髄検出複線化)
+							double tmp;
+							get_pl(seg, i, false, out tmp);
+							get_pl(seg, i, false, out buf[i]);
+							if (buf[i] != tmp) {
+								G.mlog("kakunin");
+							}
+#else
 							buf[i] = (double)seg.moz_zpl[i];
+#endif
 						}
 					}
 					WID_OF_AVG = G.SS.MOZ_CND_OTW1;
@@ -870,7 +1002,7 @@ retry:
 				//		Point u1 = (Point)seg.moz_zpt[i];//毛髄:上側点
 				//		Point u2 = (Point)seg.moz_zpb[i];//毛髄:下側点
 				//		buf[i] = (u1.Y+u2.Y)/2.0;
-						if (seg.moz_lbl[i] < 0) {
+						if (seg.moz_inf[i].moz_lbl < 0) {
 							buf_ddf[i] = 0;
 						}
 						else {
@@ -884,9 +1016,15 @@ retry:
 					}
 				}
 				cnt = WID_OF_AVG;
+#if true//2019.04.17(毛髄検出複線化)
+				if (cnt > seg.moz_inf.Count) {
+					cnt = seg.moz_inf.Count;
+				}
+#else
 				if (cnt > seg.moz_zpl.Count) {
 					cnt = seg.moz_zpl.Count;
 				}
+#endif
 				for (int i = 0; i < len; i++) {
 					int h = i-cnt/2;
 					if (h < 0) {
@@ -917,11 +1055,22 @@ retry:
 					}
 				}
 			}
+#if true//2019.04.17(毛髄検出複線化)
+			if (otl.Length != len) {
+				len = len;
+			}
+			for (int i = 0; i < len; i++) {
+				seg_of_mouz mz = seg.moz_inf[i];
+				mz.moz_out = otl[i];
+				seg.moz_inf[i] = mz;
+			}
+#else
 			if (seg.moz_out != null) {
 				seg.moz_out.Clear();
 				seg.moz_out = null;
 			}
 			seg.moz_out = new List<bool>(otl);
+#endif
 		}
 		int find_nearest_pnt(FN1D fn, Point[]pts)
 		{
@@ -971,7 +1120,11 @@ retry:
 		}
 		void interp_outliers(seg_of_hair seg)
 		{
+#if true//2019.04.17(毛髄検出複線化)
+			int len = seg.moz_inf.Count;
+#else
 			int len = seg.moz_zpl.Count;
+#endif
 			List<Point> rawtL = new List<Point>();
 			List<Point> rawbL = new List<Point>();
 			List<Point> rawtR = new List<Point>();
@@ -984,17 +1137,25 @@ retry:
 			List<seg_of_mouz> hmz = new List<seg_of_mouz>();
 
 			for (int i = 0; i < len; i++) {
+#if true//2019.04.17(毛髄検出複線化)
+				Point pt, pb;
+				double pl;
+				get_pt(seg, i, false, out pb, out pt, out pl);
+#else
 				Point pt = (Point)seg.moz_zpt[i];
 				Point pb = (Point)seg.moz_zpb[i];
 				double pl = (double)seg.moz_zpl[i];
+#endif
 				double pl_bak = pl;
 				int cnt = 0;
 				int jcnt;
 				int jmax;
 				seg_of_mouz mz = seg.moz_inf[i];
-				
-				if (!seg.moz_out[i]) {
-					if (seg.moz_lbl[i] < 0) {
+#if true//2019.04.17(毛髄検出複線化)
+				chk_pt(seg, i);
+#endif
+				if (!seg.moz_inf[i].moz_out) {
+					if (seg.moz_inf[i].moz_lbl < 0) {
 						pt = mz.phc;
 						pb = mz.phc;
 						pl = 0;
@@ -1007,6 +1168,11 @@ retry:
 						mz.pmc = cen_of_pt(mz.pml, mz.pmr);
 						mz.ddf = 0;
 					}
+#if true//2019.04.17(毛髄検出複線化)
+					else {
+						i = i;
+					}
+#endif
 					hpt.Add(pt);
 					hpb.Add(pb);
 					hpl.Add(pl);
@@ -1039,15 +1205,25 @@ retry:
 					if (seg.moz_inf[j].ddf == 0) {
 						continue;//毛髄無しのデータは補間元データとしない
 					}
-					if (seg.moz_lbl[j] < 0) {
+					if (seg.moz_inf[j].moz_lbl < 0) {
 						continue;//除外データは補間元データとしない
 					}
-					if (!seg.moz_out[j]) {
+					if (!seg.moz_inf[j].moz_out) {
+#if true//2019.04.17(毛髄検出複線化)
+						Point p1, p2;
+						get_pt(seg, j, false, out p1, out p2);
+						rawtL.Add(p2);
+						rawbL.Add(p1);
+#else
 						rawtL.Add((Point)seg.moz_zpt[j]);
 						rawbL.Add((Point)seg.moz_zpb[j]);
+#endif
 						rawdL.Add(seg.moz_inf[j].ddf);
 						cnt++;
 						jcnt++;
+#if true//2019.04.17(毛髄検出複線化)
+						chk_pt(seg, j);
+#endif
 					}
 				}
 				//後方からjmax点採集
@@ -1059,15 +1235,25 @@ retry:
 					if (seg.moz_inf[j].ddf == 0) {
 						continue;//毛髄無しのデータは補間元データとしない
 					}
-					if (seg.moz_lbl[j] < 0) {
+					if (seg.moz_inf[j].moz_lbl < 0) {
 						continue;//除外データは補間元データとしない
 					}
-					if (!seg.moz_out[j]) {
+					if (!seg.moz_inf[j].moz_out) {
+#if true//2019.04.17(毛髄検出複線化)
+						Point p1, p2;
+						get_pt(seg, j, false, out p1, out p2);
+						rawtR.Add(p2);
+						rawbR.Add(p1);
+#else
 						rawtR.Add((Point)seg.moz_zpt[j]);
 						rawbR.Add((Point)seg.moz_zpb[j]);
+#endif
 						rawdR.Add(seg.moz_inf[j].ddf);
 						cnt++;
 						jcnt++;
+#if true//2019.04.17(毛髄検出複線化)
+						chk_pt(seg, j);
+#endif
 					}
 				}
 				if (rawtL.Count >= 2 && rawtR.Count >= 2) {
@@ -1127,17 +1313,15 @@ retry:
 					pt = seg.moz_inf[i].phc;
 					pb = seg.moz_inf[i].phc;
 					pl = 0;
+#if true//2019.04.17(毛髄検出複線化)
+					mz.iml = mz.ihc;
+					mz.imr = mz.ihc;
+#endif
 				}
 				if (pl_bak > 0 && pl <= 0) {
 					pl = pl;
 				}
 				if (true) {
-				//	mz.ibf = bf;
-				//	mz.pbf = fp.ToArray();
-				//	mz.phc = fp[ic];
-				//	mz.ihc = ic;
-				//	mz.iml = uil;
-				//	mz.imr = uir;
 					mz.imc = (mz.iml+mz.imr)/2;
 					mz.pml = mz.pbf[mz.iml];
 					mz.pmr = mz.pbf[mz.imr];
@@ -1147,6 +1331,15 @@ retry:
 						mz.ddf *= -1;
 					}
 				}
+#if true//2019.04.17(毛髄検出複線化)
+				if (mz.pml != pt) {
+					i = i;
+				}
+				if (mz.pmr != pb) {
+					i = i;
+				}
+				mz.moz_zpl = pl;
+#endif
 				hpt.Add(pt);
 				hpb.Add(pb);
 				hpl.Add(pl);
@@ -1154,10 +1347,13 @@ retry:
 				if (mz.ddf == 0 && seg.moz_inf[i].ddf != 0) {
 					i = i;
 				}
+#if false//2019.04.17(毛髄検出複線化)
 				if (pl == 0 && TO_VAL(seg.moz_zpl[i]) != 0) {
 					i = i;
 				}
+#endif
 			}
+#if false//2019.04.17(毛髄検出複線化)
 			if (seg.moz_hpt != null) {
 				seg.moz_hpt.Clear();
 				seg.moz_hpt = null;
@@ -1173,6 +1369,7 @@ retry:
 			seg.moz_hpt = hpt;
 			seg.moz_hpb = hpb;
 			seg.moz_hpl = hpl;
+#endif
 			seg.moz_hnf = hmz;
 			for (int i = 0; i < len; i++) {
 				seg_of_mouz mouz = seg.moz_hnf[i];
@@ -1189,6 +1386,20 @@ retry:
 			for (int i = 0; i < seg.moz_hnf.Count; i++) {
 				seg_of_mouz moui = seg.moz_inf[i];
 				seg_of_mouz mouh = seg.moz_hnf[i];
+#if true//2019.04.17(毛髄検出複線化)
+				if (moui.fs2) {
+					seg.moz_rsl += moui.moz_zpl;
+				}
+				else {
+					seg.moz_rsd += moui.moz_zpl;
+				}
+				if (mouh.fs2) {
+					seg.moz_hsl += mouh.moz_zpl;
+				}
+				else {
+					seg.moz_hsd += mouh.moz_zpl;
+				}
+#else
 				if (moui.fs2) {
 					seg.moz_rsl += (double)seg.moz_zpl[i];
 				}
@@ -1201,6 +1412,7 @@ retry:
 				else {
 					seg.moz_hsd += (double)seg.moz_hpl[i];
 				}
+#endif
 			}
 		}
 		// il, irの範囲をsmin,smaxで正規化する
@@ -1528,13 +1740,6 @@ retry:
 							wr.Write(",");
 						}
 					}
-#else
-					for (int i = 0; i < fc.Count; i++) {
-						wr.Write(string.Format("{0:F0}", af[i]));
-						if (i < (fc.Count-1)) {
-							wr.Write(",");
-						}
-					}
 #endif
 					wr.WriteLine("");
 					wr.Close();
@@ -1542,7 +1747,6 @@ retry:
 				catch (Exception ex) {
 				}
 			}
-
 			Point upl;
 			Point upr;
 			int	uil, uir, sil, sir;
@@ -1550,21 +1754,52 @@ retry:
 #if true//2018.11.06(毛髄4)
 			int	ihl, ihr;
 #endif
-
+#if true//2019.04.17(毛髄検出複線化)
+			int imul = 1;
+retry_of_multi:
+			if (true) {
+				ic = af.Length/2;
+				sil = (ic-ll);
+				sir = (ic+lr);
+				ihl = sil;
+				ihr = sir;
+			}
+			switch (imul) {
+			case 0:
+				ic-= ll/2;
+				break;
+			case 1:
+				ic = ic;
+				break;
+			default:
+				ic+= ll/2;
+				break;
+			}
+			upl_buf.Clear();
+			upr_buf.Clear();
+			uil_buf.Clear();
+			uir_buf.Clear();
+			udf_buf.Clear();
+#else
 			sil = (ic-ll);
 			sir = (ic+lr);
 #if true//2018.11.06(毛髄4)
 			ihl = sil;
 			ihr = sir;
 #endif
+#endif
 retry:
+#if true//2019.04.17(毛髄検出複線化)
+			//G.mlog("髄検出複線化\ricを書き換え？");
+#endif
+#if false//2019.04.17(毛髄検出複線化)
 			if (sil != (ic-ll)) {
 				sil  = (ic-ll);
 			}
 			if (sir != (ic+lr)) {
 				sir  = (ic+lr);
 			}
-
+#endif
 			if (true) {
 				bool rc;
 				bool flag;
@@ -1677,13 +1912,21 @@ retry:
 			if (uml <= 0.0) {
 				uml = uml;
 			}
+#if false//2019.04.17(毛髄検出複線化)
 			seg.moz_zpt.Add(upl);//毛髄:上側点
 			seg.moz_zpb.Add(upr);//毛髄:下側点
 			seg.moz_zpl.Add(uml);//毛髄:長さ径
+#endif
 			//G.mlog("上の行あとで確認すること");
 			//---
+#if true//2019.04.17(毛髄検出複線化)
+			if (imul == 0) {
+#endif
 			seg.moz_top.Add(Point.Round(p2));
 			seg.moz_btm.Add(Point.Round(p3));
+#if true//2019.04.17(毛髄検出複線化)
+			}
+#endif
 			seg_of_mouz mouz;
 			if (true) {
 				mouz.ibf = bf;
@@ -1705,6 +1948,9 @@ retry:
 				if (mouz.pmc.Y > mouz.phc.Y) {
 					mouz.ddf *= -1;
 				}
+#if true//2019.04.17(毛髄検出複線化)
+				mouz.moz_zpl = uml;
+#endif
 				//---
 				if (true) {
 				mouz.avg = get_avg(bf, uil, uir-uil+1);
@@ -1714,316 +1960,33 @@ retry:
 				mouz.ihl = ihl;
 				mouz.ihr = ihr;
 #endif
+#if true//2019.04.17(毛髄検出複線化)
+				mouz.moz_zpl = uml;
+				mouz.moz_sum =  0;
+				mouz.moz_lbl = -1;
+				mouz.moz_out = false;
+#endif
 				//---
+#if false//2019.04.17(毛髄検出複線化)
 				seg.moz_inf.Add(mouz);
-			}
-		}
-#else
-		void test_ir(seg_of_hair seg, FN1D f2, PointF p2, PointF p3, int sx)
-		{
-			Point tx = Point.Truncate(p2);
-			Point t3 = Point.Truncate(p3);
-			PointF fx = p2;
-			ArrayList fp = new ArrayList();
-			ArrayList fc = new ArrayList();
-			double df = G.diff(p2, p3);
-			for (int i = 1;; i++) {
-				//毛髪下端から上端に向かって走査する
-				PointF f0 = f2.GetScanPt1Ext(p2, p3, i);
-				//Point  t0 = Point.Round(f0);
-				Point  t0 = Point.Truncate(f0);
-				
-				double	ff;
-				if ((ff = G.diff(f0, p3)) <= 0.4) {
-					f0 = f0;
-				}
-				if (t0.Equals(tx)) {
-					t0 = t0;//continue;
-				}
-				else {
-					fp.Add(t0);
-					fc.Add(TO_IR(t0));
-					if ((ff = G.diff(p2, f0)) > df /*t0.Equals(t3)*/) {
-						break;//毛髪上端に達した
-					}
-					tx = t0;
-				}
-				//fx = f0;
-				//Point.Round(tm).Equals(k0)
-				//if (ff > df) {
-				//    ff = ff;
-				//}
-				//if (true) {
-				//    //t3 = Point.Truncate(p3);
-				//}
-			}
-
-			double[] af;
-#if true//2018.10.10(毛髪径算出・改造)
-			int	ic, l5;
-#endif
-			if (true) {
-				ArrayList ar = new ArrayList();
-				for (int i = 0; i < fc.Count; i++) {
-					double f;
-					if (fc[i] == null) {
-						f = double.NaN;
-					}
-					else {
-						f = ((Color)fc[i]).G;
-					}
-					ar.Add(f);
-				}
-				af = (double[])ar.ToArray(typeof(double));
-//				double[] ao = new double[af.Length];
-				double fmax, fmin;
-#if true//2018.10.10(毛髪径算出・改造)
-				ic = af.Length/2;
-				l5 = af.Length/5;
-				if (true) {
-					l5 = (af.Length *  G.SS.MOZ_CND_HANI)/100/2;
-					if ((ic+l5) >= af.Length) {
-						l5--;
-					}
-					if ((ic-l5) < 0) {
-						l5--;
-					}
-				}
-#endif
-				if (this.MOZ_CND_SMCF > 0) {
-					T.SG_POL_SMOOTH(af, af, af.Length, this.MOZ_CND_SMCF, out fmax, out fmin);
-//					T.SG_2ND_DERI(af, ao, af.Length, 21, out fmax);
-				}
-				else {
-					fmax = double.MinValue;
-					fmin = double.MaxValue;
-					for (int i = 0; i < af.Length; i++) {
-						if (fmin > af[i]) {
-							fmin = af[i];
-						}
-						if (fmax < af[i]) {
-							fmax = af[i];
-						}
-					}
-				}
-#if true//2018.10.10(毛髪径算出・改造)
-				if (G.SS.MOZ_CND_CTRA) {
-					if (false) {
-						//全範囲で
-						normalize_array(af, 0.0, 255.0, 0, af.Length-1, false);
-					}
-					else if (false) {
-						//判定範囲で
-						normalize_array(af, 0.0, 255.0, ic-l5, ic+l5, false);
-					}
-					else {
-						//判定範囲の上側、下側で分けて
-						normalize_array(af, 0.0, 255.0, ic-l5, ic+ 0, false);
-						normalize_array(af, 0.0, 255.0, ic+ 1, ic+l5, false);
-					}
-				}
-#else
-				if (G.SS.MOZ_CND_CTRA) {
-					//コントラスト最大化(0-255範囲にマッピング)
-					FN1D fn = new FN1D(new PointF((float)fmin, 0f), new PointF((float)fmax, 255f));
-					for (int i = 0; i < af.Length; i++) {
-						af[i] = fn.GetYatX(af[i]);
-					}
-				}
 #endif
 			}
-			if (true) {
-				try {
-					StreamWriter wr;
-					string path = System.IO.Path.GetFileNameWithoutExtension(seg.name_of_ir);
-					path += ".csv";
-					path = "c:\\temp\\ir_" + path;
-					wr = new StreamWriter(path, true, Encoding.Default);
-					wr.Write(string.Format("{0},", sx));
-#if true//2018.10.10(毛髪径算出・改造)
-					for (int i = ic-l5; i <= ic+l5; i++) {
-						wr.Write(string.Format("{0:F0}", af[i]));
-						if (i < (fc.Count-1)) {
-							wr.Write(",");
-						}
-					}
-#else
-					for (int i = 0; i < fc.Count; i++) {
-						wr.Write(string.Format("{0:F0}", af[i]));
-						if (i < (fc.Count-1)) {
-							wr.Write(",");
-						}
-					}
-#endif
-					wr.WriteLine("");
-					wr.Close();
-				}
-				catch (Exception ex) {
-				}
+#if true//2019.04.17(毛髄検出複線化)
+			if (imul == 0) {
+				seg.moz_inf1.Add(mouz);
+				imul+=2;
+				goto retry_of_multi;
 			}
-			//Color cl;
-			Point u1 = new Point(0,0), u2=new Point(0,0);
-			double l1 = 0;
-			int	i1;
-#if false//2018.10.10(毛髪径算出・改造)
-			int	ic = af.Length/2;
-			int l5 = af.Length/5;
-#endif
-			double vmin = 255;
-			int imin = 0;
-#if false//2018.10.10(毛髪径算出・改造)
-			if (true) {
-				l5 = (af.Length *  G.SS.MOZ_CND_HANI)/100/2;
-				if ((ic+l5) >= af.Length) {
-					l5--;
-				}
-				if ((ic-l5) < 0) {
-					l5--;
-				}
+			else if (imul == 1) {
+				seg.moz_inf2.Add(mouz);
+				imul--;
+				goto retry_of_multi;
 			}
-			else {
-				l5 = af.Length/5; // G.SS.MOZ_CND_HANI=40%と同じ
+			else if (imul == 2) {
+				seg.moz_inf3.Add(mouz);
+				imul++;
 			}
 #endif
-			//最小値の位置を探索
-			//中心から＋、中心から－の二段階探索に分ける、
-			//同値の場合はセンター寄りにするため
-			if (true) {
-				for (i1 = ic; i1 <= (ic+l5); i1++) {
-					if (double.IsNaN(af[i1])) {
-						continue;
-					}
-					if (vmin > af[i1]) {
-						vmin = af[i1];
-						imin = i1;
-					}
-				}
-				for (i1 = ic; i1 >= (ic-l5); i1--) {
-					if (double.IsNaN(af[i1])) {
-						continue;
-					}
-					if (vmin > af[i1]) {
-						vmin = af[i1];
-						imin = i1;
-					}
-				}
-			}
-			else {
-				for (i1 = ic-l5; i1 <= (ic+l5); i1++) {
-					if (double.IsNaN(af[i1])) {
-						continue;
-					}
-					if (vmin > af[i1]) {
-						vmin = af[i1];
-						imin = i1;
-					}
-				}
-			}
-			i1 = imin;
-			if (af.Length < 3 || double.IsNaN(af[i1]) || af[i1] > G.SS.MOZ_CND_ZVAL) {
-				//最小値位置の値が範囲外なら毛髄無しと判定
-				u1 = (Point)fp[ic];
-				u2 = (Point)fp[ic];
-				l1 = 0;
-			}
-			else {
-				//最小値位置から＋側と－側へ閾値外になる位置を探索
-				int i0, i2;
-#if false//2018.10.10(毛髪径算出・改造)
-				for (i2 = i1; i2 < fc.Count; i2++) {
-					if (double.IsNaN(af[i2]) || af[i2] > G.SS.MOZ_CND_ZVAL) {
-						i2--;
-						break;
-					}
-				}
-				if (i2 >= af.Length) {
-					i2 = af.Length-1;
-				}
-				for (i0 = i1; i0 >= 0; i0--) {
-					if (double.IsNaN(af[i0]) || af[i0] > G.SS.MOZ_CND_ZVAL) {
-						i0++;
-						break;
-					}
-				}
-				if (i0 < 0) {
-					i0 = 0;
-				}
-				int il, ir;
-				bool rc;
-				rc = select_zval_hani(af, (ic-l5), (ic+l5), G.SS.MOZ_CND_ZVAL, out il, out ir);
-				if (i0 != il || i2 != ir) {
-					rc = rc;
-				}
-#else
-				int il, ir;
-				bool rc;
-				rc = select_zval_hani(af, (ic-l5), (ic+l5), G.SS.MOZ_CND_ZVAL, out il, out ir);
-				i0 = il;
-				i2 = ir;
-				if (!rc) {
-					u1 = (Point)fp[ic];
-					u2 = (Point)fp[ic];
-					l1 = 0;
-				}
-				else
-#endif
-				if (i0 < (ic-l5) || i2 > (ic+l5)) {
-					//判定された毛髄範囲が範囲外まで連続しているときは
-					//毛髄では無いと判定する
-					u1 = (Point)fp[ic];
-					u2 = (Point)fp[ic];
-					l1 = 0;
-					if (i0 < (ic-l5) && i2 > (ic+l5)) {
-						//両側でNG
-						rc = rc;
-					}
-					else if (i0 < (ic-l5)) {
-						//－側でNG
-						rc = select_zval_hani(af, i2+1, (ic+l5), G.SS.MOZ_CND_ZVAL, out il, out ir);
-						if ((il >= i0 && il <= i2) || (ir >= i0 && ir <= i2)) {
-							rc = rc;
-							if (rc) {
-								rc = rc;
-							}
-						}
-						if (rc && ir <= (ic+l5)) {
-							u1 = (Point)fp[il];
-							u2 = (Point)fp[ir];
-						}
-					}
-					else {
-						//＋側でNG
-						rc = select_zval_hani(af, (ic-l5), i0-1, G.SS.MOZ_CND_ZVAL, out il, out ir);
-						if ((il >= i0 && il <= i2) || (ir >= i0 && ir <= i2)) {
-							rc = rc;
-						}
-						if (rc && il >= (ic-l5)) {
-							u1 = (Point)fp[il];
-							u2 = (Point)fp[ir];
-						}
-					}
-				}
-				else {
-					u1 = (Point)fp[i0];
-					u2 = (Point)fp[i2];
-					l1 = Math.Sqrt(Math.Pow(u2.X - u1.X, 2) + Math.Pow(u2.Y - u1.Y, 2));
-				}
-			}
-			l1 = Math.Sqrt(Math.Pow(u2.X - u1.X, 2) + Math.Pow(u2.Y - u1.Y, 2));
-			l1 = G.PX2UM(l1, m_log_info.pix_pitch, m_log_info.zoom);
-			//if ((++m_chk1 % 20) == 0) {
-			//    u1 = Point.Round(p2);
-			//    u2 = Point.Round(p3);
-			//}
-			seg.moz_zpt.Add(u1);//毛髄:上側点
-			seg.moz_zpb.Add(u2);//毛髄:下側点
-			seg.moz_zpl.Add(l1);//毛髄:長さ径
-			//---
-			seg.moz_top.Add(Point.Round(p2));
-			seg.moz_btm.Add(Point.Round(p3));
-			if (l1 <= 0.0) {
-				l1 = l1;
-			}
 		}
 #endif
 		//private double m_offset_of_hair;
@@ -2053,18 +2016,22 @@ retry:
 				G.IR.PLY_XMAX = segs[idx].IR_PLY_XMAX;
 				G.IR.WIDTH    = segs[idx].IR_WIDTH;
 				//---
+#if false//2019.04.17(毛髄検出複線化)
 				segs[idx].moz_zpt.Clear();
 				segs[idx].moz_zpb.Clear();
 				segs[idx].moz_zpl.Clear();
+#endif
 				segs[idx].moz_top.Clear();
 				segs[idx].moz_btm.Clear();
 				segs[idx].moz_inf.Clear();
 				//segs[idx].moz_fs2.Clear();//S1,S2区分,S1:true, S2:false
 				//segs[idx].moz_avg.Clear();//毛髄:毛髄範囲の画素平均値(生画像による)
+#if false//2019.04.17(毛髄検出複線化)
 				segs[idx].moz_out.Clear();
 				segs[idx].moz_hpt.Clear();//毛髄:上側点:補間後
 				segs[idx].moz_hpb.Clear();//毛髄:下側点:補間後
 				segs[idx].moz_hpl.Clear();//毛髄:長さ径:補間後
+#endif
 			}
 			double RT = (100-G.SS.MOZ_CND_HANI)/100.0/2.0;
 			double RB = (1-RT);
@@ -2438,10 +2405,26 @@ retry:
 #if true//2018.11.28(メモリリーク)
 			//GC.Collect();
 #endif
-			detect_area(seg);
-			detect_outliers(seg);
-			interp_outliers(seg);
-			sum_avg(seg);
+#if true//2019.04.17(毛髄検出複線化)
+			for (int i = 0; i < 3; i++) {
+				switch (i) {
+					case  0:seg.moz_inf = seg.moz_inf1;break;
+					case  1:seg.moz_inf = seg.moz_inf2;break;
+					default:seg.moz_inf = seg.moz_inf3;break;
+				}
+#endif
+				detect_area(seg);
+				detect_outliers(seg);
+				interp_outliers(seg);
+				sum_avg(seg);
+#if true//2019.04.17(毛髄検出複線化)
+				switch (i) {
+					case  0:seg.moz_hnf1 = seg.moz_hnf; break;
+					case  1:seg.moz_hnf2 = seg.moz_hnf;break;
+					default:seg.moz_hnf3 = seg.moz_hnf;break;
+				}
+			}
+#endif
 			if (bRECALCIR == false) {
 				//キューティクル断面のフィルター処理
 #if true//2019.03.22(再測定表)
@@ -4115,6 +4098,9 @@ retry:
 				this.radioButton1.BackColor = Color.FromArgb(64,64,64);
 			}
 			this.comboBox1.Enabled = false;
+#if true//2019.04.17(毛髄検出複線化)
+			this.comboBox2.SelectedIndex = 1;//毛髄検出ライン<-中心
+#endif
 #if false//2018.11.10(保存機能)
 			this.comboBox2.SelectedIndex = 1;
 			this.comboBox2.Enabled = true;
@@ -4144,7 +4130,11 @@ retry:
 		private void Form03_Load(object sender, EventArgs e)
 		{
 			if (true) {
+#if true//2019.04.17(毛髄検出複線化)
+				this.SetDesktopBounds(G.AS.APP_F03_LFT, G.AS.APP_F03_TOP, G.AS.APP_F03_WID, G.AS.APP_F03_HEI);
+#else
 				this.SetDesktopBounds(G.AS.APP_F02_LFT, G.AS.APP_F02_TOP, G.AS.APP_F02_WID, G.AS.APP_F02_HEI);
+#endif
 			}
 			if (true) {
 				if (G.UIF_LEVL == 0) {
@@ -4260,6 +4250,17 @@ retry:
 			if (true) {
 				G.pop_imp_para();
 			}
+#if true//2019.04.17(毛髄検出複線化)
+			if (this.Left <= -32000 || this.Top <= -32000) {
+				//最小化時は更新しない
+			}
+			else {
+			G.AS.APP_F03_LFT = this.Left;
+			G.AS.APP_F03_TOP = this.Top;
+			G.AS.APP_F03_WID = this.Width;
+			G.AS.APP_F03_HEI = this.Height;
+			}
+#endif
 			//---
 			G.FORM03 = null;
 			G.FORM12.UPDSTS();
@@ -4766,12 +4767,28 @@ retry:
 					pen.Dispose();
 					gr.Dispose();
 				}
+#if true//2019.04.17(毛髄検出複線化)
+				int imul;
+				int rmul = 0;
+retry_of_multi:
+				if (this.comboBox2.SelectedIndex > 2 || this.comboBox2.SelectedIndex < 0) {
+					imul = rmul;
+				}
+				else {
+					imul = this.comboBox2.SelectedIndex;
+				}
+				switch (imul) {
+				case  0: seg.moz_inf = seg.moz_inf1; seg.moz_hnf = seg.moz_hnf1; break;
+				case  1: seg.moz_inf = seg.moz_inf2; seg.moz_hnf = seg.moz_hnf2; break;
+				default: seg.moz_inf = seg.moz_inf3; seg.moz_hnf = seg.moz_hnf3; break;
+				}
+#endif
 				if (
 #if true//2019.03.16(NODATA対応)
 					seg.bNODATA == false &&
 #endif
 					bmp_ir != null && seg.val_xum.Count > 0) {//赤外あり？
-					object obj = seg.moz_zpb[0];
+//@@@				object obj = seg.moz_zpb[0];
 					//System.Diagnostics.Debug.WriteLine(obj);
 					Graphics gr_ir = Graphics.FromImage(bmp_ir);
 					Graphics gr_pd = Graphics.FromImage(bmp_pd);
@@ -4803,7 +4820,18 @@ retry:
 						Pen pen_l = new Pen(Color.LightGreen, pw);
 #endif
 						pen = new Pen(Color.Green, pw);
-						for (int i = 0; i < seg.moz_zpb.Count; i+=1) {
+						for (int i = 0; i <
+#if true//2019.04.17(毛髄検出複線化)
+							seg.moz_inf.Count
+#else
+							seg.moz_zpb.Count
+#endif
+							; i+=1) {
+#if true//2019.04.17(毛髄検出複線化)
+							Point p1, p2;
+							chk_pt(seg, i);
+							get_pt(seg, i, this.checkBox15.Checked, out p1, out p2);
+#else
 							Point p1 = (Point)seg.moz_zpb[i];
 							Point p2 = (Point)seg.moz_zpt[i];
 #if true//2018.10.10(毛髪径算出・改造)
@@ -4811,8 +4839,9 @@ retry:
 								p1 = seg.moz_hpb[i];//補間データ
 								p2 = seg.moz_hpt[i];
 							}
-							try {
 #endif
+#endif
+							try {
 							//if (p1.X != 0 && p1.Y != 0) {
 							//    i = i;
 							//}
@@ -4822,12 +4851,12 @@ retry:
 							if (p1.X == 0 && p2.Y == 0) {
 							}
 							else if (p1.X == p2.X && p1.Y == p2.Y) {
-								//i = i;
+#if _DEBUG
+								i = i;
+#endif
 								//gr.FillRectangle(Brushes.LightGreen, p1.X-3, p1.Y-3, 7, 7);
 							}
 							else {
-							//gr.DrawLine(pen, p1.X, p1.Y, p1.X+1, p1.Y+2);
-							//gr.DrawLine(pen, p2.X, p2.Y, p2.X+1, p2.Y+2);
 #if true//2018.10.10(毛髪径算出・改造)
 								if (this.checkBox15.Checked) {
 									if (seg.moz_hnf[i].fs2) {
@@ -4845,9 +4874,6 @@ retry:
 										gr_ir.DrawLine(pen, p1, p2);
 									}
 								}
-
-#else
-								gr_ir.DrawLine(pen, p1, p2);
 #endif
 							}
 #if true//2018.10.10(毛髪径算出・改造)
@@ -4861,9 +4887,21 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #if true//2018.10.10(毛髪径算出・改造)
 					if (this.checkBox13.Checked) {//赤外・外れ判定
 						pen = new Pen(Color.Red, pw);
-						for (int i = 0; i < seg.moz_zpb.Count; i++) {
-							if (seg.moz_out[i]) {
+						for (int i = 0; i <
+#if true//2019.04.17(毛髄検出複線化)
+							seg.moz_inf.Count
+#else
+							seg.moz_zpb.Count
+#endif
+							; i++) {
+#if true//2019.04.17(毛髄検出複線化)
+							chk_pt(seg, i);
+#endif
+							if (seg.moz_inf[i].moz_out) {
 								Point p1, p2;
+#if true//2019.04.17(毛髄検出複線化)
+								get_pt(seg, i, this.checkBox15.Checked, out p1, out p2);
+#else
 								if (this.checkBox15.Checked) {
 									p1 = seg.moz_hpb[i];//補間データ
 									p2 = seg.moz_hpt[i];
@@ -4872,17 +4910,25 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 									p1 = (Point)seg.moz_zpb[i];
 									p2 = (Point)seg.moz_zpt[i];
 								}
+#endif
 								gr_ir.DrawLine(pen, p1, p2);
 							}
 						}
 					}
 					if (this.checkBox16.Checked) {//赤外・除外域
 						pen = new Pen(Color.DarkRed, pw);
-						for (int i = 0; i < seg.moz_lbl.Count; i++) {
-							if (seg.moz_lbl[i]<0) {
+						for (int i = 0; i < seg.moz_inf.Count; i++) {
+#if true//2019.04.17(毛髄検出複線化)
+							chk_pt(seg, i);
+#endif
+							if (seg.moz_inf[i].moz_lbl<0) {
 								Point p1, p2;
+#if true//2019.04.17(毛髄検出複線化)
+								get_pt(seg, i, false, out p1, out p2);
+#else
 								p1 = (Point)seg.moz_zpb[i];
 								p2 = (Point)seg.moz_zpt[i];
+#endif
 								gr_ir.DrawLine(pen, p1, p2);
 							}
 						}
@@ -4914,6 +4960,16 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 					gr_pd.Dispose();
 					gr_ir.Dispose();
 				}
+
+#if true//2019.04.17(毛髄検出複線化)
+				if (this.comboBox2.SelectedIndex > 2 || this.comboBox2.SelectedIndex < 0) {
+					if (++rmul < 3) {
+						goto retry_of_multi;
+					}
+				}
+#endif
+
+
 #if true//2018.10.30(キューティクル長)
 				gi_cut_len += seg.cut_ttl;
 #endif
@@ -5236,9 +5292,19 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 						this.chart1.Series[0].Points.AddXY(x0, y2);
 					}
 				}
-				for (int i = i0; i < seg.moz_zpl.Count; i++) {
+				for (int i = i0; i <
+#if true//2019.04.17(毛髄検出複線化)
+					seg.moz_inf.Count
+#else
+					seg.moz_zpl.Count
+#endif
+					; i++) {
 					double x0 = TO_VAL(seg.val_xum[i]) + offs;
+#if true//2019.04.17(毛髄検出複線化)
+					double y5 = seg.moz_inf[i].moz_zpl;
+#else
 					double y5 = TO_VAL(seg.moz_zpl[i]);
+#endif
 					double y6 = TO_VAL(seg.mou_len[i]);
 #if true//2018.12.25(オーバーラップ範囲改)
 					if ((double)seg.val_xum[i] < seg.ow_l_xum || (double)seg.val_xum[i] > seg.ow_r_xum) {
@@ -5250,11 +5316,15 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #if true//2018.10.10(毛髪径算出・改造)
 						//赤外・外れ判定
 #if true//2018.10.10(毛髪径算出・改造)
+#if true//2019.04.17(毛髄検出複線化)
+						get_pl(seg, i, this.checkBox15.Checked, out y5);
+#else
 						if (this.checkBox15.Checked) {
 							y5 = seg.moz_hpl[i];//補間データ
 						}
 #endif
-						if (this.checkBox13.Checked/* && seg.moz_out != null*/ && seg.moz_out[i]) {
+#endif
+						if (this.checkBox13.Checked/* && seg.moz_out != null*/ && seg.moz_inf[i].moz_out) {
 							this.chart2.Series[0].Points.Add(dp_marker(x0, y5, Color.Red));
 						}
 						else {
@@ -5296,7 +5366,7 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 							if (this.checkBox15.Checked) {
 								df = seg.moz_hnf[i].ddf;//補間データ
 							}
-							if (this.checkBox13.Checked && seg.moz_out[i]) {
+							if (this.checkBox13.Checked && seg.moz_inf[i].moz_out) {
 								this.chart6.Series[0].Points.Add(dp_marker(x0, df, Color.Red));
 							}
 							else {
@@ -5615,6 +5685,11 @@ skip:
 #if true//2019.03.16(NODATA対応)
 			if (sender == this.checkBox21) {
 				q |= 1;//画像ファイル
+			}
+#endif
+#if true//2019.04.17(毛髄検出複線化)
+			if (sender == this.comboBox2) {
+				q |= 1|2;//画像ファイル と グラフ
 			}
 #endif
 			//this.button1.Visible = !this.button1.Visible;
@@ -6122,7 +6197,12 @@ skip:
 						else {
 						double ff1 = TO_VAL(seg.val_cen_fil[i]);
 						double ff2 = TO_VAL(seg.mou_len[i]);
+#if true//2019.04.17(毛髄検出複線化)
+						double ff3;
+						get_pl(seg, i, true, out ff3);
+#else
 						double ff3 = seg.moz_hpl[i];
+#endif
 #endif
 						csv.set(1, r, F0S(ff1));
 						csv.set(2, r, F1S(ff2));

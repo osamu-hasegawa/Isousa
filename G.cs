@@ -27,6 +27,12 @@ namespace uSCOPE
 			public int APP_F02_TOP =   5;
 			public int APP_F02_WID = 600;
 			public int APP_F02_HEI = 800;
+#if true//2019.04.17(毛髄検出複線化)
+			public int APP_F03_LFT =  10;
+			public int APP_F03_TOP =   5;
+			public int APP_F03_WID = 600;
+			public int APP_F03_HEI = 800;
+#endif
 #if true//2019.03.22(再測定表)
 			public int APP_F04_LFT =  10;
 			public int APP_F04_TOP =  10;
