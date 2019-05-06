@@ -4471,10 +4471,35 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 					switch (G.CNT_MET) {
 						case  2: dx = 1;dy = 0;ap = 0; break;
 						case  3: dx = 0;dy = 1;ap = 0; break;
+#if true//2019.04.29(微分バグ修正)
+						case  4: dx = 1;dy = 1;ap = 0; break;
+						case  5: dx = 2;dy = 0;ap = 0; break;//2次微分 X
+						case  6: dx = 0;dy = 2;ap = 0; break;//2次微分 Y
+						default: dx = 2;dy = 2;ap = 0; break;//2次微分 XY
+#else
 						default: dx = 1;dy = 1;ap = 0; break;
+#endif
 					}
 					OCV_SOBEL((int)IMG.IMG_G, (int)IMG.IMG_D, dx, dy, 3+ap*2);
 					OCV_CAL_HIST((int)IMG.IMG_D, bMASK, ref G.IR.HISTVALD[0], out tmp, out tmp, out tmp);
+#if true//2019.04.29(微分バグ修正)
+					if (dx == 1 || dy == 1) {
+						for (int i = 0; i < 256; i++) {
+							if (i >= G.CNT_DTHD) {
+								fsum += (i * G.IR.HISTVALD[i]);
+							}
+							fttl += G.IR.HISTVALD[i];
+						}
+					}
+					else {
+						for (int i = 0; i < 256; i++) {
+							if (i >= G.CNT_DTH2) {
+								fsum += (i * G.IR.HISTVALD[i]);
+							}
+							fttl += G.IR.HISTVALD[i];
+						}
+					}
+#else
 					for (int i = 0; i < 256; i++) {
 #if true//2019.04.04(微分閾値追加)
 						if (i < G.CNT_DTHD) {
@@ -4485,6 +4510,7 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 						fsum += (i * G.IR.HISTVALD[i]);
 						fttl += G.IR.HISTVALD[i];
 					}
+#endif
 					fgra = fsum/fttl;
 					//G.IR.CONTRAST = fsum / (255*fttl/2);
 					G.IR.CONTRAST = fsum / (127.5*fttl/2);

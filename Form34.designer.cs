@@ -28,14 +28,19 @@
 		private void InitializeComponent()
 		{
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.comboBox8 = new System.Windows.Forms.ComboBox();
+			this.comboBox14 = new System.Windows.Forms.ComboBox();
+			this.comboBox13 = new System.Windows.Forms.ComboBox();
+			this.comboBox7 = new System.Windows.Forms.ComboBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.comboBox12 = new System.Windows.Forms.ComboBox();
 			this.comboBox11 = new System.Windows.Forms.ComboBox();
-			this.label25 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
+			this.label68 = new System.Windows.Forms.Label();
+			this.label25 = new System.Windows.Forms.Label();
 			this.panel18 = new System.Windows.Forms.Panel();
 			this.panel17 = new System.Windows.Forms.Panel();
 			this.comboBox10 = new System.Windows.Forms.ComboBox();
@@ -76,6 +81,8 @@
 			this.label9 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label51 = new System.Windows.Forms.Label();
+			this.label65 = new System.Windows.Forms.Label();
+			this.label47 = new System.Windows.Forms.Label();
 			this.label52 = new System.Windows.Forms.Label();
 			this.numericUpDown56 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown37 = new System.Windows.Forms.NumericUpDown();
@@ -110,15 +117,31 @@
 			this.numericUpDown46 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown27 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
+			this.label73 = new System.Windows.Forms.Label();
+			this.label72 = new System.Windows.Forms.Label();
+			this.label71 = new System.Windows.Forms.Label();
+			this.label43 = new System.Windows.Forms.Label();
+			this.label67 = new System.Windows.Forms.Label();
+			this.label66 = new System.Windows.Forms.Label();
 			this.label57 = new System.Windows.Forms.Label();
 			this.numericUpDown44 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown25 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
+			this.label74 = new System.Windows.Forms.Label();
 			this.label24 = new System.Windows.Forms.Label();
+			this.label70 = new System.Windows.Forms.Label();
+			this.label37 = new System.Windows.Forms.Label();
+			this.label69 = new System.Windows.Forms.Label();
+			this.label42 = new System.Windows.Forms.Label();
+			this.label75 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.label64 = new System.Windows.Forms.Label();
+			this.label46 = new System.Windows.Forms.Label();
 			this.label56 = new System.Windows.Forms.Label();
 			this.numericUpDown49 = new System.Windows.Forms.NumericUpDown();
+			this.label63 = new System.Windows.Forms.Label();
 			this.numericUpDown30 = new System.Windows.Forms.NumericUpDown();
+			this.label45 = new System.Windows.Forms.Label();
 			this.numericUpDown11 = new System.Windows.Forms.NumericUpDown();
 			this.label55 = new System.Windows.Forms.Label();
 			this.numericUpDown43 = new System.Windows.Forms.NumericUpDown();
@@ -132,55 +155,32 @@
 			this.numericUpDown47 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown28 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown9 = new System.Windows.Forms.NumericUpDown();
+			this.label62 = new System.Windows.Forms.Label();
+			this.label44 = new System.Windows.Forms.Label();
 			this.label39 = new System.Windows.Forms.Label();
+			this.label61 = new System.Windows.Forms.Label();
+			this.label35 = new System.Windows.Forms.Label();
 			this.label38 = new System.Windows.Forms.Label();
+			this.label60 = new System.Windows.Forms.Label();
+			this.label22 = new System.Windows.Forms.Label();
 			this.label29 = new System.Windows.Forms.Label();
+			this.label59 = new System.Windows.Forms.Label();
+			this.label20 = new System.Windows.Forms.Label();
 			this.label28 = new System.Windows.Forms.Label();
+			this.label58 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
 			this.label27 = new System.Windows.Forms.Label();
 			this.label33 = new System.Windows.Forms.Label();
 			this.label32 = new System.Windows.Forms.Label();
 			this.label50 = new System.Windows.Forms.Label();
 			this.label49 = new System.Windows.Forms.Label();
+			this.label48 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
 			this.label26 = new System.Windows.Forms.Label();
-			this.comboBox7 = new System.Windows.Forms.ComboBox();
-			this.label37 = new System.Windows.Forms.Label();
-			this.comboBox8 = new System.Windows.Forms.ComboBox();
-			this.comboBox13 = new System.Windows.Forms.ComboBox();
-			this.label42 = new System.Windows.Forms.Label();
-			this.label43 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.numericUpDown19 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown38 = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDown57 = new System.Windows.Forms.NumericUpDown();
-			this.comboBox14 = new System.Windows.Forms.ComboBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label17 = new System.Windows.Forms.Label();
-			this.label20 = new System.Windows.Forms.Label();
-			this.label22 = new System.Windows.Forms.Label();
-			this.label35 = new System.Windows.Forms.Label();
-			this.label44 = new System.Windows.Forms.Label();
-			this.label45 = new System.Windows.Forms.Label();
-			this.label46 = new System.Windows.Forms.Label();
-			this.label47 = new System.Windows.Forms.Label();
-			this.label48 = new System.Windows.Forms.Label();
-			this.label58 = new System.Windows.Forms.Label();
-			this.label59 = new System.Windows.Forms.Label();
-			this.label60 = new System.Windows.Forms.Label();
-			this.label61 = new System.Windows.Forms.Label();
-			this.label62 = new System.Windows.Forms.Label();
-			this.label63 = new System.Windows.Forms.Label();
-			this.label64 = new System.Windows.Forms.Label();
-			this.label65 = new System.Windows.Forms.Label();
-			this.label66 = new System.Windows.Forms.Label();
-			this.label67 = new System.Windows.Forms.Label();
-			this.label68 = new System.Windows.Forms.Label();
-			this.label69 = new System.Windows.Forms.Label();
-			this.label70 = new System.Windows.Forms.Label();
-			this.label71 = new System.Windows.Forms.Label();
-			this.label72 = new System.Windows.Forms.Label();
-			this.label73 = new System.Windows.Forms.Label();
-			this.label74 = new System.Windows.Forms.Label();
-			this.label75 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown32)).BeginInit();
@@ -390,6 +390,78 @@
 			this.groupBox2.TabIndex = 0;
 			this.groupBox2.TabStop = false;
 			// 
+			// comboBox8
+			// 
+			this.comboBox8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox8.FormattingEnabled = true;
+			this.comboBox8.Items.AddRange(new object[] {
+            "MAXMIN",
+            "標準偏差",
+            "微分(X方向)",
+            "微分(Y方向)",
+            "微分(両方向)",
+            "2次微分(X方向)",
+            "2次微分(Y方向)",
+            "2次微分(両方向)"});
+			this.comboBox8.Location = new System.Drawing.Point(3, 494);
+			this.comboBox8.Name = "comboBox8";
+			this.comboBox8.Size = new System.Drawing.Size(82, 20);
+			this.comboBox8.TabIndex = 68;
+			// 
+			// comboBox14
+			// 
+			this.comboBox14.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox14.FormattingEnabled = true;
+			this.comboBox14.Items.AddRange(new object[] {
+            "MAXMIN",
+            "標準偏差",
+            "微分(X方向)",
+            "微分(Y方向)",
+            "微分(両方向)",
+            "2次微分(X方向)",
+            "2次微分(Y方向)",
+            "2次微分(両方向)"});
+			this.comboBox14.Location = new System.Drawing.Point(227, 497);
+			this.comboBox14.Name = "comboBox14";
+			this.comboBox14.Size = new System.Drawing.Size(82, 20);
+			this.comboBox14.TabIndex = 68;
+			// 
+			// comboBox13
+			// 
+			this.comboBox13.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox13.FormattingEnabled = true;
+			this.comboBox13.Items.AddRange(new object[] {
+            "MAXMIN",
+            "標準偏差",
+            "微分(X方向)",
+            "微分(Y方向)",
+            "微分(両方向)",
+            "2次微分(X方向)",
+            "2次微分(Y方向)",
+            "2次微分(両方向)"});
+			this.comboBox13.Location = new System.Drawing.Point(227, 433);
+			this.comboBox13.Name = "comboBox13";
+			this.comboBox13.Size = new System.Drawing.Size(82, 20);
+			this.comboBox13.TabIndex = 68;
+			// 
+			// comboBox7
+			// 
+			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox7.FormattingEnabled = true;
+			this.comboBox7.Items.AddRange(new object[] {
+            "MAXMIN",
+            "標準偏差",
+            "微分(X方向)",
+            "微分(Y方向)",
+            "微分(両方向)",
+            "2次微分(X方向)",
+            "2次微分(Y方向)",
+            "2次微分(両方向)"});
+			this.comboBox7.Location = new System.Drawing.Point(3, 433);
+			this.comboBox7.Name = "comboBox7";
+			this.comboBox7.Size = new System.Drawing.Size(82, 20);
+			this.comboBox7.TabIndex = 68;
+			// 
 			// checkBox3
 			// 
 			this.checkBox3.AutoSize = true;
@@ -477,19 +549,6 @@
 			this.comboBox11.TabIndex = 65;
 			this.comboBox11.Tag = "0";
 			// 
-			// label25
-			// 
-			this.label25.AutoSize = true;
-			this.label25.BackColor = System.Drawing.SystemColors.Control;
-			this.label25.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.label25.ForeColor = System.Drawing.Color.MediumAquamarine;
-			this.label25.Location = new System.Drawing.Point(70, 391);
-			this.label25.Name = "label25";
-			this.label25.Size = new System.Drawing.Size(144, 16);
-			this.label25.TabIndex = 64;
-			this.label25.Text = "ピンボケ判定に使用";
-			this.label25.Visible = false;
-			// 
 			// label4
 			// 
 			this.label4.BackColor = System.Drawing.SystemColors.Control;
@@ -510,6 +569,32 @@
 			this.label3.Size = new System.Drawing.Size(97, 12);
 			this.label3.TabIndex = 63;
 			this.label3.Text = "自動測定パラメータ";
+			// 
+			// label68
+			// 
+			this.label68.AutoSize = true;
+			this.label68.BackColor = System.Drawing.SystemColors.Control;
+			this.label68.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.label68.ForeColor = System.Drawing.Color.MediumAquamarine;
+			this.label68.Location = new System.Drawing.Point(297, 391);
+			this.label68.Name = "label68";
+			this.label68.Size = new System.Drawing.Size(144, 16);
+			this.label68.TabIndex = 64;
+			this.label68.Text = "ピンボケ判定に使用";
+			this.label68.Visible = false;
+			// 
+			// label25
+			// 
+			this.label25.AutoSize = true;
+			this.label25.BackColor = System.Drawing.SystemColors.Control;
+			this.label25.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.label25.ForeColor = System.Drawing.Color.MediumAquamarine;
+			this.label25.Location = new System.Drawing.Point(70, 391);
+			this.label25.Name = "label25";
+			this.label25.Size = new System.Drawing.Size(144, 16);
+			this.label25.TabIndex = 64;
+			this.label25.Text = "ピンボケ判定に使用";
+			this.label25.Visible = false;
 			// 
 			// panel18
 			// 
@@ -987,6 +1072,24 @@
 			this.label51.Size = new System.Drawing.Size(10, 12);
 			this.label51.TabIndex = 37;
 			this.label51.Text = "~";
+			// 
+			// label65
+			// 
+			this.label65.AutoSize = true;
+			this.label65.Location = new System.Drawing.Point(466, 268);
+			this.label65.Name = "label65";
+			this.label65.Size = new System.Drawing.Size(38, 12);
+			this.label65.TabIndex = 36;
+			this.label65.Text = "面積:S";
+			// 
+			// label47
+			// 
+			this.label47.AutoSize = true;
+			this.label47.Location = new System.Drawing.Point(240, 269);
+			this.label47.Name = "label47";
+			this.label47.Size = new System.Drawing.Size(38, 12);
+			this.label47.TabIndex = 36;
+			this.label47.Text = "面積:S";
 			// 
 			// label52
 			// 
@@ -1654,6 +1757,58 @@
             0,
             0});
 			// 
+			// label73
+			// 
+			this.label73.AutoSize = true;
+			this.label73.Location = new System.Drawing.Point(298, 523);
+			this.label73.Name = "label73";
+			this.label73.Size = new System.Drawing.Size(85, 12);
+			this.label73.TabIndex = 17;
+			this.label73.Text = "上下オフセット(%)";
+			// 
+			// label72
+			// 
+			this.label72.AutoSize = true;
+			this.label72.Location = new System.Drawing.Point(76, 523);
+			this.label72.Name = "label72";
+			this.label72.Size = new System.Drawing.Size(85, 12);
+			this.label72.TabIndex = 17;
+			this.label72.Text = "上下オフセット(%)";
+			// 
+			// label71
+			// 
+			this.label71.AutoSize = true;
+			this.label71.Location = new System.Drawing.Point(298, 462);
+			this.label71.Name = "label71";
+			this.label71.Size = new System.Drawing.Size(85, 12);
+			this.label71.TabIndex = 17;
+			this.label71.Text = "上下オフセット(%)";
+			// 
+			// label43
+			// 
+			this.label43.AutoSize = true;
+			this.label43.Location = new System.Drawing.Point(76, 462);
+			this.label43.Name = "label43";
+			this.label43.Size = new System.Drawing.Size(85, 12);
+			this.label43.TabIndex = 17;
+			this.label43.Text = "上下オフセット(%)";
+			// 
+			// label67
+			// 
+			this.label67.Location = new System.Drawing.Point(545, 336);
+			this.label67.Name = "label67";
+			this.label67.Size = new System.Drawing.Size(54, 30);
+			this.label67.TabIndex = 17;
+			this.label67.Text = "多曲線\r\n近似精度";
+			// 
+			// label66
+			// 
+			this.label66.Location = new System.Drawing.Point(320, 337);
+			this.label66.Name = "label66";
+			this.label66.Size = new System.Drawing.Size(54, 30);
+			this.label66.TabIndex = 17;
+			this.label66.Text = "多曲線\r\n近似精度";
+			// 
 			// label57
 			// 
 			this.label57.Location = new System.Drawing.Point(94, 336);
@@ -1731,6 +1886,15 @@
             0,
             0});
 			// 
+			// label74
+			// 
+			this.label74.AutoSize = true;
+			this.label74.Location = new System.Drawing.Point(234, 482);
+			this.label74.Name = "label74";
+			this.label74.Size = new System.Drawing.Size(44, 12);
+			this.label74.TabIndex = 17;
+			this.label74.Text = "中心AF";
+			// 
 			// label24
 			// 
 			this.label24.AutoSize = true;
@@ -1740,6 +1904,51 @@
 			this.label24.TabIndex = 17;
 			this.label24.Text = "中心AF";
 			// 
+			// label70
+			// 
+			this.label70.AutoSize = true;
+			this.label70.Location = new System.Drawing.Point(243, 418);
+			this.label70.Name = "label70";
+			this.label70.Size = new System.Drawing.Size(53, 12);
+			this.label70.TabIndex = 17;
+			this.label70.Text = "計算方法";
+			// 
+			// label37
+			// 
+			this.label37.AutoSize = true;
+			this.label37.Location = new System.Drawing.Point(17, 418);
+			this.label37.Name = "label37";
+			this.label37.Size = new System.Drawing.Size(53, 12);
+			this.label37.TabIndex = 17;
+			this.label37.Text = "計算方法";
+			// 
+			// label69
+			// 
+			this.label69.AutoSize = true;
+			this.label69.Location = new System.Drawing.Point(317, 418);
+			this.label69.Name = "label69";
+			this.label69.Size = new System.Drawing.Size(103, 12);
+			this.label69.TabIndex = 17;
+			this.label69.Text = "コントラスト計算範囲";
+			// 
+			// label42
+			// 
+			this.label42.AutoSize = true;
+			this.label42.Location = new System.Drawing.Point(91, 418);
+			this.label42.Name = "label42";
+			this.label42.Size = new System.Drawing.Size(103, 12);
+			this.label42.TabIndex = 17;
+			this.label42.Text = "コントラスト計算範囲";
+			// 
+			// label75
+			// 
+			this.label75.AutoSize = true;
+			this.label75.Location = new System.Drawing.Point(233, 400);
+			this.label75.Name = "label75";
+			this.label75.Size = new System.Drawing.Size(44, 12);
+			this.label75.TabIndex = 17;
+			this.label75.Text = "表面AF";
+			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
@@ -1748,6 +1957,24 @@
 			this.label2.Size = new System.Drawing.Size(44, 12);
 			this.label2.TabIndex = 17;
 			this.label2.Text = "表面AF";
+			// 
+			// label64
+			// 
+			this.label64.AutoSize = true;
+			this.label64.Location = new System.Drawing.Point(466, 317);
+			this.label64.Name = "label64";
+			this.label64.Size = new System.Drawing.Size(51, 12);
+			this.label64.TabIndex = 17;
+			this.label64.Text = "円形度:C";
+			// 
+			// label46
+			// 
+			this.label46.AutoSize = true;
+			this.label46.Location = new System.Drawing.Point(240, 318);
+			this.label46.Name = "label46";
+			this.label46.Size = new System.Drawing.Size(51, 12);
+			this.label46.TabIndex = 17;
+			this.label46.Text = "円形度:C";
 			// 
 			// label56
 			// 
@@ -1776,6 +2003,15 @@
             0,
             0});
 			// 
+			// label63
+			// 
+			this.label63.AutoSize = true;
+			this.label63.Location = new System.Drawing.Point(466, 293);
+			this.label63.Name = "label63";
+			this.label63.Size = new System.Drawing.Size(49, 12);
+			this.label63.TabIndex = 17;
+			this.label63.Text = "周囲長:L";
+			// 
 			// numericUpDown30
 			// 
 			this.numericUpDown30.Location = new System.Drawing.Point(377, 203);
@@ -1793,6 +2029,15 @@
             0,
             0,
             0});
+			// 
+			// label45
+			// 
+			this.label45.AutoSize = true;
+			this.label45.Location = new System.Drawing.Point(240, 294);
+			this.label45.Name = "label45";
+			this.label45.Size = new System.Drawing.Size(49, 12);
+			this.label45.TabIndex = 17;
+			this.label45.Text = "周囲長:L";
 			// 
 			// numericUpDown11
 			// 
@@ -2031,6 +2276,24 @@
             0,
             0});
 			// 
+			// label62
+			// 
+			this.label62.AutoSize = true;
+			this.label62.Location = new System.Drawing.Point(466, 206);
+			this.label62.Name = "label62";
+			this.label62.Size = new System.Drawing.Size(39, 12);
+			this.label62.TabIndex = 1;
+			this.label62.Text = "明度:V";
+			// 
+			// label44
+			// 
+			this.label44.AutoSize = true;
+			this.label44.Location = new System.Drawing.Point(240, 206);
+			this.label44.Name = "label44";
+			this.label44.Size = new System.Drawing.Size(39, 12);
+			this.label44.TabIndex = 1;
+			this.label44.Text = "明度:V";
+			// 
 			// label39
 			// 
 			this.label39.AutoSize = true;
@@ -2039,6 +2302,24 @@
 			this.label39.Size = new System.Drawing.Size(39, 12);
 			this.label39.TabIndex = 1;
 			this.label39.Text = "明度:V";
+			// 
+			// label61
+			// 
+			this.label61.AutoSize = true;
+			this.label61.Location = new System.Drawing.Point(466, 184);
+			this.label61.Name = "label61";
+			this.label61.Size = new System.Drawing.Size(38, 12);
+			this.label61.TabIndex = 1;
+			this.label61.Text = "彩度:S";
+			// 
+			// label35
+			// 
+			this.label35.AutoSize = true;
+			this.label35.Location = new System.Drawing.Point(240, 184);
+			this.label35.Name = "label35";
+			this.label35.Size = new System.Drawing.Size(38, 12);
+			this.label35.TabIndex = 1;
+			this.label35.Text = "彩度:S";
 			// 
 			// label38
 			// 
@@ -2049,6 +2330,24 @@
 			this.label38.TabIndex = 1;
 			this.label38.Text = "彩度:S";
 			// 
+			// label60
+			// 
+			this.label60.AutoSize = true;
+			this.label60.Location = new System.Drawing.Point(466, 161);
+			this.label60.Name = "label60";
+			this.label60.Size = new System.Drawing.Size(39, 12);
+			this.label60.TabIndex = 1;
+			this.label60.Text = "色相:H";
+			// 
+			// label22
+			// 
+			this.label22.AutoSize = true;
+			this.label22.Location = new System.Drawing.Point(240, 161);
+			this.label22.Name = "label22";
+			this.label22.Size = new System.Drawing.Size(39, 12);
+			this.label22.TabIndex = 1;
+			this.label22.Text = "色相:H";
+			// 
 			// label29
 			// 
 			this.label29.AutoSize = true;
@@ -2058,6 +2357,24 @@
 			this.label29.TabIndex = 1;
 			this.label29.Text = "色相:H";
 			// 
+			// label59
+			// 
+			this.label59.AutoSize = true;
+			this.label59.Location = new System.Drawing.Point(466, 123);
+			this.label59.Name = "label59";
+			this.label59.Size = new System.Drawing.Size(29, 12);
+			this.label59.TabIndex = 1;
+			this.label59.Text = "閾値";
+			// 
+			// label20
+			// 
+			this.label20.AutoSize = true;
+			this.label20.Location = new System.Drawing.Point(240, 123);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(29, 12);
+			this.label20.TabIndex = 1;
+			this.label20.Text = "閾値";
+			// 
 			// label28
 			// 
 			this.label28.AutoSize = true;
@@ -2066,6 +2383,24 @@
 			this.label28.Size = new System.Drawing.Size(29, 12);
 			this.label28.TabIndex = 1;
 			this.label28.Text = "閾値";
+			// 
+			// label58
+			// 
+			this.label58.AutoSize = true;
+			this.label58.Location = new System.Drawing.Point(466, 98);
+			this.label58.Name = "label58";
+			this.label58.Size = new System.Drawing.Size(37, 12);
+			this.label58.TabIndex = 1;
+			this.label58.Text = "２値化";
+			// 
+			// label17
+			// 
+			this.label17.AutoSize = true;
+			this.label17.Location = new System.Drawing.Point(240, 98);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(37, 12);
+			this.label17.TabIndex = 1;
+			this.label17.Text = "２値化";
 			// 
 			// label27
 			// 
@@ -2112,6 +2447,24 @@
 			this.label49.TabIndex = 0;
 			this.label49.Text = "２値化パラメータ";
 			// 
+			// label48
+			// 
+			this.label48.AutoSize = true;
+			this.label48.Location = new System.Drawing.Point(466, 72);
+			this.label48.Name = "label48";
+			this.label48.Size = new System.Drawing.Size(41, 12);
+			this.label48.TabIndex = 1;
+			this.label48.Text = "平滑化";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(240, 72);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(41, 12);
+			this.label5.TabIndex = 1;
+			this.label5.Text = "平滑化";
+			// 
 			// label26
 			// 
 			this.label26.AutoSize = true;
@@ -2120,78 +2473,6 @@
 			this.label26.Size = new System.Drawing.Size(41, 12);
 			this.label26.TabIndex = 1;
 			this.label26.Text = "平滑化";
-			// 
-			// comboBox7
-			// 
-			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox7.FormattingEnabled = true;
-			this.comboBox7.Items.AddRange(new object[] {
-            "MAXMIN",
-            "標準偏差",
-            "微分(X方向)",
-            "微分(Y方向)",
-            "微分(両方向)"});
-			this.comboBox7.Location = new System.Drawing.Point(3, 433);
-			this.comboBox7.Name = "comboBox7";
-			this.comboBox7.Size = new System.Drawing.Size(82, 20);
-			this.comboBox7.TabIndex = 68;
-			// 
-			// label37
-			// 
-			this.label37.AutoSize = true;
-			this.label37.Location = new System.Drawing.Point(17, 418);
-			this.label37.Name = "label37";
-			this.label37.Size = new System.Drawing.Size(53, 12);
-			this.label37.TabIndex = 17;
-			this.label37.Text = "計算方法";
-			// 
-			// comboBox8
-			// 
-			this.comboBox8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox8.FormattingEnabled = true;
-			this.comboBox8.Items.AddRange(new object[] {
-            "MAXMIN",
-            "標準偏差",
-            "微分(X方向)",
-            "微分(Y方向)",
-            "微分(両方向)"});
-			this.comboBox8.Location = new System.Drawing.Point(3, 494);
-			this.comboBox8.Name = "comboBox8";
-			this.comboBox8.Size = new System.Drawing.Size(82, 20);
-			this.comboBox8.TabIndex = 68;
-			// 
-			// comboBox13
-			// 
-			this.comboBox13.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox13.FormattingEnabled = true;
-			this.comboBox13.Items.AddRange(new object[] {
-            "MAXMIN",
-            "標準偏差",
-            "微分(X方向)",
-            "微分(Y方向)",
-            "微分(両方向)"});
-			this.comboBox13.Location = new System.Drawing.Point(227, 433);
-			this.comboBox13.Name = "comboBox13";
-			this.comboBox13.Size = new System.Drawing.Size(82, 20);
-			this.comboBox13.TabIndex = 68;
-			// 
-			// label42
-			// 
-			this.label42.AutoSize = true;
-			this.label42.Location = new System.Drawing.Point(91, 418);
-			this.label42.Name = "label42";
-			this.label42.Size = new System.Drawing.Size(103, 12);
-			this.label42.TabIndex = 17;
-			this.label42.Text = "コントラスト計算範囲";
-			// 
-			// label43
-			// 
-			this.label43.AutoSize = true;
-			this.label43.Location = new System.Drawing.Point(76, 462);
-			this.label43.Name = "label43";
-			this.label43.Size = new System.Drawing.Size(85, 12);
-			this.label43.TabIndex = 17;
-			this.label43.Text = "上下オフセット(%)";
 			// 
 			// label6
 			// 
@@ -2281,275 +2562,6 @@
             0,
             0});
 			this.numericUpDown57.Visible = false;
-			// 
-			// comboBox14
-			// 
-			this.comboBox14.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox14.FormattingEnabled = true;
-			this.comboBox14.Items.AddRange(new object[] {
-            "MAXMIN",
-            "標準偏差",
-            "微分(X方向)",
-            "微分(Y方向)",
-            "微分(両方向)"});
-			this.comboBox14.Location = new System.Drawing.Point(227, 497);
-			this.comboBox14.Name = "comboBox14";
-			this.comboBox14.Size = new System.Drawing.Size(82, 20);
-			this.comboBox14.TabIndex = 68;
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(240, 72);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(41, 12);
-			this.label5.TabIndex = 1;
-			this.label5.Text = "平滑化";
-			// 
-			// label17
-			// 
-			this.label17.AutoSize = true;
-			this.label17.Location = new System.Drawing.Point(240, 98);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(37, 12);
-			this.label17.TabIndex = 1;
-			this.label17.Text = "２値化";
-			// 
-			// label20
-			// 
-			this.label20.AutoSize = true;
-			this.label20.Location = new System.Drawing.Point(240, 123);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(29, 12);
-			this.label20.TabIndex = 1;
-			this.label20.Text = "閾値";
-			// 
-			// label22
-			// 
-			this.label22.AutoSize = true;
-			this.label22.Location = new System.Drawing.Point(240, 161);
-			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(39, 12);
-			this.label22.TabIndex = 1;
-			this.label22.Text = "色相:H";
-			// 
-			// label35
-			// 
-			this.label35.AutoSize = true;
-			this.label35.Location = new System.Drawing.Point(240, 184);
-			this.label35.Name = "label35";
-			this.label35.Size = new System.Drawing.Size(38, 12);
-			this.label35.TabIndex = 1;
-			this.label35.Text = "彩度:S";
-			// 
-			// label44
-			// 
-			this.label44.AutoSize = true;
-			this.label44.Location = new System.Drawing.Point(240, 206);
-			this.label44.Name = "label44";
-			this.label44.Size = new System.Drawing.Size(39, 12);
-			this.label44.TabIndex = 1;
-			this.label44.Text = "明度:V";
-			// 
-			// label45
-			// 
-			this.label45.AutoSize = true;
-			this.label45.Location = new System.Drawing.Point(240, 294);
-			this.label45.Name = "label45";
-			this.label45.Size = new System.Drawing.Size(49, 12);
-			this.label45.TabIndex = 17;
-			this.label45.Text = "周囲長:L";
-			// 
-			// label46
-			// 
-			this.label46.AutoSize = true;
-			this.label46.Location = new System.Drawing.Point(240, 318);
-			this.label46.Name = "label46";
-			this.label46.Size = new System.Drawing.Size(51, 12);
-			this.label46.TabIndex = 17;
-			this.label46.Text = "円形度:C";
-			// 
-			// label47
-			// 
-			this.label47.AutoSize = true;
-			this.label47.Location = new System.Drawing.Point(240, 269);
-			this.label47.Name = "label47";
-			this.label47.Size = new System.Drawing.Size(38, 12);
-			this.label47.TabIndex = 36;
-			this.label47.Text = "面積:S";
-			// 
-			// label48
-			// 
-			this.label48.AutoSize = true;
-			this.label48.Location = new System.Drawing.Point(466, 72);
-			this.label48.Name = "label48";
-			this.label48.Size = new System.Drawing.Size(41, 12);
-			this.label48.TabIndex = 1;
-			this.label48.Text = "平滑化";
-			// 
-			// label58
-			// 
-			this.label58.AutoSize = true;
-			this.label58.Location = new System.Drawing.Point(466, 98);
-			this.label58.Name = "label58";
-			this.label58.Size = new System.Drawing.Size(37, 12);
-			this.label58.TabIndex = 1;
-			this.label58.Text = "２値化";
-			// 
-			// label59
-			// 
-			this.label59.AutoSize = true;
-			this.label59.Location = new System.Drawing.Point(466, 123);
-			this.label59.Name = "label59";
-			this.label59.Size = new System.Drawing.Size(29, 12);
-			this.label59.TabIndex = 1;
-			this.label59.Text = "閾値";
-			// 
-			// label60
-			// 
-			this.label60.AutoSize = true;
-			this.label60.Location = new System.Drawing.Point(466, 161);
-			this.label60.Name = "label60";
-			this.label60.Size = new System.Drawing.Size(39, 12);
-			this.label60.TabIndex = 1;
-			this.label60.Text = "色相:H";
-			// 
-			// label61
-			// 
-			this.label61.AutoSize = true;
-			this.label61.Location = new System.Drawing.Point(466, 184);
-			this.label61.Name = "label61";
-			this.label61.Size = new System.Drawing.Size(38, 12);
-			this.label61.TabIndex = 1;
-			this.label61.Text = "彩度:S";
-			// 
-			// label62
-			// 
-			this.label62.AutoSize = true;
-			this.label62.Location = new System.Drawing.Point(466, 206);
-			this.label62.Name = "label62";
-			this.label62.Size = new System.Drawing.Size(39, 12);
-			this.label62.TabIndex = 1;
-			this.label62.Text = "明度:V";
-			// 
-			// label63
-			// 
-			this.label63.AutoSize = true;
-			this.label63.Location = new System.Drawing.Point(466, 293);
-			this.label63.Name = "label63";
-			this.label63.Size = new System.Drawing.Size(49, 12);
-			this.label63.TabIndex = 17;
-			this.label63.Text = "周囲長:L";
-			// 
-			// label64
-			// 
-			this.label64.AutoSize = true;
-			this.label64.Location = new System.Drawing.Point(466, 317);
-			this.label64.Name = "label64";
-			this.label64.Size = new System.Drawing.Size(51, 12);
-			this.label64.TabIndex = 17;
-			this.label64.Text = "円形度:C";
-			// 
-			// label65
-			// 
-			this.label65.AutoSize = true;
-			this.label65.Location = new System.Drawing.Point(466, 268);
-			this.label65.Name = "label65";
-			this.label65.Size = new System.Drawing.Size(38, 12);
-			this.label65.TabIndex = 36;
-			this.label65.Text = "面積:S";
-			// 
-			// label66
-			// 
-			this.label66.Location = new System.Drawing.Point(320, 337);
-			this.label66.Name = "label66";
-			this.label66.Size = new System.Drawing.Size(54, 30);
-			this.label66.TabIndex = 17;
-			this.label66.Text = "多曲線\r\n近似精度";
-			// 
-			// label67
-			// 
-			this.label67.Location = new System.Drawing.Point(545, 336);
-			this.label67.Name = "label67";
-			this.label67.Size = new System.Drawing.Size(54, 30);
-			this.label67.TabIndex = 17;
-			this.label67.Text = "多曲線\r\n近似精度";
-			// 
-			// label68
-			// 
-			this.label68.AutoSize = true;
-			this.label68.BackColor = System.Drawing.SystemColors.Control;
-			this.label68.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.label68.ForeColor = System.Drawing.Color.MediumAquamarine;
-			this.label68.Location = new System.Drawing.Point(297, 391);
-			this.label68.Name = "label68";
-			this.label68.Size = new System.Drawing.Size(144, 16);
-			this.label68.TabIndex = 64;
-			this.label68.Text = "ピンボケ判定に使用";
-			this.label68.Visible = false;
-			// 
-			// label69
-			// 
-			this.label69.AutoSize = true;
-			this.label69.Location = new System.Drawing.Point(317, 418);
-			this.label69.Name = "label69";
-			this.label69.Size = new System.Drawing.Size(103, 12);
-			this.label69.TabIndex = 17;
-			this.label69.Text = "コントラスト計算範囲";
-			// 
-			// label70
-			// 
-			this.label70.AutoSize = true;
-			this.label70.Location = new System.Drawing.Point(243, 418);
-			this.label70.Name = "label70";
-			this.label70.Size = new System.Drawing.Size(53, 12);
-			this.label70.TabIndex = 17;
-			this.label70.Text = "計算方法";
-			// 
-			// label71
-			// 
-			this.label71.AutoSize = true;
-			this.label71.Location = new System.Drawing.Point(298, 462);
-			this.label71.Name = "label71";
-			this.label71.Size = new System.Drawing.Size(85, 12);
-			this.label71.TabIndex = 17;
-			this.label71.Text = "上下オフセット(%)";
-			// 
-			// label72
-			// 
-			this.label72.AutoSize = true;
-			this.label72.Location = new System.Drawing.Point(76, 523);
-			this.label72.Name = "label72";
-			this.label72.Size = new System.Drawing.Size(85, 12);
-			this.label72.TabIndex = 17;
-			this.label72.Text = "上下オフセット(%)";
-			// 
-			// label73
-			// 
-			this.label73.AutoSize = true;
-			this.label73.Location = new System.Drawing.Point(298, 523);
-			this.label73.Name = "label73";
-			this.label73.Size = new System.Drawing.Size(85, 12);
-			this.label73.TabIndex = 17;
-			this.label73.Text = "上下オフセット(%)";
-			// 
-			// label74
-			// 
-			this.label74.AutoSize = true;
-			this.label74.Location = new System.Drawing.Point(234, 482);
-			this.label74.Name = "label74";
-			this.label74.Size = new System.Drawing.Size(44, 12);
-			this.label74.TabIndex = 17;
-			this.label74.Text = "中心AF";
-			// 
-			// label75
-			// 
-			this.label75.AutoSize = true;
-			this.label75.Location = new System.Drawing.Point(233, 400);
-			this.label75.Name = "label75";
-			this.label75.Size = new System.Drawing.Size(44, 12);
-			this.label75.TabIndex = 17;
-			this.label75.Text = "表面AF";
 			// 
 			// Form34
 			// 

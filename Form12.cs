@@ -113,10 +113,12 @@ namespace uSCOPE
 			this.button4.Visible = false;	//赤外用
 			//---[ヒストグラム]
 			m_bENTER_GETD = true;//GETDが呼ばれないように
+#if false//2019.04.29(微分バグ修正)
 			this.comboBox1.Items.Clear();
 			this.comboBox1.Items.Add("矩形範囲");
 			this.comboBox1.SelectedIndex = 0;
 			G.SS.CAM_HIS_PAR1 = 1;//1:矩形範囲
+#endif
 			this.comboBox2.Items.Clear();
 			this.comboBox2.Items.Add("生画像");
 			this.comboBox2.SelectedIndex = 0;
@@ -369,6 +371,9 @@ this.SPE_COD = 0;
 #if true//2019.04.04(微分閾値追加)
 				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
 #endif
+#if true//2019.04.29(微分バグ修正)
+				G.CNT_DTH2 = G.SS.CAM_HIS_DTH2;
+#endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 			}
 			else if (sender == this.button7) {
@@ -391,6 +396,9 @@ this.SPE_COD = 0;
 #if true//2019.04.04(微分閾値追加)
 				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
 #endif
+#if true//2019.04.29(微分バグ修正)
+				G.CNT_DTH2 = G.SS.CAM_HIS_DTH2;
+#endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FCS_STS = 1;
 				this.timer1.Tag = null;
@@ -410,6 +418,9 @@ this.SPE_COD = 0;
 #endif
 #if true//2019.04.04(微分閾値追加)
 				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
+#endif
+#if true//2019.04.29(微分バグ修正)
+				G.CNT_DTH2 = G.SS.CAM_HIS_DTH2;
 #endif
 				G.CAM_PRC =  G.CAM_STS.STS_FCUS;
 				this.FC2_STS = 1;
@@ -460,6 +471,9 @@ this.SPE_COD = 0;
 #endif
 #if true//2019.04.04(微分閾値追加)
 				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
+#endif
+#if true//2019.04.29(微分バグ修正)
+				G.CNT_DTH2 = G.SS.CAM_HIS_DTH2;
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 				G.CHK_WBL = 1;
@@ -565,18 +579,25 @@ this.SPE_COD = 0;
 			}
 			m_bENTER_GETD = true;
 			try {
+#if true//2019.04.29(微分バグ修正)
+				DDV.DDX(bUpdate, this.comboBox1, ref G.SS.CAM_HIS_PAR1);
+#else
 				if (G.UIF_LEVL == 0) {
 				G.SS.CAM_HIS_PAR1 = 1;//1:矩形範囲
 				}
 				else {
 				DDV.DDX(bUpdate, this.comboBox1, ref G.SS.CAM_HIS_PAR1);
 				}
+#endif
 				DDV.DDX(bUpdate, this.comboBox7, ref G.SS.CAM_HIS_METH);
 #if false//2019.03.22(再測定表)
 				DDV.DDX(bUpdate, this.comboBox8, ref G.SS.CAM_HIS_OIMG);
 #endif
 #if true//2019.04.04(微分閾値追加)
 				DDV.DDX(bUpdate, this.numericUpDown60, ref G.SS.CAM_HIS_DTHD);
+#endif
+#if true//2019.04.29(微分バグ修正)
+				DDV.DDX(bUpdate, this.numericUpDown62, ref G.SS.CAM_HIS_DTH2);
 #endif
 				DDV.DDX(bUpdate, this.numericUpDown5, ref G.SS.CAM_HIS_BVAL);//, 1, 254);
 				if (G.UIF_LEVL == 0) {
@@ -613,7 +634,7 @@ this.SPE_COD = 0;
 				DDV.DDX(bUpdate, this.checkBox15     ,ref G.SS.CAM_CIR_LINE);
 				DDV.DDX(bUpdate, this.numericUpDown27,ref G.SS.CAM_CIR_LPER);
 				DDV.DDX(bUpdate, this.numericUpDown59,ref G.SS.CAM_CIR_LCNT);
-				DDV.DDX(bUpdate, this.checkBox3      ,ref G.SS.CAM_CIR_CHK5);
+				DDV.DDX(bUpdate, this.checkBox7      ,ref G.SS.CAM_CIR_CHK5);
 #endif
 				DDV.DDX(bUpdate, this.comboBox4, ref G.SS.CAM_CIR_DISP);
 				DDV.DDX(bUpdate, this.checkBox3, ref G.SS.CAM_CIR_CHK1);
@@ -1131,8 +1152,13 @@ this.SPE_COD = 0;
 				return;
 			}
 			GETDAT(false);//変数取込
+#if true//2019.04.29(微分バグ修正)
+			this.numericUpDown60.Enabled = (this.comboBox7.SelectedIndex >= 2 && this.comboBox7.SelectedIndex <= 4);
+			this.numericUpDown62.Enabled = (this.comboBox7.SelectedIndex >= 5 && this.comboBox7.SelectedIndex <= 7);
+#else
 #if true//2019.04.04(微分閾値追加)
 			this.numericUpDown60.Enabled = (this.comboBox7.SelectedIndex >= 2);
+#endif
 #endif
 			if (G.FORM02 != null && (G.FORM02.isLOADED() || G.FORM02.isCONNECTED())) {
 #if true//2019.01.23(GAIN調整&自動測定)
@@ -1161,6 +1187,9 @@ this.SPE_COD = 0;
 #endif
 #if true//2019.04.04(微分閾値追加)
 					G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
+#endif
+#if true//2019.04.29(微分バグ修正)
+					G.CNT_DTH2 = G.SS.CAM_HIS_DTH2;
 #endif
 				}
 				G.FORM02.UPDATE_PROC();
@@ -1818,6 +1847,10 @@ this.SPE_COD = 0;
 				prg.SetStatus("実行中...");
 #if false//2018.05.17
 				G.CNT_MOD = (G.SS.PLM_AUT_AFMD==0) ? 0: 1+G.SS.PLM_AUT_AFMD;
+#endif
+#if true//2019.04.29(微分バグ修正)
+				G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
+				G.CNT_DTH2 = G.SS.CAM_HIS_DTH2;
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_AUTO;
 #if true//2019.01.23(GAIN調整&自動測定)
@@ -6000,7 +6033,7 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 		{
 			this.numericUpDown27.Enabled = this.checkBox15.Checked;
 			this.numericUpDown59.Enabled = this.checkBox15.Checked;
-			this.checkBox3.Enabled       = this.checkBox15.Checked;
+			this.checkBox7.Enabled       = this.checkBox15.Checked;
 			this.numericUpDown15.Enabled =!this.checkBox15.Checked;
 		}
 #endif

@@ -181,6 +181,9 @@ namespace uSCOPE
 #if true//2019.04.04(微分閾値追加)
 			public int CAM_HIS_DTHD = 0;
 #endif
+#if true//2019.04.29(微分バグ修正)
+			public int CAM_HIS_DTH2 = 0;
+#endif
 			//---
 			public int CAM_CND_MODH = 1;
 			public int CAM_CND_MINH = 320;
@@ -1206,6 +1209,9 @@ namespace uSCOPE
 #endif
 #if true//2019.04.04(微分閾値追加)
 		static public int CNT_DTHD = 0;
+#endif
+#if true//2019.04.29(微分バグ修正)
+		static public int CNT_DTH2 = 0;
 #endif
 #if true//2019.02.27(ＡＦ２実装)
 		static public bool FC2_FLG=false;
