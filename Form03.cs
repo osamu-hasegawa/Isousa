@@ -636,6 +636,12 @@ retry:
 			public double		moz_hsl;//毛髄面積:Sl(補間後)
 			public double		moz_hsd;//毛髄面積:Sd(補間後)
 #endif
+#if true//2019.05.07(毛髄複線面積値対応)
+			public double		moz_rsl1,moz_rsl2,moz_rsl3, moz_rsl_mul;//毛髄面積:Sl
+			public double		moz_rsd1,moz_rsd2,moz_rsd3, moz_rsd_mul;//毛髄面積:Sd
+			public double		moz_hsl1,moz_hsl2,moz_hsl3, moz_hsl_mul;//毛髄面積:Sl(補間後)
+			public double		moz_hsd1,moz_hsd2,moz_hsd3, moz_hsd_mul;//毛髄面積:Sd(補間後)
+#endif
 #if true//2019.04.17(毛髄検出複線化)
 			public List<seg_of_mouz>
 								moz_inf1,moz_inf2,moz_inf3;
@@ -1399,22 +1405,107 @@ retry:
 				else {
 					seg.moz_hsd += mouh.moz_zpl;
 				}
-#else
-				if (moui.fs2) {
-					seg.moz_rsl += (double)seg.moz_zpl[i];
-				}
-				else {
-					seg.moz_rsd += (double)seg.moz_zpl[i];
-				}
-				if (mouh.fs2) {
-					seg.moz_hsl += (double)seg.moz_hpl[i];
-				}
-				else {
-					seg.moz_hsd += (double)seg.moz_hpl[i];
-				}
 #endif
 			}
 		}
+#if true//2019.05.07(毛髄複線面積値対応)
+		void sum_avg_mult(seg_of_hair seg)
+		{
+			Point	pt1, pt2, pt3;
+			Point	pb1, pb2, pb3;
+			double	ss1, ss2, ss3;
+			bool	fs1, fs2, fs3;
+
+			seg.moz_rsl_mul = 0;//毛髄面積:Sl
+			seg.moz_rsd_mul = 0;//毛髄面積:Sd
+			seg.moz_hsl_mul = 0;//毛髄面積:Sl(補間後)
+			seg.moz_hsd_mul = 0;//毛髄面積:Sd(補間後)
+			for (int i = 0; i < seg.moz_hnf.Count; i++) {
+				if (true) {
+					pt1 = seg.moz_inf1[i].pml;//上側
+					pb1 = seg.moz_inf1[i].pmr;
+					ss1 = seg.moz_inf1[i].moz_zpl;
+					fs1 = seg.moz_inf1[i].fs2;
+
+					pt2 = seg.moz_inf2[i].pml;//中心
+					pb2 = seg.moz_inf2[i].pmr;
+					ss2 = seg.moz_inf2[i].moz_zpl;
+					fs2 = seg.moz_inf2[i].fs2;
+
+					pt3 = seg.moz_inf3[i].pml;//下側
+					pb3 = seg.moz_inf3[i].pmr;
+					ss3 = seg.moz_inf3[i].moz_zpl;
+					fs3 = seg.moz_inf3[i].fs2;
+
+					if (ss1 != 0 && ss2 != 0 && pb1.Y >= pt2.Y) {
+						ss1 = px2um(pt1, pt2);
+					}
+					if (ss2 != 0 && ss3 != 0 && pt3.Y <= pb2.Y) {
+						ss3 = px2um(pb2, pb3);
+					}
+					if (fs1) {
+						seg.moz_rsl_mul += ss1;
+					}
+					else {
+						seg.moz_rsd_mul += ss1;
+					}
+					if (fs2) {
+						seg.moz_rsl_mul += ss2;
+					}
+					else {
+						seg.moz_rsd_mul += ss2;
+					}
+					if (fs3) {
+						seg.moz_rsl_mul += ss3;
+					}
+					else {
+						seg.moz_rsd_mul += ss3;
+					}
+				}
+				if (true) {
+					pt1 = seg.moz_hnf1[i].pml;//上側
+					pb1 = seg.moz_hnf1[i].pmr;
+					ss1 = seg.moz_hnf1[i].moz_zpl;
+					fs1 = seg.moz_hnf1[i].fs2;
+
+					pt2 = seg.moz_hnf2[i].pml;//中心
+					pb2 = seg.moz_hnf2[i].pmr;
+					ss2 = seg.moz_hnf2[i].moz_zpl;
+					fs2 = seg.moz_hnf2[i].fs2;
+
+					pt3 = seg.moz_hnf3[i].pml;//下側
+					pb3 = seg.moz_hnf3[i].pmr;
+					ss3 = seg.moz_hnf3[i].moz_zpl;
+					fs3 = seg.moz_hnf3[i].fs2;
+
+					if (ss1 != 0 && ss2 != 0 && pb1.Y >= pt2.Y) {
+						ss1 = px2um(pt1, pt2);
+					}
+					if (ss2 != 0 && ss3 != 0 && pt3.Y <= pb2.Y) {
+						ss3 = px2um(pb2, pb3);
+					}
+					if (fs1) {
+						seg.moz_hsl_mul += ss1;
+					}
+					else {
+						seg.moz_hsd_mul += ss1;
+					}
+					if (fs2) {
+						seg.moz_hsl_mul += ss2;
+					}
+					else {
+						seg.moz_hsd_mul += ss2;
+					}
+					if (fs3) {
+						seg.moz_hsl_mul += ss3;
+					}
+					else {
+						seg.moz_hsd_mul += ss3;
+					}
+				}
+			}
+		}
+#endif
 		// il, irの範囲をsmin,smaxで正規化する
 		void normalize_array(double[]af, double smin=0, double smax=1, int il=0, int ir=0, bool bALL=false)
 		{
@@ -1755,7 +1846,7 @@ retry:
 			int	ihl, ihr;
 #endif
 #if true//2019.04.17(毛髄検出複線化)
-			int imul = 1;
+			int imul = 1;//中心
 retry_of_multi:
 			if (true) {
 				ic = af.Length/2;
@@ -1765,13 +1856,13 @@ retry_of_multi:
 				ihr = sir;
 			}
 			switch (imul) {
-			case 0:
+			case 0://上側
 				ic-= ll/2;
 				break;
-			case 1:
+			case 1://中心
 				ic = ic;
 				break;
-			default:
+			default://下側
 				ic+= ll/2;
 				break;
 			}
@@ -1972,19 +2063,19 @@ retry:
 #endif
 			}
 #if true//2019.04.17(毛髄検出複線化)
-			if (imul == 0) {
+			if (imul == 0) {//上側
 				seg.moz_inf1.Add(mouz);
-				imul+=2;
+				imul+=2;//→下側
 				goto retry_of_multi;
 			}
-			else if (imul == 1) {
+			else if (imul == 1) {//中心
 				seg.moz_inf2.Add(mouz);
-				imul--;
+				imul--;//→上側
 				goto retry_of_multi;
 			}
-			else if (imul == 2) {
+			else if (imul == 2) {//下側
 				seg.moz_inf3.Add(mouz);
-				imul++;
+				imul++;//→終了
 			}
 #endif
 		}
@@ -2417,6 +2508,28 @@ retry:
 				detect_outliers(seg);
 				interp_outliers(seg);
 				sum_avg(seg);
+#if true//2019.05.07(毛髄複線面積値対応)
+				switch (i) {
+					case  0:
+						seg.moz_rsl1 = seg.moz_rsl;
+						seg.moz_rsl1 = seg.moz_rsd;
+						seg.moz_hsl1 = seg.moz_hsl;
+						seg.moz_hsd1 = seg.moz_hsd;
+					break;
+					case  1:
+						seg.moz_rsl2 = seg.moz_rsl;
+						seg.moz_rsl2 = seg.moz_rsd;
+						seg.moz_hsl2 = seg.moz_hsl;
+						seg.moz_hsd2 = seg.moz_hsd;
+					break;
+					default:
+						seg.moz_rsl3 = seg.moz_rsl;
+						seg.moz_rsl3 = seg.moz_rsd;
+						seg.moz_hsl3 = seg.moz_hsl;
+						seg.moz_hsd3 = seg.moz_hsd;
+					break;
+				}
+#endif
 #if true//2019.04.17(毛髄検出複線化)
 				switch (i) {
 					case  0:seg.moz_hnf1 = seg.moz_hnf; break;
@@ -2424,6 +2537,9 @@ retry:
 					default:seg.moz_hnf3 = seg.moz_hnf;break;
 				}
 			}
+#endif
+#if true//2019.05.07(毛髄複線面積値対応)
+			sum_avg_mult(seg);
 #endif
 			if (bRECALCIR == false) {
 				//キューティクル断面のフィルター処理
@@ -4098,8 +4214,12 @@ retry:
 				this.radioButton1.BackColor = Color.FromArgb(64,64,64);
 			}
 			this.comboBox1.Enabled = false;
+#if true//2019.05.07(毛髄複線面積値対応)
+			this.comboBox2.SelectedIndex = 3;//毛髄検出ライン<-全て
+#else
 #if true//2019.04.17(毛髄検出複線化)
 			this.comboBox2.SelectedIndex = 1;//毛髄検出ライン<-中心
+#endif
 #endif
 #if false//2018.11.10(保存機能)
 			this.comboBox2.SelectedIndex = 1;
@@ -4778,9 +4898,39 @@ retry_of_multi:
 					imul = this.comboBox2.SelectedIndex;
 				}
 				switch (imul) {
-				case  0: seg.moz_inf = seg.moz_inf1; seg.moz_hnf = seg.moz_hnf1; break;
-				case  1: seg.moz_inf = seg.moz_inf2; seg.moz_hnf = seg.moz_hnf2; break;
-				default: seg.moz_inf = seg.moz_inf3; seg.moz_hnf = seg.moz_hnf3; break;
+				case  0: seg.moz_inf = seg.moz_inf1; seg.moz_hnf = seg.moz_hnf1; break;//上側
+				case  1: seg.moz_inf = seg.moz_inf2; seg.moz_hnf = seg.moz_hnf2; break;//中心
+				default: seg.moz_inf = seg.moz_inf3; seg.moz_hnf = seg.moz_hnf3; break;//下側
+				}
+#endif
+#if true//2019.05.07(毛髄複線面積値対応)
+				if (this.comboBox2.SelectedIndex > 2 || this.comboBox2.SelectedIndex < 0) {
+					seg.moz_rsl = seg.moz_rsl_mul;
+					seg.moz_rsd = seg.moz_rsd_mul;
+					seg.moz_hsl = seg.moz_hsl_mul;
+					seg.moz_hsd = seg.moz_hsd_mul;
+				}
+				else {
+					switch(imul) {
+					case  0:
+						seg.moz_rsl = seg.moz_rsl1;
+						seg.moz_rsd = seg.moz_rsd1;
+						seg.moz_hsl = seg.moz_hsl1;
+						seg.moz_hsd = seg.moz_hsd1;
+						break;
+					case  1:
+						seg.moz_rsl = seg.moz_rsl2;
+						seg.moz_rsd = seg.moz_rsd2;
+						seg.moz_hsl = seg.moz_hsl2;
+						seg.moz_hsd = seg.moz_hsd2;
+						break;
+					default:
+						seg.moz_rsl = seg.moz_rsl3;
+						seg.moz_rsd = seg.moz_rsd3;
+						seg.moz_hsl = seg.moz_hsl3;
+						seg.moz_hsd = seg.moz_hsd3;
+						break;
+					}
 				}
 #endif
 				if (
@@ -4808,7 +4958,11 @@ retry_of_multi:
 						gr_ir.DrawLines(pen, ap);
 						gr_pd.DrawLines(pen, ap);
 					}
-					if (this.checkBox8.Checked) {//赤外・中心ライン
+					if (this.checkBox8.Checked
+#if true//2019.05.07(毛髄複線面積値対応)
+						&& rmul == 0
+#endif
+						) {//赤外・中心ライン
 						pen = new Pen(this.chart1.Series[0].Color, pw);
 						ap = (Point[])seg.pts_cen.ToArray(typeof(Point));
 						gr_ir.DrawLines(pen, ap);
@@ -4963,9 +5117,18 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 
 #if true//2019.04.17(毛髄検出複線化)
 				if (this.comboBox2.SelectedIndex > 2 || this.comboBox2.SelectedIndex < 0) {
+#if true//2019.05.07(毛髄複線面積値対応)
+					switch (rmul) {//上側→下側→中心の順に描画
+						case 0: rmul = 2; goto retry_of_multi;
+						case 2: rmul = 1; goto retry_of_multi;
+						default: break;
+					}
+
+#else
 					if (++rmul < 3) {
 						goto retry_of_multi;
 					}
+#endif
 				}
 #endif
 
@@ -4983,8 +5146,13 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #endif
 				gi_mou_dia += seg.dia_avg;
 				if (this.checkBox15.Checked) {//補間データ
+#if true//2019.05.07(毛髄複線面積値対応)
 				gi_moz_rsl += seg.moz_hsl;
 				gi_moz_rsd += seg.moz_hsd;
+#else
+				gi_moz_rsl += seg.moz_hsl;
+				gi_moz_rsd += seg.moz_hsd;
+#endif
 				}
 				else {
 				gi_moz_rsl += seg.moz_rsl;
@@ -5895,8 +6063,13 @@ skip:
 					csv.set(c, r+4, I2S(seg.pts_cen_cut.Count));
 					csv.set(c, r+5, F1S(seg.cut_ttl));
 					csv.set(c, r+6, F1S(seg.dia_avg));
+#if true//2019.05.07(毛髄複線面積値対応)
+					csv.set(c, r+7, F1S(seg.moz_hsl_mul));
+					csv.set(c, r+8, F1S(seg.moz_hsd_mul));
+#else
 					csv.set(c, r+7, F1S(seg.moz_hsl));
 					csv.set(c, r+8, F1S(seg.moz_hsd));
+#endif
 #if true//2019.03.16(NODATA対応)
 					}
 #endif

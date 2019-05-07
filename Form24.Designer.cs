@@ -128,6 +128,7 @@
 			this.radioButton10 = new System.Windows.Forms.RadioButton();
 			this.radioButton11 = new System.Windows.Forms.RadioButton();
 			this.label41 = new System.Windows.Forms.Label();
+			this.label42 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
@@ -203,6 +204,7 @@
 			this.tabPage1.Controls.Add(this.comboBox15);
 			this.tabPage1.Controls.Add(this.label22);
 			this.tabPage1.Controls.Add(this.label21);
+			this.tabPage1.Controls.Add(this.label42);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -1519,6 +1521,15 @@
 			this.label41.TabIndex = 77;
 			this.label41.Text = "カラー";
 			// 
+			// label42
+			// 
+			this.label42.Location = new System.Drawing.Point(225, 335);
+			this.label42.Name = "label42";
+			this.label42.Size = new System.Drawing.Size(85, 12);
+			this.label42.TabIndex = 105;
+			this.label42.Text = "サイズ調整用";
+			this.label42.Visible = false;
+			// 
 			// Form24
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1669,5 +1680,6 @@
 		private System.Windows.Forms.Label label41;
 		private System.Windows.Forms.Panel panel9;
 		private System.Windows.Forms.Button button_cancel;
+		private System.Windows.Forms.Label label42;
 	}
 }

@@ -38,7 +38,12 @@ namespace uSCOPE
 				case -1:
 					m_i = 1;
 					m_dlg_mode = true;
+					//this.Size = new Size(this.Size.Width, 460);
+#if true//2019.05.07(毛髄複線面積値対応)
+					this.Size = new Size(this.Size.Width, this.Size.Height-(this.button1.Top- this.label42.Top));
+#else
 					this.Size = new Size(this.Size.Width, 460);
+#endif
 					this.button1.Enabled = false;
 					this.button2.Enabled = false;
 					this.button3.Enabled = false;
