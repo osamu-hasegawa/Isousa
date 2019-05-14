@@ -79,6 +79,12 @@ namespace uSCOPE
 			m_bmp_org = new Bitmap(G.GET_DOC_PATH("OFFLINE-IMAGE.PNG"));
 			m_bmp_cam = new Bitmap(2592, 1944);
 			//---
+#if true//2019.05.08(再測定・深度合成)
+			if (m_thrd_of_cam != null) {
+				m_thrd_of_cam.Abort();
+				m_thrd_of_cam = null;
+			}
+#endif
 			if (m_thrd_of_cam == null) {
 				m_thrd_of_cam = new Thread( new ThreadStart( THRD_OF_CAMERA ) );
 			}

@@ -22,6 +22,9 @@ namespace uSCOPE
 		private int m_i = 0;
 		private int m_isel = 0;
 		private string MOZ_CND_FOLD;
+#if true//2019.05.08(再測定・深度合成)
+		private string m_fold_of_dept;
+#endif
 		//---
 		private List<hair> m_hair = new List<hair>();
 		//---
@@ -390,6 +393,47 @@ namespace uSCOPE
 			}
 			return (img);
 		}
+#if true//2019.05.08(再測定・深度合成)
+		private string to_xx_path(string path, string zpos)
+		{
+			string fold, name, buf, pext = "";
+			string file;
+
+			fold = System.IO.Path.GetDirectoryName(path);
+			fold = this.MOZ_CND_FOLD;
+			name = System.IO.Path.GetFileName(path);
+
+			if (string.IsNullOrEmpty(name)) {
+				return (null);
+			}
+			if (zpos == "深度合成" || zpos == "ZDEPT") {
+				zpos = "ZDEPT";
+				pext = m_fold_of_dept;
+				pext = pext.Replace("\\", "");
+			}
+			// '_ZP99D', '_ZM99D', '_ZDEPT'
+			if (name.Contains("_ZDEPT")) {
+				//G.mlog("pathをひとつ上に戻す必要が…");
+				buf = name.Replace("_ZDEPT", "_" + zpos);
+			}
+#if true//2018.11.13(毛髪中心AF)
+			else if (name.Contains("_K")) {
+				buf = Regex.Replace(name, "_K.[0-9][0-9].", "_" + zpos);
+			}
+#endif
+			else {
+				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
+			}
+			//
+			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
+			//file = fold + pext + buf;//fold + "\\" + buf
+			//
+			if (!System.IO.File.Exists(file)) {
+				return (null);
+			}
+			return (file);
+		}
+#else
 		private string to_xx_path(string path, string zpos)
 		{
 			string fold, name, buf, pext = "";
@@ -425,6 +469,51 @@ namespace uSCOPE
 			}
 			return (file);
 		}
+#endif
+#if true//2019.05.08(再測定・深度合成)
+		// k=0(キューティクル/断面用), 1(毛髪検出/毛髪径用), 2(毛髄用) 
+		private string to_xx_file(int k, string path)
+		{
+			string fold, name, buf, zpos, pext = "";
+			string file;
+			switch (k) {
+			case  0:zpos = "深度合成"; break;
+			case  1:zpos = "KP00D"; break;
+			default:zpos = "KP00D"; path = to_ir_file(path); break;
+			}
+			fold = System.IO.Path.GetDirectoryName(path);
+			name = System.IO.Path.GetFileName(path);
+
+			if (string.IsNullOrEmpty(name)) {
+				return (null);
+			}
+			if (zpos == "深度合成") {
+				zpos = "ZDEPT";
+				pext = m_fold_of_dept;
+			}
+			// '_ZP99D', '_ZM99D', '_ZDEPT'
+			if (name.Contains("_ZDEPT")) {
+				//G.mlog("pathをひとつ上に戻す必要が…");
+				buf = name.Replace("_ZDEPT", "_"+zpos);
+			}
+#if true//2018.11.13(毛髪中心AF)
+			else if (name.Contains("_K")) {
+				buf = Regex.Replace(name, "_K.[0-9][0-9].", "_" + zpos);
+			}
+#endif
+			else {
+				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
+			}
+			//
+			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
+			file = fold + pext + "\\" + buf;
+			//
+			if (!System.IO.File.Exists(file)) {
+				return (null);
+			}
+			return (file);
+		}
+#else
 		// k=0(キューティクル/断面用), 1(毛髪検出/毛髪径用), 2(毛髄用) 
 		private string to_xx_file(int k, string path)
 		{
@@ -461,6 +550,7 @@ namespace uSCOPE
 			}
 			return (file);
 		}
+#endif
 #endif
 		private void dispose_bmp(ref Bitmap bmp)
 		{
@@ -658,13 +748,26 @@ namespace uSCOPE
 			objs.Add(seg.mou_len_l);
 			objs.Add(seg.mou_len_r);
 			objs.Add(seg.mou_len_c);
+#if true//2019.05.08(再測定・深度合成)
+			if (G.UIF_LEVL != 0) {
+			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD || seg.kp_contr_drop >= G.SS.REM_BOK_CTHD) ? true: false);
+			}
+			else {
+			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
+			}
+#else
 #if true//2019.04.09(再測定実装)
 			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
 #else
 			objs.Add(false);
 #endif
+#endif
 #if true//2019.04.02(再測定表ユーザモード)
+#if true//2019.05.08(再測定・深度合成)
+			objs.Add((seg.mou_len_c >= G.SS.REM_CHG_DTHD) ? true: false);//再作成
+#else
 			objs.Add(false);//再作成
+#endif
 			objs.Add(seg.bak_cnt);
 			objs.Add(seg.bTMR);
 #endif
@@ -716,6 +819,11 @@ namespace uSCOPE
 		// nameが直近の再測定データかどうか?
 		private bool is_tmr(string name)
 		{
+#if true//2019.05.08(再測定・深度合成)
+			if (name.Contains("_ZDEPT")) {
+				name = name.Replace("_ZDEPT", "_ZP00D");
+			}
+#endif
 			if (BAK_FILES.Count <= 0) {
 				return(false);//再測定データがない場合
 			}
@@ -730,7 +838,11 @@ namespace uSCOPE
 		private string[] get_remes_folds(string name, out int cnt)
 		{
 			List<string> folds = new List<string>();
-
+#if true//2019.05.08(再測定・深度合成)
+			if (name.Contains("_ZDEPT")) {
+				name = name.Replace("_ZDEPT", "_ZP00D");
+			}
+#endif
 			cnt = 0;
 			if (this.BAK_FOLDS.Count != this.BAK_FILES.Count) {
 				throw new Exception("Internal Error");
@@ -760,6 +872,12 @@ namespace uSCOPE
 
 				dlg.Show("再測定", G.FORM01);
 				G.bCANCEL = false;
+#if true//2019.05.08(再測定・深度合成)
+				if (G.SS.MOZ_FST_CK00) {
+					dlg.SetStatus("深度合成中");
+					FCS_STK.fst_make(this.MOZ_CND_FOLD, out m_fold_of_dept);
+				}
+#endif
 				if (true) {
 					zpos = "_" + zpos;
 				}
@@ -1033,6 +1151,11 @@ namespace uSCOPE
 //			this.dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Gray;
 			this.dataGridView1.RowsDefaultCellStyle.BackColor = Color.White;//Color.LightGray;
 			this.dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240,244,249);//Color.DarkGray;
+#if true//2019.05.08(再測定・深度合成)
+			for (int i = 0; i < G.AS.TBL_F04_WID.Length; i++) {
+				this.dataGridView1.Columns[i].Width = G.AS.TBL_F04_WID[i];
+			}
+#endif
 			//
 			this.Text = this.Text + "[" + this.MOZ_CND_FOLD + "]";
 #if true//2019.04.02(再測定表ユーザモード)
@@ -1126,6 +1249,11 @@ namespace uSCOPE
 			G.AS.APP_F04_HEI = this.Height;
 			}
 #endif
+#if true//2019.05.08(再測定・深度合成)
+			for (int i = 0; i < G.AS.TBL_F04_WID.Length; i++) {
+				G.AS.TBL_F04_WID[i] = this.dataGridView1.Columns[i].Width;
+			}
+#endif
 			//---
 			G.FORM04 = null;
 			G.FORM12.UPDSTS();
@@ -1137,6 +1265,9 @@ namespace uSCOPE
             try {
 				DDV.DDX(bUpdate, this.numericUpDown1 , ref G.SS.REM_BOK_STHD);
 				DDV.DDX(bUpdate, this.numericUpDown2 , ref G.SS.REM_BOK_CTHD);
+#if true//2019.05.08(再測定・深度合成)
+				DDV.DDX(bUpdate, this.numericUpDown3 , ref G.SS.REM_CHG_DTHD);
+#endif
                 rc = true;
             }
             catch (Exception e) {
@@ -1201,6 +1332,11 @@ namespace uSCOPE
 					buf_dm = /*to_xx_path(*/seg.path_of_dm;//, null/*ZVAL2ORG(this.comboBox10.Text)*/);
 					buf_pd = /*to_xx_path(*/seg.path_of_pd;//, null/*ZVAL2ORG(this.comboBox8.Text)*/);
 					buf_ir = /*to_xx_path(*/seg.path_of_ir;//, null/*ZVAL2ORG(this.comboBox12.Text)*/);
+#if true//2019.05.08(再測定・深度合成)
+					buf_dm =   to_xx_path(  seg.path_of_dm   , "ZDEPT");
+					buf_pd =   to_xx_path(  seg.path_of_pd   , "KP00D");
+					buf_ir =   to_xx_path(  seg.path_of_ir   , "KP00D");
+#endif
 				}
 #if true//2019.04.02(再測定表ユーザモード)
 				if (this.comboBox1.SelectedIndex > 0 && seg.bak_cnt > 0) {
@@ -1266,7 +1402,11 @@ namespace uSCOPE
 				}
 				if (this.checkBox12.Checked) {
 					//draw_text(bmp_pd, string.Format("直径={0:F1}um", seg.dia_avg));
+#if true//2019.05.08(再測定・深度合成)
+					draw_text(bmp_pd, string.Format("直径・左={0:F1}um, 右{1:F1}um, 平均={2:F1}, 変化率={3:F1}%", seg.mou_len_l, seg.mou_len_r, seg.dia_avg, seg.mou_len_c), 60, StringAlignment.Far, StringAlignment.Far);
+#else
 					draw_text(bmp_pd, string.Format("直径・左={0:F1}um, 右{1:F1}um, AVG={2:F1}, CHANGE={3:F1}%", seg.mou_len_l, seg.mou_len_r, seg.dia_avg, seg.mou_len_c), 60, StringAlignment.Far, StringAlignment.Far);
+#endif
 				}
 				if (this.checkBox21.Checked) {
 					draw_text(bmp_dm, string.Format("CONTRAST={0:F3}, AVG={1:F3}, DROP={2:F1}%", seg.zp_contr, seg.zp_contr_avg, seg.zp_contr_drop), 60, StringAlignment.Near, StringAlignment.Near);
@@ -1402,12 +1542,29 @@ namespace uSCOPE
 #if true//2019.04.09(再測定実装)
 				this.dataGridView1.Rows[i].Cells[8].Value = flag;
 #endif
+#if true//2019.05.08(再測定・深度合成)
+				val = (double)this.dataGridView1.Rows[i].Cells[7].Value;
+				if (val >= G.SS.REM_CHG_DTHD) {
+					flag = true;
+				}
+				if (flag) {
+					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 96, 96);//;Color.Red;
+				}
+				else {
+					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
+				}
+				this.dataGridView1.Rows[i].Cells[9].Value = flag;
+#endif
 			}
 		}
 #endif
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex == 8) {
+			if (e.ColumnIndex == 8
+#if true//2019.05.08(再測定・深度合成)
+			 || e.ColumnIndex == 9
+#endif
+				) {
 				if ((bool)this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) {
 					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
 				}
@@ -1436,7 +1593,11 @@ namespace uSCOPE
 		//?CR_??_????D.???
 		//?CT_??_????D.???
 		//?IR_??_????D.???
-		private void add_remes(List<G.RE_MES> remes, string name)
+		private void add_remes(List<G.RE_MES> remes, string name
+#if true//2019.05.08(再測定・深度合成)
+													,string path
+#endif
+		)
 		{
 			G.RE_MES mes = new G.RE_MES();
 			string nam;
@@ -1445,6 +1606,9 @@ namespace uSCOPE
 
 			if (true) {
 				mes.fold = this.MOZ_CND_FOLD;
+#if true//2019.05.08(再測定・深度合成)
+				mes.path_of_zp = path;
+#endif
 			}
 			if (true) {
 				int	p;
@@ -1555,10 +1719,32 @@ namespace uSCOPE
 		}
 		private void button1_Click(object sender, EventArgs e)
 		{//再測定
+#if true//2019.05.08(再測定・深度合成)
+			List<int> la = new List<int>();
+			List<string> ls = new List<string>();
+
+			for (int q = 0; q < this.dataGridView1.Rows.Count; q++) {
+				bool flag = false;
+				flag = (bool)this.dataGridView1.Rows[q].Cells[9].Value;
+				if (flag) {
+					int idx = (int)this.dataGridView1.Rows[q].Tag;
+					int h = HIWORD(idx);
+					int i = LOWORD(idx);
+					la.Add(h+1);
+					/*
+					m_i = h;
+					m_isel = i;
+					hair hr = m_hair[m_i];
+					seg_of_hair seg = (seg_of_hair)hr.seg[m_isel];
+					seg.bREMES = flag;*/
+				}
+			}
+#else
 			if (!D.isCONNECTED() || !G.FORM11.isORG_ALL_DONE()) {
 				G.mlog("CONNECT及び原点復帰をしてください.");
 				return;
 			}
+#endif
 			for (int q = 0; q < this.dataGridView1.Rows.Count; q++) {
 				bool flag = false;
 				flag = (bool)this.dataGridView1.Rows[q].Cells[8].Value;
@@ -1566,13 +1752,42 @@ namespace uSCOPE
 					int idx = (int)this.dataGridView1.Rows[q].Tag;
 					int h = HIWORD(idx);
 					int i = LOWORD(idx);
+
 					m_i = h;
 					m_isel = i;
 					hair hr = m_hair[m_i];
 					seg_of_hair seg = (seg_of_hair)hr.seg[m_isel];
+#if true//2019.05.08(再測定・深度合成)
+					if (flag && la.Contains(h+1)) {
+						ls.Add(seg.name_of_dm);
+						flag = false;
+					}
+#endif
 					seg.bREMES = flag;
 				}
 			}
+#if true//2019.05.08(再測定・深度合成)
+			if (la.Count > 0) {
+				string buf;
+				buf = "#i次の毛髪サンプルを再作成してください.\r\r";
+				for (int i = 0; i < la.Count; i++) {
+					if (i > 0) {
+					buf += ", ";
+					}
+					buf += string.Format("{0}本目", la[i]);
+				}
+				G.mlog(buf);
+			}
+			if (ls.Count > 0) {
+				string buf;
+				buf = "#i再作成対象の毛髪サンプルに含まれている再撮影対象の次の画像は再撮影かスキップされます。\r";
+				for (int i = 0; i < ls.Count; i++) {
+					buf += "\r";
+					buf += ls[i];
+				}
+				G.mlog(buf);
+			}
+#endif
 			//---
 			G.REMES.Clear();
 			//---
@@ -1580,14 +1795,30 @@ namespace uSCOPE
 				for (int i = 0; i < m_hair[q].seg.Count(); i++) {
 					//G.mlog("seg.name_of_dm:\r\r" + seg.name_of_dm);
 					if (m_hair[q].seg[i].bREMES) {
+#if true//2019.05.08(再測定・深度合成)
+						add_remes(G.REMES, m_hair[q].seg[i].name_of_dm, m_hair[q].seg[i].path_of_dm);
+#else
 						add_remes(G.REMES, m_hair[q].seg[i].name_of_dm);
+#endif
 					}
 				}
 			}
+#if true//2019.05.08(再測定・深度合成)
+			string tmp = m_hair[0].seg[0].path_of_dm;
+			if (ls.Count > 0 && G.REMES.Count <= 0) {
+				return;//メッセージ表示済み
+			}
+#endif
 			if (G.REMES.Count <= 0) {
 				G.mlog("再撮影対象のチェック項目をＯＮしてください.");
 				return;
 			}
+#if true//2019.05.08(再測定・深度合成)
+			if (!D.isCONNECTED() || !G.FORM11.isORG_ALL_DONE()) {
+				G.mlog("CONNECT及び原点復帰をしてください.");
+				return;
+			}
+#endif
 			if (true) {
 				G.FORM12.BeginInvoke(new G.DLG_VOID_VOID(G.FORM12.do_re_mes));
 			}

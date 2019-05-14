@@ -22,6 +22,9 @@ namespace uSCOPE
 
 		private void Form30_Load(object sender, EventArgs e)
 		{
+#if true//2019.05.12(縦型対応)
+			this.label5.BackColor = m_ss.ETC_BAK_COLOR;
+#endif
 			DDX(true);
 		}
 
@@ -241,6 +244,17 @@ namespace uSCOPE
 			frmPassSet frm = new frmPassSet();
 			if (frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				m_ss.ETC_CPH_HASH = G.comp_hash(frm.m_pass_str);
+			}
+		}
+#endif
+#if true//2019.05.12(縦型対応)
+		private void label5_Click(object sender, EventArgs e)
+		{
+			ColorDialog dlg = new ColorDialog();
+			dlg.Color = m_ss.ETC_BAK_COLOR;
+			if (dlg.ShowDialog() ==  System.Windows.Forms.DialogResult.OK) {
+				m_ss.ETC_BAK_COLOR = dlg.Color;
+				this.label5.BackColor = dlg.Color;
 			}
 		}
 #endif

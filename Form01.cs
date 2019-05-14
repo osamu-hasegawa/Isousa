@@ -80,6 +80,15 @@ namespace uSCOPE
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+#if true//2019.05.12(縦型対応)
+			string[] args = Environment.GetCommandLineArgs();
+			foreach (string tmp in args) {
+				if (tmp.ToUpper().Contains("-TATE")) {
+					G.bTATE_MODE = true;
+					this.Text = "縦:" + this.Text;
+				}
+			}
+#endif
             this.timer1.Enabled = true;
 			//C:\Users\araya320\AppData\Roaming\KOP\uSCOPE (<-セットアップにてコピーされる)
 			//から

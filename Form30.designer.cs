@@ -149,6 +149,7 @@
 			this.label15 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.checkBox12 = new System.Windows.Forms.CheckBox();
 			this.checkBox6 = new System.Windows.Forms.CheckBox();
 			this.checkBox5 = new System.Windows.Forms.CheckBox();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
@@ -159,7 +160,8 @@
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkBox11 = new System.Windows.Forms.CheckBox();
 			this.button1 = new System.Windows.Forms.Button();
-			this.checkBox12 = new System.Windows.Forms.CheckBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1392,6 +1394,8 @@
 			this.groupBox3.Controls.Add(this.checkBox5);
 			this.groupBox3.Controls.Add(this.checkBox4);
 			this.groupBox3.Controls.Add(this.checkBox3);
+			this.groupBox3.Controls.Add(this.label5);
+			this.groupBox3.Controls.Add(this.label3);
 			this.groupBox3.Controls.Add(this.label22);
 			this.groupBox3.Controls.Add(this.label18);
 			this.groupBox3.Controls.Add(this.textBox67);
@@ -1415,6 +1419,17 @@
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(118, 20);
 			this.comboBox1.TabIndex = 1;
+			// 
+			// checkBox12
+			// 
+			this.checkBox12.AutoSize = true;
+			this.checkBox12.BackColor = System.Drawing.SystemColors.Control;
+			this.checkBox12.Location = new System.Drawing.Point(17, 182);
+			this.checkBox12.Name = "checkBox12";
+			this.checkBox12.Size = new System.Drawing.Size(157, 16);
+			this.checkBox12.TabIndex = 2;
+			this.checkBox12.Text = "GAIN調整ページを表示する";
+			this.checkBox12.UseVisualStyleBackColor = false;
 			// 
 			// checkBox6
 			// 
@@ -1520,16 +1535,25 @@
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
-			// checkBox12
+			// label3
 			// 
-			this.checkBox12.AutoSize = true;
-			this.checkBox12.BackColor = System.Drawing.SystemColors.Control;
-			this.checkBox12.Location = new System.Drawing.Point(17, 182);
-			this.checkBox12.Name = "checkBox12";
-			this.checkBox12.Size = new System.Drawing.Size(157, 16);
-			this.checkBox12.TabIndex = 2;
-			this.checkBox12.Text = "GAIN調整ページを表示する";
-			this.checkBox12.UseVisualStyleBackColor = false;
+			this.label3.AutoSize = true;
+			this.label3.BackColor = System.Drawing.SystemColors.Control;
+			this.label3.Location = new System.Drawing.Point(208, 22);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(41, 12);
+			this.label3.TabIndex = 1;
+			this.label3.Text = "背景色";
+			// 
+			// label5
+			// 
+			this.label5.BackColor = System.Drawing.SystemColors.Control;
+			this.label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.label5.Location = new System.Drawing.Point(263, 17);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(74, 22);
+			this.label5.TabIndex = 1;
+			this.label5.Click += new System.EventHandler(this.label5_Click);
 			// 
 			// Form30
 			// 
@@ -1704,6 +1728,8 @@
 		private System.Windows.Forms.CheckBox checkBox11;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.CheckBox checkBox12;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label5;
 
 	}
 }

@@ -39,6 +39,9 @@ namespace uSCOPE
 			public int APP_F04_WID = 600;
 			public int APP_F04_HEI = 800;
 #endif
+#if true//2019.05.08(再測定・深度合成)
+			public int[] TBL_F04_WID = {125,80,80,80,80,75,75,75,75,75,75,75};
+#endif
 			public string AUT_BEF_PATH = "";
 			public string BEFORE_PATH = "";
 			//---
@@ -619,6 +622,9 @@ namespace uSCOPE
 			public double REM_BOK_STHD = 25;
 			public double REM_BOK_CTHD = 25;
 #endif
+#if true//2019.05.08(再測定・深度合成)
+			public double REM_CHG_DTHD = 25;
+#endif
 #if true//2019.01.11(混在対応) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 			public int[]    ANL_CND_CTYP = {0,0};//キューティクル(0:BPF,1:2d)
 			public double[] ANL_CND_BPF1 = {0.047,0.047};
@@ -693,6 +699,17 @@ namespace uSCOPE
 			public string[] EUI_ZOM_TEXT = {"連続", "x 8", "x 16"};
 			public int[] EUI_ZOM_PSET = {3088, 6386};
 			public string[] EUI_ZOM_LABL = {"8倍", "16倍"};
+#if true//2019.05.12(縦型対応)
+			//---
+			public int	TAT_STG_XMIN = -1000;
+			public int	TAT_STG_XMAX = +1000;
+			public int	TAT_STG_XSTP =   250;
+			public int	TAT_STG_YMIN = -1000;
+			public int	TAT_STG_YMAX = +1000;
+			public int	TAT_STG_YSTP =   250;
+			public int	TAT_STG_ZPOS =     0;
+			public int	TAT_STG_SKIP =     2;
+#endif
 			//---
 			public void RESIZE_ARRAY(ref int[] dst, ref int[] src)
 			{
@@ -1023,6 +1040,23 @@ namespace uSCOPE
 #endif
 			public double CIR_U;
 			public Rectangle CIR_RT;
+#if true//2019.05.12(縦型対応)
+			public int			TAT_CNT;
+			public double		TAT_S;
+			public double		TAT_L;
+			public double		TAT_C;
+			public double		TAT_P;
+			public double		TAT_U;
+			public Rectangle	TAT_RT;
+			public int			TAT_DX;
+			public int			TAT_DY;
+			public int			TAT_OX;
+			public int			TAT_OY;
+			public Point		TAT_P1;
+			public Point		TAT_P2;
+			public Point		TAT_P3;
+			public Point		TAT_P4;
+#endif
 			//---
 			public Point[] DIA_TOP = new Point[16];
 			public Point[] DIA_BTM = new Point[16];
@@ -1083,6 +1117,15 @@ namespace uSCOPE
 				this.CIR_P = double.NaN;
 				this.CIR_U = double.NaN;
 				this.CIR_RT = new Rectangle(0, 0, 0, 0);
+#if true//2019.05.12(縦型対応)
+				this.TAT_CNT = 0;
+				this.TAT_S = double.NaN;
+				this.TAT_L = double.NaN;
+				this.TAT_C = double.NaN;
+				this.TAT_P = double.NaN;
+				this.TAT_U = double.NaN;
+				this.TAT_RT = new Rectangle(0, 0, 0, 0);
+#endif
 				//---
 				this.DIA_CNT = 0;
 				//---
@@ -1092,6 +1135,9 @@ namespace uSCOPE
 #if true//2019.04.09(再測定実装)
 		public class RE_MES {
 			public string		fold;
+#if true//2019.05.08(再測定・深度合成)
+			public string		path_of_zp;//深度合成のチェック用
+#endif
 			//---
 			public string		hno;//毛髪番号
 			public string		crt;//"CR" / "CT"
@@ -1154,6 +1200,9 @@ namespace uSCOPE
 		//static public bool		bDEBUG=true;
 		//static public bool		bONLINE=false;
 		//static public bool		bONLINE_OF_NI=false;
+#if true//2019.05.12(縦型対応)
+		static public bool		bTATE_MODE = false;
+#endif
 		static public int		UIF_LEVL=0;
 		static public bool		bCANCEL=false;
 		static public Form01	FORM01 = null;
@@ -1309,6 +1358,11 @@ namespace uSCOPE
 				System.IO.Directory.CreateDirectory(path);
 			}
 			path += @"\" + Application.ProductName;
+#if true//2019.05.12(縦型対応)
+			if (G.bTATE_MODE) {
+				path += ".TATE";
+			}
+#endif
 			if (!System.IO.Directory.Exists(path)) {
 				System.IO.Directory.CreateDirectory(path);
 			}
@@ -1324,6 +1378,11 @@ namespace uSCOPE
 		// filename:setting.xml
 		static public bool COPY_SETTINGS(string filename)
 		{
+#if true//2019.05.12(縦型対応)
+			if (G.bTATE_MODE) {
+				return(false);
+			}
+#endif
 			string path;
 			// path:C:\\Users\\araya320\\AppData\\Roaming
 			path = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

@@ -3382,7 +3382,12 @@ retry:
 		//---
 		// 深度合成処理
 		//---
-		private bool fst_make()
+#if true//2019.05.08(再測定・深度合成)
+		public
+#else
+		private
+#endif
+		bool fst_make()
 		{
 			try {
 				string path = this.MOZ_CND_FOLD;
