@@ -55,7 +55,17 @@ namespace uSCOPE
 			}
 			public bool load(ref APPSET ss)
 			{
+#if true//2019.05.12(縦型対応)
+				string path;
+				if (G.bTATE_MODE) {
+					path = GET_DOC_PATH("uSCOPE.tate.xml");
+				}
+				else {
+					path = GET_DOC_PATH("uSCOPE.xml");
+				}
+#else
 				string path = GET_DOC_PATH("uSCOPE.xml");
+#endif
 				bool ret = false;
 				try {
 					XmlSerializer sz = new XmlSerializer(typeof(APPSET));
@@ -74,7 +84,17 @@ namespace uSCOPE
 			//
 			public bool save(APPSET ss)
 			{
+#if true//2019.05.12(縦型対応)
+				string path;
+				if (G.bTATE_MODE) {
+					path = GET_DOC_PATH("uSCOPE.tate.xml");
+				}
+				else {
+					path = GET_DOC_PATH("uSCOPE.xml");
+				}
+#else
 				string path = GET_DOC_PATH("uSCOPE.xml");
+#endif
 				bool ret = false;
 				try {
 					XmlSerializer sz = new XmlSerializer(typeof(APPSET));
@@ -708,7 +728,25 @@ namespace uSCOPE
 			public int	TAT_STG_YMAX = +1000;
 			public int	TAT_STG_YSTP =   250;
 			public int	TAT_STG_ZPOS =     0;
+			public bool	TAT_STG_XINV = false;
 			public int	TAT_STG_SKIP =     2;
+			//---
+			public int	TAT_ETC_MODE =     0;
+			//---
+			public int	TAT_AFC_MODE =     0;
+			public int	TAT_AFC_CMET =     1;
+			public int	TAT_AFC_AFMD =     0;
+			public int	TAT_AFC_HANI =    50;
+			public int	TAT_AFC_DISL =    10;
+			public int	TAT_AFC_DISM =     5;
+			public int	TAT_AFC_DISS =     1;
+			//---
+			public int[]TAT_SUM_LOWR = {100000, 500000};
+			public int[]TAT_SUM_UPPR = {500000,2500000};
+			public int[]TAT_LEN_LOWR = {  1000,   1000};
+			public int[]TAT_LEN_UPPR = {100000, 100000};
+			public int[]TAT_CIR_LOWR = {     0,      0};
+			public int[]TAT_CIR_UPPR = {     1,      1};
 #endif
 			//---
 			public void RESIZE_ARRAY(ref int[] dst, ref int[] src)
@@ -964,7 +1002,17 @@ namespace uSCOPE
 			//
 			public bool load(ref SYSSET ss)
 			{
+#if true//2019.05.12(縦型対応)
+				string path;
+				if (G.bTATE_MODE) {
+					path = GET_DOC_PATH("settings.tate.xml");
+				}
+				else {
+					path = GET_DOC_PATH("settings.xml");
+				}
+#else
 				string path = GET_DOC_PATH("settings.xml");
+#endif
 				bool ret = false;
 				try {
 					XmlSerializer sz = new XmlSerializer(typeof(SYSSET));
@@ -983,7 +1031,17 @@ namespace uSCOPE
 			//
 			public bool save(SYSSET ss)
 			{
+#if true//2019.05.12(縦型対応)
+				string path;
+				if (G.bTATE_MODE) {
+					path = GET_DOC_PATH("settings.tate.xml");
+				}
+				else {
+					path = GET_DOC_PATH("settings.xml");
+				}
+#else
 				string path = GET_DOC_PATH("settings.xml");
+#endif
 				bool ret = false;
 				try {
 					XmlSerializer sz = new XmlSerializer(typeof(SYSSET));
@@ -1048,10 +1106,12 @@ namespace uSCOPE
 			public double		TAT_P;
 			public double		TAT_U;
 			public Rectangle	TAT_RT;
-			public int			TAT_DX;
-			public int			TAT_DY;
-			public int			TAT_OX;
-			public int			TAT_OY;
+			public int			TAT_DX;//矩形横辺長さ(短長辺不定)
+			public int			TAT_DY;//矩形縦辺長さ(短長辺不定)
+			public int			TAT_OX;//矩形中心X
+			public int			TAT_OY;//矩形中心Y
+			public int			TAT_GX;//重心X
+			public int			TAT_GY;//重心Y
 			public Point		TAT_P1;
 			public Point		TAT_P2;
 			public Point		TAT_P3;

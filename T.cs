@@ -20,12 +20,21 @@ namespace uSCOPE
 			string	path;
 //			path = System.Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
 //			path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+#if true//2019.05.12(ècå^ëŒâû)
+			path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+#else
 			path = System.Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+#endif
 			path += "\\KOP";
 			if (!System.IO.Directory.Exists(path)) {
 				System.IO.Directory.CreateDirectory(path);
 			}
 			path += "\\" + Application.ProductName;
+#if true//2019.05.12(ècå^ëŒâû)
+			if (G.bTATE_MODE) {
+				path += ".TATE";
+			}
+#endif
 			if (!System.IO.Directory.Exists(path)) {
 				System.IO.Directory.CreateDirectory(path);
 			}

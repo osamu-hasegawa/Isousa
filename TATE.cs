@@ -211,9 +211,9 @@ namespace uSCOPE
 #endif
 					for (pos = (IntPtr)0;;) {
 						pos = OCV.FIND_NEXT(pos,
-								G.SS.IMP_SUM_UPPR[0], G.SS.IMP_SUM_LOWR[0],
-								G.SS.IMP_LEN_UPPR[0], G.SS.IMP_LEN_LOWR[0],
-								G.SS.IMP_CIR_UPPR[0], G.SS.IMP_CIR_LOWR[0],
+								G.SS.TAT_SUM_UPPR[0], G.SS.TAT_SUM_LOWR[0],
+								G.SS.TAT_LEN_UPPR[0], G.SS.TAT_LEN_LOWR[0],
+								G.SS.TAT_CIR_UPPR[0], G.SS.TAT_CIR_LOWR[0],
 								out s, out l, out c);
 						if (pos == (IntPtr)0) {
 							break;
@@ -240,9 +240,9 @@ namespace uSCOPE
 					}
 					for (pos = (IntPtr)0;;) {
 						pos = OCV.FIND_NEXT(pos,
-								G.SS.IMP_SUM_UPPR[1], G.SS.IMP_SUM_LOWR[1],
-								G.SS.IMP_LEN_UPPR[1], G.SS.IMP_LEN_LOWR[1],
-								G.SS.IMP_CIR_UPPR[1], G.SS.IMP_CIR_LOWR[1],
+								G.SS.TAT_SUM_UPPR[1], G.SS.TAT_SUM_LOWR[1],
+								G.SS.TAT_LEN_UPPR[1], G.SS.TAT_LEN_LOWR[1],
+								G.SS.TAT_CIR_UPPR[1], G.SS.TAT_CIR_LOWR[1],
 								out s, out l, out c);
 						if (pos == (IntPtr)0) {
 							break;
@@ -291,6 +291,16 @@ namespace uSCOPE
 						rc.Top    = G.IR.CIR_RT.Top;
 						rc.Right  = G.IR.CIR_RT.Right;
 						rc.Bottom = G.IR.CIR_RT.Bottom;
+						}
+						if (true) {
+							double m00, m01, m10;
+							OCV.POINT p0;
+							OCV.CONTOURS_MOMENTS(pos, out m00, out m01, out m10);
+							G.IR.TAT_GX = (int)(m10/m00);
+							G.IR.TAT_GY = (int)(m01/m00);
+							p0.x = G.IR.TAT_GX;
+							p0.y = G.IR.TAT_GY;
+							Form02.draw_marker(p0, 0xFF0000);
 						}
 						//CHK1:輪郭, CHK2:多曲線, CHK3:特徴値, CHK4:毛髪径
 #if true//2019.03.02(直線近似)

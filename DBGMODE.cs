@@ -447,6 +447,11 @@ namespace uSCOPE
 				int hei_i = m_bmp_org.Height;
 				double x_per = (G.PLM_POS[0]- G.SS.PLM_MLIM[0]) / wid_p;
 				double y_per = (G.PLM_POS[1]- G.SS.PLM_MLIM[1]) / hei_p;
+#if true//2019.05.12(縦型対応)
+				if (G.bTATE_MODE) {
+				x_per = 1.0-x_per;
+				}
+#endif
 				//double xum = x * G.SS.PLM_UMPP[0];//ステージのum位置
 				//double yum = y * G.SS.PLM_UMPP[1];
 				//double xpx = G.UM2PX(xum, G.SS.CAM_SPE_UMPPX, LENS_ZOOM/4);

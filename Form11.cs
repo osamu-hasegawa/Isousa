@@ -225,12 +225,22 @@ namespace uSCOPE
 			else if (sender == this.button7 || sender == this.button10 || sender == this.button14 || sender == this.button18) {//<<ch1-ch4
 				int q = Convert.ToInt32(((Button)sender).Tag);
 				int c = m_dx[q] * (-1);
+#if true//2019.05.12(縦型対応)
+				if (q == 0 && G.bTATE_MODE) {
+				c *= (-1);
+				}
+#endif
 				D.SET_STG_REL(q, c);
 				G.PLM_STS |= (1 << q);
 			}
 			else if (sender == this.button6 || sender == this.button11 || sender == this.button15 || sender == this.button19) {//>>ch1-ch4
 				int q = Convert.ToInt32(((Button)sender).Tag);
 				int c = m_dx[q];
+#if true//2019.05.12(縦型対応)
+				if (q == 0 && G.bTATE_MODE) {
+				c *= (-1);
+				}
+#endif
 				D.SET_STG_REL(q, c);
 				G.PLM_STS |= (1 << q);
 			}
@@ -500,9 +510,19 @@ namespace uSCOPE
 			if (false) {
 			}
 			else if (sender == this.button20) {//ch1:←
+#if true//2019.05.12(縦型対応)
+				if (G.bTATE_MODE) {
+				d = 0;//CCW(-)
+				}else
+#endif
 				d = 1;//CW(+):(カメラとの兼ね合いで方向を逆に)
 			}
 			else if (sender == this.button21) {//ch1:→
+#if true//2019.05.12(縦型対応)
+				if (G.bTATE_MODE) {
+				d = 1;//CW(+)
+				}else
+#endif
 				d = 0;//CCW(-):(カメラとの兼ね合いで方向を逆に)
 			}
 			else if (sender == this.button22) {//ch2:↑

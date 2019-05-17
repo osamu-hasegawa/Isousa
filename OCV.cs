@@ -100,6 +100,7 @@ namespace uSCOPE
 		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_SAVE")]			public static extern void	SAVE(Int32 I, string file);
 		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_FIND_EDGE")]		public static extern void	FIND_EDGE(Int32 I, ref RECT pr, Int32 wid_per, Int32 cnt, ref POINT ptop, ref POINT pbtm);
 		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_FIT_LINE")]		public static extern Int32	FIT_LINE(ref POINT pl, Int32 pcnt, Int32 type, double param, double reps, double aeps, out float pf);
+		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_CONTOURS_MOMENTS")]public static extern Int32	CONTOURS_MOMENTS(IntPtr pos, out double pm00, out double pm01, out double pm10);
 #else
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_TERM")]			public static extern void	TERM();
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_RESET_MASK")]		public static extern void	RESET_MASK(Int32 x, Int32 y, Int32 w, Int32 h);
@@ -149,6 +150,7 @@ namespace uSCOPE
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_SAVE")]			public static extern void	SAVE(Int32 I, string file);
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_FIND_EDGE")]		public static extern void	FIND_EDGE(Int32 I, ref RECT pr, Int32 wid_per, Int32 cnt, ref POINT ptop, ref POINT pbtm);
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_FIT_LINE")]		public static extern Int32	FIT_LINE(ref POINT pl, Int32 pcnt, Int32 type, double param, double reps, double aeps, out float pf);
+		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_CONTOURS_MOMENTS")]public static extern Int32	CONTOURS_MOMENTS(IntPtr pos, out double pm00, out double pm01, out double pm10);
 #endif
 		public static int PF2BPP(PixelFormat pf)
 		{

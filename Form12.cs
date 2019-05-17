@@ -1501,6 +1501,13 @@ this.SPE_COD = 0;
 #endif
 					m_disl = G.SS.PLM_AUT_2DSL;
 				}
+#if true//2019.05.12(縦型対応)
+				else if ((int)this.timer1.Tag == 9) {
+					m_diss = G.SS.TAT_AFC_DISS;
+					m_dism = G.SS.TAT_AFC_DISM;
+					m_disl = G.SS.TAT_AFC_DISL;
+				}
+#endif
 				else {
 					//自動測定より(フォーカス位置探索用)
 					m_diss = G.SS.PLM_AUT_HPSS;
@@ -1525,6 +1532,13 @@ this.SPE_COD = 0;
 					m_pmin = tmp - G.SS.PLM_AUT_2HAN;
 					m_pmax = tmp + G.SS.PLM_AUT_2HAN;
 				}
+#if true//2019.05.12(縦型対応)
+				else if ((int)this.timer1.Tag == 9) {
+				    int tmp = G.PLM_POS[2] - G.SS.PLM_OFFS[2];
+				    m_pmin = tmp - G.SS.TAT_AFC_HANI;
+				    m_pmax = tmp + G.SS.TAT_AFC_HANI;
+				}
+#endif
 				else {
 					m_pmin = G.SS.PLM_AUT_HPMN;
 					m_pmax = G.SS.PLM_AUT_HPMX;
@@ -1818,7 +1832,17 @@ this.SPE_COD = 0;
 			//G.mlog("ATODE KAKU NIN");
 			//G.CNT_USSD = G.SS.IMP_AUT_USSD[999];
 #endif
-
+#if true//2019.05.12(縦型対応)
+			if (G.bTATE_MODE) {
+				if (G.SS.TAT_AFC_MODE == 1) {
+				this.FC2_STS = 1;
+				this.timer6.Tag = iTag;
+				this.timer6.Enabled = true;
+				return;
+				}
+			}
+			else
+#endif
 #if true//2019.03.02(直線近似)
 			if (iTag != 3 && G.SS.PLM_AUT_AF_2) {
 				this.FC2_STS = 1;
@@ -5795,6 +5819,13 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				    m_pmin = tmp - G.SS.PLM_AUT_2HAN;
 				    m_pmax = tmp + G.SS.PLM_AUT_2HAN;
 				}
+#if true//2019.05.12(縦型対応)
+				else if ((int)this.timer6.Tag == 9) {
+				    int tmp = G.PLM_POS[2] - G.SS.PLM_OFFS[2];
+				    m_pmin = tmp - G.SS.TAT_AFC_HANI;
+				    m_pmax = tmp + G.SS.TAT_AFC_HANI;
+				}
+#endif
 				else {
 					m_pmin = G.SS.PLM_AUT_HPMN;
 					m_pmax = G.SS.PLM_AUT_HPMX;
@@ -6917,6 +6948,9 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 			DlgProgress
 					prg = new DlgProgress();
 			int bak_of_mode = G.SS.PLM_AUT_MODE;
+			int xcnt = (int)Math.Floor((double)(G.SS.TAT_STG_XMAX-G.SS.TAT_STG_XMIN)/G.SS.TAT_STG_XSTP);
+			int ycnt = (int)Math.Floor((double)(G.SS.TAT_STG_YMAX-G.SS.TAT_STG_YMIN)/G.SS.TAT_STG_YSTP);
+			int sttl = xcnt*ycnt;
 #if true//2018.12.22(測定抜け対応)
 			m_adat = new ADATA();
 			m_rdat = new RDATA();
@@ -6959,7 +6993,7 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 						continue;
 					}
 					if (this.AUT_STS >= 998) {
-						buf += "測定終了...\r\r";
+						buf += "探索終了...\r\r";
 						prg.SetStatus(buf);
 						continue;
 					}
@@ -6981,44 +7015,24 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					//}
 					if (false) {
 					}
-					else if (this.AUT_STS >= 5 && this.AUT_STS <= 6) {
-						buf += "AF位置探索\r\r";
+					else if (G.SS.TAT_ETC_MODE == 0) {
+						buf += "枝追跡モード\r\r";
 					}
-					else if (m_adat.trace == false) {
-						buf += string.Format("毛髪 {0}本目\r\r", m_adat.h_idx + 1);
-					}
-					else {
-						buf += string.Format("毛髪 {0}/{1}本目\r\r", m_adat.h_idx + 1, m_adat.h_cnt);
+					else  {
+						buf += "毛包直接モード\r\r";
 					}
 					if (false/*bWAIT*/) {
 						buf += "待機中";
 					}
-					else if (this.FCS_STS != 0) {
-#if true//2018.11.13(毛髪中心AF)
-						if (this.AUT_STS > 600) {
-#if true//2019.03.18(AF順序)
-							if (G.SS.IMP_AUT_EXAF)
-								buf += "フォーカス(表面)";
-							else
-#endif
-						buf += "フォーカス(中心)";
-						}
-						else if (this.AUT_STS < 10) {
-						buf += "フォーカス";
+					else if (this.FCS_STS != 0 || this.FC2_STS != 0) {
+						if (this.AUT_STS == 116) {
+							buf += "フォーカス(枝)";
 						}
 						else {
-#if true//2019.03.18(AF順序)
-							if (G.SS.IMP_AUT_EXAF)
-								buf += "フォーカス(中心)";
-							else
-#endif
-						buf += "フォーカス(表面)";
+							buf += "フォーカス(毛包)";
 						}
-#else
-						buf += "フォーカス";
-#endif
 					}
-					else if (this.AUT_STS < 20) {
+					else if (false/*this.AUT_STS < 20*/) {
 						buf += "探索中";
 					}
 #if true//2019.01.23(GAIN調整&自動測定)
@@ -7026,11 +7040,11 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 						buf += "GAIN調整中";
 					}
 #endif
-					else if (m_adat.trace == false) {
-						buf += (m_adat.f_idx <= 50) ? "左側" : "右側";
+					else if (this.AUT_STS == 500 || this.AUT_STS == -500) {
+						buf += "原点復帰(Z)";
 					}
 					else {
-						buf += string.Format("{0}/{1}", 1+m_adat.f_idx, m_adat.f_cnt[m_adat.h_idx]);
+						buf += string.Format("探索中 {0}/{1}", 1+m_adat.f_idx, sttl);
 					}
 					prg.SetStatus(buf);
 				}
@@ -7128,6 +7142,37 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					m_adat.gai_tune_ir_done = false;
 					//
 				}
+				if (true/*G.SS.CAM_FCS_CHK2*/) {
+					DateTime dt = DateTime.Now;
+					m_adat.log = T.GetDocFolder();
+					m_adat.log += "\\ログ(毛包探索)\\";
+					if (System.IO.Directory.Exists(m_adat.log) == false) {
+						System.IO.Directory.CreateDirectory(m_adat.log);
+					}
+					m_adat.log += string.Format("{0:0000}{1:00}{2:00}-{3:00}{4:00}{5:00}",
+							dt.Year, dt.Month, dt.Day,
+							dt.Hour, dt.Minute, dt.Second);
+					m_adat.log += ".csv";
+					m_adat.h_cnt = 0;
+					m_adat.f_idx = 0;
+					a_write("開始");
+				}
+				if (true) {
+					G.CNT_MOD  = G.SS.TAT_AFC_AFMD;
+					G.CNT_OFS  = 0;
+					G.CNT_MET  = G.SS.TAT_AFC_CMET;
+					//---
+					G.SS.CAM_FC2_FSPD = G.SS.IMP_FC2_FSPD[0];
+					G.SS.CAM_FC2_DPLS = G.SS.IMP_FC2_DPLS[0];
+					G.SS.CAM_FC2_CNDA = G.SS.IMP_FC2_CNDA[0];
+					G.SS.CAM_FC2_CNDB = G.SS.IMP_FC2_CNDB[0];
+					G.SS.CAM_FC2_SKIP = G.SS.IMP_FC2_SKIP[0];
+					G.SS.CAM_FC2_FAVG = G.SS.IMP_FC2_FAVG[0];
+					G.SS.CAM_FC2_BPLS = G.SS.IMP_FC2_BPLS[0];
+					G.SS.CAM_FC2_DTYP = G.SS.IMP_FC2_DTYP[0];
+					G.SS.CAM_FC2_DROP = G.SS.IMP_FC2_DROP[0];
+					G.SS.CAM_FC2_DCNT = G.SS.IMP_FC2_DCNT[0];
+				}
 				break;
 			case 2:
 				//---
@@ -7173,9 +7218,6 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					//中心ＡＦから実行
 					MOVE_ABS_Z(G.SS.TAT_STG_ZPOS);
 				}
-				if (true) {
-					set_af_mode(1000);
-				}
 				NXT_STS = -this.AUT_STS;
 				break;
 			case 6:
@@ -7197,6 +7239,7 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 						NXT_STS = 998;//開始位置へ移動後に終了
 					}
 					else {
+						m_adat.f_idx++;
 						MOVE_ABS_XY(nxt_x, nxt_y);
 						NXT_STS = -this.AUT_STS;
 					}
@@ -7209,38 +7252,57 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				m_bak_y = G.PLM_POS[1];
 				break;
 			case 12:
+			case 212:
 				m_dcur = m_didx;
 				break;
-			case 13:
+			case  13:
+			case 213:
 				if ((m_didx - m_dcur) < G.SS.TAT_STG_SKIP) {
 					NXT_STS = this.AUT_STS;//画面が更新されるまで
 				}
 				break;
-			case 14:
+			case  14:
+			case 214:
 				//測定
-				if (G.IR.CIR_CNT <= 0 && G.IR.TAT_CNT <= 0) {
-					//毛髪判定NG
-//a_write("毛髪判定(中心):NG");
-//					G.mlog("毛髪の検出ができませんでした.\r画像\r\t" + mes.name_of_kp[0] + "\rの測定をスキップします.");
-					NXT_STS = 10;
+				if (G.SS.TAT_ETC_MODE == 1/*毛包直接*/) {
+					if (G.IR.TAT_CNT <= 0) {
+a_write("画像判定:NG");
+						NXT_STS = 10;
+					}
+					else {
+a_write("画像判定:毛包");
+					}
 				}
 				else {
-//a_write("毛髪判定(中心):OK");
-					NXT_STS = NXT_STS;
+					if (G.IR.CIR_CNT <= 0 && G.IR.TAT_CNT <= 0) {
+a_write("画像判定:NG");
+						NXT_STS = 10;
+					}
+					else if (G.IR.CIR_CNT > 0) {
+a_write("画像判定:枝");
+					}
+					else {
+a_write("画像判定:毛包");
+					}
 				}
 				break;
-			case 15:
-			case 141:
+			case  15:
+			case 215:
 				//毛髪エリアの水平/垂直方向センタリング
 				bool flag = true;
-				yy = G.IR.TAT_OY;
-				xx = G.IR.TAT_OX;
+				int	TOL;
+				if (G.IR.CIR_CNT > 0) {
+					yy = G.IR.TAT_OY; xx = G.IR.TAT_OX; TOL = 5;
+				}
+				else {
+					yy = G.IR.TAT_GY; xx = G.IR.TAT_GX; TOL = 10;
+				}
 				y0 = G.CAM_HEI/2;
 				x0 = G.CAM_WID/2;
 				if (m_adat.chk1 != 0) {
 					//OK(左/右移動後毛髪判定にNGのため最後の画像)
 				}
-				else if (Math.Abs(yy-y0) < (G.CAM_HEI/5) && Math.Abs(xx-x0) < (G.CAM_WID/5)) {
+				else if (Math.Abs(yy-y0) < (G.CAM_HEI/TOL) && Math.Abs(xx-x0) < (G.CAM_WID/TOL)) {
 					//OK
 				}
 				else if ((yy - y0) > 0 && (G.PLM_STS_BIT[1] & (int)G.PLM_STS_BITS.BIT_LMT_P) != 0) {
@@ -7271,74 +7333,74 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 						dif_x = 0;
 					}
 					if (dif_x != 0 || dif_y != 0) {
-//						a_write("センタリング");
-						MOVE_PIX_XY(-dif_x, dif_y);		//Xは符号が反対
+						if (G.IR.CIR_CNT > 0) {
+a_write(string.Format("センタリング(枝/X+={0}/Y+={1})", dif_x, dif_y));
+						}
+						else {
+a_write(string.Format("センタリング(毛包/X+={0}/Y+={1})", dif_x, dif_y));
+						}
+						MOVE_PIX_XY(dif_x, dif_y);
 						NXT_STS = -(this.AUT_STS - 3 - 1);		// -> 12
 					}
 				}
 				else {
 					flag = flag;
 				}
-#if true//2019.03.18(AF順序)
-				set_af_mode(1000);
-#endif
 				m_cen_x = G.PLM_POS[0];
 				m_cen_y = G.PLM_POS[1];
 				break;
 			case  16:
-//@@			set_af_mode(this.AUT_STS);
-				if (true/*!G.SS.IMP_AUT_EXAF*/) {
-					//表面ＡＦから実行
-					NXT_STS = 116;
-//a_write("AF:開始(表面)");
+			case 216:
+				if (G.IR.CIR_CNT <= 0 && G.IR.TAT_CNT <= 0) {
+a_write("枝/毛包判定:NG");
+					NXT_STS = 10;
+				}
+				else if (G.IR.CIR_CNT > 0) {
+					NXT_STS = 17;
+a_write("AF:開始(枝)");
 				}
 				else {
-					//中心ＡＦから実行
-					NXT_STS = 616;
-//a_write("AF:開始(中心)");
+					NXT_STS = 217;
+					if (m_adat.h_cnt == 0) {
+a_write("毛包発見");
+						m_adat.h_cnt++;
+					}
+a_write("AF:開始(毛包)");
 				}
 				for (int i = 0; i < 2; i++) {
 					Console.Beep(1600, 250);
 					Thread.Sleep(250);
 				}
-				start_af(1/*1:1st*/);
+				start_af(9/*縦型用*/);
 				break;
-			case 116://表面
-			case 616://中心
+			case  17://枝
+			case 217://毛包
 				//AF処理(終了待ち)
 				if (this.FCS_STS != 0 || this.FC2_STS != 0) {
 					NXT_STS = this.AUT_STS;
-					m_adat.chk2 = 1;
-				}
-				else if (m_adat.chk2 == 1) {
-					NXT_STS = this.AUT_STS;
-					m_adat.chk2 = 0;
-					m_dcur = m_didx;
-#if true//2018.11.13(毛髪中心AF)
-					if (this.AUT_STS > 600) {
-//a_write("AF:終了(中心)");
-					} else {
-//a_write("AF:終了(表面)");
-					}
-#endif
-					G.CAM_PRC = G.CAM_STS.STS_AUTO;
-				}
-				else if ((m_didx - m_dcur) < (G.SS.TAT_STG_SKIP+3)) {
-					NXT_STS = this.AUT_STS;
 				}
 				else {
+a_write(string.Format("AF:終了({0})", this.AUT_STS == 17 ? "枝": "毛包"));
 					G.CAM_PRC = G.CAM_STS.STS_AUTO;
+					m_dcur = m_didx;
 				}
 				break;
-			case 117://表面
+			case 18:
+				if ((m_didx - m_dcur) < (G.SS.TAT_STG_SKIP+3)) {
+					NXT_STS = this.AUT_STS;
+				}
+				break;
+			case 19://表面
 				//初回AF後
-				if (G.IR.CIR_CNT <= 0) {
+				if (G.IR.CIR_CNT <= 0 && G.IR.TAT_CNT <= 0) {
+a_write("AF後の枝/毛包の再検出に失敗");
 					MOVE_ABS_XY(m_bak_x, m_bak_y);
 					NXT_STS = -(10 - 1);//->10
 				}
 				if (true) {
 					m_adat.z_cur = G.PLM_POS[2];
 				}
+				NXT_STS = 118;
 				/*
 				if (G.SS.PLM_AUT_V_PK && m_adat.gai_tune_cl_done == false) {
 					m_rdat.g_nxt = NXT_STS;
@@ -7357,21 +7419,23 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				break;
 			case 119://表面
 				if (G.IR.TAT_CNT > 0) {
-					//毛包発見!
+a_write("毛包発見");
 					G.IR.TAT_CNT = G.IR.TAT_CNT;
-					NXT_STS = 140;
+					NXT_STS = 210;
 				}
 				else if (G.IR.CIR_CNT <= 0) {
-					//枝終了
+a_write("枝:終了");
 					NXT_STS = 130;
 				}
-				else if (check_eob(G.IR.TAT_P1, G.IR.TAT_P2, G.IR.TAT_P3, G.IR.TAT_P4)) {
-					//枝終了
+				/*else if (check_eob(G.IR.TAT_P1, G.IR.TAT_P2, G.IR.TAT_P3, G.IR.TAT_P4)) {
+a_write("枝:終了");
 					NXT_STS = 130;
-				}
+				}*/
 				else {
 					//次の位置へ
 					int	nxt_x, nxt_y, tmp = (int)((/*G.CAM_WID+*/G.CAM_HEI)*0.8);
+					bool ret = check_eob(G.IR.TAT_P1, G.IR.TAT_P2, G.IR.TAT_P3, G.IR.TAT_P4);
+
 					if (double.IsNaN(m_deg)) {
 						m_deg = next_deg(m_deg, G.IR.TAT_DX, G.IR.TAT_DY);
 						m_bak_d = m_deg;
@@ -7379,42 +7443,42 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					else {
 						m_deg = next_deg(m_deg, G.IR.TAT_DX, G.IR.TAT_DY);
 					}
-					nxt_x =-(int)(tmp * Math.Cos(m_deg/180*Math.PI));
+					nxt_x =+(int)(tmp * Math.Cos(m_deg/180*Math.PI));
 					nxt_y =-(int)(tmp * Math.Sin(m_deg/180*Math.PI));
-					if (true) {
+					if (!ret) {
 						yy = G.IR.TAT_OY;
 						xx = G.IR.TAT_OX;
 						y0 = G.CAM_HEI/2;
 						x0 = G.CAM_WID/2;
 
 						nxt_y += (yy-y0);
-						nxt_x += (x0-xx);
+						nxt_x += (xx-x0);
 					}
+a_write(string.Format("枝:探索({0})", m_adat.chk3 == 0 ? "逆方向": "順方向"));
 					MOVE_PIX_XY(nxt_x, nxt_y);
+					NXT_STS = -this.AUT_STS;
 				}
 				//画像保存
 				Console.Beep(800, 250);
 				break;
-			case 120://表面
-				break;
-			case 121://表面:赤外測定後
-				break;
-			case 122://表面
+			case 120:
 				m_dcur = m_didx;
 				break;
-			case 123://表面
+			case 121:
 				if ((m_didx - m_dcur) < G.SS.TAT_STG_SKIP) {
 					NXT_STS = this.AUT_STS;//画面が更新されるまで
 				}
-				break;
-			case 124://表面
-				NXT_STS = 119;
+				else {
+					NXT_STS = 119;
+				}
 				break;
 			case 130://発見地点に戻って、逆方向へ
 				if (m_adat.chk3 == 1) {
+a_write("枝:毛包発見できず");
 					NXT_STS = 999;
 				}
 				else {
+a_write("枝:検出位置へ");
 					m_adat.chk3 = 1;
 					MOVE_ABS_XY(m_cen_x, m_cen_y);
 					NXT_STS = -this.AUT_STS;
@@ -7430,10 +7494,12 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				break;
 			case 133:
 				if (G.IR.CIR_CNT <= 0) {
+a_write("枝:検出位置で枝の再検出に失敗");
 					MOVE_ABS_XY(m_bak_x, m_bak_y);
 					NXT_STS = -(10 - 1);//->10
 				}
 				else {
+a_write("枝:方向逆転");
 					m_deg = m_bak_d+180;
 					if (m_deg >= 270) {
 						m_deg -= 360;
@@ -7441,9 +7507,16 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					NXT_STS = 119;
 				}
 				break;
-			case 140://毛包発見
+			case 210://毛包発見
+				a_write("毛包発見");
+				m_adat.h_cnt++;
+				NXT_STS = 215;
 				break;
-			case 142:
+			case 218://AF終了後にここへ
+				break;
+			case 219:
+				break;
+			case 220:
 				//光源切り替え(->赤外)
 				G.FORM10.LED_SET(0, false);//透過
 				G.FORM10.LED_SET(1, false);//反射
@@ -7457,7 +7530,7 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				G.FORM10.LED_SET(0, true );//透過
 				m_adat.pref = "CT";//白色(透過)
 				m_adat.chk1 = Environment.TickCount;
-//a_write("光源切替:->透過");
+a_write("光源切替:->透過");
 				G.CAM_PRC = G.CAM_STS.STS_AUTO;
 				break;
 			case 420://赤外同時測定
@@ -7467,7 +7540,7 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				G.FORM10.LED_SET(1, true );//反射
 				m_adat.pref = "CR";//白色(反射)
 				m_adat.chk1 = Environment.TickCount;
-//a_write("光源切替:->反射");
+a_write("光源切替:->反射");
 				G.CAM_PRC = G.CAM_STS.STS_AUTO;
 				break;
 			case 440://赤外同時測定
@@ -7477,7 +7550,7 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				G.FORM10.LED_SET(2, true );//赤外
 				m_adat.pref = "IR";//赤外
 				m_adat.chk1 = Environment.TickCount;
-//a_write("光源切替:->赤外");
+a_write("光源切替:->赤外");
 				G.CAM_PRC = G.CAM_STS.STS_ATIR;
 				break;
 			case 71:
@@ -7544,22 +7617,24 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 
 				if (true/*mes.crt == "CT"*/) {
 					G.FORM10.LED_SET(0, true);//透過
-//a_write("光源切替:->透過");
+a_write("光源切替:->透過");
 				}
 				else {
 					G.FORM10.LED_SET(1, true);//反射
-//a_write("光源切替:->反射");
+a_write("光源切替:->反射");
 				}
 				m_adat.chk1 = Environment.TickCount;
 				break;
 
 #if true//2018.08.16(Z軸再原点)
 			case 500:
+a_write("原点復帰:開始(Z軸)");
 				D.SET_STG_ORG(2);
 				G.PLM_STS |= (1 << 2);
 				NXT_STS = -this.AUT_STS;
 			break;
 			case 501:
+a_write("原点復帰:終了(Z軸)");
 //				MOVE_ABS_Z(m_adat.sta_pos_z);
 				NXT_STS = m_rdat.g_nxt;
 			break;
@@ -7608,7 +7683,7 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				break;
 			case 999:
 //■■■■■■■set_expo_mode(/*auto*/1);
-//a_write(string.Format("再測定:終了"));
+a_write(string.Format("毛包探索:終了"));
 				G.CAM_PRC = G.CAM_STS.STS_NONE;
 				this.AUT_STS = 0;
 				timer8.Enabled = false;
@@ -7618,7 +7693,12 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 					Thread.Sleep(250);
 				}
 			//	G.mlog(string.Format("#i再測定が終了しました.\r毛髪:{0}本", m_adat.h_cnt));
+				if (m_adat.h_cnt > 0) {
 				G.mlog(string.Format("#i毛包探索が終了しました."));
+				}
+				else {
+				G.mlog(string.Format("#i毛包を検出できませんでした."));
+				}
 				break;
 			default:
 				if (!(this.AUT_STS < 0)) {
