@@ -19,21 +19,35 @@ namespace uSCOPE
 {
 	public partial class Form04 : Form
 	{
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+		private const int C_CLM_ZP_DROP = 2;
+		private const int C_CLM_CT_CONT = 3;
+		private const int C_CLM_CT_RATE = 4;
+
+		private const int C_CLM_KP_CONT = 3+2;
+		private const int C_CLM_KP_DROP = 4+2;
+		private const int C_CLM_HR_RATE= 7+2;
+		private const int C_CLM_RM_SHOT = 8+2;
+		private const int C_CLM_RM_MAKE = 9+2;
+		private const int C_CLM_RM_CUNT = 10+2;
+		private const int C_CLM_CHOKKIN = 11+2;
+		DIGITI	m_digi = new DIGITI();
+#endif
 		private int m_i = 0;
 		private int m_isel = 0;
-		private string MOZ_CND_FOLD;
+//%%		private string MOZ_CND_FOLD;
 #if true//2019.05.08(再測定・深度合成)
-		private string m_fold_of_dept;
+//%%		private string m_fold_of_dept;
 #endif
 		//---
-		private List<hair> m_hair = new List<hair>();
+//%%	private List<hair> m_hair = new List<hair>();
 		//---
-		private Bitmap	m_bmp_dm1;
-		private Bitmap	m_bmp_ir1;
-		private Bitmap	m_bmp_pd1;
-		private Point[] m_dia_top;
-		private Point[]	m_dia_btm;
-		private int		m_dia_cnt;
+//%%		private Bitmap	m_bmp_dm1;
+//%%		private Bitmap	m_bmp_ir1;
+//%%		private Bitmap	m_bmp_pd1;
+//%%		private Point[] m_dia_top;
+//%%		private Point[]	m_dia_btm;
+//%%		private int		m_dia_cnt;
 		private int		m_chk1, m_chk2;
 		//---
 		//private ArrayList m_zpos_org = new ArrayList();
@@ -57,6 +71,7 @@ namespace uSCOPE
 		{
 			InitializeComponent();
 		}
+#if false//2019.05.22(再測定判定(キューティクル枚数))
 		//
 		public class seg_of_hair {
 			public string path_of_dm;
@@ -152,8 +167,9 @@ namespace uSCOPE
 
 			return(um);
 		}
+
 		//---
-		private void test_pr1(seg_of_hair seg)
+		private void test_pr1(DIGITI.seg_of_hair seg)
 		{
 			List<Point> at = new List<Point>();
 			List<Point> ab = new List<Point>();
@@ -221,7 +237,7 @@ namespace uSCOPE
 			}
 			//---
 		}
-		private void test_pr0(seg_of_hair seg, bool b1st)
+		private void test_pr0(DIGITI.seg_of_hair seg, bool b1st)
 		{
 			string key = seg.name_of_dm;
 			Point	pnt_of_pls;
@@ -263,9 +279,11 @@ namespace uSCOPE
 				seg.pix_pos.Y = (float)y;
 			}
 		}
+#endif
 		ArrayList m_ah_cl = new ArrayList();
 		ArrayList m_ah_ir = new ArrayList();
 		ArrayList m_rst = new ArrayList();
+#if false//2019.05.22(再測定判定(キューティクル枚数))
 #if true//2019.04.09(再測定実装)
 		struct PLS_XYZ {
 			public int X, Y, Z;
@@ -351,6 +369,8 @@ namespace uSCOPE
 			}
 			//this.label6.Text = string.Format("x {0:F1}", m_log_info.zoom);
 		}
+#endif
+#if false//2019.05.22(再測定判定(キューティクル枚数))
 		//---
 		private string to_ir_file(string path)
 		{
@@ -400,7 +420,7 @@ namespace uSCOPE
 			string file;
 
 			fold = System.IO.Path.GetDirectoryName(path);
-			fold = this.MOZ_CND_FOLD;
+			fold = m_digi.MOZ_CND_FOLD;
 			name = System.IO.Path.GetFileName(path);
 
 			if (string.IsNullOrEmpty(name)) {
@@ -408,7 +428,7 @@ namespace uSCOPE
 			}
 			if (zpos == "深度合成" || zpos == "ZDEPT") {
 				zpos = "ZDEPT";
-				pext = m_fold_of_dept;
+				pext = m_digi.m_fold_of_dept;
 				pext = pext.Replace("\\", "");
 			}
 			// '_ZP99D', '_ZM99D', '_ZDEPT'
@@ -427,42 +447,6 @@ namespace uSCOPE
 			//
 			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
 			//file = fold + pext + buf;//fold + "\\" + buf
-			//
-			if (!System.IO.File.Exists(file)) {
-				return (null);
-			}
-			return (file);
-		}
-#else
-		private string to_xx_path(string path, string zpos)
-		{
-			string fold, name, buf, pext = "";
-			string file;
-
-			fold = System.IO.Path.GetDirectoryName(path);
-			fold = this.MOZ_CND_FOLD;
-			name = System.IO.Path.GetFileName(path);
-
-			if (string.IsNullOrEmpty(name)) {
-				return (null);
-			}
-			if (zpos == "深度合成" || zpos == "ZDEPT") {
-				throw new Exception("Internal Error");
-			}
-			// '_ZP99D', '_ZM99D', '_ZDEPT'
-			if (name.Contains("_ZDEPT")) {
-				throw new Exception("Internal Error");
-			}
-#if true//2018.11.13(毛髪中心AF)
-			else if (name.Contains("_K")) {
-				buf = Regex.Replace(name, "_K.[0-9][0-9].", "_" + zpos);
-			}
-#endif
-			else {
-				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
-			}
-			//
-			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
 			//
 			if (!System.IO.File.Exists(file)) {
 				return (null);
@@ -552,6 +536,8 @@ namespace uSCOPE
 		}
 #endif
 #endif
+#endif
+#if false//2019.05.22(再測定判定(キューティクル枚数))
 		private void dispose_bmp(ref Bitmap bmp)
 		{
 			if (bmp != null) {
@@ -592,9 +578,11 @@ namespace uSCOPE
 			}
 			return(name);
 		}
+#endif
 		private void enable_forms(bool b)
 		{
 		}
+#if false//2019.05.22(再測定判定(キューティクル枚数))
 		private int get_hair_cnt(string pext, string zpos)
 		{
 			int cnt = 0;
@@ -616,8 +604,9 @@ namespace uSCOPE
 #endif
 			return(cnt);
 		}
+#endif
 		//---
-		private void calc_contrast(int mode_of_cl, seg_of_hair seg, Bitmap bmp_dm = null, Bitmap bmp_pd = null)
+		private void calc_contrast(int mode_of_cl, DIGITI.seg_of_hair seg, Bitmap bmp_dm = null, Bitmap bmp_pd = null)
 		{
 			string tmp;
 			G.CAM_STS bak = G.CAM_PRC;
@@ -628,7 +617,12 @@ namespace uSCOPE
 					bmp = new Bitmap(seg.path_of_pd);//中心(KP00D)
 				}
 				else {
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+					bmp = (Bitmap)bmp_pd.Clone();
+					bmp.Tag = null;
+#else
 					bmp = bmp_pd;
+#endif
 				}
 				G.CNT_NO_CONTOURS = false;
 				G.CNT_MOD = G.AFMD2N(G.SS.MOZ_BOK_AFMD[mode_of_cl+2]);	//中心:コントスラト計算範囲
@@ -651,27 +645,39 @@ namespace uSCOPE
 				if (G.IR.CIR_CNT > 0 && G.IR.DIA_CNT > 1) {
 					int i = 0, h = G.IR.DIA_CNT-1;
 					seg.mou_len_l = G.diff(G.IR.DIA_TOP[i], G.IR.DIA_BTM[i]);
-					seg.mou_len_l = px2um(seg.mou_len_l);
+					seg.mou_len_l = m_digi.px2um(seg.mou_len_l);
 					//---
 					seg.mou_len_r = G.diff(G.IR.DIA_TOP[h], G.IR.DIA_BTM[h]);
-					seg.mou_len_r = px2um(seg.mou_len_r);
+					seg.mou_len_r = m_digi.px2um(seg.mou_len_r);
 				}
 				else {
 					seg.mou_len_l = double.NaN;
 					seg.mou_len_r = double.NaN;
 				}
-				if (bmp_pd == null) {
+				if (
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+					true
+#else
+					bmp_pd == null
+#endif
+					) {
 					bmp.Dispose();
 				}
 			}
 
 			if (true) {
 				if (bmp_dm == null) {
-					tmp = to_xx_path(seg.path_of_dm, "ZP00D");//表面(ZP00D)
+					tmp = m_digi.to_xx_path(seg.path_of_dm, "ZP00D");//表面(ZP00D)
 					bmp = new Bitmap(tmp);
 				}
 				else {
-					bmp = bmp_dm;
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+					bmp = (Bitmap)bmp_dm.Clone();
+					bmp.Tag = null;
+#else
+					bmp = bmp_dm
+#endif
+						;
 				}
 				//mode_of_cl=0:透過, 1:反射
 				G.CNT_NO_CONTOURS = true;
@@ -689,7 +695,13 @@ namespace uSCOPE
 				seg.zp_contr_avg = double.NaN;
 				seg.msk_of_dm = G.IR.MSK_PLY.Take(G.IR.MSK_PLY_CNT).ToArray();
 				//---
-				if (bmp_dm == null) {
+				if (
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+					true
+#else
+					bmp_dm == null
+#endif
+					) {
 					bmp.Dispose();
 					bmp = null;
 				}
@@ -699,16 +711,20 @@ namespace uSCOPE
 			G.CAM_PRC = bak;
 		}
 		//---
-		private void calc_contrast_avg(seg_of_hair[] segs)
+		private void calc_contrast_avg(DIGITI.seg_of_hair[] segs)
 		{
 			double kp_avg = 0, zp_avg = 0;
+			double ct_avg = 0;
 
 			for (int i = 0; i < segs.Length; i++) {
+				segs[i].cut_count = segs[i].pts_cen_cut.Count;
 				kp_avg += segs[i].kp_contr;
 				zp_avg += segs[i].zp_contr;
+				ct_avg += segs[i].cut_count;
 			}
 			kp_avg /= segs.Length;
 			zp_avg /= segs.Length;
+			ct_avg /= segs.Length;
 			for (int i = 0; i < segs.Length; i++) {
 				segs[i].kp_contr_drop = -(segs[i].kp_contr - kp_avg) / kp_avg * 100;
 				segs[i].kp_contr_avg = kp_avg;
@@ -717,6 +733,9 @@ namespace uSCOPE
 				segs[i].zp_contr_drop = -(segs[i].zp_contr - zp_avg) / zp_avg * 100;
 				segs[i].zp_contr_avg = zp_avg;
 				segs[i].zp_nodata = (segs[i].zp_contr_drop >= G.SS.MOZ_BOK_CTHD);
+				//---
+				segs[i].cut_avg = ct_avg;
+				segs[i].cut_drop = -(segs[i].cut_count - ct_avg) / ct_avg * 100;
 				//---
 				double	l_max = segs[i].mou_len_l,
 						l_min = segs[i].mou_len_r;
@@ -730,7 +749,7 @@ namespace uSCOPE
 			//---
 		}
 		//private m_idx;
-		private void add_grid_row(seg_of_hair seg, int h_idx, int s_idx)
+		private void add_grid_row(DIGITI.seg_of_hair seg, int h_idx, int s_idx)
 		{
 			int idx;
 			List<object> objs = new List<object>();
@@ -743,11 +762,31 @@ namespace uSCOPE
 			}
 			objs.Add(seg.zp_contr);
 			objs.Add(seg.zp_contr_drop);
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			objs.Add(seg.cut_count);
+			objs.Add(seg.cut_drop);
+#endif
 			objs.Add(seg.kp_contr);
 			objs.Add(seg.kp_contr_drop);
 			objs.Add(seg.mou_len_l);
 			objs.Add(seg.mou_len_r);
 			objs.Add(seg.mou_len_c);
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			bool flag=false;
+			if (seg.cut_count < G.SS.REM_CUT_CTHD) {
+				flag |= true;
+			}
+			if (seg.cut_drop >= G.SS.REM_CUT_RTHD) {
+				flag |= true;
+			}
+			if (G.UIF_LEVL != 0) {
+				flag |= ((seg.zp_contr_drop >= G.SS.REM_BOK_STHD || seg.kp_contr_drop >= G.SS.REM_BOK_CTHD) ? true: false);
+			}
+			else {
+				flag |= ((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
+			}
+			objs.Add(flag);
+#else
 #if true//2019.05.08(再測定・深度合成)
 			if (G.UIF_LEVL != 0) {
 			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD || seg.kp_contr_drop >= G.SS.REM_BOK_CTHD) ? true: false);
@@ -755,18 +794,12 @@ namespace uSCOPE
 			else {
 			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
 			}
-#else
-#if true//2019.04.09(再測定実装)
-			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
-#else
-			objs.Add(false);
 #endif
 #endif
+
 #if true//2019.04.02(再測定表ユーザモード)
 #if true//2019.05.08(再測定・深度合成)
 			objs.Add((seg.mou_len_c >= G.SS.REM_CHG_DTHD) ? true: false);//再作成
-#else
-			objs.Add(false);//再作成
 #endif
 			objs.Add(seg.bak_cnt);
 			objs.Add(seg.bTMR);
@@ -781,7 +814,7 @@ namespace uSCOPE
 
 		private void search_bak_dir()
 		{
-			this.BAK_FOLDS.AddRange(System.IO.Directory.GetDirectories(this.MOZ_CND_FOLD, "BAK_????????_??????"));
+			this.BAK_FOLDS.AddRange(System.IO.Directory.GetDirectories(m_digi.MOZ_CND_FOLD, "BAK_????????_??????"));
 			this.BAK_FOLDS.Sort();
 			//順序を逆にして[0]が直近のバックアップ, [N-1]が最古のバックアップにする
 			this.BAK_FOLDS.Reverse();
@@ -860,6 +893,85 @@ namespace uSCOPE
 			return(folds.ToArray());
 		}
 #endif
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+		//---
+		private void call_back00(){}
+		private void call_back01(){}
+		private void call_back02(Bitmap bmp1, Bitmap bmp2, Bitmap bmp3)
+		{
+			DIGITI.dispose_img(this.pictureBox1);
+			DIGITI.dispose_img(this.pictureBox2);
+			DIGITI.dispose_img(this.pictureBox3);
+			this.pictureBox2.Image = (Bitmap)bmp3.Clone();
+			this.pictureBox1.Image = (Bitmap)bmp1.Clone();
+			if (bmp2 != null) {
+			this.pictureBox3.Image = (Bitmap)bmp2.Clone();
+			}
+			this.pictureBox1.Update();
+			this.pictureBox2.Update();
+			this.pictureBox3.Update();
+		}
+		private void call_back03(string name_dm1, string name_ir1, int i){}
+		private void call_back04(){}
+		private void call_back05(){}
+		private void call_back06(){}
+		private void call_back07(object obj){}
+
+		private void call_back10(object obj, string name_dm1)
+		{
+			DIGITI.seg_of_hair seg = (DIGITI.seg_of_hair)obj;
+			seg.bak_folds = get_remes_folds(name_dm1, out seg.bak_cnt);
+			seg.bTMR = is_tmr(name_dm1);
+		}
+		private void call_back11(int mode_of_cl, object obj, Bitmap m_bmp_dm1, Bitmap m_bmp_pd1)
+		{
+			DIGITI.seg_of_hair seg = (DIGITI.seg_of_hair)obj;
+			calc_contrast(mode_of_cl, seg, m_bmp_dm1, m_bmp_pd1);
+		}
+		private void call_back12(object obj)
+		{
+			DIGITI.seg_of_hair[] segs = (DIGITI.seg_of_hair[])obj;
+			calc_contrast_avg(segs);
+			for (int i = 0; i < segs.Length; i++) {
+				add_grid_row(segs[i], m_digi.m_hair.Count, i);
+			}
+		}
+		private void load()
+		{
+			var dlg = new DlgProgress();
+			try {
+				int cnt_of_hair = 0;
+				dlg.Show("再撮影", G.FORM01);
+				G.bCANCEL = false;
+
+				enable_forms(false);
+				m_digi.load(
+						dlg.SetStatus,
+						call_back01, call_back02, call_back03,
+						call_back04, call_back05, call_back06,
+						call_back07,
+						call_back10, call_back11, call_back12
+				);
+				//---
+			}
+			catch (Exception ex) {
+				G.mlog(ex.ToString());
+			}
+
+			if (dlg != null) {
+				dlg.Hide();
+			    dlg.Dispose();
+			    dlg = null;
+			}
+			this.dataGridView1.Enabled = true;
+			if (this.dataGridView1.Rows.Count > 0) {
+				this.dataGridView1.Rows[0].Selected = false;
+				this.dataGridView1.Rows[0].Selected = true;
+			}
+			button4_Click_1(null, null);
+		}
+#endif
+#if false//atode kesukoto
 		//---
 		private void load()
 		{
@@ -1108,6 +1220,7 @@ namespace uSCOPE
 			}
 			button4_Click_1(null, null);
 		}
+#endif
 		private void init()
 		{
 			if (true) {
@@ -1139,7 +1252,7 @@ namespace uSCOPE
 //@@@			this.tabControl1.SelectedIndex = 2;//キューティクル間隔
 #endif
 			//---
-			this.MOZ_CND_FOLD = (G.SS.NGJ_CND_FMOD == 0) ? G.SS.AUT_BEF_PATH: G.SS.NGJ_CND_FOLD;
+//%%			this.MOZ_CND_FOLD = (G.SS.NGJ_CND_FMOD == 0) ? G.SS.AUT_BEF_PATH: G.SS.NGJ_CND_FOLD;
 			//---
 			//---
 			//this.checkBox10.Checked = (G.SS.MOZ_CND_USIR == 1);
@@ -1151,25 +1264,36 @@ namespace uSCOPE
 //			this.dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.Gray;
 			this.dataGridView1.RowsDefaultCellStyle.BackColor = Color.White;//Color.LightGray;
 			this.dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240,244,249);//Color.DarkGray;
+
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			for (int i = 0; i < G.AS.TBL_F04_CLM.Length; i++) {
+				this.dataGridView1.Columns[i].Width = G.AS.TBL_F04_CLM[i];
+			}
+#else
 #if true//2019.05.08(再測定・深度合成)
 			for (int i = 0; i < G.AS.TBL_F04_WID.Length; i++) {
 				this.dataGridView1.Columns[i].Width = G.AS.TBL_F04_WID[i];
 			}
 #endif
+#endif
 			//
-			this.Text = this.Text + "[" + this.MOZ_CND_FOLD + "]";
+			this.Text = this.Text + "[" + m_digi.MOZ_CND_FOLD + "]";
 #if true//2019.04.02(再測定表ユーザモード)
 			if (G.UIF_LEVL == 0) {
-				this.dataGridView1.Columns[3].Visible = false;
-				this.dataGridView1.Columns[4].Visible = false;
-				this.dataGridView1.Columns[10].Visible = false;//再測定回数
+				this.dataGridView1.Columns[C_CLM_KP_CONT].Visible = false;
+				this.dataGridView1.Columns[C_CLM_KP_DROP].Visible = false;
+				this.dataGridView1.Columns[C_CLM_RM_CUNT].Visible = false;//再測定回数
 				//---
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+				this.panel2.Visible = false;
+#else
 				this.label1.Visible = false;//中心
 				this.numericUpDown2.Visible = false;//中心
 				this.label2.Visible = false;//中心
+#endif
 			}
 			if (true) {
-				this.dataGridView1.Columns[11].Visible = false;//直近？
+				this.dataGridView1.Columns[C_CLM_CHOKKIN].Visible = false;//直近？
 			}
 			this.comboBox1.SelectedIndex = 0;
 			search_bak_dir();
@@ -1185,6 +1309,9 @@ namespace uSCOPE
 				if (G.UIF_LEVL == 0) {
 				}
 			}
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			m_digi.INIT(/*bREMES=*/true);
+#endif
 			init();
 			DDX(true);
 			if (true) {
@@ -1206,6 +1333,9 @@ namespace uSCOPE
 		}
 		private void Form04_FormClosing(object sender, FormClosingEventArgs e)
 		{
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			m_digi.TERM();
+#else
 			if (m_hair != null) {
 				m_hair.Clear();
 				m_hair = null;
@@ -1222,6 +1352,7 @@ namespace uSCOPE
 			dispose_img(this.pictureBox1);
 			dispose_img(this.pictureBox2);
 			dispose_img(this.pictureBox3);
+#endif
 			//Image tmp1 = this.pictureBox1.Image;
 			//Image tmp2 = this.pictureBox2.Image;
 			//this.pictureBox1.Image = null;
@@ -1249,10 +1380,16 @@ namespace uSCOPE
 			G.AS.APP_F04_HEI = this.Height;
 			}
 #endif
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			for (int i = 0; i < G.AS.TBL_F04_CLM.Length; i++) {
+				G.AS.TBL_F04_CLM[i] = this.dataGridView1.Columns[i].Width;
+			}
+#else
 #if true//2019.05.08(再測定・深度合成)
 			for (int i = 0; i < G.AS.TBL_F04_WID.Length; i++) {
 				G.AS.TBL_F04_WID[i] = this.dataGridView1.Columns[i].Width;
 			}
+#endif
 #endif
 			//---
 			G.FORM04 = null;
@@ -1267,6 +1404,10 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.numericUpDown2 , ref G.SS.REM_BOK_CTHD);
 #if true//2019.05.08(再測定・深度合成)
 				DDV.DDX(bUpdate, this.numericUpDown3 , ref G.SS.REM_CHG_DTHD);
+#endif
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+				DDV.DDX(bUpdate, this.numericUpDown4 , ref G.SS.REM_CUT_CTHD);
+				DDV.DDX(bUpdate, this.numericUpDown5 , ref G.SS.REM_CUT_RTHD);
 #endif
                 rc = true;
             }
@@ -1303,7 +1444,7 @@ namespace uSCOPE
 			gr.Dispose();
 		}
 #endif
-		private void draw_image(hair hr)
+		private void draw_image(DIGITI.hair hr)
 		{
 			string buf_dm, buf_ir, buf_pd;
 			Image bmp_dm = null, bmp_ir = null, bmp_pd = null;
@@ -1311,14 +1452,14 @@ namespace uSCOPE
 			float pw = 5;
 			//---
 			int idx = m_isel;
-			seg_of_hair seg = (seg_of_hair)hr.seg[idx];
+			DIGITI.seg_of_hair seg = hr.seg[idx];
 
 			if (false /*this.radioButton3.Checked*/) {
 			}
 			//---
-			dispose_img(this.pictureBox1);
-			dispose_img(this.pictureBox2);
-			dispose_img(this.pictureBox3);
+			DIGITI.dispose_img(this.pictureBox1);
+			DIGITI.dispose_img(this.pictureBox2);
+			DIGITI.dispose_img(this.pictureBox3);
 			if (true) {
 			GC.Collect();
 			}
@@ -1333,9 +1474,9 @@ namespace uSCOPE
 					buf_pd = /*to_xx_path(*/seg.path_of_pd;//, null/*ZVAL2ORG(this.comboBox8.Text)*/);
 					buf_ir = /*to_xx_path(*/seg.path_of_ir;//, null/*ZVAL2ORG(this.comboBox12.Text)*/);
 #if true//2019.05.08(再測定・深度合成)
-					buf_dm =   to_xx_path(  seg.path_of_dm   , "ZDEPT");
-					buf_pd =   to_xx_path(  seg.path_of_pd   , "KP00D");
-					buf_ir =   to_xx_path(  seg.path_of_ir   , "KP00D");
+					buf_dm =   m_digi.to_xx_path(  seg.path_of_dm   , "ZDEPT");
+					buf_pd =   m_digi.to_xx_path(  seg.path_of_pd   , "KP00D");
+					buf_ir =   m_digi.to_xx_path(  seg.path_of_ir   , "KP00D");
 #endif
 				}
 #if true//2019.04.02(再測定表ユーザモード)
@@ -1350,9 +1491,9 @@ namespace uSCOPE
 					buf_ir = seg.bak_folds[i] + "\\" + seg.name_of_ir;
 				}
 #endif
-				bmp_dm = to_img_from_file(buf_dm);
-				bmp_pd = to_img_from_file(buf_pd);
-				bmp_ir = to_img_from_file(buf_ir);
+				bmp_dm = m_digi.to_img_from_file(buf_dm);
+				bmp_pd = m_digi.to_img_from_file(buf_pd);
+				bmp_ir = m_digi.to_img_from_file(buf_ir);
 			}
 
 
@@ -1411,6 +1552,9 @@ namespace uSCOPE
 				if (this.checkBox21.Checked) {
 					draw_text(bmp_dm, string.Format("CONTRAST={0:F3}, AVG={1:F3}, DROP={2:F1}%", seg.zp_contr, seg.zp_contr_avg, seg.zp_contr_drop), 60, StringAlignment.Near, StringAlignment.Near);
 					draw_text(bmp_pd, string.Format("CONTRAST={0:F3}, AVG={1:F3}, DROP={2:F1}%", seg.kp_contr, seg.kp_contr_avg, seg.kp_contr_drop), 60, StringAlignment.Near, StringAlignment.Near);
+				}
+				if (true) {
+					draw_text(bmp_dm, string.Format("キューティクル枚数={0:F0}, 平均={1:F1}, DROP={2:F1}%", seg.cut_count, seg.cut_avg, seg.cut_drop), 60, StringAlignment.Far, StringAlignment.Near);
 				}
 			}
 
@@ -1481,7 +1625,7 @@ namespace uSCOPE
 #endif
 				m_i = h;
 				m_isel = i;
-				hair hr = (hair)m_hair[m_i];
+				DIGITI.hair hr = m_digi.m_hair[m_i];
 				draw_image(hr);
 			}
 			catch (Exception ex) {
@@ -1495,10 +1639,10 @@ namespace uSCOPE
 				if (!this.dataGridView1.Enabled) {
 					return;
 				}
-				if (m_i >= m_hair.Count) {
+				if (m_i >= m_digi.m_hair.Count) {
 					return;
 				}
-				hair hr = (hair)m_hair[m_i];
+				DIGITI.hair hr = m_digi.m_hair[m_i];
 				if (m_isel >= hr.seg.Count()) {
 					return;
 				}
@@ -1518,53 +1662,59 @@ namespace uSCOPE
 			}
 			for (int i = 0; i < this.dataGridView1.Rows.Count; i++) {
 				double val;
-				bool flag = false;
-				val = (double)this.dataGridView1.Rows[i].Cells[2].Value;
+				bool flag1 = false, flag2 = false;
+				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_ZP_DROP].Value;
 				if (val >= G.SS.REM_BOK_STHD) {
-					flag = true;
+					flag1 = true;
 				}
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+				val = (int)this.dataGridView1.Rows[i].Cells[C_CLM_CT_CONT].Value;
+				if (val < G.SS.REM_CUT_CTHD) {
+					flag1 = true;
+				}
+				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_CT_RATE].Value;
+				if (val >= G.SS.REM_CUT_RTHD) {
+					flag1 = true;
+				}
+#endif
 #if true//2019.04.02(再測定表ユーザモード)
 				if (G.UIF_LEVL != 0) {
 #endif
-				val = (double)this.dataGridView1.Rows[i].Cells[4].Value;
+				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_KP_DROP].Value;
 				if (val >= G.SS.REM_BOK_CTHD) {
-					flag = true;
+					flag1 = true;
 				}
 #if true//2019.04.02(再測定表ユーザモード)
 				}
 #endif
-				if (flag) {
-					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 96, 96);//;Color.Red;
-				}
-				else {
-					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
-				}
+//%%				if (flag1) {
+//%%					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 96, 96);//;Color.Red;
+//%%				}
+//%%				else {
+//%%					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
+//%%				}
 #if true//2019.04.09(再測定実装)
-				this.dataGridView1.Rows[i].Cells[8].Value = flag;
+				this.dataGridView1.Rows[i].Cells[C_CLM_RM_SHOT].Value = flag1;
 #endif
 #if true//2019.05.08(再測定・深度合成)
-				val = (double)this.dataGridView1.Rows[i].Cells[7].Value;
+				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_HR_RATE].Value;
 				if (val >= G.SS.REM_CHG_DTHD) {
-					flag = true;
+					flag2 = true;
 				}
-				if (flag) {
+				if (flag1 || flag2) {
 					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 96, 96);//;Color.Red;
 				}
 				else {
 					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
 				}
-				this.dataGridView1.Rows[i].Cells[9].Value = flag;
+				this.dataGridView1.Rows[i].Cells[C_CLM_RM_MAKE].Value = flag2;
 #endif
 			}
 		}
 #endif
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.ColumnIndex == 8
-#if true//2019.05.08(再測定・深度合成)
-			 || e.ColumnIndex == 9
-#endif
-				) {
+			if (e.ColumnIndex == C_CLM_RM_SHOT || e.ColumnIndex == C_CLM_RM_MAKE) {
 				if ((bool)this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) {
 					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
 				}
@@ -1605,7 +1755,7 @@ namespace uSCOPE
 			string[] files;
 
 			if (true) {
-				mes.fold = this.MOZ_CND_FOLD;
+				mes.fold = m_digi.MOZ_CND_FOLD;
 #if true//2019.05.08(再測定・深度合成)
 				mes.path_of_zp = path;
 #endif
@@ -1626,7 +1776,7 @@ namespace uSCOPE
 				mes.sno = name.Substring(p, 4);
 			}
 			if (false) {
-				files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "*.*");
+				files = System.IO.Directory.GetFiles(m_digi.MOZ_CND_FOLD, mes.h_name() + "*.*");
 				tmp = "";
 				for (int i = 0; i < files.Length; i++) {
 					tmp += System.IO.Path.GetFileName(files[i]);
@@ -1634,7 +1784,7 @@ namespace uSCOPE
 				}
 				G.mlog(tmp);
 			}
-			files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "ZP00D.*");
+			files = System.IO.Directory.GetFiles(m_digi.MOZ_CND_FOLD, mes.h_name() + "ZP00D.*");
 			if (files.Length == 1) {
 				tmp = files[0];
 				if (true) {
@@ -1643,14 +1793,14 @@ namespace uSCOPE
 					mes.name_of_zp.Add(nam);
 					mes.offs_of_zp.Add(0);
 					//---
-					PLS_XYZ pos;
-					if (m_log_info.map_of_xyz.TryGetValue(nam, out pos)) {
+					DIGITI.PLS_XYZ pos;
+					if (m_digi.m_log_info.map_of_xyz.TryGetValue(nam, out pos)) {
 						mes.pls_x = pos.X;
 						mes.pls_y = pos.Y;
 						mes.pls_z_of_zp = pos.Z;
 					}
 				}
-				files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "Z???D.*");
+				files = System.IO.Directory.GetFiles(m_digi.MOZ_CND_FOLD, mes.h_name() + "Z???D.*");
 				for (int i = 0; i < files.Length; i++) {
 					nam = System.IO.Path.GetFileName(files[i]);
 					tmp = System.IO.Path.GetFileNameWithoutExtension(files[i]);
@@ -1662,7 +1812,7 @@ namespace uSCOPE
 					mes.offs_of_zp.Add(get_offs(tmp));					
 				}
 			}
-			files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "KP00D.*");
+			files = System.IO.Directory.GetFiles(m_digi.MOZ_CND_FOLD, mes.h_name() + "KP00D.*");
 			if (files.Length == 1) {
 				tmp = files[0];
 				if (true) {
@@ -1671,14 +1821,14 @@ namespace uSCOPE
 					mes.name_of_kp.Add(nam);
 					mes.offs_of_kp.Add(0);
 					//---
-					PLS_XYZ pos;
-					if (m_log_info.map_of_xyz.TryGetValue(nam, out pos)) {
+					DIGITI.PLS_XYZ pos;
+					if (m_digi.m_log_info.map_of_xyz.TryGetValue(nam, out pos)) {
 					//	mes.pls_x = pos.X; //XとYはZPとKPで同じ,Zのみ異なる
 					//	mes.pls_y = pos.Y;
 						mes.pls_z_of_kp = pos.Z;
 					}
 				}
-				files = System.IO.Directory.GetFiles(this.MOZ_CND_FOLD, mes.h_name() + "K???D.*");
+				files = System.IO.Directory.GetFiles(m_digi.MOZ_CND_FOLD, mes.h_name() + "K???D.*");
 				for (int i = 0; i < files.Length; i++) {
 					nam = System.IO.Path.GetFileName(files[i]);
 					tmp = System.IO.Path.GetFileNameWithoutExtension(files[i]);
@@ -1693,8 +1843,8 @@ namespace uSCOPE
 			//該当のＩＲファイルの有無をチェック
 			if (true) {
 				for (int i = 0; i < mes.name_of_zp.Count; i++) {
-					tmp = this.MOZ_CND_FOLD + "\\" + mes.name_of_zp[i];
-					tmp = to_ir_file(tmp);
+					tmp = m_digi.MOZ_CND_FOLD + "\\" + mes.name_of_zp[i];
+					tmp = m_digi.to_ir_file(tmp);
 					if (System.IO.File.Exists(tmp)) {
 						mes.name_of_zr.Add(System.IO.Path.GetFileName(tmp));
 					}
@@ -1705,8 +1855,8 @@ namespace uSCOPE
 			}
 			if (true) {
 				for (int i = 0; i < mes.name_of_kp.Count; i++) {
-					tmp = this.MOZ_CND_FOLD + "\\" + mes.name_of_kp[i];
-					tmp = to_ir_file(tmp);
+					tmp = m_digi.MOZ_CND_FOLD + "\\" + mes.name_of_kp[i];
+					tmp = m_digi.to_ir_file(tmp);
 					if (System.IO.File.Exists(tmp)) {
 						mes.name_of_kr.Add(System.IO.Path.GetFileName(tmp));
 					}
@@ -1725,7 +1875,7 @@ namespace uSCOPE
 
 			for (int q = 0; q < this.dataGridView1.Rows.Count; q++) {
 				bool flag = false;
-				flag = (bool)this.dataGridView1.Rows[q].Cells[9].Value;
+				flag = (bool)this.dataGridView1.Rows[q].Cells[C_CLM_RM_MAKE].Value;
 				if (flag) {
 					int idx = (int)this.dataGridView1.Rows[q].Tag;
 					int h = HIWORD(idx);
@@ -1747,7 +1897,7 @@ namespace uSCOPE
 #endif
 			for (int q = 0; q < this.dataGridView1.Rows.Count; q++) {
 				bool flag = false;
-				flag = (bool)this.dataGridView1.Rows[q].Cells[8].Value;
+				flag = (bool)this.dataGridView1.Rows[q].Cells[C_CLM_RM_SHOT].Value;
 				if (true) {
 					int idx = (int)this.dataGridView1.Rows[q].Tag;
 					int h = HIWORD(idx);
@@ -1755,8 +1905,8 @@ namespace uSCOPE
 
 					m_i = h;
 					m_isel = i;
-					hair hr = m_hair[m_i];
-					seg_of_hair seg = (seg_of_hair)hr.seg[m_isel];
+					DIGITI.hair hr = m_digi.m_hair[m_i];
+					DIGITI.seg_of_hair seg = hr.seg[m_isel];
 #if true//2019.05.08(再測定・深度合成)
 					if (flag && la.Contains(h+1)) {
 						ls.Add(seg.name_of_dm);
@@ -1791,12 +1941,12 @@ namespace uSCOPE
 			//---
 			G.REMES.Clear();
 			//---
-			for (int q = 0; q < m_hair.Count; q++) {
-				for (int i = 0; i < m_hair[q].seg.Count(); i++) {
+			for (int q = 0; q < m_digi.m_hair.Count; q++) {
+				for (int i = 0; i < m_digi.m_hair[q].seg.Count(); i++) {
 					//G.mlog("seg.name_of_dm:\r\r" + seg.name_of_dm);
-					if (m_hair[q].seg[i].bREMES) {
+					if (m_digi.m_hair[q].seg[i].bREMES) {
 #if true//2019.05.08(再測定・深度合成)
-						add_remes(G.REMES, m_hair[q].seg[i].name_of_dm, m_hair[q].seg[i].path_of_dm);
+						add_remes(G.REMES, m_digi.m_hair[q].seg[i].name_of_dm, m_digi.m_hair[q].seg[i].path_of_dm);
 #else
 						add_remes(G.REMES, m_hair[q].seg[i].name_of_dm);
 #endif
@@ -1804,7 +1954,7 @@ namespace uSCOPE
 				}
 			}
 #if true//2019.05.08(再測定・深度合成)
-			string tmp = m_hair[0].seg[0].path_of_dm;
+			string tmp = m_digi.m_hair[0].seg[0].path_of_dm;
 			if (ls.Count > 0 && G.REMES.Count <= 0) {
 				return;//メッセージ表示済み
 			}
@@ -1828,7 +1978,7 @@ namespace uSCOPE
 		private void checkBox3_CheckedChanged(object sender, EventArgs e)
 		{
 			for (int q = 0; q < this.dataGridView1.Rows.Count; q++) {
-				bool flag = (bool)this.dataGridView1.Rows[q].Cells[11].Value;
+				bool flag = (bool)this.dataGridView1.Rows[q].Cells[C_CLM_CHOKKIN].Value;
 				if (this.checkBox3.Checked) {
 					this.dataGridView1.Rows[q].Visible = flag;
 				}

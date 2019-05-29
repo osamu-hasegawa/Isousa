@@ -16,7 +16,16 @@ namespace uSCOPE
 		public delegate void DLG_VOID_VOID();
 		public delegate void DLG_VOID_BOOL(bool b);
 		public delegate void DLG_VOID_INT(int n);
-
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+		public delegate void DLG_VOID_STR(string s);
+		public delegate void DLG_VOID_OBJ(object o);
+		public delegate void DLG_VOID_BMP_BMP_BMP(Bitmap bmp1,Bitmap bmp2, Bitmap bmp3);
+		
+		public delegate void DLG_VOID_STR_STR_INT(string s1, string s2, int i);
+		public delegate void DLG_VOID_OBJ_STR(object o, string s);
+		public delegate void DLG_VOID_INT_OBJ_BMP_BMP(int i, object o, Bitmap bmp1,Bitmap bmp2);
+		public delegate void DLG_VOID_OBJ_BMP_BMP(object o, Bitmap bmp1,Bitmap bmp2);
+#endif
 		public class APPSET:System.ICloneable
 		{
 			public int TRACE_LEVEL = 0;
@@ -39,8 +48,12 @@ namespace uSCOPE
 			public int APP_F04_WID = 600;
 			public int APP_F04_HEI = 800;
 #endif
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			public int[] TBL_F04_CLM = {125,80,80,80,80,75,75,75,75,75,75,75,75,75};
+#else
 #if true//2019.05.08(再測定・深度合成)
 			public int[] TBL_F04_WID = {125,80,80,80,80,75,75,75,75,75,75,75};
+#endif
 #endif
 			public string AUT_BEF_PATH = "";
 			public string BEFORE_PATH = "";
@@ -644,6 +657,10 @@ namespace uSCOPE
 #endif
 #if true//2019.05.08(再測定・深度合成)
 			public double REM_CHG_DTHD = 25;
+#endif
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			public double REM_CUT_CTHD = 0;
+			public double REM_CUT_RTHD = 25;
 #endif
 #if true//2019.01.11(混在対応) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 			public int[]    ANL_CND_CTYP = {0,0};//キューティクル(0:BPF,1:2d)

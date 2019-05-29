@@ -13,7 +13,7 @@ namespace uSCOPE
 			_11_INI_WAIT,
 			_20_NAN_IKAK = 20,
 		};
-		private Form12.ADATA m_adat = null;
+//%%		private Form12.ADATA m_adat = null;
 #if false
 		public int MACH(int AUT_STS, int FCS_STS, int FC2_STS, int m_didx)
 		{

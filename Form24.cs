@@ -191,7 +191,7 @@ namespace uSCOPE
 			G.FORM03.UPDATE_CUTICLE();
 			//
 			Cursor.Current = Cursors.Default;
-			this.textBox2.Text = G.FORM03.m_errstr;
+			this.textBox2.Text = DIGITI.m_errstr;
 		}
 
 		private void button2_Click(object sender, EventArgs e)
