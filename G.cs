@@ -661,6 +661,8 @@ namespace uSCOPE
 #if true//2019.05.22(再測定判定(キューティクル枚数))
 			public double REM_CUT_CTHD = 0;
 			public double REM_CUT_RTHD = 25;
+			public bool   REM_CUT_US_C = true;
+			public bool   REM_CUT_US_R = true;
 #endif
 #if true//2019.01.11(混在対応) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 			public int[]    ANL_CND_CTYP = {0,0};//キューティクル(0:BPF,1:2d)

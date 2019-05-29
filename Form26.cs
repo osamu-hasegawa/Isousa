@@ -144,9 +144,15 @@ namespace uSCOPE
 				zpos = "_" + "ZP00D";
 
 				if (true) {
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+					files_ct = System.IO.Directory.GetFiles(path, "*CT_??" +zpos+ ".*");
+					files_cr = System.IO.Directory.GetFiles(path, "*CR_??" +zpos+ ".*");
+					files_ir = System.IO.Directory.GetFiles(path, "*IR_??" +zpos+ ".*");
+#else
 					files_ct = System.IO.Directory.GetFiles(path, "?CT_??" +zpos+ ".*");
 					files_cr = System.IO.Directory.GetFiles(path, "?CR_??" +zpos+ ".*");
 					files_ir = System.IO.Directory.GetFiles(path, "?IR_??" +zpos+ ".*");
+#endif
 				}
 
 				if (true) {

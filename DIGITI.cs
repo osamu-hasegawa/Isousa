@@ -2860,6 +2860,11 @@ retry:
 				while (!sr.EndOfStream) {
 					buf = sr.ReadLine();
 					clms = buf.Split(',');
+#if DEBUG
+					if (clms[4].Contains("17CR")) {
+						buf = buf;
+					}
+#endif
 					if (false) {
 					}
 					else if (clms.Length >= 5 && clms[4].Contains("画像保存:")) {
@@ -3820,7 +3825,7 @@ retry:
 					hr.il_ir.Images.Add(thm);
 					}
 					//---
-					if (m_hair.Count == 0) {
+					if (m_hair.Count == 0 || this.bREMES) {
 						call_back02((Bitmap)m_bmp_dm1.Clone(), (Bitmap)m_bmp_ir1.Clone(), (Bitmap)m_bmp_pd1.Clone());
 						call_back03(name_dm1, name_ir1, i);
 					}
@@ -4052,14 +4057,45 @@ retry:
 				m_hair.Clear();
 				m_hair = null;
 			}
-			if (m_bmp_dm1 != null) {
-				m_bmp_dm1.Dispose();
-				m_bmp_dm1 = null;
+			dispose_bmp(ref m_bmp_dm0);
+			dispose_bmp(ref m_bmp_dm1);
+			dispose_bmp(ref m_bmp_dm2);
+			dispose_bmp(ref m_bmp_ir0);
+			dispose_bmp(ref m_bmp_ir1);
+			dispose_bmp(ref m_bmp_ir2);
+			dispose_bmp(ref m_bmp_pd0);
+			dispose_bmp(ref m_bmp_pd1);
+			dispose_bmp(ref m_bmp_pd2);
+
+			if (m_map_of_dml != null) {
+				m_map_of_dml.Clear();
+				m_map_of_dml = null;
 			}
-			if (m_bmp_ir1 != null) {
-				m_bmp_ir1.Dispose();
-				m_bmp_ir1 = null;
+			if (m_map_of_irl != null) {
+				m_map_of_irl.Clear();
+				m_map_of_irl = null;
 			}
+			if (m_map_of_pdl != null) {
+				m_map_of_pdl.Clear();
+				m_map_of_pdl = null;
+			}
+			if (m_zpos_org != null) {
+				m_zpos_org.Clear();
+				m_zpos_org = null;
+			}
+			if (m_zpos_val != null) {
+				m_zpos_val.Clear();
+				m_zpos_val = null;
+			}
+			if (m_log_info.map_of_xyz != null) {
+				m_log_info.map_of_xyz.Clear();
+				m_log_info.map_of_xyz = null;
+			}
+			if (m_log_info.map_of_pos != null) {
+				m_log_info.map_of_pos.Clear();
+				m_log_info.map_of_pos = null;
+			}
+			GC.Collect();
 		}
 
 		public double TO_VAL(object obj)

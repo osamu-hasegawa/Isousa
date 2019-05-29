@@ -72,538 +72,20 @@ namespace uSCOPE
 			InitializeComponent();
 		}
 #if false//2019.05.22(再測定判定(キューティクル枚数))
-		//
-		public class seg_of_hair {
-			public string path_of_dm;
-			public string path_of_ir;
-			public string path_of_pd;// 位置検出用画像ファイルパス
-			public string name_of_dm;// 1CL_00.PNG(パスを含まない、拡張子含むファイル名)
-			public string name_of_ir;// 1IR_00.PNG
-			public string name_of_pd;// 
-			public PointF pix_pos;	//画像の座標(ピクセル座標系で毛髪全体を通しての)
-			public int	width;		//当該画像のサイズ
-			public int	height;		//当該画像のサイズ
-			public int total_idx;
-#if true//2019.04.09(再測定実装)
-			public bool bREMES;
-#endif
-#if true//2019.03.16(NODATA対応)
-			public double zp_contr;
-			public double zp_contr_avg;
-			public double zp_contr_drop;
-			public bool zp_nodata;
-#endif
-#if true//2019.03.22(再測定表)
-			public double kp_contr;
-			public double kp_contr_avg;
-			public double kp_contr_drop;
-			public bool kp_nodata;
-			//---
-			public double mou_len_l;
-			public double mou_len_r;
-			public double mou_len_c;
-
-			public Point[]	msk_of_dm;//コントラスト計算多曲線
-			public Point[]	msk_of_pd;//コントラスト計算多曲線
-#endif
-#if true//2019.04.02(再測定表ユーザモード)
-			public string[] bak_folds;
-			public int bak_cnt;
-			public bool bTMR;
-#endif
-			//---
-			//---
-#if true//2018.10.10(毛髪径算出・改造)
-			public int		IR_PLY_XMIN;
-			public int		IR_PLY_XMAX;
-			public int		IR_WIDTH;
-			//---
-			public double	dia_avg;//毛髪直径の平均
-			//---
-			public Point[]	dia_top;//輪郭・頂点(上側)
-			public Point[]	dia_btm;//輪郭・頂点(下側)
-
-			public Point[]	dex_top;//輪郭・頂点(上側)・画像端まで補外
-			public Point[]	dex_btm;//輪郭・頂点(下側)
-			public Point[]	dex_cen;
-#endif
-			public int		dia_cnt;//輪郭・頂点数
-			//---
-			public seg_of_hair() {
-			}
-		};
-
-		class hair {
-			public int	cnt_of_seg;
-			public seg_of_hair[]	seg;
-#if true//2019.01.11(混在対応)
-			public int mode_of_cl;//0:透過, 1:反射
-#endif
-			public string[] name_of_cl;
-			public string[] name_of_ir;
-			public double width_of_hair;
-			public double height_of_hair;
-			public hair() {
-				this.cnt_of_seg = 0;
-				this.seg = null;
-				this.name_of_cl = null;
-				this.name_of_ir = null;
-				this.width_of_hair = 0;
-				this.height_of_hair = 0;
-			}
-		};
-
-
-		double px2um(PointF p1, PointF p2)
-		{
-			double df = G.diff(p1, p2);
-			double um = G.PX2UM(df, m_log_info.pix_pitch, m_log_info.zoom);
-
-			return(um);
-		}
-		double px2um(double df)
-		{
-			double um = G.PX2UM(df, m_log_info.pix_pitch, m_log_info.zoom);
-
-			return(um);
-		}
-
-		//---
-		private void test_pr1(DIGITI.seg_of_hair seg)
-		{
-			List<Point> at = new List<Point>();
-			List<Point> ab = new List<Point>();
-			Point	at_bak = G.IR.DIA_TOP[0];
-			Point	ab_bak = G.IR.DIA_BTM[0];
-
-			for (int i = 0; i < (G.IR.DIA_CNT-1); i++) {
-				if (G.IR.DIA_TOP[i].X < at_bak.X || G.IR.DIA_BTM[i].X < ab_bak.X) {
-					continue;
-				}
-				at.Add(at_bak = G.IR.DIA_TOP[i]);
-				ab.Add(ab_bak = G.IR.DIA_BTM[i]);
-			}
-			m_dia_top = at.ToArray();
-			m_dia_btm = ab.ToArray();
-			m_dia_cnt = m_dia_top.Count();
-#if true//2018.10.10(毛髪径算出・改造)
-			seg.dia_top = (Point[])m_dia_top.Clone();//輪郭・頂点(上側)
-			seg.dia_btm = (Point[])m_dia_btm.Clone();//輪郭・頂点(下側)
-			seg.dia_cnt = m_dia_cnt;//輪郭・頂点数
-			double avg = 0;
-			for (int i = 0; i < seg.dia_cnt; i++) {
-			avg+= G.diff(seg.dia_top[i], seg.dia_btm[i]);
-			}
-			seg.dia_avg = px2um(avg/seg.dia_cnt);
-			//---
-			seg.IR_PLY_XMIN = G.IR.PLY_XMIN;
-			seg.IR_PLY_XMAX = G.IR.PLY_XMAX;
-			seg.IR_WIDTH    = G.IR.WIDTH;
-#endif
-			if (true) {
-				List<Point> ac = new List<Point>();
-				Point pt = new Point();
-				Point pb = new Point();
-				FN1D ft, fb;
-				int l = m_dia_top.Length;
-				//---
-				ft = new FN1D(m_dia_top[0], m_dia_top[1]);
-				fb = new FN1D(m_dia_btm[0], m_dia_btm[1]);
-
-				pt.X = 0;
-				pt.Y = (int)ft.GetYatX(pt.X);
-				pb.X = 0;
-				pb.Y = (int)fb.GetYatX(pt.X);
-				at.Insert(0, pt);
-				ab.Insert(0, pb);
-				//---
-				ft = new FN1D(m_dia_top[l-2], m_dia_top[l-1]);
-				fb = new FN1D(m_dia_btm[l-2], m_dia_btm[l-1]);
-
-				pt.X = G.IR.WIDTH-1;
-				pt.Y = (int)ft.GetYatX(pt.X);
-				pb.X = G.IR.WIDTH-1;
-				pb.Y = (int)fb.GetYatX(pt.X);
-				at.Add(pt);
-				ab.Add(pb);
-				//---
-				for (int i = 0; i < at.Count; i++) {
-					ac.Add(new Point((at[i].X+ab[i].X)/2, (at[i].Y+ab[i].Y)/2));
-				}
-				//---
-				seg.dex_top = at.ToArray();//輪郭・頂点(上側)
-				seg.dex_btm = ab.ToArray();//輪郭・頂点(下側)
-				seg.dex_cen = ac.ToArray();//輪郭・頂点(中央)
-			}
-			//---
-		}
-		private void test_pr0(DIGITI.seg_of_hair seg, bool b1st)
-		{
-			string key = seg.name_of_dm;
-			Point	pnt_of_pls;
-			bool ret;
-#if true//2018.08.21
-			key = key.ToUpper();
-#endif
-			if (key.Contains("ZDEPT")) {
-				key = key.Replace("ZDEPT", "ZP00D");
-			}
-
-			if ((ret = m_log_info.map_of_pos.TryGetValue(key, out pnt_of_pls))) {
-			}
-			else {
-				key = key.Substring(0, key.Length-4);//拡張子カット
-				ret = m_log_info.map_of_pos.TryGetValue(key, out pnt_of_pls);
-			}
-
-			if (ret) {
-				pnt_of_pls.X = -pnt_of_pls.X;
-				if (b1st) {
-					m_log_info.pls_org.X = m_log_info.pls_org.Y = 0;
-					m_log_info.pls_org = pnt_of_pls;
-				}
-				//if (m_log_info.pls_org.X == 0 &&m_log_info.pls_org.Y == 0) {
-				//    m_log_info.pls_org = pnt_of_pls;
-				//}
-				double x, y;
-				
-				x = (pnt_of_pls.X - m_log_info.pls_org.X);		//[pls]
-				x = x * m_log_info.stg_pitch;					//[um ] = [um/pls]*[pls]
-				x = x / (m_log_info.pix_pitch/m_log_info.zoom);	//[pix] = [um]/[um/pix]
-				//---
-				y = (pnt_of_pls.Y - m_log_info.pls_org.Y);		//[pls]
-				y = y * m_log_info.stg_pitch;					//[um ] = [um/pls]*[pls]
-				y = y / (m_log_info.pix_pitch/m_log_info.zoom);	//[pix] = [um]/[um/pix]
-				//---
-				seg.pix_pos.X = (float)x;
-				seg.pix_pos.Y = (float)y;
-			}
-		}
 #endif
 		ArrayList m_ah_cl = new ArrayList();
 		ArrayList m_ah_ir = new ArrayList();
 		ArrayList m_rst = new ArrayList();
 #if false//2019.05.22(再測定判定(キューティクル枚数))
-#if true//2019.04.09(再測定実装)
-		struct PLS_XYZ {
-			public int X, Y, Z;
-			public PLS_XYZ(int X, int Y, int Z) {
-				this.X = X;
-				this.Y = Y;
-				this.Z = Z;
-			}
-		};
-#endif
-		struct log_info {
-			public Point pls_org;
-			public double stg_pitch;	//[um/pls]
-			public double pix_pitch;	//[um/pix]
-			public double zoom;
-			//---
-			public Dictionary<string, Point> map_of_pos;
-#if true//2019.04.09(再測定実装)
-			public Dictionary<string, PLS_XYZ> map_of_xyz;
-#endif
-		};
-		log_info m_log_info;
-		//---
-		private void test_log()
-		{
-			string path = this.MOZ_CND_FOLD + "\\log.csv";
-			string buf;
-			string[] clms;
-			StreamReader sr;
-#if true//2019.04.09(再測定実装)
-			m_log_info.map_of_xyz = new Dictionary<string,PLS_XYZ>();
-#endif
-			m_log_info.map_of_pos = new Dictionary<string,Point>();
-			m_log_info.zoom = 8;
-			m_log_info.stg_pitch = 2.5;		//[um/pls]
-			m_log_info.pix_pitch = 2.2;		//[um/pix]
-			try {
-				sr = new StreamReader(path, Encoding.Default);
-
-				while (!sr.EndOfStream) {
-					buf = sr.ReadLine();
-					clms = buf.Split(',');
-					if (false) {
-					}
-					else if (clms.Length >= 5 && clms[4].Contains("画像保存:")) {
-						string key = clms[4].Substring(5);
-						int ptx, pty;
-						if (int.TryParse(clms[1], out ptx) && int.TryParse(clms[2], out pty)) {
-							Point pt = new Point(ptx, pty);
-							m_log_info.map_of_pos.Add(key, pt);
-						}
-#if true//2019.04.09(再測定実装)
-						int ptz;
-						if (int.TryParse(clms[1], out ptx) && int.TryParse(clms[2], out pty) &&  int.TryParse(clms[3], out ptz)) {
-							PLS_XYZ pt = new PLS_XYZ(ptx, pty, ptz);
-							m_log_info.map_of_xyz.Add(key, pt);
-						}
-#endif
-					}
-					else if (buf.Contains("ZOOM軸(pls/倍)") && clms.Length >= 2) {
-						string tmp = clms[1];
-						int	i = tmp.IndexOf("/x");
-						double f;
-						if (double.TryParse(tmp.Substring(i+2), out f)) {
-							m_log_info.zoom = f;
-						}
-					}
-					else if (buf.Contains("ステージピッチ(um/pls)") && clms.Length >= 2) {
-						int n;
-						if (int.TryParse(clms[1], out n)) {
-							m_log_info.stg_pitch = n;
-						}
-					}
-					else if (buf.Contains("画素ピッチ(um/pxl)") && clms.Length >= 2) {
-						double f;
-						if (double.TryParse(clms[1], out f)) {
-							m_log_info.pix_pitch = f;
-						}
-					}
-				}
-			}
-			catch (Exception ex) {
-			}
-			//this.label6.Text = string.Format("x {0:F1}", m_log_info.zoom);
-		}
 #endif
 #if false//2019.05.22(再測定判定(キューティクル枚数))
-		//---
-		private string to_ir_file(string path)
-		{
-			string fold = System.IO.Path.GetDirectoryName(path);
-			string name = System.IO.Path.GetFileName(path);
-			string buf = null;
-
-
-			if (string.IsNullOrEmpty(name)) {
-				return(null);
-			}
-			if (name.Contains("CT")) {
-				buf = name.Replace("CT", "IR");
-			}
-			else if (name.Contains("CR")) {
-				buf = name.Replace("CR", "IR");
-			}
-			else {
-				buf = name.Replace("CL", "IR");
-			}
-#if false//2019.04.01(表面赤外省略)
-			if (!System.IO.File.Exists(fold+"\\"+buf)) {
-				//buf = null;
-				return(null);
-			}
-#endif
-			return(fold+"\\"+buf);
-		}
-#if true//2018.08.21
-		private Image to_img_from_file(string path)
-		{
-			Image img = null;
-			if (System.IO.File.Exists(path)) {
-				try {
-					img = Bitmap.FromFile(path);
-				}
-				catch (Exception ex) {
-					System.Diagnostics.Debug.WriteLine(ex.Message);
-				}
-			}
-			return (img);
-		}
-#if true//2019.05.08(再測定・深度合成)
-		private string to_xx_path(string path, string zpos)
-		{
-			string fold, name, buf, pext = "";
-			string file;
-
-			fold = System.IO.Path.GetDirectoryName(path);
-			fold = m_digi.MOZ_CND_FOLD;
-			name = System.IO.Path.GetFileName(path);
-
-			if (string.IsNullOrEmpty(name)) {
-				return (null);
-			}
-			if (zpos == "深度合成" || zpos == "ZDEPT") {
-				zpos = "ZDEPT";
-				pext = m_digi.m_fold_of_dept;
-				pext = pext.Replace("\\", "");
-			}
-			// '_ZP99D', '_ZM99D', '_ZDEPT'
-			if (name.Contains("_ZDEPT")) {
-				//G.mlog("pathをひとつ上に戻す必要が…");
-				buf = name.Replace("_ZDEPT", "_" + zpos);
-			}
-#if true//2018.11.13(毛髪中心AF)
-			else if (name.Contains("_K")) {
-				buf = Regex.Replace(name, "_K.[0-9][0-9].", "_" + zpos);
-			}
-#endif
-			else {
-				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
-			}
-			//
-			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
-			//file = fold + pext + buf;//fold + "\\" + buf
-			//
-			if (!System.IO.File.Exists(file)) {
-				return (null);
-			}
-			return (file);
-		}
-#endif
-#if true//2019.05.08(再測定・深度合成)
-		// k=0(キューティクル/断面用), 1(毛髪検出/毛髪径用), 2(毛髄用) 
-		private string to_xx_file(int k, string path)
-		{
-			string fold, name, buf, zpos, pext = "";
-			string file;
-			switch (k) {
-			case  0:zpos = "深度合成"; break;
-			case  1:zpos = "KP00D"; break;
-			default:zpos = "KP00D"; path = to_ir_file(path); break;
-			}
-			fold = System.IO.Path.GetDirectoryName(path);
-			name = System.IO.Path.GetFileName(path);
-
-			if (string.IsNullOrEmpty(name)) {
-				return (null);
-			}
-			if (zpos == "深度合成") {
-				zpos = "ZDEPT";
-				pext = m_fold_of_dept;
-			}
-			// '_ZP99D', '_ZM99D', '_ZDEPT'
-			if (name.Contains("_ZDEPT")) {
-				//G.mlog("pathをひとつ上に戻す必要が…");
-				buf = name.Replace("_ZDEPT", "_"+zpos);
-			}
-#if true//2018.11.13(毛髪中心AF)
-			else if (name.Contains("_K")) {
-				buf = Regex.Replace(name, "_K.[0-9][0-9].", "_" + zpos);
-			}
-#endif
-			else {
-				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
-			}
-			//
-			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
-			file = fold + pext + "\\" + buf;
-			//
-			if (!System.IO.File.Exists(file)) {
-				return (null);
-			}
-			return (file);
-		}
-#else
-		// k=0(キューティクル/断面用), 1(毛髪検出/毛髪径用), 2(毛髄用) 
-		private string to_xx_file(int k, string path)
-		{
-			string fold, name, buf, zpos, pext = "";
-			string file;
-			switch (k) {
-			case  0:zpos = "ZP00D"; break;
-			case  1:zpos = "KP00D"; break;
-			default:zpos = "KP00D"; path = to_ir_file(path); break;
-			}
-			fold = System.IO.Path.GetDirectoryName(path);
-			name = System.IO.Path.GetFileName(path);
-
-			if (string.IsNullOrEmpty(name)) {
-				return (null);
-			}
-			// '_ZP99D', '_ZM99D', '_ZDEPT'
-			if (false) {
-			}
-#if true//2018.11.13(毛髪中心AF)
-			else if (name.Contains("_K")) {
-				buf = Regex.Replace(name, "_K.[0-9][0-9].", "_" + zpos);
-			}
-#endif
-			else {
-				buf = Regex.Replace(name, "_Z.[0-9][0-9].", "_" + zpos);
-			}
-			//
-			file = System.IO.Path.Combine(fold, pext, buf);//fold + "\\" + buf
-			file = fold + pext + "\\" + buf;
-			//
-			if (!System.IO.File.Exists(file)) {
-				return (null);
-			}
-			return (file);
-		}
-#endif
-#endif
 #endif
 #if false//2019.05.22(再測定判定(キューティクル枚数))
-		private void dispose_bmp(ref Bitmap bmp)
-		{
-			if (bmp != null) {
-				bmp.Dispose();
-				bmp = null;
-			}
-			else {
-				bmp = bmp;
-			}
-		}
-		private void dispose_bmp(ref Image img)
-		{
-			if (img != null) {
-				img.Dispose();
-				img = null;
-			}
-			else {
-				img = img;
-			}
-		}
-		private void dispose_img(PictureBox pic)
-		{
-			Image img = pic.Image;
-			pic.Image = null;
-			if (img != null) {
-				img.Dispose();
-				img = null;
-			}
-			else {
-				img = img;
-			}
-		}
-		private string get_name_of_path(string path)
-		{
-			string name = "";
-			if (!string.IsNullOrEmpty(path) && System.IO.File.Exists(path)) {
-				name = System.IO.Path.GetFileName(path);	
-			}
-			return(name);
-		}
 #endif
 		private void enable_forms(bool b)
 		{
 		}
 #if false//2019.05.22(再測定判定(キューティクル枚数))
-		private int get_hair_cnt(string pext, string zpos)
-		{
-			int cnt = 0;
-#if true
-			for (int q = 0; q < 24; q++) {
-				string buf = q.ToString();
-				string[] files_cr =
-					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "CR_??"+zpos+".*");
-				string[] files_ct =
-					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "CT_??"+zpos+".*");
-				string[] files_ir =
-					System.IO.Directory.GetFiles(this.MOZ_CND_FOLD + pext, buf + "IR_??"+zpos+".*");
-
-				if (files_ct.Length <= 0 && files_cr.Length <= 0) {
-					continue;
-				}
-				cnt++;
-			}
-#endif
-			return(cnt);
-		}
 #endif
 		//---
 		private void calc_contrast(int mode_of_cl, DIGITI.seg_of_hair seg, Bitmap bmp_dm = null, Bitmap bmp_pd = null)
@@ -748,6 +230,41 @@ namespace uSCOPE
 			}
 			//---
 		}
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+		private bool check_remes(DIGITI.seg_of_hair seg)
+		{
+			return(check_remes(seg.cut_count, seg.cut_drop, seg.zp_contr_drop, seg.kp_contr_drop));
+		}
+		private bool check_remes(double cut_count, double cut_drop, double zp_contr_drop, double kp_contr_drop)
+		{
+			bool flag;
+			if (false) {
+			}
+			else if (cut_count < G.SS.REM_CUT_CTHD && G.SS.REM_CUT_US_C) {
+				flag = true;
+			}
+			else if (cut_drop >= G.SS.REM_CUT_RTHD && G.SS.REM_CUT_US_R) {
+				flag = true;
+			}
+			else {
+				if (G.UIF_LEVL != 0) {
+					flag = (zp_contr_drop >= G.SS.REM_BOK_STHD || kp_contr_drop >= G.SS.REM_BOK_CTHD);
+				}
+				else {
+					flag = (zp_contr_drop >= G.SS.REM_BOK_STHD);
+				}
+			}
+			return(flag);
+		}
+		private bool check_remak(DIGITI.seg_of_hair seg)
+		{
+			return (check_remak(seg.mou_len_c));
+		}
+		private bool check_remak(double mou_len_c)
+		{
+			return (mou_len_c >= G.SS.REM_CHG_DTHD);
+		}
+#endif
 		//private m_idx;
 		private void add_grid_row(DIGITI.seg_of_hair seg, int h_idx, int s_idx)
 		{
@@ -772,20 +289,10 @@ namespace uSCOPE
 			objs.Add(seg.mou_len_r);
 			objs.Add(seg.mou_len_c);
 #if true//2019.05.22(再測定判定(キューティクル枚数))
-			bool flag=false;
-			if (seg.cut_count < G.SS.REM_CUT_CTHD) {
-				flag |= true;
-			}
-			if (seg.cut_drop >= G.SS.REM_CUT_RTHD) {
-				flag |= true;
-			}
-			if (G.UIF_LEVL != 0) {
-				flag |= ((seg.zp_contr_drop >= G.SS.REM_BOK_STHD || seg.kp_contr_drop >= G.SS.REM_BOK_CTHD) ? true: false);
-			}
-			else {
-				flag |= ((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
-			}
-			objs.Add(flag);
+			objs.Add(check_remes(seg));
+			objs.Add(check_remak(seg));
+			objs.Add(seg.bak_cnt);
+			objs.Add(seg.bTMR);
 #else
 #if true//2019.05.08(再測定・深度合成)
 			if (G.UIF_LEVL != 0) {
@@ -795,7 +302,7 @@ namespace uSCOPE
 			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
 			}
 #endif
-#endif
+
 
 #if true//2019.04.02(再測定表ユーザモード)
 #if true//2019.05.08(再測定・深度合成)
@@ -803,6 +310,7 @@ namespace uSCOPE
 #endif
 			objs.Add(seg.bak_cnt);
 			objs.Add(seg.bTMR);
+#endif
 #endif
 			idx = this.dataGridView1.Rows.Add(objs.ToArray());
 			this.dataGridView1.Rows[idx].HeaderCell.Value = (idx+1).ToString();
@@ -1408,6 +916,8 @@ namespace uSCOPE
 #if true//2019.05.22(再測定判定(キューティクル枚数))
 				DDV.DDX(bUpdate, this.numericUpDown4 , ref G.SS.REM_CUT_CTHD);
 				DDV.DDX(bUpdate, this.numericUpDown5 , ref G.SS.REM_CUT_RTHD);
+				DDV.DDX(bUpdate, this.checkBox4      , ref G.SS.REM_CUT_US_C);
+				DDV.DDX(bUpdate, this.checkBox5      , ref G.SS.REM_CUT_US_R);
 #endif
                 rc = true;
             }
@@ -1663,6 +1173,26 @@ namespace uSCOPE
 			for (int i = 0; i < this.dataGridView1.Rows.Count; i++) {
 				double val;
 				bool flag1 = false, flag2 = false;
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+				double	cut_count, cut_drop, zp_contr_drop, kp_contr_drop;
+				double	mou_len_c;
+				cut_count     = (int)this.dataGridView1.Rows[i].Cells[C_CLM_CT_CONT].Value;
+				cut_drop      = (double)this.dataGridView1.Rows[i].Cells[C_CLM_CT_RATE].Value;
+				zp_contr_drop = (double)this.dataGridView1.Rows[i].Cells[C_CLM_ZP_DROP].Value;
+				kp_contr_drop = (double)this.dataGridView1.Rows[i].Cells[C_CLM_KP_DROP].Value;
+				mou_len_c     = (double)this.dataGridView1.Rows[i].Cells[C_CLM_HR_RATE].Value;
+				flag1 = check_remes(cut_count, cut_drop, zp_contr_drop, kp_contr_drop);
+				flag2 = check_remak(mou_len_c);
+
+				this.dataGridView1.Rows[i].Cells[C_CLM_RM_SHOT].Value = flag1;
+				this.dataGridView1.Rows[i].Cells[C_CLM_RM_MAKE].Value = flag2;
+				if (flag1 || flag2) {
+					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 96, 96);//;Color.Red;
+				}
+				else {
+					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
+				}
+#else
 				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_ZP_DROP].Value;
 				if (val >= G.SS.REM_BOK_STHD) {
 					flag1 = true;
@@ -1708,6 +1238,7 @@ namespace uSCOPE
 					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
 				}
 				this.dataGridView1.Rows[i].Cells[C_CLM_RM_MAKE].Value = flag2;
+#endif
 #endif
 			}
 		}
@@ -1992,6 +1523,13 @@ namespace uSCOPE
 					this.dataGridView1.Rows[q].DefaultCellStyle.BackColor = Color.Empty;
 				}
 			}
+		}
+#endif
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+		private void checkBox4_CheckedChanged(object sender, EventArgs e)
+		{
+			this.numericUpDown4.Enabled = (this.checkBox4.Checked);
+			this.numericUpDown5.Enabled = (this.checkBox5.Checked);
 		}
 #endif
 	}

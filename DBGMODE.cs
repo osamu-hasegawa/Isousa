@@ -485,7 +485,13 @@ namespace uSCOPE
 				//画像取得
 				try {
 					m_fm.BeginInvoke(m_fg, new object[] { null, null });
-					if (m_event_cam.WaitOne(750)) {
+					if (m_event_cam.WaitOne(
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+						250//3.5fps
+#else
+						750//1.5fps
+#endif
+						)) {
 						if (m_exit_req) {
 							break;
 						}

@@ -2843,7 +2843,7 @@ this.SPE_COD = 0;
 		 
 		 */
 		private void rename_nuke_files()
-		{
+		 {
 			List<int>	old_im_posi = new List<int>();
 			List<string>old_cl_name = new List<string>();
 			List<string>old_ir_name = new List<string>();
@@ -2912,13 +2912,20 @@ this.SPE_COD = 0;
 			//---
 			string buf = System.IO.File.ReadAllText(m_adat.log, Encoding.Default);
 			for (int i = old_cl_name.Count-1; i >= 0; i--) {
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+				
+				buf = buf.Replace("画像保存:" + old_cl_name[i], "画像保存:" + upd_cl_name[i]);
+				buf = buf.Replace("画像保存:" + old_ir_name[i], "画像保存:" + upd_ir_name[i]);
+#else
 				buf = buf.Replace(old_cl_name[i], upd_cl_name[i]);
 				buf = buf.Replace(old_ir_name[i], upd_ir_name[i]);
+#endif
 			}
 			System.IO.File.WriteAllText(m_adat.log, buf, Encoding.Default);
 #if true//2019.01.11(混在対応)
 			m_adat.y_1st_pos.Clear();
 			m_adat.y_1st_pref.Clear();
+
 			for (int i = 0; i < old_cl_name.Count; i++) {
 				int		pos = old_im_posi[i];
 				string	tmp = old_cl_name[i];
@@ -3610,13 +3617,16 @@ a_write("毛髪判定(中心):OK");
 				// -849,-555,-263, +31,+274,+568,+862,(7本OFFLINE画像,XYリミットを共に±1000に設定)
 				if (NXT_STS == 15 && !m_adat.nuke) {
 					if (false
-					 ||Math.Abs(G.PLM_POS[1]-(-272)) < 20
-					 ||Math.Abs(G.PLM_POS[1]-(+ 33)) < 20 
-					 ||Math.Abs(G.PLM_POS[1]-(+862)) < 20 
+					 ||Math.Abs(G.PLM_POS[1]-( -729)) < 20/*06CR / 7th*/
+					 ||Math.Abs(G.PLM_POS[1]-( -576)) < 20/*07CR / 8th*/
+					 ||Math.Abs(G.PLM_POS[1]-( +923)) < 20/*14CR /15th*/
+					 ||Math.Abs(G.PLM_POS[1]-(+1335)) < 20/*16CR /17th*/
+					 ||Math.Abs(G.PLM_POS[1]-(+1641)) < 20/*17CR /18th*/
 					) {
 						DialogResult ret;
 						this.timer2.Enabled = false;
-						ret = G.mlog("#q[デバッグ用]\r毛髪抜けデバッグのため当該毛髪をスキップさせますか?");
+						ret = DialogResult.Yes;
+					//	ret = G.mlog("#q[デバッグ用]\r毛髪抜けデバッグのため当該毛髪をスキップさせますか?");
 						if (ret == DialogResult.Yes) {
 						NXT_STS = 10;//抜けデバッグのため毛髪をスキップさせる
 						}
