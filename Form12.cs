@@ -4833,6 +4833,10 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 			else {
 				frm = new Form26();
 			}
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+			G.CNT_DTHD = G.SS.CAM_HIS_DTHD;
+			G.CNT_DTH2 = G.SS.CAM_HIS_DTH2;
+#endif
 			if (frm.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				if (G.FORM02 != null) {
 					if (G.FORM02.isCONNECTED()) {

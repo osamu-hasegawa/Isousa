@@ -111,8 +111,6 @@ namespace uSCOPE
 				G.CNT_OFS = G.SS.MOZ_BOK_COFS[mode_of_cl];				//中心:上下オフセット
 #if true//2019.03.22(再測定表)
 				G.CNT_MET = G.SS.MOZ_BOK_CMET[mode_of_cl+2];			//中心:計算方法
-#else
-				G.CNT_USSD= G.SS.MOZ_BOK_USSD[mode_of_cl+2];			//中心:標準偏差
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 				G.FORM02.load_file(bmp, false);
@@ -167,8 +165,6 @@ namespace uSCOPE
 				G.CNT_OFS = G.SS.MOZ_BOK_SOFS[mode_of_cl];				//表面:上下オフセット
 #if true//2019.03.22(再測定表)
 				G.CNT_MET = G.SS.MOZ_BOK_CMET[mode_of_cl+0];			//表面:計算方法
-#else
-				G.CNT_USSD= G.SS.MOZ_BOK_USSD[mode_of_cl+0];			//表面:標準偏差
 #endif
 				G.CAM_PRC = G.CAM_STS.STS_HIST;
 				G.FORM02.load_file(bmp, false);

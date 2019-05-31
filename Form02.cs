@@ -4587,9 +4587,15 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 				//---
 				//---
 				string buf = "";
+#if true//2019.05.22(再測定判定(キューティクル枚数))
+				if (G.SS.CAM_HIS_CHK1 && ((G.CAM_PRC == G.CAM_STS.STS_HIST) || (G.CAM_PRC == G.CAM_STS.STS_FCUS && G.SS.CAM_FCS_PAR1 <= 1) || (G.CAM_PRC == G.CAM_STS.STS_AUTO))) {
+					buf += string.Format("CONTRAST={0:F3}", G.IR.CONTRAST);
+				}
+#else
 				if ((G.CAM_PRC == G.CAM_STS.STS_HIST && G.SS.CAM_HIS_CHK1) || (G.CAM_PRC == G.CAM_STS.STS_FCUS && G.SS.CAM_FCS_PAR1 <= 1) || (G.CAM_PRC == G.CAM_STS.STS_AUTO)) {
 					buf += string.Format("CONTRAST={0:F3}", G.IR.CONTRAST);
 				}
+#endif
 				if (G.CAM_PRC == G.CAM_STS.STS_HIST && G.SS.CAM_HIS_CHK2) {
 					if (!string.IsNullOrEmpty(buf)) {
 						buf += ",";
