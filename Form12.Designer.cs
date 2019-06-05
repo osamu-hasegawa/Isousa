@@ -303,6 +303,8 @@
 			this.timer6 = new System.Windows.Forms.Timer(this.components);
 			this.timer7 = new System.Windows.Forms.Timer(this.components);
 			this.timer8 = new System.Windows.Forms.Timer(this.components);
+			this.numericUpDown63 = new System.Windows.Forms.NumericUpDown();
+			this.label89 = new System.Windows.Forms.Label();
 			this.tabControl4.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel9.SuspendLayout();
@@ -385,6 +387,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown36)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown35)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown34)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown63)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl4
@@ -956,6 +959,7 @@
 			// tabPage4
 			// 
 			this.tabPage4.BackColor = System.Drawing.Color.SteelBlue;
+			this.tabPage4.Controls.Add(this.numericUpDown63);
 			this.tabPage4.Controls.Add(this.numericUpDown62);
 			this.tabPage4.Controls.Add(this.numericUpDown60);
 			this.tabPage4.Controls.Add(this.panel4);
@@ -967,6 +971,7 @@
 			this.tabPage4.Controls.Add(this.button6);
 			this.tabPage4.Controls.Add(this.button13);
 			this.tabPage4.Controls.Add(this.button5);
+			this.tabPage4.Controls.Add(this.label89);
 			this.tabPage4.Controls.Add(this.label80);
 			this.tabPage4.Controls.Add(this.label20);
 			this.tabPage4.Controls.Add(this.label19);
@@ -981,7 +986,7 @@
 			// 
 			// numericUpDown62
 			// 
-			this.numericUpDown62.Location = new System.Drawing.Point(222, 71);
+			this.numericUpDown62.Location = new System.Drawing.Point(61, 44);
 			this.numericUpDown62.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1000,7 +1005,7 @@
 			// 
 			// numericUpDown60
 			// 
-			this.numericUpDown60.Location = new System.Drawing.Point(81, 71);
+			this.numericUpDown60.Location = new System.Drawing.Point(61, 18);
 			this.numericUpDown60.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1061,8 +1066,9 @@
             "微分(両方向)",
             "2次微分(X方向)",
             "2次微分(Y方向)",
-            "2次微分(両方向)"});
-			this.comboBox7.Location = new System.Drawing.Point(137, 47);
+            "2次微分(両方向)",
+            "バンドパス"});
+			this.comboBox7.Location = new System.Drawing.Point(138, 66);
 			this.comboBox7.Name = "comboBox7";
 			this.comboBox7.Size = new System.Drawing.Size(137, 20);
 			this.comboBox7.TabIndex = 0;
@@ -1090,7 +1096,7 @@
             "毛髪範囲10% (横1/3)",
             "毛髪範囲10% (横1/4)",
             "毛髪範囲10% (横1/5)"});
-			this.comboBox1.Location = new System.Drawing.Point(137, 21);
+			this.comboBox1.Location = new System.Drawing.Point(137, 28);
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(138, 20);
 			this.comboBox1.TabIndex = 0;
@@ -1147,25 +1153,25 @@
 			// label80
 			// 
 			this.label80.AutoSize = true;
-			this.label80.Location = new System.Drawing.Point(146, 74);
+			this.label80.Location = new System.Drawing.Point(3, 39);
 			this.label80.Name = "label80";
-			this.label80.Size = new System.Drawing.Size(71, 12);
+			this.label80.Size = new System.Drawing.Size(47, 24);
 			this.label80.TabIndex = 11;
-			this.label80.Text = "2次微分閾値";
+			this.label80.Text = "2次微分\r\n閾値";
 			// 
 			// label20
 			// 
 			this.label20.AutoSize = true;
-			this.label20.Location = new System.Drawing.Point(20, 74);
+			this.label20.Location = new System.Drawing.Point(3, 13);
 			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(53, 12);
+			this.label20.Size = new System.Drawing.Size(29, 24);
 			this.label20.TabIndex = 11;
-			this.label20.Text = "微分閾値";
+			this.label20.Text = "微分\r\n閾値";
 			// 
 			// label19
 			// 
 			this.label19.AutoSize = true;
-			this.label19.Location = new System.Drawing.Point(78, 52);
+			this.label19.Location = new System.Drawing.Point(136, 51);
 			this.label19.Name = "label19";
 			this.label19.Size = new System.Drawing.Size(53, 12);
 			this.label19.TabIndex = 11;
@@ -1174,7 +1180,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(79, 26);
+			this.label3.Location = new System.Drawing.Point(136, 13);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(53, 12);
 			this.label3.TabIndex = 11;
@@ -4201,6 +4207,34 @@
 			this.timer8.Interval = 1;
 			this.timer8.Tick += new System.EventHandler(this.timer8_Tick);
 			// 
+			// numericUpDown63
+			// 
+			this.numericUpDown63.Location = new System.Drawing.Point(61, 69);
+			this.numericUpDown63.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.numericUpDown63.Name = "numericUpDown63";
+			this.numericUpDown63.Size = new System.Drawing.Size(51, 19);
+			this.numericUpDown63.TabIndex = 30;
+			this.numericUpDown63.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDown63.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.numericUpDown63.ValueChanged += new System.EventHandler(this.OnControlStateChanged);
+			// 
+			// label89
+			// 
+			this.label89.AutoSize = true;
+			this.label89.Location = new System.Drawing.Point(3, 66);
+			this.label89.Name = "label89";
+			this.label89.Size = new System.Drawing.Size(52, 24);
+			this.label89.TabIndex = 11;
+			this.label89.Text = "バンドパス\r\n閾値";
+			// 
 			// Form12
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -4304,6 +4338,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown36)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown35)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown34)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown63)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -4584,5 +4619,7 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown62;
 		private System.Windows.Forms.Label label80;
 		private System.Windows.Forms.Timer timer8;
+		private System.Windows.Forms.NumericUpDown numericUpDown63;
+		private System.Windows.Forms.Label label89;
     }
 }

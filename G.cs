@@ -220,6 +220,9 @@ namespace uSCOPE
 #if true//2019.04.29(微分バグ修正)
 			public int CAM_HIS_DTH2 = 0;
 #endif
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+			public int CAM_HIS_BPTH = 0;
+#endif
 			//---
 			public int CAM_CND_MODH = 1;
 			public int CAM_CND_MINH = 320;

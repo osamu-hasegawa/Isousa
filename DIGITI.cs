@@ -4218,6 +4218,9 @@ retry:
 				dst[i] = sum;
 			}
 		}
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+		static
+#endif
 		public bool calc_filter_coeff()
 		{
 			//bool ret;

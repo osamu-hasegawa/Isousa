@@ -194,6 +194,9 @@ namespace uSCOPE
 				BeginInvoke(new G.DLG_VOID_VOID(this.PASSWORD_INPUT));
 			}
 #endif
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+			DIGITI.calc_filter_coeff();
+#endif
 		}
 #if true//2019.01.15(パスワード画面)
 		private void PASSWORD_INPUT()

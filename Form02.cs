@@ -3870,7 +3870,70 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 			}
 		}
 #endif
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+		byte[] img_buf = new byte[1024*3];
+		bool[] img_msk = new bool[1024*3];
+		private void calc_bandpass_contrast(bool bMASK, double pix_pitch, double[] FCOF, int FCOF_LEN, int THD, out double CONTRAST)
+		{
+			CONTRAST = 0;
+			int val;
+			int cnt, y;
+			double x;
+			double pitch = 1/(2.2/8);
+			int	ttl_cnt = 0;
+			double	ttl_sum = 0;
+			int		sta, stp;
 
+			for (y = 0; y < m_height; y++) {
+				bool flag = false;
+				cnt = 0;
+				for (x = 0; x < m_width; x+=pitch) {
+					OCV.GET_PIXEL_8U((int)OCV.IMG.IMG_G, (int)x, y, out val);
+					img_buf[cnt] = (byte)val;
+					OCV.GET_PIXEL_8U((int)OCV.IMG.IMG_M, (int)x, y, out val);
+					if (val != 0) {
+						flag = true;
+						img_msk[cnt] = true;
+					}
+					else {
+						img_msk[cnt] = false;
+					}
+					cnt++;
+				}
+				if (!flag) {
+					continue;
+				}
+				sta = (FCOF_LEN/2);
+				stp = (cnt-(FCOF_LEN/2));
+
+				for (int i = sta; i < stp; i++) {
+					if (bMASK && img_msk[i] == false) {
+						continue;
+					}
+					if (true) {
+						double sum = 0;
+						
+						for (int h = 0; h < FCOF_LEN; h++) {
+							int j = h - FCOF_LEN/2;
+							j = i + j;
+							/*if (j < 0) {
+								j = 0;
+							}
+							else if (j >= cnt) {
+								j = cnt-1;
+							}*/
+							sum += img_buf[j] * FCOF[h];
+						}
+						if (sum > THD) {
+							ttl_sum += sum;
+						}
+						ttl_cnt++;
+					}
+				}
+			}
+			CONTRAST = ttl_sum / ttl_cnt;
+		}
+#endif
 		private void post_proc()
 		{
 			string buf1 = null, buf2 = null;
@@ -4473,6 +4536,17 @@ Trace.WriteLineIf((G.AS.TRACE_LEVEL & 1)!=0, "1:OneShot()::" + Environment.TickC
 #endif
 					}
 				}
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+				if (G.CNT_MET == 8) {
+					double tmp;
+					//calc_bandpass_contrast(bMASK!=0, /*pix/um@8倍*/1/(2.2/8), G.SS.MOZ_CND_FCOF, G.SS.MOZ_CND_FCOF.Length, 0, out tmp);
+					OCV.BP_CONTRAST((int)OCV.IMG.IMG_G, bMASK, /*pix/um@8倍*/1/(2.2/8), ref G.SS.MOZ_CND_FCOF[0], G.SS.MOZ_CND_FCOF.Length, G.SS.CAM_HIS_BPTH, out G.IR.CONTRAST);
+					//if (G.IR.CONTRAST != tmp) {
+					//	throw new Exception("Internal Error");
+					//}
+				}
+				else
+#endif
 				if (
 #if true//2019.03.22(再測定表)
 					G.CNT_MET >= 2

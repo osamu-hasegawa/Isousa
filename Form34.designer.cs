@@ -402,7 +402,8 @@
             "微分(両方向)",
             "2次微分(X方向)",
             "2次微分(Y方向)",
-            "2次微分(両方向)"});
+            "2次微分(両方向)",
+            "バンドパス"});
 			this.comboBox8.Location = new System.Drawing.Point(3, 494);
 			this.comboBox8.Name = "comboBox8";
 			this.comboBox8.Size = new System.Drawing.Size(82, 20);
@@ -420,7 +421,8 @@
             "微分(両方向)",
             "2次微分(X方向)",
             "2次微分(Y方向)",
-            "2次微分(両方向)"});
+            "2次微分(両方向)",
+            "バンドパス"});
 			this.comboBox14.Location = new System.Drawing.Point(227, 497);
 			this.comboBox14.Name = "comboBox14";
 			this.comboBox14.Size = new System.Drawing.Size(82, 20);
@@ -438,7 +440,8 @@
             "微分(両方向)",
             "2次微分(X方向)",
             "2次微分(Y方向)",
-            "2次微分(両方向)"});
+            "2次微分(両方向)",
+            "バンドパス"});
 			this.comboBox13.Location = new System.Drawing.Point(227, 433);
 			this.comboBox13.Name = "comboBox13";
 			this.comboBox13.Size = new System.Drawing.Size(82, 20);
@@ -456,7 +459,8 @@
             "微分(両方向)",
             "2次微分(X方向)",
             "2次微分(Y方向)",
-            "2次微分(両方向)"});
+            "2次微分(両方向)",
+            "バンドパス"});
 			this.comboBox7.Location = new System.Drawing.Point(3, 433);
 			this.comboBox7.Name = "comboBox7";
 			this.comboBox7.Size = new System.Drawing.Size(82, 20);

@@ -3426,9 +3426,15 @@ skip:
 #if true//2019.01.11(混在対応)
 			m_digi.SWAP_ANL_CND(hr.mode_of_cl);//0:透過, 1:反射
 #endif
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+			if (!DIGITI.calc_filter_coeff()) {
+				return;
+			}
+#else
 			if (!m_digi.calc_filter_coeff()) {
 				return;
 			}
+#endif
 #if true//2018.10.30(キューティクル長)
 			UPDATE_BY_FILES(0);
 #endif

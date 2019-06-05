@@ -614,6 +614,9 @@ this.SPE_COD = 0;
 #if true//2019.04.29(微分バグ修正)
 				DDV.DDX(bUpdate, this.numericUpDown62, ref G.SS.CAM_HIS_DTH2);
 #endif
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+				DDV.DDX(bUpdate, this.numericUpDown63, ref G.SS.CAM_HIS_BPTH);
+#endif
 				DDV.DDX(bUpdate, this.numericUpDown5, ref G.SS.CAM_HIS_BVAL);//, 1, 254);
 				if (G.UIF_LEVL == 0) {
 				G.SS.CAM_HIS_DISP = 0;//0:生画像

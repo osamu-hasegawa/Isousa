@@ -101,6 +101,11 @@ namespace uSCOPE
 		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_FIND_EDGE")]		public static extern void	FIND_EDGE(Int32 I, ref RECT pr, Int32 wid_per, Int32 cnt, ref POINT ptop, ref POINT pbtm);
 		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_FIT_LINE")]		public static extern Int32	FIT_LINE(ref POINT pl, Int32 pcnt, Int32 type, double param, double reps, double aeps, out float pf);
 		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_CONTOURS_MOMENTS")]public static extern Int32	CONTOURS_MOMENTS(IntPtr pos, out double pm00, out double pm01, out double pm10);
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_GET_PIXEL_8U")]	public static extern void	GET_PIXEL_8U(Int32 I, Int32 x, Int32 y, out Int32 pf);
+		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_GET_PIXEL_32F")]	public static extern void	GET_PIXEL_32F(Int32 I, Int32 x, Int32 y, out float pf);
+		[DllImport("IMGSUB64.DLL", EntryPoint = "OCV_BP_CONTRAST")]		public static extern void	BP_CONTRAST(Int32 I, Int32 bMASK, double pix_pitch, ref double FCOF, Int32 FCOF_LEN, Int32 THD, out double CONTRAST);
+#endif
 #else
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_TERM")]			public static extern void	TERM();
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_RESET_MASK")]		public static extern void	RESET_MASK(Int32 x, Int32 y, Int32 w, Int32 h);
@@ -151,6 +156,11 @@ namespace uSCOPE
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_FIND_EDGE")]		public static extern void	FIND_EDGE(Int32 I, ref RECT pr, Int32 wid_per, Int32 cnt, ref POINT ptop, ref POINT pbtm);
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_FIT_LINE")]		public static extern Int32	FIT_LINE(ref POINT pl, Int32 pcnt, Int32 type, double param, double reps, double aeps, out float pf);
 		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_CONTOURS_MOMENTS")]public static extern Int32	CONTOURS_MOMENTS(IntPtr pos, out double pm00, out double pm01, out double pm10);
+#if true//2019.06.03(バンドパス・コントラスト値対応)
+		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_GET_PIXEL_8U")]	public static extern void	GET_PIXEL_8U(Int32 I, Int32 x, Int32 y, out Int32 pf);
+		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_GET_PIXEL_32F")]	public static extern void	GET_PIXEL_32F(Int32 I, Int32 x, Int32 y, out float pf);
+		[DllImport("IMGSUB32.DLL", EntryPoint = "OCV_BP_CONTRAST")]		public static extern void	BP_CONTRAST(Int32 I, Int32 bMASK, double pix_pitch, ref double FCOF, Int32 FCOF_LEN, Int32 THD, out double CONTRAST);
+#endif
 #endif
 		public static int PF2BPP(PixelFormat pf)
 		{
