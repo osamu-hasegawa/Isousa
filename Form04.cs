@@ -29,12 +29,23 @@ namespace uSCOPE
 		private const int C_CLM_HR_RATE= 7+2;
 		private const int C_CLM_RM_SHOT = 8+2;
 		private const int C_CLM_RM_MAKE = 9+2;
+#if true//2019.07.27(保存形式変更)
+		private const int C_CLM_DL_FLAG = 10+2;
+		private const int C_CLM_RM_CUNT = 11+2;
+		private const int C_CLM_CHOKKIN = 12+2;
+		private const int C_CLM_FILNAME = 0;
+		private const int C_CLM_ZP_CONT = 1;
+#else
 		private const int C_CLM_RM_CUNT = 10+2;
 		private const int C_CLM_CHOKKIN = 11+2;
+#endif
 		DIGITI	m_digi = new DIGITI();
 #endif
 		private int m_i = 0;
 		private int m_isel = 0;
+#if true//2019.07.27(保存形式変更)
+//		private List<string> m_del_flag = null;
+#endif
 //%%		private string MOZ_CND_FOLD;
 #if true//2019.05.08(再測定・深度合成)
 //%%		private string m_fold_of_dept;
@@ -195,7 +206,16 @@ namespace uSCOPE
 			double ct_avg = 0;
 
 			for (int i = 0; i < segs.Length; i++) {
+#if true//2019.07.27(保存形式変更)
+				if (segs[i].pts_cen_cut != null) {
+					segs[i].cut_count = segs[i].pts_cen_cut.Count;
+				}
+				else {
+					segs[i].cut_count = 0;
+				}
+#else
 				segs[i].cut_count = segs[i].pts_cen_cut.Count;
+#endif
 				kp_avg += segs[i].kp_contr;
 				zp_avg += segs[i].zp_contr;
 				ct_avg += segs[i].cut_count;
@@ -261,6 +281,20 @@ namespace uSCOPE
 			return (mou_len_c >= G.SS.REM_CHG_DTHD);
 		}
 #endif
+#if true//2019.07.27(保存形式変更)
+		private List<string> get_del_list()
+		{
+			var l = new List<string>();
+			for (int i = 0; i < this.dataGridView1.Rows.Count; i++) {
+				string	name = (string)this.dataGridView1.Rows[i].Cells[C_CLM_FILNAME].Value;
+				bool	flag = (bool  )this.dataGridView1.Rows[i].Cells[C_CLM_DL_FLAG].Value;
+				if (flag) {
+					l.Add(G.get_base_name(name));
+				}
+			}
+			return(l);
+		}
+#endif
 		//private m_idx;
 		private void add_grid_row(DIGITI.seg_of_hair seg, int h_idx, int s_idx)
 		{
@@ -284,6 +318,21 @@ namespace uSCOPE
 			objs.Add(seg.mou_len_l);
 			objs.Add(seg.mou_len_r);
 			objs.Add(seg.mou_len_c);
+#if true
+			string buf = G.get_base_name(seg.name_of_dm);
+			if (buf != null && m_digi.m_del_flag.Contains(buf)) {
+			objs.Add(false);
+			objs.Add(false);
+			objs.Add(true);
+			}
+			else {
+			objs.Add(check_remes(seg));
+			objs.Add(check_remak(seg));
+			objs.Add(false);
+			}
+			objs.Add(seg.bak_cnt);
+			objs.Add(seg.bTMR);
+#else
 #if true//2019.05.22(再測定判定(キューティクル枚数))
 			objs.Add(check_remes(seg));
 			objs.Add(check_remak(seg));
@@ -298,7 +347,7 @@ namespace uSCOPE
 			objs.Add((seg.zp_contr_drop >= G.SS.REM_BOK_STHD) ? true: false);
 			}
 #endif
-
+#endif
 
 #if true//2019.04.02(再測定表ユーザモード)
 #if true//2019.05.08(再測定・深度合成)
@@ -443,6 +492,7 @@ namespace uSCOPE
 		private void load()
 		{
 			var dlg = new DlgProgress();
+
 			try {
 				int cnt_of_hair = 0;
 				dlg.Show("再撮影", G.FORM01);
@@ -857,6 +907,10 @@ namespace uSCOPE
 			dispose_img(this.pictureBox2);
 			dispose_img(this.pictureBox3);
 #endif
+#if true//2019.07.27(保存形式変更)
+			button2_Click(null, null);
+#endif
+
 			//Image tmp1 = this.pictureBox1.Image;
 			//Image tmp2 = this.pictureBox2.Image;
 			//this.pictureBox1.Image = null;
@@ -1015,7 +1069,11 @@ namespace uSCOPE
 				Graphics gr_pd = Graphics.FromImage(bmp_pd);
 				Graphics gr_dm = Graphics.FromImage(bmp_dm);
 				Pen pen = null;
-				if (this.checkBox2.Checked) {//赤外・輪郭
+				if (this.checkBox2.Checked
+#if true//2019.07.27(保存形式変更)
+					&& seg.dex_top != null && seg.dex_btm != null
+#endif
+					) {//赤外・輪郭
 					pen = new Pen(Color.Blue, pw);
 					gr_dm.DrawLines(pen, seg.dex_top);//.dia_top);
 					gr_pd.DrawLines(pen, seg.dex_top);
@@ -1025,14 +1083,22 @@ namespace uSCOPE
 					gr_pd.DrawLines(pen, seg.dex_btm);
 					gr_ir.DrawLines(pen, seg.dex_btm);
 				}
-				if (this.checkBox8.Checked) {//中心ライン
+				if (this.checkBox8.Checked
+#if true//2019.07.27(保存形式変更)
+					&& seg.dex_cen != null
+#endif
+					) {//中心ライン
 					pen = new Pen(Color.Cyan/*this.chart1.Series[0].Color*/, pw);
 					//---
 					gr_dm.DrawLines(pen, seg.dex_cen);
 					gr_pd.DrawLines(pen, seg.dex_cen);
 					gr_ir.DrawLines(pen, seg.dex_cen);
 				}
-				if (this.checkBox1.Checked) {//コントスラト計算範囲
+				if (this.checkBox1.Checked
+#if true//2019.07.27(保存形式変更)
+					&& seg.msk_of_dm != null && seg.msk_of_pd != null
+#endif
+					) {//コントスラト計算範囲
 					pen = new Pen(Color.Red, pw/2);
 					if (seg.msk_of_dm.Length > 0) {
 						gr_dm.DrawPolygon(pen, seg.msk_of_dm);
@@ -1179,7 +1245,12 @@ namespace uSCOPE
 				mou_len_c     = (double)this.dataGridView1.Rows[i].Cells[C_CLM_HR_RATE].Value;
 				flag1 = check_remes(cut_count, cut_drop, zp_contr_drop, kp_contr_drop);
 				flag2 = check_remak(mou_len_c);
-
+#if true//2019.07.27(保存形式変更)
+				if ((bool)this.dataGridView1.Rows[i].Cells[C_CLM_DL_FLAG].Value) {
+					flag1 = false;
+					flag2 = false;
+				}
+#endif
 				this.dataGridView1.Rows[i].Cells[C_CLM_RM_SHOT].Value = flag1;
 				this.dataGridView1.Rows[i].Cells[C_CLM_RM_MAKE].Value = flag2;
 				if (flag1 || flag2) {
@@ -1189,58 +1260,38 @@ namespace uSCOPE
 					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
 				}
 #else
-				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_ZP_DROP].Value;
-				if (val >= G.SS.REM_BOK_STHD) {
-					flag1 = true;
-				}
-#if true//2019.05.22(再測定判定(キューティクル枚数))
-				val = (int)this.dataGridView1.Rows[i].Cells[C_CLM_CT_CONT].Value;
-				if (val < G.SS.REM_CUT_CTHD) {
-					flag1 = true;
-				}
-				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_CT_RATE].Value;
-				if (val >= G.SS.REM_CUT_RTHD) {
-					flag1 = true;
-				}
-#endif
-#if true//2019.04.02(再測定表ユーザモード)
-				if (G.UIF_LEVL != 0) {
-#endif
-				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_KP_DROP].Value;
-				if (val >= G.SS.REM_BOK_CTHD) {
-					flag1 = true;
-				}
-#if true//2019.04.02(再測定表ユーザモード)
-				}
-#endif
-//%%				if (flag1) {
-//%%					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 96, 96);//;Color.Red;
-//%%				}
-//%%				else {
-//%%					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
-//%%				}
-#if true//2019.04.09(再測定実装)
-				this.dataGridView1.Rows[i].Cells[C_CLM_RM_SHOT].Value = flag1;
-#endif
-#if true//2019.05.08(再測定・深度合成)
-				val = (double)this.dataGridView1.Rows[i].Cells[C_CLM_HR_RATE].Value;
-				if (val >= G.SS.REM_CHG_DTHD) {
-					flag2 = true;
-				}
-				if (flag1 || flag2) {
-					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 96, 96);//;Color.Red;
-				}
-				else {
-					this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Empty;
-				}
-				this.dataGridView1.Rows[i].Cells[C_CLM_RM_MAKE].Value = flag2;
-#endif
 #endif
 			}
 		}
 #endif
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
+#if true//2019.07.27(保存形式変更)
+			bool flag;
+			if (e.ColumnIndex == C_CLM_RM_SHOT || e.ColumnIndex == C_CLM_RM_MAKE || e.ColumnIndex == C_CLM_DL_FLAG) {
+				if ((bool)this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) {
+					flag = false;
+				}
+				else {
+					flag  = true;
+				}
+				if (e.ColumnIndex == C_CLM_DL_FLAG) {
+					if (flag) {
+					this.dataGridView1.Rows[e.RowIndex].Cells[C_CLM_RM_SHOT].Value = false;
+					this.dataGridView1.Rows[e.RowIndex].Cells[C_CLM_RM_MAKE].Value = false;
+					}
+					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = flag;
+					button2_Click(null, null);
+				}
+				else {
+					bool dflag = (bool)this.dataGridView1.Rows[e.RowIndex].Cells[C_CLM_DL_FLAG].Value;
+					if (!dflag) {
+					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = flag;
+					}
+				}
+				
+			}
+#else
 			if (e.ColumnIndex == C_CLM_RM_SHOT || e.ColumnIndex == C_CLM_RM_MAKE) {
 				if ((bool)this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) {
 					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
@@ -1248,7 +1299,7 @@ namespace uSCOPE
 				else {
 					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
 				}
-			}
+#endif
 		}
 #if true//2019.04.09(再測定実装)
 		private int get_offs(string name)
@@ -1526,6 +1577,19 @@ namespace uSCOPE
 		{
 			this.numericUpDown4.Enabled = (this.checkBox4.Checked);
 			this.numericUpDown5.Enabled = (this.checkBox5.Checked);
+		}
+#endif
+#if true//2019.07.27(保存形式変更)
+		private void button2_Click(object sender, EventArgs e)
+		{
+			var l = get_del_list();
+			if (!G.is_equ(l, m_digi.m_del_flag)) {
+				//if (G.mlog("#q削除指定が変更されました.保存しますか?") == System.Windows.Forms.DialogResult.Yes) {
+					G.save_txt(m_digi.MOZ_CND_FOLD + "\\delflag.txt", l);
+					m_digi.m_del_flag.Clear();
+					m_digi.m_del_flag.AddRange(l);
+				//}
+			}
 		}
 #endif
 	}

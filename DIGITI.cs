@@ -75,8 +75,9 @@ namespace uSCOPE
 		public ArrayList m_zpos_val = new ArrayList();
 		public string m_fold_of_dept;
 		static public string m_errstr;
-
-
+#if true//2019.07.27(保存形式変更)
+		public List<string> m_del_flag = null;
+#endif
 #if true//2019.04.17(毛髄検出複線化)
 		public void chk_pt(seg_of_hair seg, int idx)
 		{
@@ -618,6 +619,9 @@ retry:
 			public List<seg_of_mouz>
 								moz_hnf1,moz_hnf2,moz_hnf3;//毛髄:補間後
 #endif
+#if true//2019.07.27(保存形式変更)
+			public List<double>	moz_rlen, moz_hlen;
+#endif
 			//---
 #if true//2018.10.10(毛髪径算出・改造)
 			public int		IR_PLY_XMIN;
@@ -635,6 +639,9 @@ retry:
 			public ArrayList dia_btm;//輪郭・頂点(下側)
 #endif
 			public int		dia_cnt;//輪郭・頂点数
+#if true//2019.07.27(保存形式変更)
+			public double	dia2_dif;//毛髪直径(表面と中心画像のＺ座標から計算)
+#endif
 #if true//2018.11.02(HSVグラフ)
 			public Point[]	his_top;//ヒストグラム算出範囲・頂点(上側)
 			public Point[]	his_btm;//ヒストグラム算出範囲・頂点(下側)
@@ -711,6 +718,10 @@ retry:
 				this.moz_hnf2 = new List<seg_of_mouz>();
 				this.moz_hnf3 = new List<seg_of_mouz>();
 #endif
+#if true//2019.07.27(保存形式変更)
+				this.moz_rlen = new List<double>();
+				this.moz_hlen = new List<double>();
+#endif
 #if true //2018.12.17(オーバーラップ範囲)
 				this.ow_l_wid = -1;
 				this.ow_r_wid = -1;
@@ -723,6 +734,9 @@ retry:
 				this.ow_l_xum = -1;
 				this.ow_r_xum = -1;
 #endif
+#endif
+#if true//2019.07.27(保存形式変更)
+				this.bNODATA = false;
 #endif
 			}
 		};
@@ -1431,6 +1445,9 @@ retry:
 					else {
 						seg.moz_rsd_mul += ss3;
 					}
+#if true//2019.07.27(保存形式変更)
+					seg.moz_rlen.Add(ss1+ss2+ss3);
+#endif
 				}
 				if (true) {
 					pt1 = seg.moz_hnf1[i].pml;//上側
@@ -1472,6 +1489,9 @@ retry:
 					else {
 						seg.moz_hsd_mul += ss3;
 					}
+#if true//2019.07.27(保存形式変更)
+					seg.moz_hlen.Add(ss1+ss2+ss3);
+#endif
 				}
 			}
 		}
@@ -2860,8 +2880,8 @@ retry:
 				while (!sr.EndOfStream) {
 					buf = sr.ReadLine();
 					clms = buf.Split(',');
-#if DEBUG
-					if (clms[4].Contains("17CR")) {
+#if DEBUG///2019.07.27(保存形式変更)
+					if (clms.Length >= 5 && clms[4].Contains("17CR")) {
 						buf = buf;
 					}
 #endif
@@ -3251,268 +3271,43 @@ retry:
 			}
 			}
 		}
+
 #if false//2019.05.22(再測定判定(キューティクル枚数))
-		//---
-		private bool make_focus_stack3(ArrayList ar_con, ArrayList ar_bmp_dep, out Bitmap bmp_dep)
+#endif
+#if true//2019.07.27(保存形式変更)
+		private double get_dia2(seg_of_hair seg)
 		{
-			bool ret = false;
-
-			bmp_dep = null;
-
+			PLS_XYZ p1;
+			PLS_XYZ p2;
+			string k1, k2;
+			bool	ret1, ret2;
+			double dia2 = double.NaN;
 			try {
-				//string pat;
-				//string tmp = System.IO.Path.GetFileName(file);
-				//string[] ZXXXD;
-
-				//pat = tmp.Replace("ZP00D", "Z???D");
-				//ZXXXD = System.IO.Directory.GetFiles(path, pat);
-				bmp_dep = (Bitmap)((Bitmap)ar_bmp_dep[0]).Clone();
-
-				int wid = bmp_dep.Width / G.SS.MOZ_FST_CCNT;
-				int hei = bmp_dep.Height/ G.SS.MOZ_FST_RCNT;
-				int k = 0;
-				Graphics gr = Graphics.FromImage(bmp_dep);
-
-				for (int r = 0; r < G.SS.MOZ_FST_RCNT; r++) {
-					for (int c = 0; c < G.SS.MOZ_FST_CCNT; c++, k++) {
-						double fmax = -1;
-						int imax = 0;
-						//最大コントラストの画像を検索
-						for (int j = 0; j < ar_bmp_dep.Count; j++) {
-							double[] fcnt = (double[])ar_con[j];
-							if (fmax < fcnt[k]) {
-								fmax = fcnt[k];
-								imax = j;
-							}
-						}
-						int x = c*wid;
-						int y = r*hei;
-						int w = (c == (G.SS.MOZ_FST_CCNT-1) ? (bmp_dep.Width -x): wid);
-						int h = (r == (G.SS.MOZ_FST_RCNT-1) ? (bmp_dep.Height-y): hei);							
-							
-						Bitmap bmp = (Bitmap)ar_bmp_dep[imax];
-						Rectangle srt = new Rectangle(x, y, w, h);
-						gr.DrawImage(bmp, x, y, srt, GraphicsUnit.Pixel);
-					}
+				k1 = seg.name_of_dm.ToUpper();
+				if (k1.Contains("ZDEPT")) {
+					k1 = k1.Replace("ZDEPT", "ZP00D");
 				}
-				gr.Dispose();
-				ret = true;
-			}
-			catch (Exception ex) {
-				G.mlog(ex.ToString());
-			}
-			return(ret);
-		}
-		//---
-		private string[] fst_to_ir_file(string path, string[] cl_files)
-		{
-			ArrayList ar = new ArrayList();
-			for (int i = 0; i < cl_files.Length; i++) {
-				string tmp = System.IO.Path.GetFileName(cl_files[i]);
-				tmp = tmp.Replace("CT_", "IR_");
-				tmp = tmp.Replace("CR_", "IR_");
-				ar.Add(path + "\\" + tmp);
-			}
-			return((string[])ar.ToArray(typeof(string)));
-		}
-		//---
-		private bool fst_calc_contrast(string[] ZXXXD, ArrayList ar_con, ArrayList ar_bmp_dep)
-		{
-			bool ret = false;
-			try {
-				if (ar_con != null) {
-					ar_con.Clear();
-				}
-				if (ar_bmp_dep != null) {
-					ar_bmp_dep.Clear();
+				k2 = seg.name_of_pd.ToUpper();
+				if (k2.Contains("ZDEPT")) {
+					k2 = k2.Replace("ZDEPT", "ZP00D");
 				}
 
-				for (int j = 0; j < ZXXXD.Length; j++) {
-					Bitmap bmp = new Bitmap(ZXXXD[j]);
-					if (true) {
-						ar_bmp_dep.Add(bmp);
-					}
-					if (ar_con != null) {
-						double[] fctr;
-						fctr = Form02.DO_PROC_FOCUS(bmp, G.SS.MOZ_FST_FCOF, G.SS.MOZ_FST_RCNT, G.SS.MOZ_FST_CCNT);
-						ar_con.Add(fctr);
-					}
-#if true//2018.10.10(毛髪径算出・改造)
-					else {
-						Form02.DO_PROC_FOCUS(bmp, 0, 0, 0);
-					}
-#endif
+				if ((ret1 = m_log_info.map_of_xyz.TryGetValue(k1, out p1))) {
 				}
-				ret = true;
-			}
-			catch (Exception ex) {
-				G.mlog(ex.ToString());
-			}
-			return(ret);
-		}
-		//---
-		// 深度合成処理
-		//---
-		public bool fst_make()
-		{
-			try {
-				string path = this.MOZ_CND_FOLD;
-				string[] CL_ZP00D = null, IR_ZP00D = null;
-				string pat;
-				Bitmap bmp_dep;
-				string path_dep;
-#if true//2018.10.10(毛髪径算出・改造)
-				bool bInit = false;
-#endif
-				m_fold_of_dept  = string.Format("\\{0}x{1}", G.SS.MOZ_FST_RCNT, G.SS.MOZ_FST_CCNT);
-				switch (G.SS.MOZ_FST_MODE) {
-				case   /*CL*/  0:m_fold_of_dept += "_CL"; break;
-				case   /*IR*/  1:m_fold_of_dept += "_IR"; break;
-				default/*CL,IR*/:m_fold_of_dept += "_CL_IR"; break;
+				else {
+					//key = key.Substring(0, key.Length-4);//拡張子カット
+					//ret = m_log_info.map_of_pos.TryGetValue(key, out pnt_of_pls);
 				}
-				path_dep = path + m_fold_of_dept;
-				System.IO.Directory.CreateDirectory(path_dep);
-#if true//2018.07.02
-				if (G.SS.MOZ_FST_CK01) {
-					//既に合成済みの場合は合成処理をスキップする
-					string[] CL_ZDEPT = null;
-#if true//2019.03.16(NODATA対応)
-					CL_ZDEPT = System.IO.Directory.GetFiles(path_dep, "*C?_??_ZDEPT.*");
-#else
-					CL_ZDEPT = System.IO.Directory.GetFiles(path_dep, "?C?_??_ZDEPT.*");
-#endif
-					if (CL_ZDEPT.Length > 0) {
-						return(true);
-					}
+				if ((ret2 = m_log_info.map_of_xyz.TryGetValue(k2, out p2))) {
 				}
-#endif
-				for (int q = 0; q <
-#if true//2018.09.29(キューティクルライン検出)
-					24
-#else
-					10
-#endif
-					; q++) {
-					//---
-					pat = string.Format("{0}C?_??_ZP00D.*", q);//カラー
-					CL_ZP00D = System.IO.Directory.GetFiles(path, pat);
-					//---
-					if (
-#if true//2018.10.10(毛髪径算出・改造)
-						!bInit && CL_ZP00D.Length > 0
-#else
-						q == 0 && CL_ZP00D.Length > 0
-#endif
-						) {
-						//opencvのセットアップのため呼び出し
-						Bitmap bmp = new Bitmap(CL_ZP00D[0]);
-						G.CAM_PRC = G.CAM_STS.STS_NONE;
-						G.FORM02.load_file(bmp, false);
-#if true//2018.10.10(毛髪径算出・改造)
-						bInit = true;
-#endif
-					}
-#if false//2019.04.01(表面赤外省略)
-					//---
-					//if (CL_ZP00D.Length > 0) {
-						IR_ZP00D = fst_to_ir_file(path, CL_ZP00D);
-					//}
-					//---
-					//---
-#endif
-					for (int i = 0; i < CL_ZP00D.Length; i++) {
-						ArrayList ar_cl_con = new ArrayList();
-#if false//2019.04.01(表面赤外省略)
-						ArrayList ar_ir_con = new ArrayList();
-#endif
-						ArrayList ar_cl_bmp_dep = new ArrayList();
-#if false//2019.04.01(表面赤外省略)
-						ArrayList ar_ir_bmp_dep = new ArrayList();
-#endif
-						string tmp;
-						string[] CL_ZXXD, IR_ZXXD;
-						if (true) {
-							tmp = System.IO.Path.GetFileName(CL_ZP00D[i]);
-							CL_ZXXD = System.IO.Directory.GetFiles(path, tmp.Replace("ZP00D", "Z???D"));
-#if false//2019.04.01(表面赤外省略)
-							IR_ZXXD = fst_to_ir_file(path, CL_ZXXD);
-#endif
-						}
-
-						switch (G.SS.MOZ_FST_MODE) {
-						case /*CL*/0:
-							if (!fst_calc_contrast(CL_ZXXD, ar_cl_con, ar_cl_bmp_dep)) {
-								return(false);
-							}
-#if false//2019.04.01(表面赤外省略)
-							if (!fst_calc_contrast(IR_ZXXD, null     , ar_ir_bmp_dep)) {
-								return(false);
-							}
-							ar_ir_con = ar_cl_con;
-#endif
-						break;
-#if false//2019.04.01(表面赤外省略)
-						case /*IR*/1:
-							if (!fst_calc_contrast(CL_ZXXD, null     , ar_cl_bmp_dep)) {
-								return(false);
-							}
-							if (!fst_calc_contrast(IR_ZXXD, ar_ir_con, ar_ir_bmp_dep)) {
-								return(false);
-							}
-							ar_cl_con = ar_ir_con;
-						break;
-#endif
-						default/*CL,IR*/:
-							if (!fst_calc_contrast(CL_ZXXD, ar_cl_con, ar_cl_bmp_dep)) {
-								return(false);
-							}
-#if false//2019.04.01(表面赤外省略)
-							if (!fst_calc_contrast(IR_ZXXD, ar_ir_con, ar_ir_bmp_dep)) {
-								return(false);
-							}
-#endif
-						break;
-						}
-
-						if (true) {
-							string name = System.IO.Path.GetFileName(CL_ZP00D[i]);// name: xCx_xx_ZP00D.xxx
-
-							if (!make_focus_stack3(ar_cl_con, ar_cl_bmp_dep, out bmp_dep)) {
-								return(false);
-							}
-							name = name.Replace("ZP00D", "ZDEPT");
-							bmp_dep.Save(path_dep + "\\" + name);
-							bmp_dep.Dispose();
-							bmp_dep = null;
-						}
-#if false//2019.04.01(表面赤外省略)
-						if (true) {
-							string name = System.IO.Path.GetFileName(IR_ZP00D[i]);// name: xIR_xx_ZP00D.xxx
-
-							if (!make_focus_stack3(ar_ir_con, ar_ir_bmp_dep, out bmp_dep)) {
-								return(false);
-							}
-							name = name.Replace("ZP00D", "ZDEPT");
-							bmp_dep.Save(path_dep + "\\" + name);
-							bmp_dep.Dispose();
-							bmp_dep = null;
-						}
-#endif
-						for (int j = 0; j < ar_cl_bmp_dep.Count; j++) {
-							Bitmap bmp;
-							bmp = (Bitmap)ar_cl_bmp_dep[j];
-							bmp.Dispose();
-#if false//2019.04.01(表面赤外省略)
-							bmp = (Bitmap)ar_ir_bmp_dep[j];
-							bmp.Dispose();
-#endif
-						}
-					}
+				if (ret1 && ret2) {
+					dia2 = 2*Math.Abs((p1.Z-p2.Z) * G.SS.PLM_UMPP[2]);
 				}
 			}
 			catch (Exception ex) {
+				G.mlog(ex.Message);
 			}
-			return(true);
+			return(dia2);
 		}
 #endif
 		//---
@@ -3542,7 +3337,14 @@ retry:
 			string zpos = G.SS.MOZ_CND_ZPOS;
 #endif
 			string pext = "";
-
+#if true//2019.07.27(保存形式変更)
+			if (System.IO.File.Exists(this.MOZ_CND_FOLD + "\\delflag.txt")) {
+				G.load_txt(this.MOZ_CND_FOLD + "\\delflag.txt", out m_del_flag);
+			}
+			else {
+				m_del_flag = new List<string>();
+			}
+#endif
 #if true
 			if (G.SS.MOZ_FST_CK00) {
 				SetStatus("深度合成中");
@@ -3552,6 +3354,8 @@ retry:
 				fst_make();
 #endif
 			}
+#endif
+#if true//2019.07.27(保存形式変更)
 #endif
 			if (string.IsNullOrEmpty(zpos)) {
 				zpos = "";
@@ -3697,12 +3501,25 @@ retry:
 					seg.path_of_ir = path_ir1;
 					seg.name_of_dm = name_dm1;
 					seg.name_of_ir = name_ir1;
+#if true//2019.07.27(保存形式変更)
+					if (true) {
+						string tmp = G.get_base_name(seg.name_of_dm);
+						if (tmp != null && m_del_flag.Contains(tmp)) {
+							seg.bNODATA = true;
+						}
+					}
+#endif
 					//---
 					seg.path_of_pd = path_pd1;
 					seg.name_of_pd = name_pd1;
 					if (this.bREMES) {
 						call_back10(seg, name_dm1);
 					}
+#if true//2019.07.27(保存形式変更)
+					if (G.SS.MOZ_CND_DIA2) {
+					seg.dia2_dif = get_dia2(seg);
+					}
+#endif
 					//---
 					test_pr0(seg, /*b1st=*/(i==0));
 					ar_seg.Add(seg);
@@ -3747,6 +3564,27 @@ retry:
 #if true//2019.03.16(NODATA対応)
 				if (!this.bREMES) {
 					double contr_avg = 0;
+#if true//2019.07.27(保存形式変更)
+					int count = 0;
+					for (int i = 0; i < segs.Length; i++) {
+						if (!segs[i].bNODATA) {
+							contr_avg += segs[i].contr;
+							count++;
+						}
+					}
+					contr_avg /= count;
+					for (int i = 0; i < segs.Length; i++) {
+						if (segs[i].bNODATA) {
+							segs[i].contr_drop = double.NaN;
+							segs[i].contr_avg = double.NaN;
+						}
+						else {
+							segs[i].contr_drop = -(segs[i].contr - contr_avg) / contr_avg * 100;
+							segs[i].contr_avg = contr_avg;
+							segs[i].bNODATA = (segs[i].contr_drop >= G.SS.MOZ_BOK_CTHD);
+						}
+					}
+#else
 					for (int i = 0; i < segs.Length; i++) {
 						contr_avg += segs[i].contr;
 					}
@@ -3756,6 +3594,7 @@ retry:
 						segs[i].contr_avg = contr_avg;
 						segs[i].bNODATA = (segs[i].contr_drop >= G.SS.MOZ_BOK_CTHD);
 					}
+#endif
 				}
 #endif
 				for (int i = 0; i < segs.Length; i++) {

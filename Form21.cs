@@ -78,8 +78,11 @@ namespace uSCOPE
 #if true//2019.04.01(表面赤外省略)
 		private bool get_zpos(string path, string ct, out string[] zpos)
 		{
-			zpos = null;
 
+			zpos = null;
+#if true//2019.07.27(不具合修正)
+			try {
+#endif
 			if (true) {
 				for (int i = 0; i <= 23; i++) {
 					string NS = i.ToString();
@@ -96,6 +99,13 @@ namespace uSCOPE
 				string tmp = System.IO.Path.GetFileNameWithoutExtension(zpos[i]);
 				zpos[i] = tmp.Substring(tmp.Length-5);
 			}
+#if true//2019.07.27(不具合修正)
+			}
+			catch (Exception ex) {
+				G.mlog(ex.Message);
+				return(false);
+			}
+#endif
 			return(true);
 		}
 #endif
@@ -402,6 +412,9 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.comboBox1      , ref G.SS.MOZ_BOK_AFMD[0]);//透過(表面)
 				DDV.DDX(bUpdate, this.comboBox2      , ref G.SS.MOZ_BOK_AFMD[1]);//反射(表面)
 				DDV.DDX(bUpdate, this.numericUpDown1 , ref G.SS.MOZ_BOK_CTHD);
+#endif
+#if true//2019.07.27(保存形式変更)
+				DDV.DDX(bUpdate, this.checkBox1      , ref G.SS.MOZ_CND_DIA2);	//直径２(表面・中心画像のＺ座標から)
 #endif
 				//---
 				if (bUpdate == false) {

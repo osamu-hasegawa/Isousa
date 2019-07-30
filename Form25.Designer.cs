@@ -37,12 +37,7 @@
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.radioButton3 = new System.Windows.Forms.RadioButton();
-			this.radioButton4 = new System.Windows.Forms.RadioButton();
 			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -117,7 +112,7 @@
 			// button1
 			// 
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button1.Location = new System.Drawing.Point(74, 333);
+			this.button1.Location = new System.Drawing.Point(74, 240);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 26);
 			this.button1.TabIndex = 51;
@@ -128,7 +123,7 @@
 			// button2
 			// 
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(172, 333);
+			this.button2.Location = new System.Drawing.Point(172, 240);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 26);
 			this.button2.TabIndex = 52;
@@ -138,85 +133,27 @@
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Controls.Add(this.label5);
-			this.groupBox4.Controls.Add(this.label3);
 			this.groupBox4.Controls.Add(this.label2);
-			this.groupBox4.Controls.Add(this.label1);
-			this.groupBox4.Controls.Add(this.radioButton3);
-			this.groupBox4.Controls.Add(this.radioButton4);
 			this.groupBox4.Controls.Add(this.textBox2);
 			this.groupBox4.Location = new System.Drawing.Point(12, 151);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(289, 169);
+			this.groupBox4.Size = new System.Drawing.Size(289, 80);
 			this.groupBox4.TabIndex = 48;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "ファイル";
 			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.BackColor = System.Drawing.SystemColors.Control;
-			this.label5.Location = new System.Drawing.Point(69, 145);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(207, 12);
-			this.label5.TabIndex = 41;
-			this.label5.Text = "xxxx:ファイル名, n:毛髪番号, ss:画像番号";
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.BackColor = System.Drawing.SystemColors.Control;
-			this.label3.Location = new System.Drawing.Point(69, 132);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(75, 12);
-			this.label3.TabIndex = 41;
-			this.label3.Text = "xxxx_n_ss.csv";
-			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(19, 74);
+			this.label2.Location = new System.Drawing.Point(19, 26);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(51, 12);
 			this.label2.TabIndex = 38;
 			this.label2.Text = "ファイル名";
 			// 
-			// label1
-			// 
-			this.label1.BackColor = System.Drawing.SystemColors.Control;
-			this.label1.Location = new System.Drawing.Point(26, 113);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(254, 30);
-			this.label1.TabIndex = 41;
-			this.label1.Text = "ファイル名に毛髪番号と画像番号を付与して保存されます";
-			// 
-			// radioButton3
-			// 
-			this.radioButton3.AutoSize = true;
-			this.radioButton3.Location = new System.Drawing.Point(21, 27);
-			this.radioButton3.Name = "radioButton3";
-			this.radioButton3.Size = new System.Drawing.Size(93, 16);
-			this.radioButton3.TabIndex = 0;
-			this.radioButton3.Text = "選択中の毛髪";
-			this.radioButton3.UseVisualStyleBackColor = true;
-			this.radioButton3.Click += new System.EventHandler(this.radioButton1_Click);
-			// 
-			// radioButton4
-			// 
-			this.radioButton4.AutoSize = true;
-			this.radioButton4.Checked = true;
-			this.radioButton4.Location = new System.Drawing.Point(21, 49);
-			this.radioButton4.Name = "radioButton4";
-			this.radioButton4.Size = new System.Drawing.Size(93, 16);
-			this.radioButton4.TabIndex = 0;
-			this.radioButton4.TabStop = true;
-			this.radioButton4.Text = "選択中の画像";
-			this.radioButton4.UseVisualStyleBackColor = true;
-			this.radioButton4.Click += new System.EventHandler(this.radioButton1_Click);
-			// 
 			// textBox2
 			// 
-			this.textBox2.Location = new System.Drawing.Point(28, 89);
+			this.textBox2.Location = new System.Drawing.Point(28, 45);
 			this.textBox2.Name = "textBox2";
 			this.textBox2.Size = new System.Drawing.Size(245, 19);
 			this.textBox2.TabIndex = 2;
@@ -228,7 +165,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(316, 368);
+			this.ClientSize = new System.Drawing.Size(316, 274);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.button1);
@@ -260,13 +197,8 @@
 		private System.Windows.Forms.RadioButton radioButton1;
 		private System.Windows.Forms.RadioButton radioButton2;
 		private System.Windows.Forms.GroupBox groupBox4;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.RadioButton radioButton4;
-		private System.Windows.Forms.RadioButton radioButton3;
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Label label3;
 
 	}
 }

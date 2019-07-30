@@ -3100,6 +3100,22 @@ this.SPE_COD = 0;
 			return(ret);
 		}
 #endif
+#if true//2019.07.27(保存形式変更)
+		private void set_z_nam_pos(char mark, int[] zpos, ref int zcnt, List<string> z_nam, List<int> z_pos)
+		{
+			for (int i = 0; i < zpos.Length; i++) {
+				int pos = zpos[i];
+				zcnt++;
+				if (pos >= 0) {
+				z_nam.Add(string.Format("{0}P{1:00}D", mark, +pos));
+				}
+				else {
+				z_nam.Add(string.Format("{0}M{1:00}D", mark, -pos));
+				}
+				z_pos.Add(pos);
+			}
+		}
+#endif
 		private int m_retry_cnt_of_hpos;
 		// 自動測定
 		private void timer2_Tick(object sender, EventArgs e)
@@ -3350,6 +3366,14 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 #endif
 					}
 					if (G.SS.PLM_AUT_ZDCK && G.SS.PLM_AUT_ZDEP != null && G.SS.PLM_AUT_ZDEP.Length > 0) {
+#if true//2019.07.27(保存形式変更)
+						if (m_adat.pref == "CR") {
+						set_z_nam_pos('Z', G.SS.PLM_AUT_ZDEP, ref m_adat.z_cnt, m_adat.z_nam, m_adat.z_pos);
+						}
+						else {
+						set_z_nam_pos('Z', G.SS.PLM_HAK_ZDEP, ref m_adat.z_cnt, m_adat.z_nam, m_adat.z_pos);
+						}
+#else
 						for (int i = 0; i < G.SS.PLM_AUT_ZDEP.Length; i++) {
 							int pos = G.SS.PLM_AUT_ZDEP[i];
 					        m_adat.z_cnt++;
@@ -3361,6 +3385,7 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 							}
 					        m_adat.z_pos.Add(pos);
 					    }
+#endif
 					}
 #if true//2018.11.13(毛髪中心AF)
 					if (G.SS.PLM_AUT_ZKCK) {
@@ -3370,6 +3395,14 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 					}
 #endif
 					if (G.SS.PLM_AUT_ZKCK && G.SS.PLM_AUT_ZKEI != null && G.SS.PLM_AUT_ZKEI.Length > 0) {
+#if true//2019.07.27(保存形式変更)
+						if (m_adat.pref == "CR") {
+						set_z_nam_pos('K', G.SS.PLM_AUT_ZKEI, ref m_adat.k_cnt, m_adat.k_nam, m_adat.k_pos);
+						}
+						else {
+						set_z_nam_pos('K', G.SS.PLM_HAK_ZKEI, ref m_adat.k_cnt, m_adat.k_nam, m_adat.k_pos);
+						}
+#else
 						for (int i = 0; i < G.SS.PLM_AUT_ZKEI.Length; i++) {
 							int pos = G.SS.PLM_AUT_ZKEI[i];
 #if true//2018.11.13(毛髪中心AF)
@@ -3392,6 +3425,7 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 					        m_adat.z_pos.Add(pos);
 #endif
 					    }
+#endif
 					}
 #if true//2019.03.18(AF順序)
 					if (m_adat.exaf_done == false && G.SS.IMP_AUT_EXAF) {
@@ -6287,7 +6321,16 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 			if (System.IO.File.Exists(mes.path_of_zp)) {
 				string src = mes.path_of_zp;
 				string dst = m_rdat.bup_fold + "\\" + System.IO.Path.GetFileName(mes.path_of_zp);
+#if true//2019.07.27(保存形式変更)
+				try {
+#endif
 				System.IO.File.Move(src,  dst);
+#if true//2019.07.27(保存形式変更)
+				}
+				catch (Exception ex) {
+					G.mlog(ex.Message);
+				}
+#endif
 			}
 		}
 #endif

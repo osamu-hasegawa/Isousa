@@ -80,6 +80,7 @@
 			this.checkBox9 = new System.Windows.Forms.CheckBox();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
 			this.checkBox5 = new System.Windows.Forms.CheckBox();
+			this.checkBox15 = new System.Windows.Forms.CheckBox();
 			this.checkBox14 = new System.Windows.Forms.CheckBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
 			this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
@@ -118,7 +119,13 @@
 			this.label24 = new System.Windows.Forms.Label();
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.label23 = new System.Windows.Forms.Label();
-			this.checkBox15 = new System.Windows.Forms.CheckBox();
+			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.label27 = new System.Windows.Forms.Label();
+			this.checkBox16 = new System.Windows.Forms.CheckBox();
+			this.textBox6 = new System.Windows.Forms.TextBox();
+			this.label28 = new System.Windows.Forms.Label();
+			this.checkBox17 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -146,6 +153,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown22)).BeginInit();
 			this.groupBox5.SuspendLayout();
+			this.groupBox6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button2
@@ -903,6 +911,16 @@
 			this.checkBox5.UseVisualStyleBackColor = true;
 			this.checkBox5.Click += new System.EventHandler(this.checkBox2_Click);
 			// 
+			// checkBox15
+			// 
+			this.checkBox15.AutoSize = true;
+			this.checkBox15.Location = new System.Drawing.Point(332, 285);
+			this.checkBox15.Name = "checkBox15";
+			this.checkBox15.Size = new System.Drawing.Size(153, 16);
+			this.checkBox15.TabIndex = 66;
+			this.checkBox15.Text = "表面赤外画像測定を省略";
+			this.checkBox15.UseVisualStyleBackColor = true;
+			// 
 			// checkBox14
 			// 
 			this.checkBox14.AutoSize = true;
@@ -1362,7 +1380,7 @@
 			// label19
 			// 
 			this.label19.AutoSize = true;
-			this.label19.Location = new System.Drawing.Point(857, 391);
+			this.label19.Location = new System.Drawing.Point(661, -3);
 			this.label19.Name = "label19";
 			this.label19.Size = new System.Drawing.Size(47, 12);
 			this.label19.TabIndex = 55;
@@ -1379,10 +1397,10 @@
 			this.groupBox5.Controls.Add(this.textBox4);
 			this.groupBox5.Location = new System.Drawing.Point(19, 375);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(479, 104);
+			this.groupBox5.Size = new System.Drawing.Size(388, 104);
 			this.groupBox5.TabIndex = 56;
 			this.groupBox5.TabStop = false;
-			this.groupBox5.Text = "Z方向測定";
+			this.groupBox5.Text = "Z方向測定(反射/黒髪用)";
 			// 
 			// checkBox7
 			// 
@@ -1419,7 +1437,7 @@
 			// 
 			this.textBox3.Location = new System.Drawing.Point(105, 32);
 			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(357, 19);
+			this.textBox3.Size = new System.Drawing.Size(267, 19);
 			this.textBox3.TabIndex = 0;
 			this.textBox3.Text = "+2 +4 +6 -2";
 			// 
@@ -1436,13 +1454,13 @@
 			// 
 			this.textBox4.Location = new System.Drawing.Point(105, 73);
 			this.textBox4.Name = "textBox4";
-			this.textBox4.Size = new System.Drawing.Size(357, 19);
+			this.textBox4.Size = new System.Drawing.Size(267, 19);
 			this.textBox4.TabIndex = 0;
 			this.textBox4.Text = "+25 +28 +31";
 			// 
 			// label23
 			// 
-			this.label23.Location = new System.Drawing.Point(857, 408);
+			this.label23.Location = new System.Drawing.Point(732, -3);
 			this.label23.Name = "label23";
 			this.label23.Size = new System.Drawing.Size(110, 18);
 			this.label23.TabIndex = 50;
@@ -1450,15 +1468,78 @@
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.label23.Visible = false;
 			// 
-			// checkBox15
+			// groupBox6
 			// 
-			this.checkBox15.AutoSize = true;
-			this.checkBox15.Location = new System.Drawing.Point(332, 285);
-			this.checkBox15.Name = "checkBox15";
-			this.checkBox15.Size = new System.Drawing.Size(153, 16);
-			this.checkBox15.TabIndex = 66;
-			this.checkBox15.Text = "表面赤外画像測定を省略";
-			this.checkBox15.UseVisualStyleBackColor = true;
+			this.groupBox6.Controls.Add(this.checkBox17);
+			this.groupBox6.Controls.Add(this.textBox5);
+			this.groupBox6.Controls.Add(this.checkBox16);
+			this.groupBox6.Controls.Add(this.label27);
+			this.groupBox6.Controls.Add(this.textBox6);
+			this.groupBox6.Controls.Add(this.label28);
+			this.groupBox6.Location = new System.Drawing.Point(416, 375);
+			this.groupBox6.Name = "groupBox6";
+			this.groupBox6.Size = new System.Drawing.Size(388, 104);
+			this.groupBox6.TabIndex = 57;
+			this.groupBox6.TabStop = false;
+			this.groupBox6.Text = "Z方向測定(透過/白髪用)";
+			// 
+			// textBox5
+			// 
+			this.textBox5.Location = new System.Drawing.Point(105, 31);
+			this.textBox5.Name = "textBox5";
+			this.textBox5.Size = new System.Drawing.Size(267, 19);
+			this.textBox5.TabIndex = 0;
+			this.textBox5.Text = "+2 +4 +6 -2";
+			// 
+			// label27
+			// 
+			this.label27.AutoSize = true;
+			this.label27.Location = new System.Drawing.Point(104, 15);
+			this.label27.Name = "label27";
+			this.label27.Size = new System.Drawing.Size(59, 12);
+			this.label27.TabIndex = 55;
+			this.label27.Text = "Z座標(pls)";
+			// 
+			// checkBox16
+			// 
+			this.checkBox16.AutoSize = true;
+			this.checkBox16.Enabled = false;
+			this.checkBox16.Location = new System.Drawing.Point(10, 32);
+			this.checkBox16.Name = "checkBox16";
+			this.checkBox16.Size = new System.Drawing.Size(72, 16);
+			this.checkBox16.TabIndex = 56;
+			this.checkBox16.Text = "深度合成";
+			this.checkBox16.UseVisualStyleBackColor = true;
+			this.checkBox16.Click += new System.EventHandler(this.checkBox4_Click);
+			// 
+			// textBox6
+			// 
+			this.textBox6.Location = new System.Drawing.Point(106, 72);
+			this.textBox6.Name = "textBox6";
+			this.textBox6.Size = new System.Drawing.Size(267, 19);
+			this.textBox6.TabIndex = 0;
+			this.textBox6.Text = "+25 +28 +31";
+			// 
+			// label28
+			// 
+			this.label28.AutoSize = true;
+			this.label28.Location = new System.Drawing.Point(105, 58);
+			this.label28.Name = "label28";
+			this.label28.Size = new System.Drawing.Size(59, 12);
+			this.label28.TabIndex = 55;
+			this.label28.Text = "Z座標(pls)";
+			// 
+			// checkBox17
+			// 
+			this.checkBox17.AutoSize = true;
+			this.checkBox17.Enabled = false;
+			this.checkBox17.Location = new System.Drawing.Point(11, 74);
+			this.checkBox17.Name = "checkBox17";
+			this.checkBox17.Size = new System.Drawing.Size(84, 16);
+			this.checkBox17.TabIndex = 56;
+			this.checkBox17.Text = "毛髪径判定";
+			this.checkBox17.UseVisualStyleBackColor = true;
+			this.checkBox17.Click += new System.EventHandler(this.checkBox4_Click);
 			// 
 			// Form20
 			// 
@@ -1468,6 +1549,7 @@
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.CancelButton = this.button2;
 			this.ClientSize = new System.Drawing.Size(1003, 495);
+			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.label23);
@@ -1517,6 +1599,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown22)).EndInit();
 			this.groupBox5.ResumeLayout(false);
 			this.groupBox5.PerformLayout();
+			this.groupBox6.ResumeLayout(false);
+			this.groupBox6.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1615,5 +1699,12 @@
 		private System.Windows.Forms.CheckBox checkBox13;
 		private System.Windows.Forms.CheckBox checkBox14;
 		private System.Windows.Forms.CheckBox checkBox15;
+		private System.Windows.Forms.GroupBox groupBox6;
+		private System.Windows.Forms.TextBox textBox5;
+		private System.Windows.Forms.CheckBox checkBox16;
+		private System.Windows.Forms.Label label27;
+		private System.Windows.Forms.CheckBox checkBox17;
+		private System.Windows.Forms.TextBox textBox6;
+		private System.Windows.Forms.Label label28;
 	}
 }

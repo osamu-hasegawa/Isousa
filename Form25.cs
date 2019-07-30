@@ -13,9 +13,13 @@ namespace uSCOPE
 {
 	public partial class Form25 : Form
 	{
+#if true//2019.07.27(保存形式変更)
+		public string m_fullpath;
+#else
 		public string h_no;
 		public string[] i_no;
 		public int i_sel;
+#endif
 		public Form25()
 		{
 			InitializeComponent();
@@ -63,6 +67,7 @@ namespace uSCOPE
 			if (fold[fold.Length-1] != '\\') {
 				fold += "\\";
 			}
+#if false//2019.07.27(保存形式変更)
 			if (G.SS.MOZ_SAV_FMOD == 0) {
 				i_s = 0;
 				i_e = this.i_no.Length-1;
@@ -70,18 +75,21 @@ namespace uSCOPE
 			else {
 				i_s = i_e = i_sel;
 			}
+#endif
 #if true//2019.01.09(保存機能修正)
 			if (true) {
 				string path;
 
 				path = fold;
 				path += name;
+#if false//2019.07.27(保存形式変更)
 				path += "_";
 				path += this.h_no;
 				if (G.SS.MOZ_SAV_FMOD != 0) {
 				path += "_";
 				path += i_no[i_sel];
 				}
+#endif
 				path += ".csv";
 				if (System.IO.File.Exists(path)) {
 					if (G.mlog(string.Format("#q{0}は既に存在します。\r上書きしますか?", path)) != System.Windows.Forms.DialogResult.Yes) {
@@ -89,6 +97,9 @@ namespace uSCOPE
 						return;
 					}
 				}
+#if true//2019.07.27(保存形式変更)
+				m_fullpath = path;
+#endif
 			}
 #else
 			for (int i = i_s; i <= i_e; i++) {
@@ -118,7 +129,9 @@ namespace uSCOPE
             try {
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton1, this.radioButton2}, ref G.SS.MOZ_SAV_DMOD);
 				DDV.DDX(bUpdate, this.textBox1       , ref G.SS.MOZ_SAV_FOLD);
+#if false//2019.07.27(保存形式変更)
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton3, this.radioButton4}, ref G.SS.MOZ_SAV_FMOD);
+#endif
 				DDV.DDX(bUpdate, this.textBox2       , ref G.SS.MOZ_SAV_NAME);
 				//---
 				if (bUpdate == false) {

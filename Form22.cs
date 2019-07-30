@@ -78,6 +78,10 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.checkBox7      , ref m_ss.PLM_AUT_ZKCK);//Ｚ測定:毛髪径判定用
 				DDV.DDX(bUpdate, this.textBox4       , ref m_ss.PLM_AUT_ZKEI, 50, -99, +99);
 #endif
+#if true//2019.07.27(保存形式変更)
+				DDV.DDX(bUpdate, this.textBox5       , ref m_ss.PLM_HAK_ZDEP, 50, -99, +99);
+				DDV.DDX(bUpdate, this.textBox6       , ref m_ss.PLM_HAK_ZKEI, 50, -99, +99);
+#endif
 #if true//2018.07.30(終了位置指定)
 				DDV.DDX(bUpdate, this.numericUpDown14 , ref m_ss.PLM_AUT_ED_Y, G.SS.PLM_MLIM[1], G.SS.PLM_PLIM[1]);
                 if (bUpdate == false) {
@@ -96,6 +100,24 @@ namespace uSCOPE
 						return(false);
 					}
 #endif
+#if true//2019.07.27(保存形式変更)
+					if (!G.check_zpos(m_ss.PLM_AUT_ZDEP, m_ss.PLM_AUT_ZDCK)) {
+						this.textBox3.Focus();
+						return(false);
+					}
+					if (!G.check_zpos(m_ss.PLM_AUT_ZKEI, false)) {
+						this.textBox4.Focus();
+						return(false);
+					}
+					if (!G.check_zpos(m_ss.PLM_HAK_ZDEP, m_ss.PLM_AUT_ZDCK)) {
+						this.textBox5.Focus();
+						return(false);
+					}
+					if (!G.check_zpos(m_ss.PLM_HAK_ZKEI, false)) {
+						this.textBox6.Focus();
+						return(false);
+					}
+#else
 					if (m_ss.PLM_AUT_ZDEP != null) {
 						for (int i = 0; i < m_ss.PLM_AUT_ZDEP.Length; i++) {
 							int val = m_ss.PLM_AUT_ZDEP[i];
@@ -142,7 +164,7 @@ namespace uSCOPE
 							}
 						}
 					}
-
+#endif
 #endif
 				}
 #endif
@@ -164,6 +186,13 @@ namespace uSCOPE
 		private void checkBox6_CheckedChanged(object sender, EventArgs e)
 		{
 			textBox3.Enabled = (this.checkBox6.Checked == true);
+#if true//2019.07.27(保存形式変更)
+			textBox4.Enabled = (this.checkBox7.Checked == true);
+			this.checkBox16.Checked = this.checkBox6.Checked;
+			this.checkBox17.Checked = this.checkBox7.Checked;
+			textBox5.Enabled = textBox3.Enabled;
+			textBox6.Enabled = textBox4.Enabled;
+#endif
 		}
 #endif
 #if true//2018.07.30

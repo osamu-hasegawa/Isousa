@@ -88,6 +88,8 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
@@ -100,6 +102,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button3
@@ -710,7 +713,7 @@
 			// 
 			// button4
 			// 
-			this.button4.Location = new System.Drawing.Point(311, 307);
+			this.button4.Location = new System.Drawing.Point(312, 390);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(288, 36);
 			this.button4.TabIndex = 51;
@@ -862,6 +865,26 @@
 			this.label7.TabIndex = 39;
 			this.label7.Text = "対象画像";
 			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.checkBox1);
+			this.groupBox4.Location = new System.Drawing.Point(312, 300);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(288, 84);
+			this.groupBox4.TabIndex = 64;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "その他";
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Location = new System.Drawing.Point(29, 18);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(245, 16);
+			this.checkBox1.TabIndex = 57;
+			this.checkBox1.Text = "表面画像と中心画像のＺ座標から直径を算出";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			// 
 			// Form21
 			// 
 			this.AcceptButton = this.button1;
@@ -869,6 +892,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button2;
 			this.ClientSize = new System.Drawing.Size(608, 468);
+			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.checkBox3);
@@ -907,6 +931,8 @@
 			this.groupBox3.ResumeLayout(false);
 			this.groupBox3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+			this.groupBox4.ResumeLayout(false);
+			this.groupBox4.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -974,6 +1000,8 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.GroupBox groupBox4;
+		private System.Windows.Forms.CheckBox checkBox1;
 
 	}
 }

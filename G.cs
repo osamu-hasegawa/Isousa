@@ -9,6 +9,10 @@ using System.Drawing;
 #if true//2019.01.15(パスワード画面)
 using System.Security.Cryptography;
 #endif
+#if true//2019.07.27(保存形式変更)
+using System.IO;
+#endif
+
 namespace uSCOPE
 {
 	public class G
@@ -463,6 +467,10 @@ namespace uSCOPE
 			//---
 			public bool PLM_AUT_ZKCK = false;//Ｚ測定:毛髪径判定用
 			public int[] PLM_AUT_ZKEI = null;
+#if true//2019.07.27(保存形式変更)
+			public int[] PLM_HAK_ZDEP = null;//白髪用
+			public int[] PLM_HAK_ZKEI = null;//白髪用
+#endif
 			//---
 			public bool PLM_AUT_IRCK = false;
 #if true//2018.08.16
@@ -519,7 +527,9 @@ namespace uSCOPE
 #if true//2018.11.10(保存機能)
 			public int MOZ_SAV_DMOD = 0;
 			public string MOZ_SAV_FOLD = "";
+#if false//2019.07.27(保存形式変更)
 			public int MOZ_SAV_FMOD = 0;
+#endif
 			public string MOZ_SAV_NAME = "";
 #endif
 			//---
@@ -648,6 +658,9 @@ namespace uSCOPE
 			public bool[] MOZ_BOK_USSD = {false, false, false, false};//標準偏差, 透過(表面), 反射(表面), 透過(中心), 反射(中心)
 #endif
 			public int MOZ_BOK_CTHD = 25;
+#endif
+#if true//2019.07.27(保存形式変更)
+			public bool MOZ_CND_DIA2 = false;
 #endif
 #if true//2019.03.14(NG画像判定)
 			//[XmlIgnoreAttribute]
@@ -1759,6 +1772,115 @@ namespace uSCOPE
 				AFMD++;
 			}
 			return(AFMD);
+		}
+#endif
+#if true//2019.07.27(保存形式変更)
+		static public bool load_txt(string path, out List<string> buf)
+		{
+			bool ret = false;
+			buf = new List<string>();
+			try {
+				var st = new StreamReader(path, Encoding.Default);
+				string tmp;
+				while ((tmp = st.ReadLine()) != null) {
+					buf.Add(tmp.Trim());
+				}
+				st.Close();
+				ret = true;
+			}
+			catch(Exception ex) {
+				G.mlog(ex.Message);
+			}
+			return(ret);
+		}
+		static public bool save_txt(string path, List<string> buf)
+		{
+			bool ret = false;
+			try {
+				var st = new StreamWriter(path, false, Encoding.Default);
+				for (int i = 0; i < buf.Count; i++) {
+					st.WriteLine(buf[i]);
+				}
+				st.Close();
+				ret = true;
+			}
+			catch(Exception ex) {
+				G.mlog(ex.Message);
+			}
+			return(ret);
+		}
+		static public bool is_equ(List<string> l1, List<string> l2)
+		{
+			if (l1 == null && l2 == null) {
+				return(true);
+			}
+			if (l1 == null || l2 == null) {
+				return(false);
+			}
+			if (l1.Count != l2.Count) {
+				return(false);
+			}
+			for (int i = 0; i < l1.Count; i++) {
+				if (string.Compare(l1[i], l2[i], true) != 0) {
+					return(false);
+				}
+			}
+			return(true);
+		}
+		/* name -> '0CR_00_KP00D.PNG'
+		 * ret  -> '0CR_00'
+		 */
+		static public string get_base_name(string name)
+		{
+			string buf = name.ToUpper();
+			int p;
+			buf = buf.Trim();
+			if ((p = buf.IndexOf("CR")) <= 0) {
+				if ((p = buf.IndexOf("CT")) <= 0) {
+					return(null);
+				}
+			}
+			if (buf.Length < (p+5)) {
+				return(null);
+			}
+			return(buf.Substring(0, p+5));
+		}
+		static public string get_parenet_dir(string path)
+		{
+			string buf = "";
+			try {
+				DirectoryInfo di = Directory.GetParent(path);
+				buf = di.Name;
+			}
+			catch (Exception ex) {
+			}
+
+			return(buf);
+		}
+		static public bool check_zpos(int[] zpos, bool chk)
+		{
+			if (zpos == null) {
+				if (chk) {
+					G.mlog("Z座標を入力してください.");
+					return(false);
+				}
+				return(true);
+			}
+			for (int i = 0; i < zpos.Length; i++) {
+				int val = zpos[i];
+				int idxf, idxl;
+				idxf = Array.IndexOf(zpos, val);
+				idxl = Array.LastIndexOf(zpos, val);
+				if (idxf != idxl) {
+					G.mlog(string.Format("同じ値({0})が指定されています.", val));
+					return(false);
+				}
+				if (val == 0) {
+					G.mlog("0が指定されています.");
+					return(false);
+				}
+			}
+			return(true);
 		}
 #endif
 	}
