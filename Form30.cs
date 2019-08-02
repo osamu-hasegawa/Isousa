@@ -50,6 +50,13 @@ namespace uSCOPE
 						break;
 					}
 				}
+#if true//2019.07.27(保存形式変更)
+				if (m_ss.ETC_UIF_LEVL == 1) {
+					G.mlog("#s「UI表示」を選択してください。");
+					this.comboBox1.Focus();
+					e.Cancel = true;
+				}
+#endif
 			}
 		}
 		private bool DDX(bool bUpdate)
@@ -236,6 +243,13 @@ namespace uSCOPE
 						break;
 					}
 				}
+#if true//2019.07.27(保存形式変更)
+				if (m_ss.ETC_UIF_LEVL == 1) {
+					G.mlog("「UI表示」を選択してください。");
+					this.ActiveControl = this.comboBox1;
+					e.Cancel = true;
+				}
+#endif
 			}
 		}
 #if true//2019.01.15(パスワード画面)

@@ -154,14 +154,14 @@
 			this.checkBox5 = new System.Windows.Forms.CheckBox();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
 			this.label22 = new System.Windows.Forms.Label();
 			this.label18 = new System.Windows.Forms.Label();
 			this.textBox67 = new System.Windows.Forms.TextBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.checkBox11 = new System.Windows.Forms.CheckBox();
 			this.button1 = new System.Windows.Forms.Button();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1411,8 +1411,8 @@
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Items.AddRange(new object[] {
-            "ユーザ用(暫定)",
-            "ユーザ用(最終)",
+            "ユーザ用",
+            "---",
             "開発者用(一度)",
             "開発者用(常に)"});
 			this.comboBox1.Location = new System.Drawing.Point(129, 53);
@@ -1475,6 +1475,26 @@
 			this.checkBox3.Text = "赤外LED点灯時グレースケールに変換する";
 			this.checkBox3.UseVisualStyleBackColor = false;
 			// 
+			// label5
+			// 
+			this.label5.BackColor = System.Drawing.SystemColors.Control;
+			this.label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.label5.Location = new System.Drawing.Point(263, 17);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(74, 22);
+			this.label5.TabIndex = 1;
+			this.label5.Click += new System.EventHandler(this.label5_Click);
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.BackColor = System.Drawing.SystemColors.Control;
+			this.label3.Location = new System.Drawing.Point(208, 22);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(41, 12);
+			this.label3.TabIndex = 1;
+			this.label3.Text = "背景色";
+			// 
 			// label22
 			// 
 			this.label22.BackColor = System.Drawing.SystemColors.Control;
@@ -1534,26 +1554,6 @@
 			this.button1.Text = "パスワード設定";
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.BackColor = System.Drawing.SystemColors.Control;
-			this.label3.Location = new System.Drawing.Point(208, 22);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(41, 12);
-			this.label3.TabIndex = 1;
-			this.label3.Text = "背景色";
-			// 
-			// label5
-			// 
-			this.label5.BackColor = System.Drawing.SystemColors.Control;
-			this.label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.label5.Location = new System.Drawing.Point(263, 17);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(74, 22);
-			this.label5.TabIndex = 1;
-			this.label5.Click += new System.EventHandler(this.label5_Click);
 			// 
 			// Form30
 			// 

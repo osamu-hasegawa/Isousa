@@ -79,6 +79,7 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.textBox4       , ref m_ss.PLM_AUT_ZKEI, 50, -99, +99);
 #endif
 #if true//2019.07.27(保存形式変更)
+				DDV.DDX(bUpdate, this.textBox1       , ref m_ss.PLM_AUT_TITL);
 				DDV.DDX(bUpdate, this.textBox5       , ref m_ss.PLM_HAK_ZDEP, 50, -99, +99);
 				DDV.DDX(bUpdate, this.textBox6       , ref m_ss.PLM_HAK_ZKEI, 50, -99, +99);
 #endif
@@ -188,8 +189,6 @@ namespace uSCOPE
 			textBox3.Enabled = (this.checkBox6.Checked == true);
 #if true//2019.07.27(保存形式変更)
 			textBox4.Enabled = (this.checkBox7.Checked == true);
-			this.checkBox16.Checked = this.checkBox6.Checked;
-			this.checkBox17.Checked = this.checkBox7.Checked;
 			textBox5.Enabled = textBox3.Enabled;
 			textBox6.Enabled = textBox4.Enabled;
 #endif

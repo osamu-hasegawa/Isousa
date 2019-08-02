@@ -420,8 +420,6 @@ namespace uSCOPE
 			textBox3.Enabled = (this.checkBox6.Checked == true);
 			textBox4.Enabled = (this.checkBox7.Checked == true);
 #if true//2019.07.27(保存形式変更)
-			this.checkBox16.Checked = this.checkBox6.Checked;
-			this.checkBox17.Checked = this.checkBox7.Checked;
 			textBox5.Enabled = textBox3.Enabled;
 			textBox6.Enabled = textBox4.Enabled;
 #endif
