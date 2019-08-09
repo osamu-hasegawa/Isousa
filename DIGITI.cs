@@ -75,8 +75,15 @@ namespace uSCOPE
 		public ArrayList m_zpos_val = new ArrayList();
 		public string m_fold_of_dept;
 		static public string m_errstr;
+#if true//2019.08.08(保存内容変更)
+		public List<string> m_flag_del = null;
+		public List<string> m_flag_hakuri = null;
+		public List<string> m_flag_uneri = null;
+		public List<string> m_flag_gomi = null;
+#else
 #if true//2019.07.27(保存形式変更)
 		public List<string> m_del_flag = null;
+#endif
 #endif
 #if true//2019.04.17(毛髄検出複線化)
 		public void chk_pt(seg_of_hair seg, int idx)
@@ -486,6 +493,11 @@ retry:
 			public double contr_avg;
 			public double contr_drop;
 			public bool bNODATA;
+#endif
+#if true//2019.08.08(保存内容変更)
+			public bool bHAKURI;
+			public bool bUNERI;
+			public bool bGOMI;
 #endif
 #if true//2019.04.09(再測定実装)
 			public bool bREMES;
@@ -3338,11 +3350,31 @@ retry:
 #endif
 			string pext = "";
 #if true//2019.07.27(保存形式変更)
-			if (System.IO.File.Exists(this.MOZ_CND_FOLD + "\\delflag.txt")) {
-				G.load_txt(this.MOZ_CND_FOLD + "\\delflag.txt", out m_del_flag);
+			if (System.IO.File.Exists(this.MOZ_CND_FOLD + "\\flag_del.txt")) {
+				G.load_txt(this.MOZ_CND_FOLD + "\\flag_del.txt", out m_flag_del);
 			}
 			else {
-				m_del_flag = new List<string>();
+				m_flag_del = new List<string>();
+			}
+#endif
+#if true//2019.08.08(保存内容変更)
+			if (System.IO.File.Exists(this.MOZ_CND_FOLD + "\\flag_hakuri.txt")) {
+				G.load_txt(this.MOZ_CND_FOLD + "\\flag_hakuri.txt", out m_flag_hakuri);
+			}
+			else {
+				m_flag_hakuri = new List<string>();
+			}
+			if (System.IO.File.Exists(this.MOZ_CND_FOLD + "\\flag_uneri.txt")) {
+				G.load_txt(this.MOZ_CND_FOLD + "\\flag_uneri.txt", out m_flag_uneri);
+			}
+			else {
+				m_flag_uneri = new List<string>();
+			}
+			if (System.IO.File.Exists(this.MOZ_CND_FOLD + "\\flag_gomi.txt")) {
+				G.load_txt(this.MOZ_CND_FOLD + "\\flag_gomi.txt", out m_flag_gomi);
+			}
+			else {
+				m_flag_gomi = new List<string>();
 			}
 #endif
 #if true
@@ -3504,9 +3536,20 @@ retry:
 #if true//2019.07.27(保存形式変更)
 					if (true) {
 						string tmp = G.get_base_name(seg.name_of_dm);
-						if (tmp != null && m_del_flag.Contains(tmp)) {
+						if (tmp != null && m_flag_del.Contains(tmp)) {
 							seg.bNODATA = true;
 						}
+#if true//2019.08.08(保存内容変更)
+						if (tmp != null && m_flag_hakuri.Contains(tmp)) {
+							seg.bHAKURI = true;
+						}
+						if (tmp != null && m_flag_uneri.Contains(tmp)) {
+							seg.bUNERI = true;
+						}
+						if (tmp != null && m_flag_gomi.Contains(tmp)) {
+							seg.bGOMI = true;
+						}
+#endif
 					}
 #endif
 					//---

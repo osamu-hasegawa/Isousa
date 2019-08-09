@@ -1871,7 +1871,11 @@ System.Diagnostics.Debug.WriteLine(ex.ToString());
 #endif
 #if true//2019.07.27(保存形式変更)
 					if (G.SS.MOZ_CND_DIA2) {
+#if true//2019.08.08(保存内容変更)
+					draw_text(bmp_pd, string.Format("直径={0:F1}/Z直径={1:F1}um", gi_mou_dia, seg.dia2_dif));
+#else
 					draw_text(bmp_pd, string.Format("直径1={0:F1}/直径2={1:F1}um", gi_mou_dia, seg.dia2_dif));
+#endif
 					}
 					else
 #endif
@@ -2625,6 +2629,190 @@ skip:
 		{
 			return(string.Format("{0:F0}", f));
 		}
+#if true//2019.08.08(保存内容変更)
+		private void button3_Click(object sender, EventArgs e)
+		{
+			try {
+				Form25 frm = new Form25();
+				string fold;
+				if (frm.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) {
+					return;
+				}
+				if (G.SS.MOZ_SAV_DMOD == 0) {
+					fold = G.SS.MOZ_CND_FOLD;
+				}
+				else {
+					fold = G.SS.MOZ_SAV_FOLD;
+				}
+				if (fold[fold.Length-1] != '\\') {
+					fold += "\\";
+				}
+
+				CSV csv = new CSV();
+				int r = 0, c = 0;
+				string path = frm.m_fullpath;
+				//ksk	userID	sample_no	毛髪色	500um_Frame
+				//ファイル_キューティクル	ファイル_径	ファイル_赤外
+				//キューティクル剥離	うねり	ゴミ付着
+				//キューティクル枚数	キューティクル長割合
+				//キューティクル間隔mean	キューティクル間隔mode	キューティクル間隔sd
+				//直径[um]	毛髄面積・明割合	毛髄面積・暗割合	毛髄面積割合合計
+				//毛髪色Hpeak	毛髪色Speak	毛髪色Vpeak	扁平度	Z直径[um]
+				//キューティクル長[um]	毛髄面積・明[um^2]	毛髄面積・暗[um^2]
+				//キューティクル間隔[um]0~1	キューティクル間隔[um]1~2	キューティクル間隔[um]2~3
+				//キューティクル間隔[um]3~4	キューティクル間隔[um]4~5	キューティクル間隔[um]5~6
+				//キューティクル間隔[um]6~7	キューティクル間隔[um]7~8	キューティクル間隔[um]8~9
+				//キューティクル間隔[um]9~10	キューティクル間隔[um]10~11	キューティクル間隔[um]11~12
+				//キューティクル間隔[um]12~13	キューティクル間隔[um]13~14	キューティクル間隔[um]14~15
+				//キューティクル間隔[um]15~16	キューティクル間隔[um]16~17	キューティクル間隔[um]17~18
+				//キューティクル間隔[um]18~19	キューティクル間隔[um]19~20
+				//毛髪径_H色相[deg]0	毛髪径_H色相[deg]2	毛髪径_H色相[deg]4	毛髪径_H色相[deg]6
+				//...
+				//毛髪径_H色相[deg]352	毛髪径_H色相[deg]354	毛髪径_H色相[deg]356	毛髪径_H色相[deg]358
+				//毛髪径_S画素値0	毛髪径_S画素値1	毛髪径_S画素値2	毛髪径_S画素値3	毛髪径_S画素値4
+				//...
+				//毛髪径_S画素値252	毛髪径_S画素値253	毛髪径_S画素値254	毛髪径_S画素値255
+				//毛髪径_V画素値0	毛髪径_V画素値1	毛髪径_V画素値2	毛髪径_V画素値3
+				//...
+				//毛髪径_V画素値252	毛髪径_V画素値253	毛髪径_V画素値254	毛髪径_V画素値255
+
+				/*-------------------------------------------------------------------*/
+				string[] clms = {
+					"ksk", "userID", "sample_no", "毛髪色", "500um_Frame",
+					"ファイル_キューティクル", "ファイル_径", "ファイル_赤外",
+					"キューティクル剥離", "うねり", "ゴミ付着",
+					"キューティクル枚数", "キューティクル長割合",
+					"キューティクル間隔mean","キューティクル間隔mode","キューティクル間隔sd",
+					"直径[um]", "毛髄面積・明割合", "毛髄面積・暗割合", "毛髄面積割合合計",
+					"毛髪色Hpeak", "毛髪色Speak", "毛髪色Vpeak", "扁平度", "Z直径[um]",
+					"キューティクル長[um]", "毛髄面積・明[um^2]", "毛髄面積・暗[um^2]",
+				};
+				string buf;
+				string ksk = "uSCOPE";
+				string b_w;
+				string uid = G.get_uid(m_digi.MOZ_CND_FOLD, out b_w);
+				double avg, std, mod;
+				/*-------------------------------------------------------------------*/
+
+				for (int i = 0; i < clms.Length; i++) {
+					csv.set(c++, r, clms[i]);
+				}
+				for (int i = 0; i < G.SS.MOZ_CND_HCNT; i++) {//キュ..間隔[um]0~1,...,キュ..間隔[um]19~20
+					//double x = (G.SS.MOZ_CND_HWID/2.0) + i * G.SS.MOZ_CND_HWID;
+					buf = string.Format("キューティクル間隔[um]{0}~{1}", i * G.SS.MOZ_CND_HWID, (i+1) * G.SS.MOZ_CND_HWID);
+					csv.set(c++, r, buf);
+				}
+				for (int k = 0; k <= 358; k += 2) {//0,2,4,....,358
+					buf = string.Format("毛髪径_H色相[deg]{0}", k);
+					csv.set(c++, r, buf);
+				}
+				for (int k = 0; k <= 255; k += 1) {//0,1,2,....,255
+					buf = string.Format("毛髪径_S画素値{0}", k);
+					csv.set(c++, r, buf);
+				}
+				for (int k = 0; k <= 255; k += 1) {//0,1,2,....,255
+					buf = string.Format("毛髪径_V画素値{0}", k);
+					csv.set(c++, r, buf);
+				}
+				r++;
+				for (int j = 0; j <  m_digi.m_hair.Count; j++) {
+					DIGITI.hair hr = m_digi.m_hair[j];
+					for (int k = 0; k < hr.seg.Length; k++, r++) {
+						DIGITI.seg_of_hair seg = hr.seg[k];
+						int pk_h, pk_s, pk_v;
+						double	L = seg.dia_avg;
+						//---
+						G.get_avg_std_mod(seg.his_cen_cut, G.SS.MOZ_CND_HCNT, G.SS.MOZ_CND_HWID,
+											out avg, out std, out mod);
+						pk_h = G.get_peak_idx(seg.HIST_H_PD, 180) * 2;
+						pk_s = G.get_peak_idx(seg.HIST_S_PD, 256);
+						pk_v = G.get_peak_idx(seg.HIST_V_PD, 256);
+						//---
+						c = 0;
+						csv.set(c++, r, ksk);
+						csv.set(c++, r, uid);
+						csv.set(c++, r, I2S(j));
+						csv.set(c++, r, b_w);
+						csv.set(c++, r, I2S(k+1));
+						csv.set(c++, r, seg.name_of_dm);
+						csv.set(c++, r, seg.name_of_pd);
+						csv.set(c++, r, seg.name_of_ir);
+						csv.set(c++, r, seg.bHAKURI ? "1": "0");
+						csv.set(c++, r, seg.bUNERI  ? "1": "0");
+						csv.set(c++, r, seg.bGOMI   ? "1": "0");
+						if (seg.bNODATA) {
+						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
+						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
+						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
+						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
+						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
+						csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
+						}
+						else {
+						csv.set(c++, r, seg.pts_cen_cut == null ? "0" : I2S(seg.pts_cen_cut.Count));
+						csv.set(c++, r, F1S(seg.cut_ttl/L));//キューティクル長割合
+						csv.set(c++, r, F1S(avg));//キューティクル間隔mean
+						csv.set(c++, r, string.Format("{0}~{1}", mod, mod+G.SS.MOZ_CND_HWID));//キューティクル間隔mode
+						csv.set(c++, r, F1S(std));//キューティクル間隔sd
+						csv.set(c++, r, F1S(L));
+						csv.set(c++, r, F1S(seg.moz_hsl_mul/L));//毛髄面積・明割合
+						csv.set(c++, r, F1S(seg.moz_hsd_mul/L));//毛髄面積・暗割合
+						csv.set(c++, r, F1S((seg.moz_hsl_mul+seg.moz_hsd_mul)/L));//毛髄面積割合合計
+						csv.set(c++, r, I2S(pk_h));//毛髪色Hpeak
+						csv.set(c++, r, I2S(pk_s));//毛髪色Speak
+						csv.set(c++, r, I2S(pk_v));//毛髪色Vpeak
+						csv.set(c++, r, F1S(Math.Abs(L-seg.dia2_dif)));//扁平度
+						csv.set(c++, r, F1S(seg.dia2_dif));//Z直径[um]
+						csv.set(c++, r, F1S(seg.cut_ttl));
+						csv.set(c++, r, F1S(seg.moz_hsl_mul));
+						csv.set(c++, r, F1S(seg.moz_hsd_mul));
+						}
+						//ヒストグラム
+						for (int i = 0; i < G.SS.MOZ_CND_HCNT; i++) {
+							if (seg.bNODATA) {
+							csv.set(c++, r, "-1");
+							}
+							else {
+							csv.set(c++, r, seg.his_cen_cut == null ? "0" : I2S(seg.his_cen_cut[i]));
+							}
+						}
+						//"毛髪径_H色相[deg]0,2,...,356,358"
+						for (int i = 0; i < 180; i++) {
+							if (seg.bNODATA) {
+							csv.set(c++, r, "-1");
+							}
+							else {
+							csv.set(c++, r, F0S(seg.HIST_H_PD[i]));
+							}
+						}
+						//"毛髪径_S画素値0,1,...,254,255"
+						for (int i = 0; i < 256; i++) {
+							if (seg.bNODATA) {
+							csv.set(c++, r, "-1");
+							}
+							else {
+							csv.set(c++, r, F0S(seg.HIST_S_PD[i]));
+							}
+						}
+						//"毛髪径_V画素値0,1,...,254,255"
+						for (int i = 0; i < 256; i++) {
+							if (seg.bNODATA) {
+							csv.set(c++, r, "-1");
+							}
+							else {
+							csv.set(c++, r, F0S(seg.HIST_V_PD[i]));
+							}
+						}
+					}
+				}
+				/*-------------------------------------------------------------------*/
+				csv.save(path);
+			}
+			catch (Exception ex) {
+				G.mlog(ex.ToString());
+			}
+		}
+#else
 #if true//2019.07.27(保存形式変更)
 		private void button3_Click(object sender, EventArgs e)
 		{
@@ -3242,6 +3430,7 @@ skip:
 				G.mlog(ex.ToString());
 			}
 		}
+#endif
 #endif
 #endif
 		private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)

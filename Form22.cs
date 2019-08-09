@@ -101,6 +101,13 @@ namespace uSCOPE
 						return(false);
 					}
 #endif
+#if true//2019.08.08(保存内容変更)
+					if (string.IsNullOrEmpty(m_ss.PLM_AUT_TITL)) {
+						G.mlog("タイトルを入力してください.");
+						this.textBox1.Focus();
+						return(false);
+					}
+#endif
 #if true//2019.07.27(保存形式変更)
 					if (!G.check_zpos(m_ss.PLM_AUT_ZDEP, m_ss.PLM_AUT_ZDCK)) {
 						this.textBox3.Focus();

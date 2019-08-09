@@ -112,17 +112,18 @@
 			this.numericUpDown22 = new System.Windows.Forms.NumericUpDown();
 			this.label19 = new System.Windows.Forms.Label();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.textBox5 = new System.Windows.Forms.TextBox();
 			this.checkBox7 = new System.Windows.Forms.CheckBox();
+			this.label27 = new System.Windows.Forms.Label();
+			this.textBox6 = new System.Windows.Forms.TextBox();
 			this.checkBox6 = new System.Windows.Forms.CheckBox();
+			this.label28 = new System.Windows.Forms.Label();
 			this.label20 = new System.Windows.Forms.Label();
 			this.textBox3 = new System.Windows.Forms.TextBox();
 			this.label24 = new System.Windows.Forms.Label();
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.label23 = new System.Windows.Forms.Label();
-			this.textBox5 = new System.Windows.Forms.TextBox();
-			this.label27 = new System.Windows.Forms.Label();
-			this.textBox6 = new System.Windows.Forms.TextBox();
-			this.label28 = new System.Windows.Forms.Label();
+			this.checkBox16 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -788,6 +789,7 @@
 			this.groupBox3.Controls.Add(this.checkBox9);
 			this.groupBox3.Controls.Add(this.checkBox4);
 			this.groupBox3.Controls.Add(this.checkBox5);
+			this.groupBox3.Controls.Add(this.checkBox16);
 			this.groupBox3.Controls.Add(this.checkBox15);
 			this.groupBox3.Controls.Add(this.checkBox14);
 			this.groupBox3.Controls.Add(this.checkBox3);
@@ -1402,6 +1404,14 @@
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Z方向測定";
 			// 
+			// textBox5
+			// 
+			this.textBox5.Location = new System.Drawing.Point(421, 31);
+			this.textBox5.Name = "textBox5";
+			this.textBox5.Size = new System.Drawing.Size(267, 19);
+			this.textBox5.TabIndex = 0;
+			this.textBox5.Text = "+2 +4 +6 -2";
+			// 
 			// checkBox7
 			// 
 			this.checkBox7.AutoSize = true;
@@ -1413,6 +1423,23 @@
 			this.checkBox7.UseVisualStyleBackColor = true;
 			this.checkBox7.Click += new System.EventHandler(this.checkBox4_Click);
 			// 
+			// label27
+			// 
+			this.label27.AutoSize = true;
+			this.label27.Location = new System.Drawing.Point(420, 15);
+			this.label27.Name = "label27";
+			this.label27.Size = new System.Drawing.Size(129, 12);
+			this.label27.TabIndex = 55;
+			this.label27.Text = "Z座標(pls) 透過/白髪用";
+			// 
+			// textBox6
+			// 
+			this.textBox6.Location = new System.Drawing.Point(422, 72);
+			this.textBox6.Name = "textBox6";
+			this.textBox6.Size = new System.Drawing.Size(267, 19);
+			this.textBox6.TabIndex = 0;
+			this.textBox6.Text = "+25 +28 +31";
+			// 
 			// checkBox6
 			// 
 			this.checkBox6.AutoSize = true;
@@ -1423,6 +1450,15 @@
 			this.checkBox6.Text = "深度合成";
 			this.checkBox6.UseVisualStyleBackColor = true;
 			this.checkBox6.Click += new System.EventHandler(this.checkBox4_Click);
+			// 
+			// label28
+			// 
+			this.label28.AutoSize = true;
+			this.label28.Location = new System.Drawing.Point(421, 58);
+			this.label28.Name = "label28";
+			this.label28.Size = new System.Drawing.Size(129, 12);
+			this.label28.TabIndex = 55;
+			this.label28.Text = "Z座標(pls) 透過/白髪用";
 			// 
 			// label20
 			// 
@@ -1468,39 +1504,15 @@
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.label23.Visible = false;
 			// 
-			// textBox5
+			// checkBox16
 			// 
-			this.textBox5.Location = new System.Drawing.Point(421, 31);
-			this.textBox5.Name = "textBox5";
-			this.textBox5.Size = new System.Drawing.Size(267, 19);
-			this.textBox5.TabIndex = 0;
-			this.textBox5.Text = "+2 +4 +6 -2";
-			// 
-			// label27
-			// 
-			this.label27.AutoSize = true;
-			this.label27.Location = new System.Drawing.Point(420, 15);
-			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(129, 12);
-			this.label27.TabIndex = 55;
-			this.label27.Text = "Z座標(pls) 透過/白髪用";
-			// 
-			// textBox6
-			// 
-			this.textBox6.Location = new System.Drawing.Point(422, 72);
-			this.textBox6.Name = "textBox6";
-			this.textBox6.Size = new System.Drawing.Size(267, 19);
-			this.textBox6.TabIndex = 0;
-			this.textBox6.Text = "+25 +28 +31";
-			// 
-			// label28
-			// 
-			this.label28.AutoSize = true;
-			this.label28.Location = new System.Drawing.Point(421, 58);
-			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(129, 12);
-			this.label28.TabIndex = 55;
-			this.label28.Text = "Z座標(pls) 透過/白髪用";
+			this.checkBox16.AutoSize = true;
+			this.checkBox16.Location = new System.Drawing.Point(312, 310);
+			this.checkBox16.Name = "checkBox16";
+			this.checkBox16.Size = new System.Drawing.Size(161, 16);
+			this.checkBox16.TabIndex = 66;
+			this.checkBox16.Text = "保存フォルダ名に日時を付加";
+			this.checkBox16.UseVisualStyleBackColor = true;
 			// 
 			// Form20
 			// 
@@ -1661,5 +1673,6 @@
 		private System.Windows.Forms.Label label27;
 		private System.Windows.Forms.TextBox textBox6;
 		private System.Windows.Forms.Label label28;
+		private System.Windows.Forms.CheckBox checkBox16;
 	}
 }

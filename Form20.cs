@@ -162,6 +162,9 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, this.textBox5       , ref m_ss.PLM_HAK_ZDEP, 50, -99, +99);
 				DDV.DDX(bUpdate, this.textBox6       , ref m_ss.PLM_HAK_ZKEI, 50, -99, +99);
 #endif
+#if true//2019.08.08(保存内容変更)
+				DDV.DDX(bUpdate, this.checkBox16,ref m_ss.PLM_AUT_ADDT);//表面赤外省略
+#endif
 				if (bUpdate == false) {
 					if (this.textBox2.Text == "") {
 						G.mlog("フォルダを指定してください.");
@@ -178,6 +181,13 @@ namespace uSCOPE
 							return (false);
 						}
 					}
+#if true//2019.08.08(保存内容変更)
+					if (string.IsNullOrEmpty(m_ss.PLM_AUT_TITL)) {
+						G.mlog("タイトルを入力してください.");
+						this.textBox1.Focus();
+						return(false);
+					}
+#endif
 					//---
 #if true//2019.07.27(保存形式変更)
 					if (!G.check_zpos(m_ss.PLM_AUT_ZDEP, m_ss.PLM_AUT_ZDCK)) {

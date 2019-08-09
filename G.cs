@@ -486,6 +486,9 @@ namespace uSCOPE
 #if true//2019.04.01(表面赤外省略)
 			public bool PLM_AUT_NOSF = false;//表面赤外省略
 #endif
+#if true//2019.08.08(保存内容変更)
+			public bool PLM_AUT_ADDT = false;//保存フォルダ名に日時を付加
+#endif
 			//---
 			public int ETC_LED_WAIT = 18;
 			public int ETC_UIF_LEVL =  0;
@@ -1845,6 +1848,77 @@ namespace uSCOPE
 			}
 			return(buf.Substring(0, p+5));
 		}
+#if true//2019.08.08(保存内容変更)
+		static public string get_uid(string path, out string b_w)
+		{
+			string buf = path;
+
+			b_w = "";
+			try {
+				DirectoryInfo di = Directory.GetParent(path + "\\test.txt");
+				buf = di.Name;
+			}
+			catch (Exception ex) {
+			}
+			int p;
+			if ((p = buf.IndexOf("_")) >= 0) {
+				buf = buf.Substring(0, p);
+			}
+			if (buf.Length > 0) {
+				string tmp = buf.ToLower();
+				int l = tmp.Length;
+				if (tmp[l-1] == 'b' || tmp[l-1] == 'w') {
+					b_w = "" + tmp[l-1];
+					buf = buf.Substring(0, l-1);
+				}
+			}
+			return(buf);
+		}
+		static public void get_avg_std_mod(List<int> his, int hcnt, int HWID, out double avg, out double std, out double mod)
+		{
+			double sum = 0;
+			double dev = 0;
+			int	cnt = 0;
+			int imax = 0;
+			avg = 0;
+			std = 0;
+			mod = 0;
+			if (his == null || his.Count <= 0) {
+				return;
+			}
+			for (int i = 0; i < hcnt; i++) {
+				double val = i+HWID/2.0;
+				if (his[imax] < his[i]) {
+					imax = i;
+				}
+				cnt += his[i];
+				sum += val*his[i];
+			}
+			avg = sum/cnt;
+			for (int i = 0; i < hcnt; i++) {
+				double val = i+HWID/2.0;
+				dev += Math.Pow((val - avg), 2) * his[i];
+			}
+			std = Math.Sqrt(dev/cnt);
+			mod = imax*HWID;
+		}
+		static public int get_peak_idx(double[] vals, int cnt)
+		{
+			double	max = 0;
+			int imax = 0;
+
+			if (cnt > vals.Length) {
+				cnt = vals.Length;
+			}
+			for (int i = 0; i < cnt; i++) {
+				if (max < vals[i]) {
+					max = vals[i];
+					imax = i;
+				}
+			}
+			return(imax);
+		}
+#endif
 		static public string get_parenet_dir(string path)
 		{
 			string buf = "";

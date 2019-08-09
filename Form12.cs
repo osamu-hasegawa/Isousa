@@ -3201,6 +3201,16 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 					if (m_adat.retry == false) {
 						DateTime dt = DateTime.Now;
 						string buf = "";
+#if true//2019.08.08(保存内容変更)
+						string b_w;
+						if (G.SS.PLM_AUT_MODE >= 0 && G.SS.PLM_AUT_MODE <= 4) {
+							b_w = "w";//白髪
+						}
+						else {
+							b_w = "b";//黒髪
+						}
+						if (G.SS.PLM_AUT_ADDT) {
+#endif
 						buf = string.Format("{0:0000}{1:00}{2:00}_{3:00}{4:00}{5:00}",
 										dt.Year,
 										dt.Month,
@@ -3208,9 +3218,17 @@ System.Diagnostics.Debug.WriteLine("{0}:STS={1},DIDX={2}", Environment.TickCount
 										dt.Hour,
 										dt.Minute,
 										dt.Second);
+#if true//2019.08.08(保存内容変更)
+						buf = G.SS.PLM_AUT_TITL + b_w + "_" + buf;
+						}
+						else {
+						buf = G.SS.PLM_AUT_TITL + b_w;
+						}
+#else
 						if (!string.IsNullOrEmpty(G.SS.PLM_AUT_TITL)) {
 							buf = G.SS.PLM_AUT_TITL + "_" + buf;
 						}
+#endif
 						m_adat.fold = G.SS.PLM_AUT_FOLD;
 						if (G.SS.PLM_AUT_FOLD.Last() != '\\') {
 							m_adat.fold += "\\";

@@ -31,8 +31,16 @@ namespace uSCOPE
 		private const int C_CLM_RM_MAKE = 9+2;
 #if true//2019.07.27(保存形式変更)
 		private const int C_CLM_DL_FLAG = 10+2;
+#if true//2019.08.08(保存内容変更)
+		private const int C_CLM_CH_FLAG = 11+2;
+		private const int C_CLM_UN_FLAG = 12+2;
+		private const int C_CLM_GM_FLAG = 13+2;
+		private const int C_CLM_RM_CUNT = 14+2;
+		private const int C_CLM_CHOKKIN = 15+2;
+#else
 		private const int C_CLM_RM_CUNT = 11+2;
 		private const int C_CLM_CHOKKIN = 12+2;
+#endif
 		private const int C_CLM_FILNAME = 0;
 		private const int C_CLM_ZP_CONT = 1;
 #else
@@ -282,12 +290,20 @@ namespace uSCOPE
 		}
 #endif
 #if true//2019.07.27(保存形式変更)
-		private List<string> get_del_list()
+		private List<string> get_del_list(
+#if true//2019.08.08(保存内容変更)
+			int I_CLM_INDEX
+#endif
+			)
 		{
 			var l = new List<string>();
 			for (int i = 0; i < this.dataGridView1.Rows.Count; i++) {
 				string	name = (string)this.dataGridView1.Rows[i].Cells[C_CLM_FILNAME].Value;
+#if true//2019.08.08(保存内容変更)
+				bool	flag = (bool  )this.dataGridView1.Rows[i].Cells[I_CLM_INDEX  ].Value;
+#else
 				bool	flag = (bool  )this.dataGridView1.Rows[i].Cells[C_CLM_DL_FLAG].Value;
+#endif
 				if (flag) {
 					l.Add(G.get_base_name(name));
 				}
@@ -320,7 +336,7 @@ namespace uSCOPE
 			objs.Add(seg.mou_len_c);
 #if true
 			string buf = G.get_base_name(seg.name_of_dm);
-			if (buf != null && m_digi.m_del_flag.Contains(buf)) {
+			if (buf != null && m_digi.m_flag_del.Contains(buf)) {
 			objs.Add(false);
 			objs.Add(false);
 			objs.Add(true);
@@ -330,6 +346,26 @@ namespace uSCOPE
 			objs.Add(check_remak(seg));
 			objs.Add(false);
 			}
+#if true//2019.08.08(保存内容変更)
+			if (buf != null && m_digi.m_flag_hakuri.Contains(buf)) {
+				objs.Add(true);
+			}
+			else {
+				objs.Add(false);
+			}
+			if (buf != null && m_digi.m_flag_uneri.Contains(buf)) {
+				objs.Add(true);
+			}
+			else {
+				objs.Add(false);
+			}
+			if (buf != null && m_digi.m_flag_gomi.Contains(buf)) {
+				objs.Add(true);
+			}
+			else {
+				objs.Add(false);
+			}
+#endif
 			objs.Add(seg.bak_cnt);
 			objs.Add(seg.bTMR);
 #else
@@ -1268,7 +1304,13 @@ namespace uSCOPE
 		{
 #if true//2019.07.27(保存形式変更)
 			bool flag;
-			if (e.ColumnIndex == C_CLM_RM_SHOT || e.ColumnIndex == C_CLM_RM_MAKE || e.ColumnIndex == C_CLM_DL_FLAG) {
+			if (e.ColumnIndex == C_CLM_RM_SHOT || e.ColumnIndex == C_CLM_RM_MAKE || e.ColumnIndex == C_CLM_DL_FLAG
+#if true//2019.08.08(保存内容変更)
+			 || e.ColumnIndex == C_CLM_CH_FLAG
+			 || e.ColumnIndex == C_CLM_UN_FLAG
+			 || e.ColumnIndex == C_CLM_GM_FLAG
+#endif
+			) {
 				if ((bool)this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) {
 					flag = false;
 				}
@@ -1281,8 +1323,18 @@ namespace uSCOPE
 					this.dataGridView1.Rows[e.RowIndex].Cells[C_CLM_RM_MAKE].Value = false;
 					}
 					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = flag;
+#if true//2019.08.08(保存内容変更)
+					button2_Click(e.ColumnIndex, null);
+#else
 					button2_Click(null, null);
+#endif
 				}
+#if true//2019.08.08(保存内容変更)
+				else if (e.ColumnIndex == C_CLM_CH_FLAG || e.ColumnIndex == C_CLM_UN_FLAG || e.ColumnIndex == C_CLM_GM_FLAG) {
+					this.dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = flag;
+					button2_Click(e.ColumnIndex, null);
+				}
+#endif
 				else {
 					bool dflag = (bool)this.dataGridView1.Rows[e.RowIndex].Cells[C_CLM_DL_FLAG].Value;
 					if (!dflag) {
@@ -1579,6 +1631,38 @@ namespace uSCOPE
 			this.numericUpDown5.Enabled = (this.checkBox5.Checked);
 		}
 #endif
+#if true//2019.08.08(保存内容変更)
+		private void button2_Click(object sender, EventArgs e)
+		{
+			int CLM_IDX = -1;
+			List<int> clms = new List<int>() {C_CLM_DL_FLAG, C_CLM_CH_FLAG, C_CLM_UN_FLAG, C_CLM_GM_FLAG};
+		//	List<string> file = new List<string>() {"flag_del", "flag_hakuri", "flag_uneri", "flag_gomi"};
+			List<string> flgs;
+			if (sender != null && sender.GetType() == typeof(int)) {
+				CLM_IDX = (int)sender;
+			}
+			for (int i = 0; i < clms.Count; i++) {
+				if (CLM_IDX != -1 && clms[i] != CLM_IDX) {
+					continue;
+				}
+				int iclm = clms[i];
+				string file;
+				switch (iclm) {
+				case C_CLM_DL_FLAG:	flgs = m_digi.m_flag_del   ; file = "flag_del.txt"; break;
+				case C_CLM_CH_FLAG:	flgs = m_digi.m_flag_hakuri; file = "flag_hakuri.txt"; break;
+				case C_CLM_UN_FLAG:	flgs = m_digi.m_flag_uneri ; file = "flag_uneri.txt"; break;
+				case C_CLM_GM_FLAG:	flgs = m_digi.m_flag_gomi  ; file = "flag_gomi.txt"; break;
+				default:throw new Exception("Internal Error");
+				}
+				var l = get_del_list(iclm);
+				if (!G.is_equ(l, flgs)) {
+					G.save_txt(m_digi.MOZ_CND_FOLD + "\\" + file, l);
+					flgs.Clear();
+					flgs.AddRange(l);
+				}
+			}
+		}
+#else
 #if true//2019.07.27(保存形式変更)
 		private void button2_Click(object sender, EventArgs e)
 		{
@@ -1591,6 +1675,7 @@ namespace uSCOPE
 				//}
 			}
 		}
+#endif
 #endif
 	}
 }
