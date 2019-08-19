@@ -38,7 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>1717</NoWarn>
+    <NoWarn>1717,0162,0168,0219</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -170,11 +170,10 @@
     </Compile>
     <Compile Include="F_REMEZ_SCIPY.cs" />
     <Compile Include="G.cs" />
-    <Compile Include="GRH.cs" />
+    <Compile Include="TATE.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Q.cs" />
-    <Compile Include="STMAUTO.cs" />
     <Compile Include="T.cs" />
     <Compile Include="Form11.cs">
       <SubType>Form</SubType>
@@ -236,12 +235,6 @@
     <Compile Include="Form25.Designer.cs">
       <DependentUpon>Form25.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form21BAK.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form21BAK.Designer.cs">
-      <DependentUpon>Form21BAK.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmPassword.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +265,15 @@
     <Compile Include="Form35.designer.cs">
       <DependentUpon>Form35.cs</DependentUpon>
     </Compile>
+    <Compile Include="FCS_STK.cs" />
+    <Compile Include="OCV.cs" />
+    <Compile Include="Form27.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form27.Designer.cs">
+      <DependentUpon>Form27.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DIGITI.cs" />
     <EmbeddedResource Include="DlgProgress.resx">
       <DependentUpon>DlgProgress.cs</DependentUpon>
     </EmbeddedResource>
@@ -345,9 +347,6 @@
     <EmbeddedResource Include="Form25.resx">
       <DependentUpon>Form25.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form21BAK.resx">
-      <DependentUpon>Form21BAK.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmPassword.resx">
       <DependentUpon>frmPassword.cs</DependentUpon>
     </EmbeddedResource>
@@ -362,6 +361,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form35.resx">
       <DependentUpon>Form35.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form27.resx">
+      <DependentUpon>Form27.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest" />
