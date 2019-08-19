@@ -2635,9 +2635,16 @@ skip:
 			try {
 				Form25 frm = new Form25();
 				string fold;
+#if true//2019.08.18(不具合修正)
+				string b_w;
+				string uid = G.get_uid(m_digi.MOZ_CND_FOLD, out b_w);
+				G.SS.MOZ_SAV_NAME = uid;
+				frm.MOZ_CND_FOLD = m_digi.MOZ_CND_FOLD;
+#endif
 				if (frm.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) {
 					return;
 				}
+#if false//2019.08.18(不具合修正)
 				if (G.SS.MOZ_SAV_DMOD == 0) {
 					fold = G.SS.MOZ_CND_FOLD;
 				}
@@ -2647,7 +2654,7 @@ skip:
 				if (fold[fold.Length-1] != '\\') {
 					fold += "\\";
 				}
-
+#endif
 				CSV csv = new CSV();
 				int r = 0, c = 0;
 				string path = frm.m_fullpath;
@@ -2689,8 +2696,10 @@ skip:
 				};
 				string buf;
 				string ksk = "uSCOPE";
+#if false//2019.08.18(不具合修正)
 				string b_w;
 				string uid = G.get_uid(m_digi.MOZ_CND_FOLD, out b_w);
+#endif
 				double avg, std, mod;
 				/*-------------------------------------------------------------------*/
 
@@ -2737,10 +2746,15 @@ skip:
 						csv.set(c++, r, seg.name_of_dm);
 						csv.set(c++, r, seg.name_of_pd);
 						csv.set(c++, r, seg.name_of_ir);
+#if false//2019.08.18(不具合修正)
 						csv.set(c++, r, seg.bHAKURI ? "1": "0");
 						csv.set(c++, r, seg.bUNERI  ? "1": "0");
 						csv.set(c++, r, seg.bGOMI   ? "1": "0");
+#endif
 						if (seg.bNODATA) {
+#if true//2019.08.18(不具合修正)
+						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
+#endif
 						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
 						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
 						csv.set(c++, r, "-1"); csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
@@ -2749,6 +2763,11 @@ skip:
 						csv.set(c++, r, "-1"); csv.set(c++, r, "-1");
 						}
 						else {
+#if true//2019.08.18(不具合修正)
+						csv.set(c++, r, seg.bHAKURI ? "1": "0");
+						csv.set(c++, r, seg.bUNERI  ? "1": "0");
+						csv.set(c++, r, seg.bGOMI   ? "1": "0");
+#endif
 						csv.set(c++, r, seg.pts_cen_cut == null ? "0" : I2S(seg.pts_cen_cut.Count));
 						csv.set(c++, r, F1S(seg.cut_ttl/L));//キューティクル長割合
 						csv.set(c++, r, F1S(avg));//キューティクル間隔mean

@@ -6180,6 +6180,13 @@ a_write(string.Format("GAIN調整:終了(OFFSET={0})", G.SS.CAM_PAR_GA_OF[(int)t
 				G.FORM04 = null;
 				Application.DoEvents();
 			}
+#if true//2019.08.18(不具合修正)
+			if (G.FORM03 != null) {
+				G.FORM03.Close();
+				G.FORM03 = null;
+				Application.DoEvents();
+			}
+#endif
 			//カメラ画面をオープン
 			if (G.FORM02 == null) {
 				G.FORM02 = new Form02();

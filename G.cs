@@ -1562,8 +1562,13 @@ namespace uSCOPE
 			double df = Math.Sqrt(dx*dx + dy*dy);
 			return(df);
 		}
+#if true//2019.08.18(不具合修正)
+		private static int
+			TMP_IMP_PUSHED = 0;
+#else
 		private static bool
 			TMP_IMP_PUSHED = false;
+#endif
 		private static
 		int TMP_FLT_COEF,
 			TMP_BIN_MODE,
@@ -1592,6 +1597,11 @@ namespace uSCOPE
 
 		static public void push_imp_para()
 		{
+#if true//2019.08.18(不具合修正)
+			if (TMP_IMP_PUSHED > 0) {
+			}
+			else {
+#endif
 			TMP_FLT_COEF = G.SS.CAM_CIR_FILT;
 			TMP_BIN_MODE = G.SS.CAM_CND_MODH;
 			TMP_BIN_BVAL = G.SS.CAM_HIS_BVAL;
@@ -1614,13 +1624,28 @@ namespace uSCOPE
 #endif
 			TMP_POL_PREC = G.SS.CAM_DIR_PREC;
 			//---
+#if true//2019.08.18(不具合修正)
+			}
+			TMP_IMP_PUSHED++;
+#else
 			TMP_IMP_PUSHED = true;
+#endif
 		}
 		static public void pop_imp_para()
 		{
+#if true//2019.08.18(不具合修正)
+			TMP_IMP_PUSHED--;
+			if (TMP_IMP_PUSHED < 0) {
+				G.mlog("over pop!!!");
+			}
+			else if (TMP_IMP_PUSHED > 0) {
+				return;
+			}
+#else
 			if (!TMP_IMP_PUSHED) {
 				G.mlog("over pop!!!");
 			}
+#endif
 			G.SS.CAM_CIR_FILT     = TMP_FLT_COEF;
 			G.SS.CAM_CND_MODH     = TMP_BIN_MODE;
 			G.SS.CAM_HIS_BVAL     = TMP_BIN_BVAL;
@@ -1643,7 +1668,9 @@ namespace uSCOPE
 #endif
 			G.SS.CAM_DIR_PREC     = TMP_POL_PREC;
 			//---
+#if false//2019.08.18(不具合修正)
 			TMP_IMP_PUSHED = false;
+#endif
 		}
 		//ch=0:白色LED用(透過), ch=1:白色LED用(反射), ch=2:赤外LED用
 		static public void set_imp_param(int i, int mask)

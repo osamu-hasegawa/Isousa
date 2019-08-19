@@ -20,6 +20,9 @@ namespace uSCOPE
 		public string[] i_no;
 		public int i_sel;
 #endif
+#if true//2019.08.18(不具合修正)
+		public string MOZ_CND_FOLD;
+#endif
 		public Form25()
 		{
 			InitializeComponent();
@@ -27,6 +30,7 @@ namespace uSCOPE
 
 		private void Form25_Load(object sender, EventArgs e)
 		{
+#if false//2019.08.18(不具合修正)
 			if (string.IsNullOrEmpty(G.SS.MOZ_CND_FOLD)) {
 				string path;
 				path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -34,6 +38,7 @@ namespace uSCOPE
 				path += @"\" + Application.ProductName;
 				G.SS.MOZ_CND_FOLD = path;
 			}
+#endif
             //---
             DDX(true);
 			//---
@@ -51,8 +56,12 @@ namespace uSCOPE
             }
 			string fold, name;
 			int i_s, i_e;
-			if (G.SS.MOZ_SAV_DMOD == 0) {
+			if (G.SS.MOZ_SAV_DMOD == 0/*毛髪画像と同一のフォルダ*/) {
+#if true//2019.08.18(不具合修正)
+				fold = this.MOZ_CND_FOLD;
+#else
 				fold = G.SS.MOZ_CND_FOLD;
+#endif
 			}
 			else {
 				fold = this.textBox1.Text;
