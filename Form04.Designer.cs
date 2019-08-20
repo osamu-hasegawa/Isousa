@@ -1035,7 +1035,7 @@
 			dataGridViewCellStyle11.Format = "N0";
 			dataGridViewCellStyle11.NullValue = null;
 			this.Column11.DefaultCellStyle = dataGridViewCellStyle11;
-			this.Column11.HeaderText = "再測定回数";
+			this.Column11.HeaderText = "再撮影回数";
 			this.Column11.Name = "Column11";
 			this.Column11.Width = 75;
 			// 

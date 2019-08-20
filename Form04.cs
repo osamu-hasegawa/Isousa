@@ -451,7 +451,13 @@ namespace uSCOPE
 			}
 			string[] files = this.BAK_FILES[0];
 			for (int i = 0; i <files.Length; i++) {
-				if (files[i].Contains(name)) {
+				if (
+#if true//2019.08.20(再撮影バグ修正)
+				string.Compare(files[i], name, true) == 0
+#else
+				files[i].Contains(name)
+#endif
+				) {
 					return(true);
 				}
 			}
@@ -472,7 +478,13 @@ namespace uSCOPE
 			for (int i = 0; i < this.BAK_FILES.Count; i++) {
 				string[] files = this.BAK_FILES[i];
 				for (int h = 0; h < files.Length; h++) {
-					if (files[h].Contains(name)) {
+					if (
+#if true//2019.08.20(再撮影バグ修正)
+					string.Compare(files[h], name, true) == 0
+#else
+					files[h].Contains(name)
+#endif
+					) {
 						folds.Add(this.BAK_FOLDS[i]);
 						cnt++;
 						break;
