@@ -2655,7 +2655,11 @@ skip:
 					fold += "\\";
 				}
 #endif
+#if true//2019.08.21(UTF8対応)
+				CSV csv = new CSV(G.SS.MOZ_SAV_CODE);
+#else
 				CSV csv = new CSV();
+#endif
 				int r = 0, c = 0;
 				string path = frm.m_fullpath;
 				//ksk	userID	sample_no	毛髪色	500um_Frame

@@ -535,6 +535,9 @@ namespace uSCOPE
 #endif
 			public string MOZ_SAV_NAME = "";
 #endif
+#if true//2019.08.21(UTF8対応)
+			public int MOZ_SAV_CODE = 0;
+#endif
 			//---
 			public int MOZ_CND_FMOD = 0;
 			[XmlIgnoreAttribute]

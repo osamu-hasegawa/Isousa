@@ -142,6 +142,9 @@ namespace uSCOPE
 				DDV.DDX(bUpdate, new RadioButton[] { this.radioButton3, this.radioButton4}, ref G.SS.MOZ_SAV_FMOD);
 #endif
 				DDV.DDX(bUpdate, this.textBox2       , ref G.SS.MOZ_SAV_NAME);
+#if true//2019.08.21(UTF8対応)
+				DDV.DDX(bUpdate, this.comboBox1      , ref G.SS.MOZ_SAV_CODE);
+#endif
 				//---
 				if (bUpdate == false) {
 					if (G.SS.MOZ_SAV_DMOD == 1 && this.textBox1.Text == "") {

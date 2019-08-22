@@ -39,8 +39,11 @@
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.groupBox2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button3
@@ -112,7 +115,7 @@
 			// button1
 			// 
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button1.Location = new System.Drawing.Point(74, 240);
+			this.button1.Location = new System.Drawing.Point(74, 296);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 26);
 			this.button1.TabIndex = 51;
@@ -123,7 +126,7 @@
 			// button2
 			// 
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(172, 240);
+			this.button2.Location = new System.Drawing.Point(172, 296);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 26);
 			this.button2.TabIndex = 52;
@@ -135,7 +138,7 @@
 			// 
 			this.groupBox4.Controls.Add(this.label2);
 			this.groupBox4.Controls.Add(this.textBox2);
-			this.groupBox4.Location = new System.Drawing.Point(12, 151);
+			this.groupBox4.Location = new System.Drawing.Point(12, 207);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(289, 80);
 			this.groupBox4.TabIndex = 48;
@@ -159,13 +162,37 @@
 			this.textBox2.TabIndex = 2;
 			this.textBox2.Text = "TEST";
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.comboBox1);
+			this.groupBox1.Location = new System.Drawing.Point(14, 145);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(286, 56);
+			this.groupBox1.TabIndex = 53;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "文字コード";
+			// 
+			// comboBox1
+			// 
+			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Items.AddRange(new object[] {
+            "UTF-8",
+            "UTF-8(BOM付き)",
+            "Shift-JIS"});
+			this.comboBox1.Location = new System.Drawing.Point(26, 22);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(121, 20);
+			this.comboBox1.TabIndex = 0;
+			// 
 			// Form25
 			// 
 			this.AcceptButton = this.button1;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(316, 274);
+			this.ClientSize = new System.Drawing.Size(316, 332);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.button1);
@@ -182,6 +209,7 @@
 			this.groupBox2.PerformLayout();
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -199,6 +227,8 @@
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.ComboBox comboBox1;
 
 	}
 }

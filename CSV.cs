@@ -17,6 +17,9 @@ namespace uSCOPE
 						dict;
 //		private int		dummy;
 		/**/
+#if true//2019.08.21(UTF8‘Î‰ž)
+		private Encoding enc = Encoding.Default;
+#endif
 		public
 		CSV()
 		{
@@ -37,6 +40,18 @@ namespace uSCOPE
 			//this.r_max = 0;
 			//this.cnt = 0;
 		}
+#if true//2019.08.21(UTF8‘Î‰ž)
+		public CSV(int code)
+		{
+			this.bTabSep = false;
+			clear();
+			switch (code) {
+			case  0:this.enc = new UTF8Encoding(false); break;
+			case  1:this.enc = new UTF8Encoding(true); break;
+			default:this.enc = Encoding.Default; break;
+			}
+		}
+#endif
 		public
 		void clear()
 		{
@@ -168,7 +183,11 @@ namespace uSCOPE
 
 			try {
 /*				rd = new StreamReader(filename, Encoding.GetEncoding("Shift_JIS"));*/
+#if true//2019.08.21(UTF8‘Î‰ž)
+				wr = new StreamWriter(filename, false, this.enc);
+#else
 				wr = new StreamWriter(filename, false, Encoding.Default);
+#endif
 				for (int r = 0; r <= this.r_max; r++) {
 					buf = get(0, r);
 					for (int c = 1; c <= this.c_max; c++) {
