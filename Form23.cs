@@ -56,8 +56,12 @@ namespace uSCOPE
 #if true//2019.04.01(表面赤外省略)
 		private bool get_zpos(string path, string ct, out string[] zpos)
 		{
+#if false//2019.08.26(その他修正)
 			zpos = null;
-
+#else
+			zpos = new string[0];
+			try {
+#endif
 			if (true) {
 				for (int i = 0; i <= 23; i++) {
 					string NS = i.ToString();
@@ -67,6 +71,11 @@ namespace uSCOPE
 					}
 				}
 			}
+#if true//2019.08.26(その他修正)
+			}
+			catch (Exception ex) {
+			}
+#endif
 			if (zpos.Length <= 0) {
 				return(false);
 			}
@@ -177,6 +186,9 @@ namespace uSCOPE
 				this.comboBox10.Enabled = true;
 				this.comboBox12.Enabled = true;
 #endif
+#if true//2019.08.26(その他修正)
+				if (zpos != null) {
+#endif
 #if true//2018.11.13(毛髪中心AF)
 				for (int i = 0; i < zpos.Length; i++) {
 					switch (zpos[i][0]) {
@@ -190,6 +202,9 @@ namespace uSCOPE
 							break;
 					}
 				}
+#if true//2019.08.26(その他修正)
+				}
+#endif
 				for (int i = 0; i < m_zpos.Count; i++) {
 					//if (this.comboBox18.SelectedIndex == 0 || this.comboBox18.SelectedIndex == 2) {
 						this.comboBox10.Items.Add(m_zpos[i]);

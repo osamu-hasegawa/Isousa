@@ -636,7 +636,9 @@ namespace uSCOPE
 			if (G.UIF_LEVL == 0) {
 				this.dataGridView1.Columns[C_CLM_KP_CONT].Visible = false;
 				this.dataGridView1.Columns[C_CLM_KP_DROP].Visible = false;
+#if false//2019.08.26(その他修正)
 				this.dataGridView1.Columns[C_CLM_RM_CUNT].Visible = false;//再測定回数
+#endif
 				//---
 #if true//2019.05.22(再測定判定(キューティクル枚数))
 				this.panel2.Visible = false;

@@ -2641,6 +2641,9 @@ skip:
 				G.SS.MOZ_SAV_NAME = uid;
 				frm.MOZ_CND_FOLD = m_digi.MOZ_CND_FOLD;
 #endif
+#if true//2019.08.26(その他修正)
+				G.SS.MOZ_SAV_NAME+= b_w;
+#endif
 				if (frm.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) {
 					return;
 				}
